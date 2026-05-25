@@ -13,6 +13,7 @@ module.exports = {
   i18n,
   images: {
     domains: [
+      'plantathome-media-prod.s3.ap-south-1.amazonaws.com',
       'plantathome.s3.ap-south-1.amazonaws.com',
       'lh3.googleusercontent.com',
       'localhost',
