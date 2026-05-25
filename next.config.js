@@ -15,11 +15,14 @@ module.exports = {
     domains: [
       'plantathome-media-prod.s3.ap-south-1.amazonaws.com',
       'plantathome.s3.ap-south-1.amazonaws.com',
+      'pickbazarlaravel.s3.ap-southeast-1.amazonaws.com',
+      'pixarlaravel.s3.ap-southeast-1.amazonaws.com',
       'lh3.googleusercontent.com',
       'localhost',
       '127.0.0.1',
       'res.cloudinary.com',
       's3.amazonaws.com',
+      'via.placeholder.com',
     ],
   },
   ...(process.env.FRAMEWORK_PROVIDER === 'graphql' && {
