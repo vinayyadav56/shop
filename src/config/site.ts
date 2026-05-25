@@ -2,11 +2,11 @@ import { Routes } from '@/config/routes';
 import { PaymentGateway } from '@/types';
 
 export const siteSettings = {
-  name: 'PickBazar',
+  name: 'PlantAtHome',
   description: '',
   logo: {
     url: '/logo.svg',
-    alt: 'PickBazar',
+    alt: 'PlantAtHome',
     href: '/grocery',
     width: 128,
     height: 40,
