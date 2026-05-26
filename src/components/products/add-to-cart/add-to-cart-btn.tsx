@@ -60,10 +60,12 @@ const AddToCartBtn: React.FC<Props> = ({ variant, onClick, disabled }) => {
         <button
           onClick={onClick}
           disabled={disabled}
-          className="order-5 flex items-center justify-center rounded-full border-2 border-border-100 bg-light px-3 py-2 text-sm font-semibold text-accent transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-light focus:border-accent focus:bg-accent focus:text-light focus:outline-0 sm:order-4 sm:justify-start sm:px-5"
+          className="pa-add-btn order-5 sm:order-4"
         >
-          <CartIcon className="h-4 w-4 ltr:mr-2.5 rtl:ml-2.5" />
-          <span>{t('text-cart')}</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="ltr:mr-1.5 rtl:ml-1.5 shrink-0">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span>{t('text-add')}</span>
         </button>
       );
     case 'big':

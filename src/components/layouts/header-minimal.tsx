@@ -235,13 +235,7 @@ const HeaderMinimal = ({ layout }: { layout: string }) => {
               <div className="hidden lg:inline-flex">
                 {isAuthorize ? <AuthorizedMenu /> : <JoinButton />}
               </div>
-              <Link
-                href={`${process.env.NEXT_PUBLIC_ADMIN_URL}/register`}
-                variant="button"
-                target="_blank"
-              >
-                {t('text-become-seller')}
-              </Link>
+              {/* Become a Seller removed — single-vendor shop */}
             </div>
           </div>
         </div>

@@ -4,7 +4,6 @@ import usePrice from '@/lib/use-price';
 import { useTranslation } from 'next-i18next';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { productPlaceholder } from '@/lib/placeholders';
-import CartIcon from '@/components/icons/cart';
 import { useRouter } from 'next/router';
 import { twMerge } from 'tailwind-merge';
 import dynamic from 'next/dynamic';
@@ -65,7 +64,7 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
       <div
         onClick={handleProductQuickView}
         className={cn(
-          'pa-helium-img relative flex h-48 w-auto items-center justify-center sm:h-64 cursor-pointer',
+          'relative flex h-48 w-auto items-center justify-center sm:h-64 cursor-pointer',
           query?.pages
             ? query?.pages?.includes('medicine')
               ? 'm-4 mb-0'
@@ -114,10 +113,12 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
               {Number(quantity) > 0 && (
                 <button
                   onClick={handleProductQuickView}
-                  className="flex items-center justify-center order-5 px-3 py-2 text-sm font-semibold transition-colors duration-300 border-2 rounded-full border-border-100 bg-light text-accent hover:border-accent hover:bg-accent hover:text-light focus:border-accent focus:bg-accent focus:text-light focus:outline-0 sm:order-4 sm:justify-start sm:px-4"
+                  className="pa-add-btn order-5 sm:order-4"
                 >
-                  <CartIcon className="w-4 h-4 ltr:mr-2 rtl:ml-2" />
-                  <span>{t('text-cart')}</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="ltr:mr-1.5 rtl:ml-1.5">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+                  </svg>
+                  <span>{t('text-view')}</span>
                 </button>
               )}
             </>
