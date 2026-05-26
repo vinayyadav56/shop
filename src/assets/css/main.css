@@ -12,44 +12,44 @@
     */
 
     /*
-    * primary color
+    * primary color — #059669 emerald
     */
-    --color-accent: 45, 106, 79;
+    --color-accent: 5, 150, 105;
 
     /*
-    * Hover state color of primary color
+    * Hover state color — #047857 dark emerald
     */
-    --color-accent-hover: 27, 67, 50;
+    --color-accent-hover: 4, 120, 87;
 
     /*
-    * shade of primary color
+    * shade — #a7f3d0
     */
-    --color-accent-200: 183, 228, 199;
+    --color-accent-200: 167, 243, 208;
 
     /*
-    * shade of primary color
+    * shade — #6ee7b7
     */
-    --color-accent-300: 149, 213, 178;
+    --color-accent-300: 110, 231, 183;
 
     /*
-    * shade of primary color
+    * shade — #34d399
     */
-    --color-accent-400: 82, 183, 136;
+    --color-accent-400: 52, 211, 153;
 
     /*
-    * shade of primary color
+    * shade — #059669
     */
-    --color-accent-500: 45, 106, 79;
+    --color-accent-500: 5, 150, 105;
 
     /*
-    * shade of primary color
+    * shade — #047857
     */
-    --color-accent-600: 27, 67, 50;
+    --color-accent-600: 4, 120, 87;
 
     /*
-    * shade of primary color
+    * shade — #065f46 deep forest
     */
-    --color-accent-700: 8, 28, 21;
+    --color-accent-700: 6, 95, 70;
 
     /*
     * light color
@@ -337,6 +337,15 @@
   a {
     @apply no-underline;
   }
+
+  body {
+    background-color: #fafaf8;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
 }
 @import './custom-plugins.css';
 @import './rich-text-editor.css';
+@import './plantathome-overrides.css';

@@ -1,0 +1,363 @@
+/* ============================================================
+   PlantAtHome Design System Overrides
+   Applied on top of Tailwind / Pickbazar base styles
+   ============================================================ */
+
+/* ── Global foundation ──────────────────────────────────── */
+:root {
+  --pa-primary: #059669;
+  --pa-dark:    #047857;
+  --pa-deep:    #065f46;
+  --pa-cyan:    #0891b2;
+  --pa-bg:      #fafaf8;
+  --pa-bg-light:#f8f8f6;
+  --pa-bg-green:#f0fdf4;
+  --pa-border:  rgba(34,197,94,0.15);
+  --pa-border-m:rgba(34,197,94,0.25);
+  --pa-sh-green:0 8px 24px rgba(5,150,105,0.22);
+  --pa-grad:    linear-gradient(135deg, #059669 0%, #047857 100%);
+  --pa-grad-hero: linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%);
+  --pa-t: all 0.3s ease;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--pa-bg) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Announcement bar ───────────────────────────────────── */
+.pa-announce {
+  background: var(--pa-grad-hero);
+  color: rgba(255,255,255,0.9);
+  text-align: center;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-family: 'Sora', sans-serif;
+  letter-spacing: 0.2px;
+  position: relative;
+  z-index: 201;
+}
+.pa-announce strong { color: #fff; font-weight: 600; }
+
+/* ── Primary buttons — gradient instead of flat ─────────── */
+button[data-variant="normal"],
+.btn-accent,
+.bg-accent {
+  background: var(--pa-grad) !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 14px rgba(5,150,105,0.25) !important;
+  transition: var(--pa-t) !important;
+}
+button[data-variant="normal"]:hover:not(:disabled),
+.btn-accent:hover {
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: var(--pa-sh-green) !important;
+}
+
+/* Add to cart circular buttons */
+.add-to-cart,
+[class*="add-to-cart"] button,
+button[class*="AddToCart"] {
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* ── Cards — product cards ──────────────────────────────── */
+.product-card,
+article.product-card {
+  border-radius: 12px !important;
+  border: 1px solid var(--pa-border) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+  background: #fff !important;
+}
+.product-card:hover,
+article.product-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 16px 40px rgba(5,150,105,0.13) !important;
+  border-color: rgba(5,150,105,0.35) !important;
+}
+
+/* Product image shine effect */
+.product-image {
+  position: relative;
+  overflow: hidden;
+}
+.product-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg,
+    transparent 35%,
+    rgba(255,255,255,0.5) 50%,
+    transparent 65%
+  );
+  transform: translateX(-150%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+.product-card:hover .product-image::after {
+  transform: translateX(150%);
+}
+
+/* Discount badge on cards */
+.product-card .discount-badge,
+.product-card [class*="discount"] {
+  background: var(--pa-grad) !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+}
+
+/* ── Category cards ─────────────────────────────────────── */
+.category-card,
+[class*="category-card"],
+.sliding-card-category {
+  border-radius: 12px !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+  border: 1px solid var(--pa-border-m) !important;
+}
+.category-card:hover,
+[class*="category-card"]:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 12px 32px rgba(5,150,105,0.15) !important;
+  border-color: rgba(5,150,105,0.4) !important;
+}
+
+/* ── Header improvements ────────────────────────────────── */
+header,
+.site-header-with-search,
+[class*="site-header"] {
+  border-bottom: 1px solid var(--pa-border) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  background: rgba(255,255,255,0.97) !important;
+}
+
+/* Search input */
+.search-input input,
+input[class*="search"],
+[class*="search"] input[type="text"],
+[class*="search"] input[type="search"] {
+  border-radius: 8px !important;
+  border-color: var(--pa-border-m) !important;
+  background: #f8f8f6 !important;
+  transition: var(--pa-t) !important;
+  font-family: 'Sora', sans-serif !important;
+}
+.search-input input:focus,
+input[class*="search"]:focus,
+[class*="search"] input:focus {
+  border-color: var(--pa-primary) !important;
+  box-shadow: 0 0 0 3px rgba(5,150,105,0.1) !important;
+  background: #fff !important;
+}
+
+/* ── Banner / Hero section ──────────────────────────────── */
+.banner-wrap,
+[class*="banner-with-search"],
+.hero-section {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Overlay gradient on hero banners without images */
+.text-center.bannerPlaceholder,
+.banner-placeholder {
+  background: var(--pa-grad-hero) !important;
+}
+
+/* ── Navigation links ───────────────────────────────────── */
+nav a,
+.main-nav a,
+[class*="static-menu"] a {
+  transition: color 0.25s ease !important;
+  font-family: 'Sora', sans-serif !important;
+}
+nav a:hover { color: var(--pa-primary) !important; }
+
+/* ── Forms & Inputs ─────────────────────────────────────── */
+input:not([type="radio"]):not([type="checkbox"]),
+textarea,
+select {
+  border-radius: 8px !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+  font-family: 'Sora', sans-serif !important;
+}
+input:focus:not([type="radio"]):not([type="checkbox"]),
+textarea:focus,
+select:focus {
+  border-color: var(--pa-primary) !important;
+  box-shadow: 0 0 0 3px rgba(5,150,105,0.1) !important;
+  outline: none !important;
+}
+
+/* ── Price text — gradient green ────────────────────────── */
+.text-accent,
+[class*="sale-price"],
+[class*="salePrice"],
+[class*="current-price"] {
+  background: var(--pa-grad) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-weight: 700 !important;
+}
+
+/* ── Section backgrounds — alternating ──────────────────── */
+.section-bg-light { background-color: var(--pa-bg-light) !important; }
+.section-bg-green { background-color: var(--pa-bg-green) !important; }
+
+/* ── Footer ─────────────────────────────────────────────── */
+footer,
+[class*="footer"] {
+  font-family: 'Sora', sans-serif !important;
+}
+footer a:hover { color: #6ee7b7 !important; }
+
+/* Footer newsletter subscribe input */
+footer input[type="email"] {
+  border-radius: 8px 0 0 8px !important;
+  border-color: var(--pa-border-m) !important;
+}
+footer button[type="submit"],
+footer .subscribe-btn {
+  background: var(--pa-grad) !important;
+  border-color: transparent !important;
+  border-radius: 0 8px 8px 0 !important;
+  transition: var(--pa-t) !important;
+}
+
+/* ── Badges & Tags ──────────────────────────────────────── */
+.badge,
+[class*="badge"],
+.tag,
+[class*="tag"] {
+  border-radius: 100px !important;
+  font-family: 'Sora', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.4px !important;
+}
+
+/* ── Breadcrumbs & minor UI ─────────────────────────────── */
+.breadcrumb a:hover { color: var(--pa-primary) !important; }
+
+/* ── Pagination ─────────────────────────────────────────── */
+.rc-pagination .rc-pagination-item.rc-pagination-item-active {
+  background: var(--pa-grad) !important;
+  border-color: transparent !important;
+}
+
+/* ── Smooth image loading ───────────────────────────────── */
+img {
+  transition: opacity 0.3s ease !important;
+}
+
+/* ── Scroll-to-top button (global) ─────────────────────── */
+#scrollToTop,
+.scroll-to-top {
+  background: var(--pa-grad) !important;
+  border-radius: 50% !important;
+  box-shadow: var(--pa-sh-green) !important;
+  transition: var(--pa-t) !important;
+}
+#scrollToTop:hover,
+.scroll-to-top:hover {
+  transform: translateY(-3px) !important;
+}
+
+/* ── Sidebar & Drawer ───────────────────────────────────── */
+[class*="drawer"],
+[class*="sidebar"] {
+  font-family: 'Sora', sans-serif !important;
+}
+
+/* ── Tabs / Filter pills ────────────────────────────────── */
+[class*="tab"]:not([class*="table"]),
+[class*="filter-tab"] {
+  border-radius: 100px !important;
+  transition: var(--pa-t) !important;
+  font-family: 'Sora', sans-serif !important;
+}
+
+/* ── Banner text overlay (on banner images) ─────────────── */
+.banner-text h1,
+.banner-text h2,
+[class*="banner"] h1,
+[class*="banner"] h2 {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  letter-spacing: -0.5px !important;
+}
+
+/* ── Cart sidebar ───────────────────────────────────────── */
+[class*="cart"] button[data-variant="normal"] {
+  border-radius: 8px !important;
+}
+
+/* ── Wishlist button ────────────────────────────────────── */
+[class*="wishlist"] button,
+button[aria-label*="wishlist"],
+button[aria-label*="Wishlist"] {
+  transition: transform 0.3s ease, background-color 0.3s ease !important;
+}
+[class*="wishlist"] button:hover,
+button[aria-label*="wishlist"]:hover {
+  transform: scale(1.15) !important;
+}
+
+/* ── Rating stars ───────────────────────────────────────── */
+[class*="rating"] .star,
+[class*="star-rating"] {
+  color: #f59e0b !important;
+}
+
+/* ── Modal improvements ─────────────────────────────────── */
+[class*="modal"],
+[class*="Modal"] {
+  border-radius: 16px !important;
+  font-family: 'Sora', sans-serif !important;
+}
+
+/* ── Skeleton loaders — green tint ─────────────────────── */
+[class*="skeleton"],
+[class*="Skeleton"] {
+  background: linear-gradient(90deg, #f0fdf4 25%, #e8f7f0 50%, #f0fdf4 75%) !important;
+  background-size: 200% 100% !important;
+  animation: shimmer 1.5s infinite !important;
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* ── Mobile bottom nav ──────────────────────────────────── */
+.mobile-navigation {
+  border-top: 1px solid var(--pa-border) !important;
+  background: rgba(255,255,255,0.97) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+/* ── Shop page section headers ──────────────────────────── */
+.section-heading,
+[class*="section-heading"],
+[class*="sectionHeading"] {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-weight: 600 !important;
+}
+
+/* ── Global link / interactive transitions ──────────────── */
+a,
+button {
+  transition: color 0.25s ease, background-color 0.25s ease,
+              border-color 0.25s ease, box-shadow 0.25s ease,
+              transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* ── Rounded borders for all cards globally ─────────────── */
+[class*="-card"],
+[class*="Card"] {
+  border-radius: 12px !important;
+}

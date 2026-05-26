@@ -32,8 +32,8 @@ module.exports = {
         '-1': '-1',
       },
       fontFamily: {
-        body: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Poppins', 'system-ui', 'sans-serif'],
+        body: ['Sora', 'system-ui', 'sans-serif'],
+        heading: ['Playfair Display', 'Georgia', 'serif'],
       },
       fontSize: {
         '10px': '0.625rem',
