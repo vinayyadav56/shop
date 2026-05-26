@@ -35,7 +35,7 @@ body {
   text-align: center;
   padding: 10px 20px;
   font-size: 13px;
-  font-family: 'Sora', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   letter-spacing: 0.2px;
   position: relative;
   z-index: 201;
@@ -145,7 +145,7 @@ input[class*="search"],
   border-color: var(--pa-border-m) !important;
   background: #f8f8f6 !important;
   transition: var(--pa-t) !important;
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'DM Sans', sans-serif !important;
 }
 .search-input input:focus,
 input[class*="search"]:focus,
@@ -174,7 +174,7 @@ nav a,
 .main-nav a,
 [class*="static-menu"] a {
   transition: color 0.25s ease !important;
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'DM Sans', sans-serif !important;
 }
 nav a:hover { color: var(--pa-primary) !important; }
 
@@ -184,7 +184,7 @@ textarea,
 select {
   border-radius: 8px !important;
   transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'DM Sans', sans-serif !important;
 }
 input:focus:not([type="radio"]):not([type="checkbox"]),
 textarea:focus,
@@ -213,7 +213,7 @@ select:focus {
 /* ── Footer ─────────────────────────────────────────────── */
 footer,
 [class*="footer"] {
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'DM Sans', sans-serif !important;
 }
 footer a:hover { color: #6ee7b7 !important; }
 
@@ -236,7 +236,7 @@ footer .subscribe-btn {
 .tag,
 [class*="tag"] {
   border-radius: 100px !important;
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'DM Sans', sans-serif !important;
   font-size: 11px !important;
   font-weight: 600 !important;
   letter-spacing: 0.4px !important;
@@ -272,7 +272,7 @@ img {
 /* ── Sidebar & Drawer ───────────────────────────────────── */
 [class*="drawer"],
 [class*="sidebar"] {
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'DM Sans', sans-serif !important;
 }
 
 /* ── Tabs / Filter pills ────────────────────────────────── */
@@ -280,7 +280,7 @@ img {
 [class*="filter-tab"] {
   border-radius: 100px !important;
   transition: var(--pa-t) !important;
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'DM Sans', sans-serif !important;
 }
 
 /* ── Banner text overlay (on banner images) ─────────────── */
@@ -288,7 +288,7 @@ img {
 .banner-text h2,
 [class*="banner"] h1,
 [class*="banner"] h2 {
-  font-family: 'Playfair Display', Georgia, serif !important;
+  font-family: 'Outfit', sans-serif !important;
   letter-spacing: -0.5px !important;
 }
 
@@ -318,7 +318,7 @@ button[aria-label*="wishlist"]:hover {
 [class*="modal"],
 [class*="Modal"] {
   border-radius: 16px !important;
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'DM Sans', sans-serif !important;
 }
 
 /* ── Skeleton loaders — green tint ─────────────────────── */
@@ -344,7 +344,7 @@ button[aria-label*="wishlist"]:hover {
 .section-heading,
 [class*="section-heading"],
 [class*="sectionHeading"] {
-  font-family: 'Playfair Display', Georgia, serif !important;
+  font-family: 'Outfit', sans-serif !important;
   font-weight: 600 !important;
 }
 
@@ -373,7 +373,7 @@ button {
   text-align: center;
   padding: 9px 20px;
   font-size: 13px;
-  font-family: 'Sora', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   letter-spacing: 0.2px;
   position: relative;
   z-index: 201;
@@ -416,12 +416,12 @@ button {
   padding: 6px 16px;
   font-size: 13px;
   font-weight: 600;
-  font-family: 'Sora', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   margin-bottom: 14px;
   letter-spacing: 0.3px;
 }
 .pa-sec-h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Outfit', sans-serif;
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 700;
   color: #1f2937;
@@ -437,7 +437,7 @@ button {
 .pa-sec-sub {
   color: #6b7280;
   font-size: 15px;
-  font-family: 'Sora', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   margin: 0;
 }
 
@@ -501,7 +501,7 @@ button {
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 .pa-cat-name {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 15px;
   font-weight: 600;
   color: #fff;
@@ -512,7 +512,7 @@ button {
   text-shadow: none;
 }
 .pa-cat-count {
-  font-family: 'Sora', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 11px;
   font-weight: 500;
   color: rgba(255,255,255,0.85);
@@ -585,14 +585,14 @@ button {
   box-shadow: 0 6px 20px rgba(5,150,105,0.3);
 }
 .pa-feat-title {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   font-weight: 600;
   color: #1f2937;
   margin: 0 0 8px;
 }
 .pa-feat-desc {
-  font-family: 'Sora', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #6b7280;
   margin: 0;
@@ -632,7 +632,7 @@ button {
   font-weight: 700;
 }
 .pa-helium-name {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Outfit', sans-serif;
   color: #1f2937;
   font-size: 14px;
   font-weight: 600;
@@ -677,12 +677,12 @@ button {
   padding: 5px 14px;
   font-size: 12px;
   font-weight: 600;
-  font-family: 'Sora', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   margin-bottom: 16px;
   border: 1px solid rgba(255,255,255,0.2);
 }
 .pa-nl-h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Outfit', sans-serif;
   font-size: clamp(1.5rem, 3.5vw, 2.25rem);
   font-weight: 700;
   color: #fff;
@@ -691,7 +691,7 @@ button {
 .pa-nl-sub {
   color: rgba(255,255,255,0.8);
   font-size: 14px;
-  font-family: 'Sora', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   margin: 0 0 28px;
 }
 .pa-nl-form {
@@ -708,7 +708,7 @@ button {
   padding: 14px 18px;
   border: none;
   outline: none;
-  font-family: 'Sora', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   background: #fff;
   color: #1f2937;
@@ -719,7 +719,7 @@ button {
   background: #065f46;
   color: #fff;
   border: none;
-  font-family: 'Sora', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -735,7 +735,7 @@ button {
   justify-content: center;
   gap: 4px;
   padding: 7px 14px;
-  font-family: 'Sora', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #fff;
@@ -852,7 +852,7 @@ button[class*="place-order"] {
   background: var(--pa-grad) !important;
   box-shadow: 0 6px 24px rgba(5,150,105,0.4) !important;
   border-radius: 12px !important;
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'DM Sans', sans-serif !important;
   font-weight: 600 !important;
   letter-spacing: 0.3px !important;
   animation: pa-glow-pulse 2.5s ease-in-out infinite;
@@ -863,7 +863,7 @@ button[class*="place-order"] {
   border-radius: 12px !important;
   border: 1px solid var(--pa-border-m) !important;
   box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'DM Sans', sans-serif !important;
   margin-top: 4px;
 }
 .pac-item {

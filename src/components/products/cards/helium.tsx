@@ -136,7 +136,7 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
               </div>
 
               {Number(quantity) > 0 && (
-                <AddToCart data={product} variant="single" />
+                <AddToCart data={product} variant="single" counterVariant="helium" />
               )}
             </>
           )}

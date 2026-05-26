@@ -23,6 +23,7 @@ module.exports = {
       'res.cloudinary.com',
       's3.amazonaws.com',
       'via.placeholder.com',
+      'images.unsplash.com',
     ],
   },
   ...(process.env.FRAMEWORK_PROVIDER === 'graphql' && {
