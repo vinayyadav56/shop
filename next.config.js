@@ -43,7 +43,7 @@ module.exports = {
       return config;
     },
   }),
-  ...(process.env.APPLICATION_MODE === 'production' && {
+  ...(['production', 'staging'].includes(process.env.APPLICATION_MODE) && {
     typescript: {
       ignoreBuildErrors: true,
     },
