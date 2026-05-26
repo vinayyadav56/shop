@@ -28,17 +28,24 @@ export const getStaticPaths: GetStaticPaths<ParsedQueryParams> = async ({
   locales,
 }) => {
   invariant(locales, 'locales is not defined');
-  const data = await client.types.all({ limit: 100 });
-  const paths = data?.flatMap((type) =>
-    locales?.map((locale) => ({ params: { pages: [type.slug] }, locale }))
-  );
-  // We'll pre-render only these paths at build time also with the slash route.
-  return {
-    paths: paths.concat(
-      locales?.map((locale) => ({ params: { pages: [] }, locale }))
-    ),
-    fallback: 'blocking',
-  };
+  try {
+    const data = await client.types.all({ limit: 100 });
+    const paths = data?.flatMap((type) =>
+      locales?.map((locale) => ({ params: { pages: [type.slug] }, locale }))
+    );
+    return {
+      paths: paths.concat(
+        locales?.map((locale) => ({ params: { pages: [] }, locale }))
+      ),
+      fallback: 'blocking',
+    };
+  } catch {
+    // API unavailable at build time — fall back to root path only, load at runtime
+    return {
+      paths: locales.map((locale) => ({ params: { pages: [] }, locale })),
+      fallback: 'blocking',
+    };
+  }
 };
 
 export const getStaticProps: GetStaticProps<
