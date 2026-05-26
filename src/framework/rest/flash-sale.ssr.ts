@@ -23,14 +23,15 @@ export const getStaticPaths: GetStaticPaths<ParsedQueryParams> = async ({
   defaultLocale
 }) => {
   invariant(locales, 'locales is not defined');
-  const { data } = await client?.flashSale?.all({ language: defaultLocale, limit: SHOPS_LIMIT });
-  const paths = data?.flatMap((flashSale) =>
-    locales?.map((locale) => ({ params: { slug: flashSale?.slug }, locale }))
-  );
-  return {
-    paths,
-    fallback: 'blocking',
-  };
+  try {
+    const { data } = await client?.flashSale?.all({ language: defaultLocale, limit: SHOPS_LIMIT });
+    const paths = data?.flatMap((flashSale: FlashSale) =>
+      locales?.map((locale) => ({ params: { slug: flashSale?.slug }, locale }))
+    ) ?? [];
+    return { paths, fallback: 'blocking' };
+  } catch {
+    return { paths: [], fallback: 'blocking' };
+  }
 };
 
 type PageProps = {};
