@@ -4,6 +4,8 @@ import Categories from '@/components/categories/categories';
 import { Element } from 'react-scroll';
 import FilterBar from './filter-bar';
 import ProductGridHome from '@/components/products/grids/home';
+import PaShopByCategory from '@/components/pa-shop-by-category';
+import PaFeatures from '@/components/pa-features';
 import type { HomePageProps } from '@/types';
 
 export default function ClassicLayout({ variables }: HomePageProps) {
@@ -11,6 +13,8 @@ export default function ClassicLayout({ variables }: HomePageProps) {
     <>
       <Banner layout="classic" variables={variables.types} />
       <PromotionSliders variables={variables.types} />
+      <PaShopByCategory variables={variables.categories} />
+      <PaFeatures />
       <FilterBar variables={variables.categories} />
       <Element
         name="grid"

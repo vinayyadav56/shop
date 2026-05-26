@@ -57,7 +57,7 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
     <article
       className={twMerge(
         cn(
-          'product-card cart-type-helium h-full overflow-hidden rounded border border-border-200 bg-light transition-shadow duration-200 hover:shadow-sm',
+          'product-card pa-helium cart-type-helium h-full overflow-hidden',
           className
         )
       )}
@@ -65,14 +65,13 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
       <div
         onClick={handleProductQuickView}
         className={cn(
-          'relative flex h-48 w-auto items-center justify-center sm:h-64',
+          'pa-helium-img relative flex h-48 w-auto items-center justify-center sm:h-64 cursor-pointer',
           query?.pages
             ? query?.pages?.includes('medicine')
               ? 'm-4 mb-0'
               : ''
             : ''
         )}
-        // role="button"
       >
         <span className="sr-only">{t('text-product-image')}</span>
         <Image
@@ -83,33 +82,31 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
           className="block object-contain product-image"
         />
         {discount && (
-          <div className="absolute top-3 rounded-full bg-yellow-500 px-1.5 text-xs font-semibold leading-6 text-light ltr:right-3 rtl:left-3 sm:px-2 md:top-4 md:px-2.5 ltr:md:right-4 rtl:md:left-4">
+          <div className="pa-helium-badge absolute top-3 ltr:right-3 rtl:left-3 md:top-4 ltr:md:right-4 rtl:md:left-4">
             {discount}
           </div>
         )}
       </div>
-      {/* End of product image */}
 
       <header className="relative p-3 md:p-5 md:py-6">
         <h3
           onClick={handleProductQuickView}
           role="button"
-          className="mb-2 text-sm font-semibold truncate text-heading"
+          className="pa-helium-name mb-2 truncate"
         >
           {name}
         </h3>
         <p className="text-xs text-muted">{unit}</p>
-        {/* End of product info */}
 
         <div className="relative flex items-center justify-between mt-7 min-h-6 md:mt-8">
           {product_type.toLowerCase() === 'variable' ? (
             <>
               <div>
-                <span className="text-sm font-semibold text-accent md:text-[15px]">
+                <span className="pa-helium-price text-sm md:text-[15px]">
                   {minPrice}
                 </span>
-                <span> - </span>
-                <span className="text-sm font-semibold text-accent md:text-[15px]">
+                <span className="text-muted mx-1">-</span>
+                <span className="pa-helium-price text-sm md:text-[15px]">
                   {maxPrice}
                 </span>
               </div>
@@ -132,7 +129,7 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
                     {basePrice}
                   </del>
                 )}
-                <span className="text-sm font-semibold text-accent md:text-base">
+                <span className="pa-helium-price text-sm md:text-base">
                   {price}
                 </span>
               </div>
@@ -148,7 +145,6 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
               {t('text-out-stock')}
             </div>
           )}
-          {/* End of product price */}
         </div>
       </header>
     </article>
