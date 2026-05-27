@@ -81,6 +81,7 @@ jobs:
 
       - name: Build check (staging env)
         env:
+          APPLICATION_MODE: staging
           FRAMEWORK_PROVIDER: rest
           NEXT_PUBLIC_VERSION: REST
           NEXT_PUBLIC_REST_API_ENDPOINT: https://plantathome-api-production.up.railway.app/api
