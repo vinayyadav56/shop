@@ -28,17 +28,24 @@ export const getStaticPaths: GetStaticPaths<ParsedQueryParams> = async ({
   locales,
 }) => {
   invariant(locales, 'locales is not defined');
-  const data = await client.types.all({ limit: 100 });
-  const paths = data?.flatMap((type) =>
-    locales?.map((locale) => ({ params: { pages: [type.slug] }, locale }))
-  );
-  // We'll pre-render only these paths at build time also with the slash route.
-  return {
-    paths: paths.concat(
-      locales?.map((locale) => ({ params: { pages: [] }, locale }))
-    ),
-    fallback: 'blocking',
-  };
+  try {
+    const data = await client.types.all({ limit: 100 });
+    const paths = data?.flatMap((type) =>
+      locales?.map((locale) => ({ params: { pages: [type.slug] }, locale }))
+    );
+    return {
+      paths: paths.concat(
+        locales?.map((locale) => ({ params: { pages: [] }, locale }))
+      ),
+      fallback: 'blocking',
+    };
+  } catch {
+    // API unavailable at build time — fall back to root path only, load at runtime
+    return {
+      paths: locales.map((locale) => ({ params: { pages: [] }, locale })),
+      fallback: 'blocking',
+    };
+  }
 };
 
 export const getStaticProps: GetStaticProps<
@@ -46,14 +53,20 @@ export const getStaticProps: GetStaticProps<
   ParsedQueryParams
 > = async ({ locale, params }) => {
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(
-    [API_ENDPOINTS.SETTINGS, { language: locale }],
-    ({ queryKey }) => client.settings.all(queryKey[1] as SettingsQueryOptions)
-  );
-  const types = await queryClient.fetchQuery(
-    [API_ENDPOINTS.TYPES, { limit: TYPES_PER_PAGE, language: locale }],
-    ({ queryKey }) => client.types.all(queryKey[1] as TypeQueryOptions)
-  );
+  let types: Awaited<ReturnType<typeof client.types.all>>;
+  try {
+    await queryClient.prefetchQuery(
+      [API_ENDPOINTS.SETTINGS, { language: locale }],
+      ({ queryKey }) => client.settings.all(queryKey[1] as SettingsQueryOptions)
+    );
+    types = await queryClient.fetchQuery(
+      [API_ENDPOINTS.TYPES, { limit: TYPES_PER_PAGE, language: locale }],
+      ({ queryKey }) => client.types.all(queryKey[1] as TypeQueryOptions)
+    );
+  } catch {
+    // API unavailable at build time — page will be generated on first request via ISR
+    return { notFound: true, revalidate: 120 };
+  }
 
   const { pages } = params!;
   let pageType: string | undefined;
