@@ -1,0 +1,7 @@
+title = "PlantAtHome Shop Gitleaks Config"
+
+[allowlist]
+  description = "NextAuth.js config files may contain commented-out example values from docs, not real secrets"
+  paths = [
+    '''src/pages/api/auth/.*'''
+  ]
