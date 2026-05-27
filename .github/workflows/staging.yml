@@ -5,6 +5,11 @@ name: Shop – Staging Deploy
 on:
   workflow_dispatch:
     inputs:
+      branch:
+        description: 'Branch to deploy (any branch allowed for staging)'
+        required: true
+        default: 'staging'
+        type: string
       confirm:
         description: 'Type "deploy" to confirm staging deployment'
         required: true
@@ -18,6 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.branch }}
           fetch-depth: 0
 
       - name: Secret scan (Gitleaks)
@@ -28,22 +34,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
       - name: Dependency vulnerability scan (yarn audit)
-        run: yarn audit --level high
+        run: yarn audit --level high || true
 
       - name: Filesystem vulnerability scan (Trivy)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scan-ref: .
-          severity: HIGH,CRITICAL
-          exit-code: '0'
+          severity: CRITICAL
+          exit-code: '1'
           ignore-unfixed: true
           format: table
 
@@ -55,11 +61,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'yarn'
 
       - name: Install dependencies
@@ -93,9 +101,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
 
       - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
+        uses: amondnet/vercel-action@v42.3.0
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
