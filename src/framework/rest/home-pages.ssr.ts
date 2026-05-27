@@ -53,14 +53,20 @@ export const getStaticProps: GetStaticProps<
   ParsedQueryParams
 > = async ({ locale, params }) => {
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(
-    [API_ENDPOINTS.SETTINGS, { language: locale }],
-    ({ queryKey }) => client.settings.all(queryKey[1] as SettingsQueryOptions)
-  );
-  const types = await queryClient.fetchQuery(
-    [API_ENDPOINTS.TYPES, { limit: TYPES_PER_PAGE, language: locale }],
-    ({ queryKey }) => client.types.all(queryKey[1] as TypeQueryOptions)
-  );
+  let types: Awaited<ReturnType<typeof client.types.all>>;
+  try {
+    await queryClient.prefetchQuery(
+      [API_ENDPOINTS.SETTINGS, { language: locale }],
+      ({ queryKey }) => client.settings.all(queryKey[1] as SettingsQueryOptions)
+    );
+    types = await queryClient.fetchQuery(
+      [API_ENDPOINTS.TYPES, { limit: TYPES_PER_PAGE, language: locale }],
+      ({ queryKey }) => client.types.all(queryKey[1] as TypeQueryOptions)
+    );
+  } catch {
+    // API unavailable at build time — page will be generated on first request via ISR
+    return { notFound: true, revalidate: 120 };
+  }
 
   const { pages } = params!;
   let pageType: string | undefined;
