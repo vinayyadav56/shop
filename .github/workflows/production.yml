@@ -96,6 +96,7 @@ jobs:
 
       - name: Build check (production env)
         env:
+          APPLICATION_MODE: production
           FRAMEWORK_PROVIDER: rest
           NEXT_PUBLIC_VERSION: REST
           NEXT_PUBLIC_REST_API_ENDPOINT: https://api.plantathome.in/api
