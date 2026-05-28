@@ -12,19 +12,8 @@ import { SettingsQueryOptions } from '@/types';
 type ParsedQueryParams = {
   slug: string;
 };
-export const getStaticPaths: GetStaticPaths<ParsedQueryParams> = async ({
-  locales,
-}) => {
-  invariant(locales, 'locales is not defined');
-  try {
-    const { data } = await client.products.all({ limit: 100 });
-    const paths = data?.flatMap((product) =>
-      locales?.map((locale) => ({ params: { slug: product.slug }, locale }))
-    );
-    return { paths, fallback: 'blocking' };
-  } catch {
-    return { paths: [], fallback: 'blocking' };
-  }
+export const getStaticPaths: GetStaticPaths<ParsedQueryParams> = async () => {
+  return { paths: [], fallback: 'blocking' };
 };
 type PageProps = {
   product: Product;
