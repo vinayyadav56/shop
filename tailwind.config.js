@@ -32,10 +32,8 @@ module.exports = {
         '-1': '-1',
       },
       fontFamily: {
-        display: ['Cormorant Garamond', 'Georgia', 'serif'],
-        body: ['DM Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
-        heading: ['DM Sans', 'system-ui', 'sans-serif'],
-        mono: ['DM Mono', 'Fira Mono', 'Consolas', 'monospace'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
+        heading: ['Montserrat', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         '10px': '0.625rem',
@@ -47,12 +45,6 @@ module.exports = {
         h6: 'var(--h6)',
       },
       colors: {
-        'pa-ink':     '#0A0A0A',
-        'pa-cream':   '#F9F5EE',
-        'pa-gold':    '#C9A26B',
-        'pa-forest':  '#0D1A12',
-        'pa-primary': '#1B4332',
-        'pa-sage':    '#52796F',
         light: withOpacity('--color-light'),
         dark: withOpacity('--color-dark'),
         accent: withOpacity('--color-accent'),
