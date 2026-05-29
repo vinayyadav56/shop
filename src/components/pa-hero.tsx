@@ -3,7 +3,7 @@ import { Image } from '@/components/ui/image';
 import { useRouter } from 'next/router';
 
 const HERO_IMG = 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&q=80';
-const FEATURED_IMG = 'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=800&q=80';
+const FEATURED_IMG = 'https://images.unsplash.com/photo-1508385082359-a8ae0145b471?w=800&h=900&q=95&fit=crop&crop=entropy&auto=format';
 
 const badges = [
   { icon: '🚚', text: 'Same Day Delivery' },
