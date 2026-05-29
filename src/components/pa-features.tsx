@@ -1,4 +1,6 @@
-const features = [
+import { useSettings } from '@/framework/settings';
+
+const DEFAULT_FEATURES = [
   {
     emoji: '🚚',
     title: 'Free Delivery',
@@ -21,24 +23,30 @@ const features = [
   },
 ];
 
-const PaFeatures: React.FC = () => (
-  <section className="pa-feat-section">
-    <div className="pa-wrap">
-      <div className="pa-feat-grid">
-        {features.map((f) => (
-          <div key={f.title} className="pa-feat-card">
-            <div className="pa-feat-icon">
-              <span role="img" aria-label={f.title}>{f.emoji}</span>
+const PaFeatures: React.FC = () => {
+  const { settings } = useSettings() as any;
+  const features: typeof DEFAULT_FEATURES =
+    settings?.homeFeatures?.length ? settings.homeFeatures : DEFAULT_FEATURES;
+
+  return (
+    <section className="pa-feat-section">
+      <div className="pa-wrap">
+        <div className="pa-feat-grid">
+          {features.map((f: any) => (
+            <div key={f.title} className="pa-feat-card">
+              <div className="pa-feat-icon">
+                <span role="img" aria-label={f.title}>{f.emoji}</span>
+              </div>
+              <div>
+                <h3 className="pa-feat-title">{f.title}</h3>
+                <p className="pa-feat-desc">{f.desc}</p>
+              </div>
             </div>
-            <div>
-              <h3 className="pa-feat-title">{f.title}</h3>
-              <p className="pa-feat-desc">{f.desc}</p>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default PaFeatures;

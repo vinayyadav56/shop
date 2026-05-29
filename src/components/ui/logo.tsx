@@ -1,7 +1,6 @@
 import { Image } from '@/components/ui/image';
 import cn from 'classnames';
 import Link from '@/components/ui/link';
-import { logoPlaceholder } from '@/lib/placeholders';
 import { useSettings } from '@/framework/settings';
 
 const Logo: React.FC<React.AnchorHTMLAttributes<{}>> = ({
@@ -13,14 +12,14 @@ const Logo: React.FC<React.AnchorHTMLAttributes<{}>> = ({
   }: any = useSettings();
   return (
     <Link href="/" className={cn('inline-flex', className)} {...props}>
-      <span className="relative h-[2.125rem] w-32 overflow-hidden md:w-[8.625rem]">
+      <span className="relative h-[2.875rem] w-[13rem] overflow-hidden">
         <Image
-          src={logo?.original ?? logoPlaceholder}
+          src={logo?.original ?? '/logo.svg'}
           alt={siteTitle || 'PlantAtHome'}
           fill
           sizes="(max-width: 768px) 100vw"
           loading="eager"
-          className="object-contain"
+          className="object-contain object-left"
         />
       </span>
     </Link>
