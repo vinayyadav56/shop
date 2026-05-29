@@ -17,6 +17,9 @@ const ProfileForm = ({ user }: { user: User }) => {
     if (!user) {
       return false;
     }
+    // avatar is an array when a new file is uploaded; an object when unchanged
+    const rawAvatar = values?.profile?.avatar;
+    const avatar = Array.isArray(rawAvatar) ? rawAvatar[0] : rawAvatar;
     updateProfile({
       id: user.id,
       name: values.name,
@@ -24,7 +27,7 @@ const ProfileForm = ({ user }: { user: User }) => {
         id: user?.profile?.id,
         bio: values?.profile?.bio ?? '',
         //@ts-ignore
-        avatar: values?.profile?.avatar?.[0],
+        avatar,
       },
     });
   }
