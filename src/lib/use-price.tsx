@@ -61,13 +61,13 @@ export default function usePrice(
   const currencyOptions = settings?.currencyOptions;
   const { amount, baseAmount, currencyCode, currencyOptionsFormat } = {
     ...data,
-    currencyCode: currency ?? 'USD',
+    currencyCode: currency ?? 'INR',
     currencyOptionsFormat: currencyOptions ?? {
-      formation: 'en-US',
+      formation: 'en-IN',
       fractions: 2
     }
   };
-  const { formation = 'en-US', fractions = 2 } = currencyOptionsFormat!;
+  const { formation = 'en-IN', fractions = 2 } = currencyOptionsFormat!;
 
   const { locale } = useRouter();
   const value = useMemo(() => {
