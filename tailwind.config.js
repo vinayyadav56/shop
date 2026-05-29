@@ -33,7 +33,7 @@ module.exports = {
       },
       fontFamily: {
         body: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Playfair Display', 'Georgia', 'serif'],
+        heading: ['Montserrat', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         '10px': '0.625rem',

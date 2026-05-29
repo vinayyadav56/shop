@@ -37,7 +37,10 @@ const addressSchema = yup.object().shape({
     country: yup.string().required('error-country-required'),
     city: yup.string().required('error-city-required'),
     state: yup.string().required('error-state-required'),
-    zip: yup.string().required('error-zip-required'),
+    zip: yup
+      .string()
+      .required('error-zip-required')
+      .matches(/^\d{6}$/, 'error-zip-invalid'),
     street_address: yup.string().required('error-street-required'),
   }),
 });
@@ -210,7 +213,7 @@ export default function CreateOrUpdateAddressForm() {
           type: address?.type ?? type,
           address: {
             city: address?.address?.city ?? '',
-            country: address?.address?.country ?? '',
+            country: address?.address?.country ?? 'India',
             state: address?.address?.state ?? '',
             zip: address?.address?.zip ?? '',
             street_address: address?.address?.street_address ?? '',

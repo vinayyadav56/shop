@@ -49,6 +49,7 @@ const CreateOrUpdateGuestAddressForm = () => {
           title: address?.title ?? '',
           type: address?.type ?? type,
           address: {
+            country: 'India',
             ...address?.address,
           },
         }}

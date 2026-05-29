@@ -30,7 +30,7 @@
   --pa-grad-light:  linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
 
   /* Typography */
-  --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-heading: 'Montserrat', system-ui, -apple-system, sans-serif;
   --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   /* Radius */

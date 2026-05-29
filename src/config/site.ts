@@ -7,12 +7,12 @@ export const siteSettings = {
   logo: {
     url: '/logo.svg',
     alt: 'PlantAtHome',
-    href: '/grocery',
-    width: 128,
-    height: 40,
+    href: '/plants',
+    width: 200,
+    height: 50,
   },
   defaultLanguage: 'en',
-  currencyCode: 'USD',
+  currencyCode: 'INR',
   product: {
     placeholderImage: '/product-placeholder.svg',
     cardMaps: {
@@ -109,17 +109,10 @@ export const siteSettings = {
   headerLinks: [
     { href: Routes.shops, icon: null, label: 'nav-menu-shops' },
     { href: Routes.coupons, icon: null, label: 'nav-menu-offer' },
-    { href: Routes.contactUs, label: 'nav-menu-contact' },
     { href: Routes.flashSale, label: 'nav-menu-flash-sale' },
-    { href: Routes.manufacturers, label: 'text-manufacturers' },
-    { href: Routes.authors, label: 'text-authors' },
     { href: Routes.help, label: 'nav-menu-faq' },
-    { href: Routes.terms, label: 'nav-menu-terms' },
+    { href: Routes.contactUs, label: 'nav-menu-contact' },
     { href: Routes.customerRefundPolicies, label: 'nav-menu-refund-policy' },
-    {
-      href: Routes.vendorRefundPolicies,
-      label: 'nav-menu-vendor-refund-policy',
-    },
   ],
   footer: {
     // copyright: {
@@ -134,19 +127,15 @@ export const siteSettings = {
         title: 'text-explore',
         links: [
           {
-            name: 'Shops',
+            name: 'Shop Plants',
             href: Routes.shops,
-          },
-          {
-            name: 'Authors',
-            href: Routes.authors,
           },
           {
             name: 'Flash Deals',
             href: Routes?.flashSale,
           },
           {
-            name: 'Coupon',
+            name: 'Coupons & Offers',
             href: Routes.coupons,
           },
         ],
@@ -155,16 +144,16 @@ export const siteSettings = {
         title: 'text-customer-service',
         links: [
           {
-            name: 'text-faq-help',
+            name: 'Help & FAQ',
             href: Routes.help,
           },
           {
-            name: 'Vendor Refund Policies',
-            href: Routes.vendorRefundPolicies,
+            name: 'Refund Policy',
+            href: Routes.customerRefundPolicies,
           },
           {
-            name: 'Customer Refund Policies',
-            href: Routes.customerRefundPolicies,
+            name: 'Track Your Order',
+            href: Routes.orders,
           },
         ],
       },
@@ -172,19 +161,15 @@ export const siteSettings = {
         title: 'text-our-information',
         links: [
           {
-            name: 'Manufacturers',
-            href: Routes?.manufacturers,
-          },
-          {
-            name: 'Privacy policies',
+            name: 'Privacy Policy',
             href: Routes.privacy,
           },
           {
-            name: 'text-terms-condition',
+            name: 'Terms & Conditions',
             href: Routes.terms,
           },
           {
-            name: 'text-contact-us',
+            name: 'Contact Us',
             href: Routes.contactUs,
           },
         ],
