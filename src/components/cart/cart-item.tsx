@@ -1,11 +1,8 @@
 import { Image } from '@/components/ui/image';
 import { motion } from 'framer-motion';
 import { siteSettings } from '@/config/site';
-import Counter from '@/components/ui/counter';
-import { CloseIcon } from '@/components/icons/close-icon';
 import { fadeInOut } from '@/lib/motion/fade-in-out';
 import usePrice from '@/lib/use-price';
-import { useTranslation } from 'next-i18next';
 import { useCart } from '@/store/quick-cart/cart.context';
 
 interface CartItemProps {
@@ -13,35 +10,22 @@ interface CartItemProps {
 }
 
 const CartItem = ({ item }: CartItemProps) => {
-  const { t } = useTranslation('common');
-  const {
-    isInStock,
-    clearItemFromCart,
-    addItemToCart,
-    removeItemFromCart,
-    updateCartLanguage,
-    language,
-  } = useCart();
+  const { isInStock, clearItemFromCart, addItemToCart, removeItemFromCart } =
+    useCart();
 
-  const { price } = usePrice({
-    amount: item.price,
-  });
-  const { price: itemPrice } = usePrice({
-    amount: item.itemTotal,
-  });
-  function handleIncrement(e: any) {
+  const { price } = usePrice({ amount: item.price });
+  const { price: itemTotal } = usePrice({ amount: item.itemTotal });
+  const outOfStock = !isInStock(item.id);
+
+  function handleIncrement(e: React.MouseEvent) {
     e.stopPropagation();
-    // Check language and update
-    if (item?.language !== language) {
-      updateCartLanguage(item?.language);
-    }
     addItemToCart(item, 1);
   }
-  const handleRemoveClick = (e: any) => {
+  function handleDecrement(e: React.MouseEvent) {
     e.stopPropagation();
     removeItemFromCart(item.id);
-  };
-  const outOfStock = !isInStock(item.id);
+  }
+
   return (
     <motion.div
       layout
@@ -49,44 +33,66 @@ const CartItem = ({ item }: CartItemProps) => {
       animate="to"
       exit="from"
       variants={fadeInOut(0.25)}
-      className="flex items-center border-b border-solid border-border-200 border-opacity-75 px-4 py-4 text-sm sm:px-6"
+      className="pa-cart-item"
     >
-      <div className="flex-shrink-0">
-        <Counter
-          value={item.quantity}
-          onDecrement={handleRemoveClick}
-          onIncrement={handleIncrement}
-          variant="pillVertical"
-          disabled={outOfStock}
-        />
-      </div>
-
-      <div className="relative mx-4 flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden bg-gray-100 sm:h-16 sm:w-16">
+      {/* Product image */}
+      <div className="pa-cart-item-img">
         <Image
           src={item?.image ?? siteSettings?.product?.placeholderImage}
           alt={item.name}
           fill
-          sizes="(max-width: 768px) 100vw"
-          className="object-contain"
+          sizes="72px"
+          className="object-cover"
         />
+        {outOfStock && (
+          <span className="pa-cart-oos">Out of stock</span>
+        )}
       </div>
-      <div>
-        {/* <h3 className="font-bold text-heading">{item.name}</h3> */}
-        <h3 className="font-bold text-heading">{item.name} </h3>
-        <p className="my-2.5 font-semibold text-accent">{price}</p>
-        <span className="text-xs text-body">
-          {item.quantity} X {item.unit}
-        </span>
+
+      {/* Content */}
+      <div className="pa-cart-item-body">
+        <h3 className="pa-cart-item-name" title={item.name}>{item.name}</h3>
+        {item.unit && (
+          <p className="pa-cart-item-unit">{item.unit}</p>
+        )}
+        <div className="pa-cart-item-bottom">
+          {/* Quantity stepper */}
+          <div className="pa-qty-stepper">
+            <button
+              className="pa-qty-btn"
+              onClick={handleDecrement}
+              aria-label="Decrease quantity"
+            >
+              <svg width="10" height="2" viewBox="0 0 10 2" fill="currentColor">
+                <rect width="10" height="2" rx="1"/>
+              </svg>
+            </button>
+            <span className="pa-qty-val">{item.quantity}</span>
+            <button
+              className="pa-qty-btn"
+              onClick={handleIncrement}
+              disabled={outOfStock}
+              aria-label="Increase quantity"
+            >
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+                <path d="M5 0v10M0 5h10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </div>
+          <span className="pa-cart-item-total">{itemTotal}</span>
+        </div>
+        <p className="pa-cart-item-price">{price} each</p>
       </div>
-      <span className="font-bold text-heading ltr:ml-auto rtl:mr-auto">
-        {itemPrice}
-      </span>
+
+      {/* Remove button */}
       <button
-        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted transition-all duration-200 hover:bg-gray-100 hover:text-red-600 focus:bg-gray-100 focus:text-red-600 focus:outline-0 ltr:ml-3 ltr:-mr-2 rtl:mr-3 rtl:-ml-2"
+        className="pa-cart-remove-btn"
         onClick={() => clearItemFromCart(item.id)}
+        aria-label="Remove item"
       >
-        <span className="sr-only">{t('text-close')}</span>
-        <CloseIcon className="h-3 w-3" />
+        <svg width="9" height="9" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+          <path d="M1 1l12 12M13 1L1 13"/>
+        </svg>
       </button>
     </motion.div>
   );
