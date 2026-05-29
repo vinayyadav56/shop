@@ -32,8 +32,8 @@ module.exports = {
         '-1': '-1',
       },
       fontFamily: {
-        body: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Montserrat', 'system-ui', 'sans-serif'],
+        body: ['DM Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        heading: ['Cormorant Garamond', 'Georgia', 'serif'],
       },
       fontSize: {
         '10px': '0.625rem',
