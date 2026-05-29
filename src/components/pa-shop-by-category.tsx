@@ -8,19 +8,34 @@ interface Props {
 
 function getEmoji(name: string): string {
   const n = name.toLowerCase();
-  if (n.includes('succulent') || n.includes('cactus')) return '🌵';
-  if (n.includes('flower') || n.includes('bloom') || n.includes('rose') || n.includes('hibiscus')) return '🌺';
-  if (n.includes('herb') || n.includes('basil') || n.includes('mint') || n.includes('tulsi')) return '🌱';
-  if (n.includes('tree') || n.includes('outdoor') || n.includes('garden')) return '🌳';
-  if (n.includes('indoor') || n.includes('foliage') || n.includes('fern') || n.includes('tropical')) return '🪴';
-  if (n.includes('seed') || n.includes('bulb')) return '🌾';
-  if (n.includes('fruit') || n.includes('veggie') || n.includes('vegetable')) return '🍃';
+  if (n.includes('succulent') || n.includes('cactus') || n.includes('cacti')) return '🌵';
+  if (n.includes('flower') || n.includes('bloom') || n.includes('rose')) return '🌸';
+  if (n.includes('herb') || n.includes('spice') || n.includes('basil') || n.includes('mint')) return '🌿';
+  if (n.includes('tree') || n.includes('palm') || n.includes('outdoor')) return '🌳';
+  if (n.includes('indoor') || n.includes('foliage') || n.includes('tropical')) return '🪴';
+  if (n.includes('climbing') || n.includes('vine') || n.includes('creeper')) return '🍃';
+  if (n.includes('ground') || n.includes('grass') || n.includes('cover')) return '🌾';
+  if (n.includes('vegetable') || n.includes('veggie')) return '🥦';
+  if (n.includes('shrub') || n.includes('bush')) return '🌱';
   return '🌿';
 }
 
+const FALLBACK_COLORS = [
+  'linear-gradient(135deg,#1B5E20,#2E7D32)',
+  'linear-gradient(135deg,#0D3D14,#1B5E20)',
+  'linear-gradient(135deg,#2E7D32,#43A047)',
+  'linear-gradient(135deg,#1B5E20,#388E3C)',
+  'linear-gradient(135deg,#004D40,#00695C)',
+  'linear-gradient(135deg,#1A237E,#283593)',
+  'linear-gradient(135deg,#4A148C,#6A1B9A)',
+  'linear-gradient(135deg,#BF360C,#D84315)',
+  'linear-gradient(135deg,#1B5E20,#558B2F)',
+  'linear-gradient(135deg,#E65100,#EF6C00)',
+];
+
 const PaShopByCategory: React.FC<Props> = ({ variables }) => {
   const { categories, isLoading } = useCategories(variables);
-  const rootCats = categories?.filter((c: any) => !c.parent_id)?.slice(0, 8) ?? [];
+  const rootCats = categories?.filter((c: any) => !c.parent_id)?.slice(0, 10) ?? [];
 
   if (isLoading || !rootCats.length) return null;
 
@@ -28,52 +43,48 @@ const PaShopByCategory: React.FC<Props> = ({ variables }) => {
     <section className="pa-cat-section">
       <div className="pa-wrap">
         <div className="pa-sec-hdr">
-          <span className="pa-pill">🌿 Browse Collections</span>
+          <span className="pa-pill">🌿 Collections</span>
           <h2 className="pa-sec-h2">
-            Shop by <span className="pa-grad-text">Collection</span>
+            Shop by <span className="pa-grad-text">Plant Type</span>
           </h2>
           <p className="pa-sec-sub">
-            Carefully curated botanical categories for every plant lover
+            From air-purifying indoor plants to vibrant flowering varieties — find your perfect green companion.
           </p>
         </div>
 
         <div className="pa-cat-grid">
-          {rootCats.map((cat: any) => (
+          {rootCats.map((cat: any, i: number) => (
             <Link
               key={cat.id}
-              href={`/${cat.type?.slug ?? 'grocery'}/search/?category=${cat.slug}`}
+              href={`/${cat.type?.slug ?? 'plants'}/search/?category=${cat.slug}`}
               className="pa-cat-card group"
             >
-              {/* Background image overlay */}
-              {cat.image?.original && (
+              {/* Background: real image or gradient fallback */}
+              {cat.image?.original ? (
                 <div className="pa-cat-img-wrap">
                   <Image
                     src={cat.image.original}
                     alt={cat.name}
                     fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
+                    sizes="(max-width: 520px) 50vw, (max-width: 800px) 33vw, 20vw"
                     className="pa-cat-img"
                   />
                   <div className="pa-cat-img-overlay" />
                 </div>
+              ) : (
+                <div
+                  style={{ position: 'absolute', inset: 0, background: FALLBACK_COLORS[i % FALLBACK_COLORS.length] }}
+                  aria-hidden="true"
+                />
               )}
 
               {/* Content */}
               <div className="pa-cat-body">
-                {!cat.image?.original && (
-                  <span className="pa-cat-emoji">{getEmoji(cat.name)}</span>
-                )}
+                <span className="pa-cat-emoji">{getEmoji(cat.name)}</span>
                 <div className="pa-cat-name">{cat.name}</div>
                 {cat.products_count > 0 && (
                   <div className="pa-cat-count">{cat.products_count} plants</div>
                 )}
-              </div>
-
-              {/* Arrow */}
-              <div className="pa-cat-arr">
-                <svg width="12" height="12" fill="none" stroke="#fff" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
               </div>
             </Link>
           ))}

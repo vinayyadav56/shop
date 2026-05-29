@@ -7,14 +7,11 @@ import { productPlaceholder } from '@/lib/placeholders';
 import { useRouter } from 'next/router';
 import { twMerge } from 'tailwind-merge';
 import dynamic from 'next/dynamic';
+
 const AddToCart = dynamic(
-  () =>
-    import('@/components/products/add-to-cart/add-to-cart').then(
-      (module) => module.AddToCart,
-    ),
+  () => import('@/components/products/add-to-cart/add-to-cart').then((m) => m.AddToCart),
   { ssr: false },
 );
-
 
 type HeliumProps = {
   product: any;
@@ -24,52 +21,33 @@ type HeliumProps = {
 const Helium: React.FC<HeliumProps> = ({ product, className }) => {
   const { t } = useTranslation('common');
   const { query } = useRouter();
-  const {
-    name,
-    image,
-    unit,
-    quantity,
-    min_price,
-    max_price,
-    product_type,
-    in_flash_sale,
-  } = product ?? {};
+  const { name, image, unit, quantity, min_price, max_price, product_type } = product ?? {};
 
   const { price, basePrice, discount } = usePrice({
     amount: product.sale_price ? product.sale_price : product.price!,
     baseAmount: product.price,
   });
-  const { price: minPrice } = usePrice({
-    amount: min_price,
-  });
-  const { price: maxPrice } = usePrice({
-    amount: max_price,
-  });
-
+  const { price: minPrice } = usePrice({ amount: min_price });
+  const { price: maxPrice } = usePrice({ amount: max_price });
   const { openModal } = useModalAction();
 
   function handleProductQuickView() {
     return openModal('PRODUCT_DETAILS', product.slug);
   }
 
+  const inStock = Number(quantity) > 0;
+
   return (
     <article
-      className={twMerge(
-        cn(
-          'product-card pa-helium cart-type-helium h-full overflow-hidden',
-          className
-        )
-      )}
+      className={twMerge(cn('product-card pa-helium cart-type-helium h-full overflow-hidden', className))}
     >
+      {/* Image area */}
       <div
         onClick={handleProductQuickView}
         className={cn(
-          'relative flex h-48 w-auto items-center justify-center sm:h-64 cursor-pointer',
-          query?.pages
-            ? query?.pages?.includes('medicine')
-              ? 'm-4 mb-0'
-              : ''
-            : ''
+          'relative flex h-48 w-auto items-center justify-center sm:h-64 cursor-pointer overflow-hidden',
+          'bg-gradient-to-br from-green-50 to-emerald-50',
+          query?.pages?.includes?.('medicine') ? 'm-4 mb-0 rounded-2xl' : '',
         )}
       >
         <span className="sr-only">{t('text-product-image')}</span>
@@ -77,48 +55,53 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
           src={image?.original ?? productPlaceholder}
           alt={name}
           fill
-          sizes="(max-width: 768px) 100vw"
-          className="block object-contain product-image"
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className="block object-contain product-image transition-transform duration-500 group-hover:scale-105"
         />
+
+        {/* Discount badge */}
         {discount && (
-          <div className="pa-helium-badge absolute top-3 ltr:right-3 rtl:left-3 md:top-4 ltr:md:right-4 rtl:md:left-4">
+          <div className="pa-helium-badge absolute top-3 ltr:right-3 rtl:left-3">
             {discount}
+          </div>
+        )}
+
+        {/* Out of stock overlay */}
+        {!inStock && (
+          <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+            <span className="px-3 py-1.5 rounded-full bg-red-500 text-white text-xs font-bold">
+              Out of Stock
+            </span>
           </div>
         )}
       </div>
 
-      <header className="relative p-3 md:p-5 md:py-6">
+      {/* Info area */}
+      <header className="relative p-3 md:p-4">
         <h3
           onClick={handleProductQuickView}
           role="button"
-          className="pa-helium-name mb-2 truncate"
+          className="pa-helium-name mb-1 truncate cursor-pointer hover:text-green-700 transition-colors"
         >
           {name}
         </h3>
-        <p className="text-xs text-muted">{unit}</p>
+        {unit && <p className="text-xs text-gray-400 mb-3">{unit}</p>}
 
-        <div className="relative flex items-center justify-between mt-7 min-h-6 md:mt-8">
-          {product_type.toLowerCase() === 'variable' ? (
+        <div className="flex items-center justify-between gap-2 min-h-[32px]">
+          {product_type?.toLowerCase() === 'variable' ? (
             <>
-              <div>
-                <span className="pa-helium-price text-sm md:text-[15px]">
-                  {minPrice}
-                </span>
-                <span className="text-muted mx-1">-</span>
-                <span className="pa-helium-price text-sm md:text-[15px]">
-                  {maxPrice}
-                </span>
+              <div className="flex items-baseline gap-1">
+                <span className="pa-helium-price text-sm md:text-[15px]">{minPrice}</span>
+                <span className="text-gray-300 text-xs">–</span>
+                <span className="pa-helium-price text-sm md:text-[15px]">{maxPrice}</span>
               </div>
-
-              {Number(quantity) > 0 && (
-                <button
-                  onClick={handleProductQuickView}
-                  className="pa-add-btn order-5 sm:order-4"
-                >
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="ltr:mr-1.5 rtl:ml-1.5">
-                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+              {inStock && (
+                <button onClick={handleProductQuickView} className="pa-add-btn">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
                   </svg>
-                  <span>{t('text-view')}</span>
+                  View
                 </button>
               )}
             </>
@@ -126,25 +109,16 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
             <>
               <div className="relative">
                 {basePrice && (
-                  <del className="absolute text-xs italic text-opacity-75 -top-4 text-muted md:-top-5">
+                  <del className="absolute text-xs italic text-gray-400 -top-4 ltr:left-0">
                     {basePrice}
                   </del>
                 )}
-                <span className="pa-helium-price text-sm md:text-base">
-                  {price}
-                </span>
+                <span className="pa-helium-price text-sm md:text-base">{price}</span>
               </div>
-
-              {Number(quantity) > 0 && (
+              {inStock && (
                 <AddToCart data={product} variant="single" counterVariant="helium" />
               )}
             </>
-          )}
-
-          {Number(quantity) <= 0 && (
-            <div className="px-2 py-1 text-xs bg-red-500 rounded text-light">
-              {t('text-out-stock')}
-            </div>
           )}
         </div>
       </header>

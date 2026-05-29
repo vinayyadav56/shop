@@ -2,7 +2,7 @@ const features = [
   {
     emoji: '🚚',
     title: 'Free Delivery',
-    desc: 'Free shipping on all orders above ₹999. Safe, swift delivery to your door.',
+    desc: 'Free shipping on orders above ₹999. Safe, swift delivery to your door.',
   },
   {
     emoji: '🌱',
@@ -17,7 +17,7 @@ const features = [
   {
     emoji: '💬',
     title: 'Plant Care Support',
-    desc: 'Expert advice and care guides available 7 days a week, just for you.',
+    desc: 'Expert advice and care guides, available 7 days a week, just for you.',
   },
 ];
 
@@ -30,8 +30,10 @@ const PaFeatures: React.FC = () => (
             <div className="pa-feat-icon">
               <span role="img" aria-label={f.title}>{f.emoji}</span>
             </div>
-            <h3 className="pa-feat-title">{f.title}</h3>
-            <p className="pa-feat-desc">{f.desc}</p>
+            <div>
+              <h3 className="pa-feat-title">{f.title}</h3>
+              <p className="pa-feat-desc">{f.desc}</p>
+            </div>
           </div>
         ))}
       </div>
