@@ -5,23 +5,21 @@ import Input from '@/components/ui/forms/input';
 function GuestName({ count, label }: { count: number; label: string }) {
     const [name, setName] = useAtom(guestNameAtom);
     return (
-        <div className="p-5 bg-light shadow-700 md:p-8">
-            <div className="flex items-center justify-between mb-5 md:mb-8">
-                <div className="flex items-center space-x-3 rtl:space-x-reverse md:space-x-4">
-                    <span className="flex items-center justify-center w-8 h-8 text-base rounded-full bg-accent text-light lg:text-xl">
-                        {count}
-                    </span>
-                    <p className="text-lg capitalize text-heading lg:text-xl">{label}</p>
+        <div className="pa-checkout-step">
+            <div className="pa-checkout-step-header">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <span className="pa-checkout-step-num">{count}</span>
+                    <span className="pa-checkout-step-label">{label}</span>
                 </div>
             </div>
             <div className="block">
                 <Input
                     //@ts-ignore
-
                     value={name}
                     name="guestName"
                     onChange={(e) => setName(e.target.value)}
                     variant="outline"
+                    placeholder="Enter your full name"
                 />
             </div>
         </div>
