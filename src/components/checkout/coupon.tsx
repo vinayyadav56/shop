@@ -31,13 +31,12 @@ const Coupon = ({ theme, subtotal }: { theme?: 'dark'; subtotal: number }) => {
   } = useVerifyCoupon();
   if (!hasCoupon && !coupon) {
     return (
-      <p
-        role="button"
-        className="text-xs font-bold transition duration-200 text-body hover:text-accent"
+      <button
+        className="pa-coupon-trigger"
         onClick={() => setHasCoupon(true)}
       >
         {t('text-have-coupon')}
-      </p>
+      </button>
     );
   }
   function onSubmit(code: FormTypes) {

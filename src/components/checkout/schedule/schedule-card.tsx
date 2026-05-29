@@ -5,19 +5,16 @@ interface ScheduleProps {
   checked: boolean;
 }
 const ScheduleCard: React.FC<ScheduleProps> = ({ checked, schedule }) => (
-  <div
-    className={classNames(
-      "relative p-4 rounded border cursor-pointer group hover:border-accent",
-      {
-        "border-accent shadow-sm": checked,
-        "bg-gray-100 border-transparent": !checked,
-      }
+  <div className={classNames('pa-schedule-card', { 'pa-schedule-card--checked': checked })}>
+    {checked && (
+      <span className="pa-schedule-check">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </span>
     )}
-  >
-    <span className="text-sm text-heading font-semibold block mb-2">
-      {schedule.title}
-    </span>
-    <span className="text-sm text-heading block">{schedule.description}</span>
+    <span className="pa-schedule-title">{schedule.title}</span>
+    <span className="pa-schedule-desc">{schedule.description}</span>
   </div>
 );
 

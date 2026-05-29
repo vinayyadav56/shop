@@ -2558,3 +2558,163 @@ textarea:focus {
 /* ── Empty address / no items inline state ───────────────────── */
 .bg-gray-100.rounded.border { background: #F5F8F3 !important; border-color: rgba(46,107,74,0.15) !important; }
 
+
+/* ── Address card ─────────────────────────────────────────────── */
+.pa-address-card {
+  position: relative;
+  cursor: pointer;
+  border-radius: 14px;
+  border: 1.5px solid rgba(46,107,74,0.12);
+  background: #F5F8F3;
+  padding: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  min-height: 80px;
+}
+.pa-address-card:hover {
+  border-color: rgba(44,95,46,0.4);
+}
+.pa-address-card--checked {
+  border-color: #2C5F2E;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(44,95,46,0.12), 0 2px 12px rgba(44,95,46,0.08);
+}
+.pa-address-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2C5F2E, #3D8B40);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pa-address-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0D1F0D;
+  margin-bottom: 6px;
+  text-transform: capitalize;
+  padding-right: 28px;
+}
+.pa-address-body {
+  font-size: 12.5px;
+  color: #4A6A4A;
+  line-height: 1.5;
+}
+.pa-address-actions {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.pa-address-card:hover .pa-address-actions { opacity: 1; }
+.pa-address-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+}
+.pa-address-btn--edit { background: #2C5F2E; }
+.pa-address-btn--delete { background: #DC2626; }
+
+/* ── Schedule card ────────────────────────────────────────────── */
+.pa-schedule-card {
+  position: relative;
+  cursor: pointer;
+  border-radius: 14px;
+  border: 1.5px solid rgba(46,107,74,0.12);
+  background: #F5F8F3;
+  padding: 16px 14px;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.pa-schedule-card:hover {
+  border-color: rgba(44,95,46,0.4);
+}
+.pa-schedule-card--checked {
+  border-color: #2C5F2E;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(44,95,46,0.12), 0 2px 12px rgba(44,95,46,0.08);
+}
+.pa-schedule-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2C5F2E, #3D8B40);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pa-schedule-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0D1F0D;
+  margin-bottom: 4px;
+  padding-right: 28px;
+}
+.pa-schedule-desc {
+  display: block;
+  font-size: 12px;
+  color: #4A6A4A;
+  line-height: 1.4;
+}
+
+/* ── Coupon input area ────────────────────────────────────────── */
+.pa-coupon-wrap {
+  background: #F0F7F0;
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px dashed rgba(44,95,46,0.3);
+}
+.pa-coupon-trigger {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #2C5F2E;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+}
+.pa-coupon-trigger:before {
+  content: '🏷';
+  font-size: 14px;
+}
+
+/* ── Phone input override ─────────────────────────────────────── */
+.react-tel-input .form-control {
+  border-radius: 10px !important;
+  border-color: rgba(46,107,74,0.2) !important;
+  background: #F5F8F3 !important;
+}
+.react-tel-input .form-control:focus {
+  border-color: #2C5F2E !important;
+  box-shadow: 0 0 0 2px rgba(44,95,46,0.15) !important;
+}
+.react-tel-input .flag-dropdown {
+  border-radius: 10px 0 0 10px !important;
+  border-color: rgba(46,107,74,0.2) !important;
+  background: #F5F8F3 !important;
+}
+
+/* ── Empty cart in order summary ─────────────────────────────── */
+.pa-order-summary svg[width="100"] {
+  opacity: 0.5;
+}

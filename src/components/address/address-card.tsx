@@ -20,37 +20,24 @@ const AddressCard: React.FC<AddressProps> = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <div
-      className={classNames(
-        'group relative cursor-pointer rounded border p-4 hover:border-accent',
-        {
-          'border-accent shadow-sm': checked,
-          'border-transparent bg-gray-100': !checked,
-        }
+    <div className={classNames('pa-address-card', { 'pa-address-card--checked': checked })}>
+      {checked && (
+        <span className="pa-address-check">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </span>
       )}
-    >
-      <p className="mb-3 text-sm font-semibold capitalize text-heading">
-        {address?.title}
-      </p>
-      <p className="text-sm text-sub-heading">
-        {formatAddress(address?.address)}
-      </p>
-      <div className="absolute top-4 flex space-x-2 opacity-0 group-hover:opacity-100 ltr:right-4 rtl:left-4 rtl:space-x-reverse">
+      <p className="pa-address-title">{address?.title}</p>
+      <p className="pa-address-body">{formatAddress(address?.address)}</p>
+      <div className="pa-address-actions">
         {onEdit && (
-          <button
-            className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-light"
-            onClick={onEdit}
-          >
-            <span className="sr-only">{t('text-edit')}</span>
+          <button className="pa-address-btn pa-address-btn--edit" onClick={onEdit} title={t('text-edit')}>
             <PencilIcon className="h-3 w-3" />
           </button>
         )}
         {onDelete && (
-          <button
-            className="flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-light"
-            onClick={onDelete}
-          >
-            <span className="sr-only">{t('text-delete')}</span>
+          <button className="pa-address-btn pa-address-btn--delete" onClick={onDelete} title={t('text-delete')}>
             <CloseIcon className="h-3 w-3" />
           </button>
         )}
