@@ -6,7 +6,7 @@ import ProductGridHome from '@/components/products/grids/home';
 import PaHero from '@/components/pa-hero';
 import PaShopByCategory from '@/components/pa-shop-by-category';
 import PaFeatures from '@/components/pa-features';
-import PaBenefits from '@/components/pa-benefits';
+import PaScienceBenefits from '@/components/pa-science-benefits';
 import PaStats from '@/components/pa-stats';
 import PaCareHub from '@/components/pa-care-hub';
 import PaTestimonials from '@/components/pa-testimonials';
@@ -24,8 +24,8 @@ export default function ClassicLayout({ variables }: HomePageProps) {
       {/* 3. Shop by category grid */}
       <PaShopByCategory variables={variables.categories} />
 
-      {/* 4. Plant benefits */}
-      <PaBenefits />
+      {/* 4. Why every home needs plants — science benefits */}
+      <PaScienceBenefits />
 
       {/* 5. Why choose us stats */}
       <PaStats />
