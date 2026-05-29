@@ -105,11 +105,26 @@ jobs:
         with:
           ref: ${{ inputs.branch }}
 
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v42.3.0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_SHOP_PROJECT_ID }}
-          vercel-args: '--prod'
-          working-directory: ./
+          node-version: '20'
+
+      - name: Deploy to Vercel
+        run: |
+          npx vercel --token "$VERCEL_TOKEN" \
+            --yes --prod \
+            --build-env "NEXT_PUBLIC_RAZORPAY_KEY_ID=$STAGING_RAZORPAY_KEY_ID" \
+            --build-env "APPLICATION_MODE=staging" \
+            --build-env "FRAMEWORK_PROVIDER=rest" \
+            --build-env "NEXT_PUBLIC_VERSION=REST" \
+            --build-env "NEXT_PUBLIC_REST_API_ENDPOINT=https://plantathome-production.up.railway.app" \
+            --build-env "NEXT_PUBLIC_SITE_URL=https://plantathome-shop-staging.vercel.app" \
+            --build-env "NEXT_PUBLIC_ADMIN_URL=https://plantathome-admin-staging.vercel.app" \
+            --build-env "NEXT_PUBLIC_DEFAULT_LANGUAGE=en" \
+            --build-env "NEXT_PUBLIC_ENABLE_MULTI_LANG=false"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_SHOP_PROJECT_ID }}
+          STAGING_RAZORPAY_KEY_ID: ${{ secrets.STAGING_RAZORPAY_KEY_ID }}
