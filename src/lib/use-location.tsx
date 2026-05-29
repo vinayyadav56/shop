@@ -82,13 +82,13 @@ export default function useLocation({ onChange, onChangeCurrentLocation, setInpu
   }, []);
 
   const onUnmount = useCallback(() => {
-    setAutocomplete(true);
+    setAutocomplete(null);
   }, []);
 
   const onPlaceChanged = () => {
     const place = autocomplete?.getPlace();
 
-    if (!place?.geometry?.location ?? true) {
+    if (!place?.geometry?.location) {
       return;
     }
     const location = getLocation(place);

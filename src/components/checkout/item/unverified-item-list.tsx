@@ -15,36 +15,38 @@ const UnverifiedItemList = ({ hideTitle = false }: { hideTitle?: boolean }) => {
     }
   );
   return (
-    <div className="w-full">
+    <div className="pa-order-summary">
       {!hideTitle && (
-        <div className="mb-4 flex flex-col items-center space-x-4 rtl:space-x-reverse">
-          <span className="text-base font-bold text-heading">
-            {t('text-your-order')}
-          </span>
-        </div>
+        <h3 className="pa-order-summary-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C5F2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+          </svg>
+          {t('text-your-order')}
+        </h3>
       )}
-      <div className="flex flex-col border-b border-border-200 py-3">
-        {isEmpty ? (
-          <div className="mb-4 flex h-full flex-col items-center justify-center">
-            <EmptyCartIcon width={140} height={176} />
-            <h4 className="mt-6 text-base font-semibold">
-              {t('text-no-products')}
-            </h4>
-          </div>
-        ) : (
-          items?.map((item) => <ItemCard item={item} key={item.id} />)
-        )}
-      </div>
-      <div className="mt-4 space-y-2">
-        <ItemInfoRow title={t('text-sub-total')} value={subtotal} />
-        <ItemInfoRow
-          title={t('text-tax')}
-          value={t('text-calculated-checkout')}
-        />
-        <ItemInfoRow
-          title={t('text-estimated-shipping')}
-          value={t('text-calculated-checkout')}
-        />
+      {isEmpty ? (
+        <div className="pa-empty-state" style={{ padding: '32px 0' }}>
+          <EmptyCartIcon width={100} height={120} />
+          <p className="pa-empty-state-sub" style={{ marginTop: 12 }}>
+            {t('text-no-products')}
+          </p>
+        </div>
+      ) : (
+        items?.map((item) => <ItemCard item={item} key={item.id} />)
+      )}
+      <div className="mt-3">
+        <div className="pa-order-row">
+          <span>{t('text-sub-total')}</span>
+          <span style={{ fontWeight: 600, color: '#2E6B4A' }}>{subtotal}</span>
+        </div>
+        <div className="pa-order-row">
+          <span>{t('text-tax')}</span>
+          <span>{t('text-calculated-checkout')}</span>
+        </div>
+        <div className="pa-order-row">
+          <span>{t('text-estimated-shipping')}</span>
+          <span>{t('text-calculated-checkout')}</span>
+        </div>
       </div>
       <CheckAvailabilityAction>
         {t('text-check-availability')}

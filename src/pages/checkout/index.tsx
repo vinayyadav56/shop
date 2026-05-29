@@ -31,11 +31,11 @@ export default function CheckoutPage() {
   return (
     <>
       <Seo noindex={true} nofollow={true} />
-      <div className="bg-gray-100 px-4 py-8 lg:py-10 lg:px-8 xl:py-14 xl:px-16 2xl:px-20">
+      <div className="pa-checkout-page">
         <div className="m-auto flex w-full max-w-5xl flex-col items-center rtl:space-x-reverse lg:flex-row lg:items-start lg:space-x-8">
           <div className="w-full space-y-6 lg:max-w-2xl">
             <ContactGrid
-              className="bg-light p-5 shadow-700 md:p-8"
+              className="pa-checkout-step"
               contact={profile?.contact}
               label={t('text-contact-number')}
               count={1}
@@ -43,7 +43,7 @@ export default function CheckoutPage() {
 
             <AddressGrid
               userId={id!}
-              className="bg-light p-5 shadow-700 md:p-8"
+              className="pa-checkout-step"
               label={t('text-billing-address')}
               count={2}
               //@ts-ignore
@@ -56,7 +56,7 @@ export default function CheckoutPage() {
             />
             <AddressGrid
               userId={me?.id!}
-              className="bg-light p-5 shadow-700 md:p-8"
+              className="pa-checkout-step"
               label={t('text-shipping-address')}
               count={3}
               //@ts-ignore
@@ -68,7 +68,7 @@ export default function CheckoutPage() {
               type={AddressType.Shipping}
             />
             <ScheduleGrid
-              className="bg-light p-5 shadow-700 md:p-8"
+              className="pa-checkout-step"
               label={t('text-delivery-schedule')}
               count={4}
             />

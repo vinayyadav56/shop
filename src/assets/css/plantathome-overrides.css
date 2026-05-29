@@ -2166,3 +2166,371 @@ select:focus {
   gap: 4px;
 }
 
+
+/* ================================================================
+   PlantAtHome — Checkout Page Premium Redesign
+   ================================================================ */
+
+/* ── Checkout page wrapper ───────────────────────────────────── */
+.pa-checkout-page {
+  background: linear-gradient(160deg, #F5F8F3 0%, #FAF8F2 60%, #F0F5F0 100%);
+  min-height: 100vh;
+  padding: 32px 16px 64px;
+}
+@media (min-width: 1024px) { .pa-checkout-page { padding: 48px 32px 80px; } }
+
+/* ── Step card (contact, address, etc.) ─────────────────────── */
+.pa-checkout-step {
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  border: 1.5px solid rgba(46,107,74,0.10);
+  box-shadow: 0 2px 16px rgba(46,107,74,0.06);
+  margin-bottom: 16px;
+}
+@media (min-width: 768px) { .pa-checkout-step { padding: 28px 32px; } }
+
+.pa-checkout-step-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.pa-checkout-step-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2C5F2E, #3D8B40);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(44,95,46,0.3);
+}
+.pa-checkout-step-label {
+  font-family: var(--font-heading) !important;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0D1F0D;
+}
+
+/* ── Order summary panel ─────────────────────────────────────── */
+.pa-order-summary {
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  border: 1.5px solid rgba(46,107,74,0.10);
+  box-shadow: 0 2px 16px rgba(46,107,74,0.06);
+  position: sticky;
+  top: 24px;
+}
+.pa-order-summary-title {
+  font-family: var(--font-heading) !important;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0D1F0D;
+  margin: 0 0 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(46,107,74,0.10);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pa-order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(46,107,74,0.06);
+  font-size: 13.5px;
+}
+.pa-order-item-name { color: #0D1F0D; font-weight: 500; }
+.pa-order-item-qty { color: #6B8C6B; font-size: 12px; }
+.pa-order-item-price { color: #2E6B4A; font-weight: 600; }
+.pa-order-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #4A6A4A;
+  padding: 5px 0;
+}
+.pa-order-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0D1F0D;
+  padding: 12px 0 0;
+  border-top: 1.5px solid rgba(46,107,74,0.12);
+  margin-top: 8px;
+}
+.pa-order-total span:last-child { color: #2E6B4A; }
+
+/* Place order button in checkout */
+.pa-place-order-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 52px;
+  border-radius: 99px;
+  background: linear-gradient(135deg, #2C5F2E 0%, #3D8B40 100%);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  margin-top: 16px;
+  box-shadow: 0 4px 18px rgba(44,95,46,0.35);
+  transition: box-shadow 0.25s, transform 0.15s;
+  letter-spacing: 0.01em;
+  gap: 8px;
+}
+.pa-place-order-btn:hover { box-shadow: 0 6px 24px rgba(44,95,46,0.5); transform: translateY(-1px); }
+.pa-place-order-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+/* Coupon row */
+.pa-coupon-row {
+  background: #F5F8F3;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  border: 1px dashed rgba(46,107,74,0.25);
+}
+
+/* ================================================================
+   PlantAtHome — Product Grid Improvements
+   ================================================================ */
+
+/* Product grid home */
+.pa-product-grid-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 0 16px;
+  border-bottom: 1.5px solid rgba(46,107,74,0.08);
+  margin-bottom: 20px;
+}
+.pa-product-grid-title {
+  font-family: var(--font-heading) !important;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 800;
+  color: #0D1F0D;
+}
+.pa-product-grid-title span { color: #2E6B4A; }
+
+/* Sort/Filter bar */
+.pa-filter-bar {
+  background: #fff;
+  border-bottom: 1px solid rgba(46,107,74,0.08);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.pa-filter-pill {
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: #F0F5F0;
+  color: #2E6B4A;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1.5px solid rgba(46,107,74,0.15);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.pa-filter-pill:hover, .pa-filter-pill.active {
+  background: #2C5F2E;
+  color: #fff;
+  border-color: #2C5F2E;
+}
+
+/* ================================================================
+   PlantAtHome — Global UI Polish
+   ================================================================ */
+
+/* Search bar */
+.pa-search-input {
+  background: #fff !important;
+  border: 1.5px solid rgba(46,107,74,0.18) !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+.pa-search-input:focus {
+  border-color: #2E6B4A !important;
+  box-shadow: 0 0 0 3px rgba(46,107,74,0.12) !important;
+  outline: none !important;
+}
+
+/* Breadcrumb */
+.pa-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #6B8C6B;
+  margin-bottom: 20px;
+}
+.pa-breadcrumb a { color: #2E6B4A; text-decoration: none; }
+.pa-breadcrumb a:hover { text-decoration: underline; }
+.pa-breadcrumb-sep { color: rgba(46,107,74,0.3); }
+
+/* Toast/notification overrides */
+.Toastify__toast--success {
+  background: #2C5F2E !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+}
+.Toastify__toast--error {
+  background: #B91C1C !important;
+  border-radius: 12px !important;
+}
+.Toastify__progress-bar { background: rgba(255,255,255,0.4) !important; }
+
+/* Empty state generic */
+.pa-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 24px;
+  text-align: center;
+}
+.pa-empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+.pa-empty-state-title {
+  font-family: var(--font-heading) !important;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0D1F0D;
+  margin: 0 0 8px;
+}
+.pa-empty-state-sub {
+  font-size: 14px;
+  color: #6B8C6B;
+  max-width: 320px;
+  line-height: 1.6;
+}
+
+/* ── Mobile navigation bar ───────────────────────────────────── */
+.pa-mobile-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: #fff;
+  border-top: 1px solid rgba(46,107,74,0.12);
+  display: none;
+  grid-template-columns: repeat(4, 1fr);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+}
+@media (max-width: 768px) { .pa-mobile-nav { display: grid; } }
+.pa-mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0 10px;
+  color: #6B8C6B;
+  text-decoration: none;
+  font-size: 10px;
+  gap: 3px;
+  transition: color 0.15s;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+.pa-mobile-nav-item.active, .pa-mobile-nav-item:hover { color: #2C5F2E; }
+.pa-mobile-nav-badge {
+  position: absolute;
+  top: 4px;
+  right: calc(50% - 18px);
+  background: #C7A76C;
+  color: #fff;
+  border-radius: 99px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* Add padding at bottom of page on mobile for nav bar */
+@media (max-width: 768px) {
+  body { padding-bottom: 60px; }
+}
+
+/* ── Category sidebar enhancement ───────────────────────────── */
+.pa-category-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #2E4A2E;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-decoration: none;
+}
+.pa-category-item:hover { background: #F0F5F0; color: #2C5F2E; }
+.pa-category-item.active {
+  background: #2C5F2E;
+  color: #fff;
+  font-weight: 600;
+}
+.pa-category-item-count {
+  margin-left: auto;
+  font-size: 11px;
+  background: rgba(46,107,74,0.12);
+  border-radius: 99px;
+  padding: 2px 7px;
+  color: #2E6B4A;
+}
+.pa-category-item.active .pa-category-item-count {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+/* ── Input field global polish ───────────────────────────────── */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  border-color: #2E6B4A !important;
+  box-shadow: 0 0 0 3px rgba(46,107,74,0.10) !important;
+  outline: none !important;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #F5F8F3; }
+::-webkit-scrollbar-thumb { background: rgba(46,107,74,0.25); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(46,107,74,0.45); }
+
+/* ── Accent colour override for buttons/links ────────────────── */
+.btn-accent, .bg-accent {
+  background-color: #2C5F2E !important;
+}
+.hover\:bg-accent-hover:hover, .bg-accent-hover {
+  background-color: #1B5E20 !important;
+}
+.text-accent { color: #2C5F2E !important; }
+.border-accent { border-color: #2C5F2E !important; }
+.ring-accent { --tw-ring-color: rgba(44,95,46,0.4) !important; }
+.focus\:ring-accent-700:focus { --tw-ring-color: rgba(27,94,32,0.5) !important; }
+
