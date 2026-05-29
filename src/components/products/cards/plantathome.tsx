@@ -275,7 +275,6 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
               variant="argon"
               data={product}
               counterClass="pa-counter"
-              buttonClassName="pa-card-atc"
             />
           ) : (
             <button className="pa-card-atc pa-card-atc--disabled" disabled>
