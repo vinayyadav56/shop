@@ -98,8 +98,15 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
     }
   );
   return (
-    <div className={className}>
-      <div className="flex flex-col pb-2 border-b border-border-200">
+    <div className={cn('pa-order-summary', className)}>
+      <h3 className="pa-order-summary-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C5F2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+        </svg>
+        {t('text-your-order')}
+      </h3>
+
+      <div style={{ marginBottom: 12 }}>
         {!isEmptyCart ? (
           items?.map((item) => {
             const notAvailable = verifiedResponse?.unavailable_products?.find(
@@ -118,38 +125,56 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
         )}
       </div>
 
-      <div className="mt-4 space-y-2">
-        <ItemInfoRow title={t('text-sub-total')} value={sub_total} />
-        <ItemInfoRow title={t('text-tax')} value={tax} />
-        <div className="flex justify-between">
-          <p className="text-sm text-body">{t('text-shipping')} <span className='text-xs font-semibold text-accent'>{freeShippings && `(${t('text-free-shipping')})`}</span></p>
-          <span className="text-sm text-body"> {shipping}</span>
+      <div style={{ borderTop: '1px solid rgba(46,107,74,0.10)', paddingTop: 12 }}>
+        <div className="pa-order-row">
+          <span>{t('text-sub-total')}</span>
+          <span style={{ fontWeight: 600, color: '#2E6B4A' }}>{sub_total}</span>
         </div>
+        <div className="pa-order-row">
+          <span>{t('text-tax')}</span>
+          <span>{tax}</span>
+        </div>
+        <div className="pa-order-row">
+          <span>
+            {t('text-shipping')}
+            {freeShippings && (
+              <span style={{ fontSize: 11, fontWeight: 700, color: '#2E6B4A', marginLeft: 4 }}>
+                (FREE)
+              </span>
+            )}
+          </span>
+          <span style={{ color: freeShippings ? '#2E6B4A' : undefined }}>
+            {freeShippings ? '₹0' : shipping}
+          </span>
+        </div>
+
         {discount && coupon ? (
-          <div className="flex justify-between">
-            <p className="flex items-center gap-1 text-sm text-body ltr:mr-2 rtl:ml-2">
-              {t('text-discount')} <span className='-mt-px text-xs font-semibold text-accent'>{coupon?.type === CouponType.FREE_SHIPPING && `(${t('text-free-shipping')})` }</span>
-            </p>
-            <span className="flex items-center text-xs font-semibold text-red-500 ltr:mr-auto rtl:ml-auto">
-              ({coupon?.code})
-              <button onClick={() => setCoupon(null)}>
-                <CloseIcon className="w-3 h-3 ltr:ml-2 rtl:mr-2 mt-0.5" />
+          <div className="pa-order-row">
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              {t('text-discount')}
+              <span style={{ fontSize: 11, color: '#2E6B4A', fontWeight: 600 }}>
+                ({coupon?.code})
+              </span>
+              <button onClick={() => setCoupon(null)} style={{ color: '#E53E3E', marginLeft: 2, lineHeight: 1 }}>
+                <CloseIcon className="w-3 h-3" />
               </button>
             </span>
-            <span className="flex items-center gap-1 text-sm text-body">{calculateDiscount > 0 ? <span className='-mt-0.5'>-</span>: null} {discountPrice}</span>
+            <span style={{ color: '#E53E3E', fontWeight: 600 }}>
+              {calculateDiscount > 0 ? '-' : ''}{discountPrice}
+            </span>
           </div>
         ) : (
-          <div className="mt-5 !mb-4 flex justify-between">
+          <div style={{ marginTop: 8, marginBottom: 4 }}>
             <Coupon subtotal={base_amount} />
           </div>
         )}
-        <div className="flex justify-between pt-3 border-t-4 border-double border-border-200">
-          <p className="text-base font-semibold text-heading">
-            {t('text-total')}
-          </p>
-          <span className="text-base font-semibold text-heading">{total}</span>
+
+        <div className="pa-order-total">
+          <span>{t('text-total')}</span>
+          <span>{total}</span>
         </div>
       </div>
+
       {verifiedResponse && (
         <Wallet
           totalPrice={totalPrice}
@@ -158,7 +183,7 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
         />
       )}
       {use_wallet && !Boolean(payableAmount) ? null : (
-        <PaymentGrid className="p-5 mt-10 border border-gray-200 bg-light" />
+        <PaymentGrid className="pa-payment-grid" />
       )}
       <PlaceOrderAction>{t('text-place-order')}</PlaceOrderAction>
     </div>

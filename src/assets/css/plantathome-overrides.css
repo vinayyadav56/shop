@@ -2193,6 +2193,7 @@ select:focus {
 .pa-checkout-step-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 14px;
   margin-bottom: 20px;
 }
@@ -2533,4 +2534,27 @@ textarea:focus {
 .border-accent { border-color: #2C5F2E !important; }
 .ring-accent { --tw-ring-color: rgba(44,95,46,0.4) !important; }
 .focus\:ring-accent-700:focus { --tw-ring-color: rgba(27,94,32,0.5) !important; }
+
+/* ── Payment grid inside order summary ───────────────────────── */
+.pa-payment-grid {
+  margin-top: 20px;
+  padding: 20px;
+  background: #F5F8F3;
+  border-radius: 14px;
+  border: 1px solid rgba(46,107,74,0.10);
+}
+.pa-payment-grid .text-heading { color: #0D1F0D; }
+
+/* ── Spin keyframe for loading icon ──────────────────────────── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Schedule / address card selected state ──────────────────── */
+.border-accent { border-color: #2C5F2E !important; }
+.shadow-600 { box-shadow: 0 0 0 2px rgba(44,95,46,0.25) !important; }
+
+/* ── Empty address / no items inline state ───────────────────── */
+.bg-gray-100.rounded.border { background: #F5F8F3 !important; border-color: rgba(46,107,74,0.15) !important; }
 

@@ -7,14 +7,10 @@ function OrderNote({ count, label }: { count: number; label: string }) {
   const [note, setNote] = useAtom(orderNoteAtom);
 
   return (
-    <div className="bg-light p-5 shadow-700 md:p-8">
-      <div className="mb-5 flex items-center justify-between md:mb-8">
-        <div className="flex items-center space-x-3 rtl:space-x-reverse md:space-x-4">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-base text-light lg:text-xl">
-            {count}
-          </span>
-          <p className="text-lg capitalize text-heading lg:text-xl">{label}</p>
-        </div>
+    <div className="pa-checkout-step">
+      <div className="pa-checkout-step-header">
+        <span className="pa-checkout-step-num">{count}</span>
+        <span className="pa-checkout-step-label">{label}</span>
       </div>
       <div className="block">
         <TextArea
@@ -23,6 +19,7 @@ function OrderNote({ count, label }: { count: number; label: string }) {
           name="orderNote"
           onChange={(e) => setNote(e.target.value)}
           variant="outline"
+          placeholder="Any special delivery instructions? (optional)"
         />
       </div>
     </div>

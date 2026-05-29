@@ -12,26 +12,26 @@ const ItemCard = ({ item, notAvailable }: Props) => {
     amount: item.itemTotal,
   });
   return (
-    <div className="flex justify-between py-2">
-      <div className="flex items-center justify-between text-base">
+    <div className="pa-order-item">
+      <div style={{ flex: 1, minWidth: 0 }}>
         <span
-          className={cn('text-sm', notAvailable ? 'text-red-500' : 'text-body')}
+          className={cn('pa-order-item-name', notAvailable && 'text-red-500')}
+          style={{ display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
         >
-          <span
-            className={cn(
-              'text-sm font-bold',
-              notAvailable ? 'text-red-500' : 'text-heading'
-            )}
-          >
-            {item.quantity}
-          </span>
-          <span className="mx-2">x</span>
-          <span>{item.name}</span> | <span>{item.unit}</span>{' '}
-          <span> {item?.in_flash_sale ? '(On Sale)' : ''} </span>
+          {item.name}
+          {item?.in_flash_sale && (
+            <span style={{ marginLeft: 4, fontSize: 10, background: '#FEE2E2', color: '#991B1B', padding: '1px 5px', borderRadius: 4 }}>
+              SALE
+            </span>
+          )}
+        </span>
+        <span className="pa-order-item-qty">
+          {item.quantity} × {item.unit}
         </span>
       </div>
       <span
-        className={cn('text-sm', notAvailable ? 'text-red-500' : 'text-body')}
+        className={cn('pa-order-item-price', notAvailable && '!text-red-500')}
+        style={{ flexShrink: 0, marginLeft: 12 }}
       >
         {!notAvailable ? price : t('text-unavailable')}
       </span>

@@ -73,22 +73,22 @@ const Footer = () => {
               ) : (
                 ''
               )}
-              {contactDetails?.emailAddress ? (
+              {(contactDetails?.emailAddress || (settings as any)?.contactEmail) ? (
                 <Link
                   className="mb-1 text-sm text-heading"
-                  href={`mailto:${contactDetails?.emailAddress}`}
+                  href={`mailto:${contactDetails?.emailAddress || (settings as any)?.contactEmail}`}
                 >
-                  {contactDetails?.emailAddress}
+                  {contactDetails?.emailAddress || (settings as any)?.contactEmail}
                 </Link>
               ) : (
                 ''
               )}
-              {contactDetails?.contact ? (
+              {(contactDetails?.contact || (settings as any)?.contactPhone) ? (
                 <Link
                   className="text-sm text-heading"
-                  href={`tel:${contactDetails?.contact}`}
+                  href={`tel:${contactDetails?.contact || (settings as any)?.contactPhone}`}
                 >
-                  {contactDetails?.contact}
+                  {contactDetails?.contact || (settings as any)?.contactPhone}
                 </Link>
               ) : (
                 ''

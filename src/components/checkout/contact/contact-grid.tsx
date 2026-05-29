@@ -40,25 +40,16 @@ const ContactGrid = ({
 
   return (
     <div className={className}>
-      <div
-        className={classNames('mb-5 flex items-center justify-between', {
-          'md:mb-8': count,
-        })}
-      >
-        <div className="flex items-center space-x-3 rtl:space-x-reverse md:space-x-4">
-          {count && (
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-base text-light lg:text-xl">
-              {count}
-            </span>
-          )}
-          <p className="text-lg capitalize text-heading lg:text-xl">{label}</p>
+      <div className="pa-checkout-step-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {count && <span className="pa-checkout-step-num">{count}</span>}
+          <span className="pa-checkout-step-label">{label}</span>
         </div>
-
         <button
-          className="flex items-center text-sm font-semibold text-accent transition-colors duration-200 hover:text-accent-hover focus:text-accent-hover focus:outline-0"
+          style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 600, color: '#2C5F2E', background: 'none', border: 'none', cursor: 'pointer' }}
           onClick={onAddOrChange}
         >
-          <PlusIcon className="h-4 w-4 stroke-2 ltr:mr-0.5 rtl:ml-0.5" />
+          <PlusIcon className="h-4 w-4 stroke-2" />
           {contactNumber ? t('text-update') : t('text-add')}
         </button>
       </div>

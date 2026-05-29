@@ -39,13 +39,13 @@ export const ContactPage = () => {
                 {t('text-address')}
               </span>
               <span className="text-sm text-body">
-                {settings?.contactDetails?.location?.formattedAddress ? (
+                {settings?.contactDetails?.location?.formattedAddress || (settings as any)?.contactAddress ? (
                   <Link
-                    title={settings?.contactDetails?.location?.formattedAddress}
+                    title={settings?.contactDetails?.location?.formattedAddress || (settings as any)?.contactAddress}
                     target="_blank"
-                    href={`https://www.google.com/maps/place/${settings?.contactDetails?.location?.formattedAddress}`}
+                    href={`https://www.google.com/maps/place/${settings?.contactDetails?.location?.formattedAddress || (settings as any)?.contactAddress}`}
                   >
-                    {settings?.contactDetails?.location?.formattedAddress}
+                    {settings?.contactDetails?.location?.formattedAddress || (settings as any)?.contactAddress}
                   </Link>
                 ) : (
                   t('common:text-no-address')
@@ -58,8 +58,8 @@ export const ContactPage = () => {
                 {t('text-phone')}
               </span>
               <span className="text-sm text-body">
-                {settings?.contactDetails?.contact
-                  ? settings?.contactDetails?.contact
+                {settings?.contactDetails?.contact || (settings as any)?.contactPhone
+                  ? (settings?.contactDetails?.contact || (settings as any)?.contactPhone)
                   : t('text-no-contact')}
               </span>
             </div>
@@ -69,8 +69,8 @@ export const ContactPage = () => {
                 Email Address
               </span>
               <span className="text-sm text-body">
-                {settings?.contactDetails?.emailAddress
-                  ? settings?.contactDetails?.emailAddress
+                {settings?.contactDetails?.emailAddress || (settings as any)?.contactEmail
+                  ? (settings?.contactDetails?.emailAddress || (settings as any)?.contactEmail)
                   : 'No Email Address'}
               </span>
             </div>
