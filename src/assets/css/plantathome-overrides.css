@@ -6,38 +6,32 @@
 /* ── CSS Variables ──────────────────────────────────────────── */
 :root {
   /* Brand palette */
-  --pa-primary:   #1B4332;
-  --pa-secondary: #2D6A4F;
-  --pa-accent:    #84A98C;
-  --pa-accent-lt: #CAD2C5;
+  --pa-primary:   #1B5E20;
+  --pa-secondary: #2E7D32;
+  --pa-accent:    #81C784;
+  --pa-accent-lt: #C8E6C9;
   --pa-bg:        #FAFAF8;
-  --pa-bg-alt:    #F5F2EC;
-  --pa-dark:      #0A0A0A;
-  --pa-dark-80:   rgba(10,10,10,0.8);
+  --pa-bg-alt:    #F4F7F4;
+  --pa-dark:      #111827;
+  --pa-dark-80:   rgba(17,24,39,0.8);
   --pa-success:   #16A34A;
-  --pa-warning:   #D97706;
+  --pa-warning:   #F59E0B;
   --pa-error:     #DC2626;
 
-  /* Gold & cream — luxury accents */
-  --pa-gold:      #C9A26B;
-  --pa-gold-lt:   #E2C99C;
-  --pa-gold-pale: rgba(201,162,107,0.12);
-  --pa-cream:     #F9F5EE;
-
   /* Text */
-  --pa-text:      #1A1A1A;
+  --pa-text:      #374151;
   --pa-text-muted:#6B7280;
   --pa-text-light:#9CA3AF;
 
   /* Gradients */
-  --pa-grad:        linear-gradient(135deg, #1B4332 0%, #2D6A4F 60%, #52796F 100%);
-  --pa-grad-hero:   linear-gradient(160deg, #0A1208 0%, #1B4332 50%, #2D6A4F 100%);
-  --pa-grad-accent: linear-gradient(135deg, #84A98C 0%, #52796F 100%);
-  --pa-grad-light:  linear-gradient(135deg, #F9F5EE 0%, #F0EAE0 100%);
+  --pa-grad:        linear-gradient(135deg, #1B5E20 0%, #2E7D32 60%, #388E3C 100%);
+  --pa-grad-hero:   linear-gradient(160deg, #0D3D14 0%, #1B5E20 50%, #2E7D32 100%);
+  --pa-grad-accent: linear-gradient(135deg, #81C784 0%, #4CAF50 100%);
+  --pa-grad-light:  linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
 
-  /* Typography — luxury editorial */
-  --font-heading: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* Typography */
+  --font-heading: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   /* Radius */
   --pa-radius:      20px;
@@ -45,23 +39,23 @@
   --pa-radius-pill: 100px;
   --pa-radius-sm:   12px;
 
-  /* Shadows — refined depth */
-  --pa-shadow-xs: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --pa-shadow-sm: 0 2px 10px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05);
-  --pa-shadow-md: 0 4px 20px rgba(0,0,0,0.09), 0 2px 6px rgba(0,0,0,0.05);
-  --pa-shadow-lg: 0 8px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
-  --pa-shadow-xl: 0 20px 64px rgba(0,0,0,0.16), 0 8px 24px rgba(0,0,0,0.08);
-  --pa-glow:      0 0 0 3px rgba(201,162,107,0.25);
+  /* Shadows */
+  --pa-shadow-xs: 0 1px 4px rgba(0,0,0,0.06);
+  --pa-shadow-sm: 0 2px 12px rgba(27,94,32,0.08);
+  --pa-shadow-md: 0 4px 24px rgba(27,94,32,0.12);
+  --pa-shadow-lg: 0 8px 48px rgba(27,94,32,0.18);
+  --pa-shadow-xl: 0 16px 64px rgba(27,94,32,0.22);
+  --pa-glow:      0 0 0 3px rgba(129,199,132,0.3);
 
-  /* Transitions — Apple spring easing */
-  --pa-t:     all 0.4s cubic-bezier(0.16,1,0.3,1);
-  --pa-t-fast:all 0.22s cubic-bezier(0,0,0.2,1);
-  --pa-t-slow:all 0.7s cubic-bezier(0.16,1,0.3,1);
+  /* Transitions */
+  --pa-t:     all 0.3s cubic-bezier(0.4,0,0.2,1);
+  --pa-t-fast:all 0.18s cubic-bezier(0.4,0,0.2,1);
+  --pa-t-slow:all 0.5s cubic-bezier(0.4,0,0.2,1);
 
   /* Spacing */
   --pa-section:    96px;
   --pa-section-sm: 56px;
-  --pa-wrap:       1440px;
+  --pa-wrap:       1280px;
 }
 
 /* ── Base ───────────────────────────────────────────────────── */
