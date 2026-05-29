@@ -1,20 +1,42 @@
 import Banner from '@/components/banners/banner';
-import PromotionSliders from '@/components/promotions/promotions';
 import Categories from '@/components/categories/categories';
 import { Element } from 'react-scroll';
 import FilterBar from './filter-bar';
 import ProductGridHome from '@/components/products/grids/home';
+import PaHero from '@/components/pa-hero';
 import PaShopByCategory from '@/components/pa-shop-by-category';
 import PaFeatures from '@/components/pa-features';
+import PaBenefits from '@/components/pa-benefits';
+import PaStats from '@/components/pa-stats';
+import PaCareHub from '@/components/pa-care-hub';
+import PaTestimonials from '@/components/pa-testimonials';
 import type { HomePageProps } from '@/types';
 
 export default function ClassicLayout({ variables }: HomePageProps) {
   return (
     <>
-      <Banner layout="classic" variables={variables.types} />
-      <PromotionSliders variables={variables.types} />
-      <PaShopByCategory variables={variables.categories} />
+      {/* 1. Full-width premium hero */}
+      <PaHero />
+
+      {/* 2. Trust strip */}
       <PaFeatures />
+
+      {/* 3. Shop by category grid */}
+      <PaShopByCategory variables={variables.categories} />
+
+      {/* 4. Plant benefits */}
+      <PaBenefits />
+
+      {/* 5. Why choose us stats */}
+      <PaStats />
+
+      {/* 6. Plant care learning hub */}
+      <PaCareHub />
+
+      {/* 7. Testimonials */}
+      <PaTestimonials />
+
+      {/* 8. Product grid with sidebar categories */}
       <FilterBar variables={variables.categories} />
       <Element
         name="grid"
