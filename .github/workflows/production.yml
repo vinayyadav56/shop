@@ -136,6 +136,9 @@ jobs:
             echo "==> Stopping shop temporarily to free RAM for build..."
             pm2 stop shop || true
 
+            echo "==> Clearing any corrupted previous build..."
+            rm -rf .next
+
             echo "==> Building (NODE_OPTIONS limits heap to 1.5GB; swap covers the rest)..."
             APPLICATION_MODE=production \
             FRAMEWORK_PROVIDER=rest \
