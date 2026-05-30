@@ -1,0 +1,72 @@
+name: Shop – EC2 Debug
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    name: Check EC2 Shop State
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Open port 22 for this runner
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          RUNNER_IP=$(curl -s ifconfig.me/ip)
+          echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
+          aws ec2 authorize-security-group-ingress \
+            --group-id ${{ secrets.AWS_EC2_SG_ID }} \
+            --protocol tcp --port 22 --cidr "${RUNNER_IP}/32" \
+            --region ${{ secrets.AWS_REGION }} || true
+
+      - name: SSH diagnostics
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 5m
+          script: |
+            echo "=== PM2 process list ==="
+            pm2 list
+
+            echo ""
+            echo "=== PM2 shop logs (last 50 lines) ==="
+            pm2 logs shop --lines 50 --nostream 2>&1 || echo "No shop logs"
+
+            echo ""
+            echo "=== Shop .next directory ==="
+            ls -la /var/www/plantathome/shop-src/.next/ 2>/dev/null || echo "No .next directory"
+
+            echo ""
+            echo "=== Shop .next/BUILD_ID ==="
+            cat /var/www/plantathome/shop-src/.next/BUILD_ID 2>/dev/null || echo "No BUILD_ID"
+
+            echo ""
+            echo "=== Current nginx shop config ==="
+            cat /etc/nginx/sites-enabled/shop 2>/dev/null || \
+            grep -r "plantathome.in" /etc/nginx/sites-enabled/ 2>/dev/null | head -20 || \
+            echo "No nginx config found for shop"
+
+            echo ""
+            echo "=== Port 3000 listening? ==="
+            ss -tlnp | grep 3000 || echo "Nothing on port 3000"
+
+            echo ""
+            echo "=== curl localhost:3000 ==="
+            curl -s -o /dev/null -w "HTTP: %{http_code}" http://localhost:3000 2>/dev/null || echo "curl failed"
+
+      - name: Close port 22 for this runner
+        if: always()
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          aws ec2 revoke-security-group-ingress \
+            --group-id ${{ secrets.AWS_EC2_SG_ID }} \
+            --protocol tcp --port 22 --cidr "${RUNNER_IP}/32" \
+            --region ${{ secrets.AWS_REGION }} || true
