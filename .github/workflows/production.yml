@@ -149,6 +149,18 @@ jobs:
             NODE_OPTIONS="--max-old-space-size=1500" \
             yarn build:rest
 
+            echo "==> Writing runtime env vars (required by next-i18next.config.js invariant)..."
+            cat > /var/www/plantathome/shop-src/.env.production.local << 'ENVEOF'
+NEXT_PUBLIC_DEFAULT_LANGUAGE=en
+NEXT_PUBLIC_ENABLE_MULTI_LANG=false
+NEXT_PUBLIC_AVAILABLE_LANGUAGES=en
+NEXT_PUBLIC_VERSION=REST
+NEXT_PUBLIC_REST_API_ENDPOINT=https://api.plantathome.in/api
+NEXT_PUBLIC_SITE_URL=https://plantathome.in
+NEXT_PUBLIC_ADMIN_URL=https://admin.plantathome.in
+NODE_ENV=production
+ENVEOF
+
             echo "==> Restarting shop on port 3003 (matches nginx proxy)..."
             pm2 delete shop 2>/dev/null || true
             pm2 start "yarn start" --name shop --cwd /var/www/plantathome/shop-src
