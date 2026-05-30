@@ -149,8 +149,9 @@ jobs:
             NODE_OPTIONS="--max-old-space-size=1500" \
             yarn build:rest
 
-            echo "==> Restarting shop (zero-downtime reload)..."
-            pm2 start shop || pm2 start "yarn start" --name shop --cwd /var/www/plantathome/shop-src
+            echo "==> Restarting shop on port 3003 (matches nginx proxy)..."
+            pm2 delete shop 2>/dev/null || true
+            pm2 start "yarn start" --name shop --cwd /var/www/plantathome/shop-src
             pm2 save
 
             echo "==> Deploy complete"
