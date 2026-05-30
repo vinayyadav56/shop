@@ -30,34 +30,41 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           command_timeout: 5m
           script: |
-            echo "=== PM2 process list ==="
+            echo "=== PM2 list ==="
             pm2 list
 
             echo ""
-            echo "=== PM2 shop logs (last 50 lines) ==="
-            pm2 logs shop --lines 50 --nostream 2>&1 || echo "No shop logs"
+            echo "=== Port 3003 listening? ==="
+            ss -tlnp | grep 3003 || echo "Nothing on port 3003"
 
             echo ""
-            echo "=== Shop .next directory ==="
-            ls -la /var/www/plantathome/shop-src/.next/ 2>/dev/null || echo "No .next directory"
+            echo "=== curl localhost:3003 ==="
+            curl -sL -o /dev/null -w "HTTP: %{http_code}" http://localhost:3003 2>/dev/null
 
             echo ""
-            echo "=== Shop .next/BUILD_ID ==="
-            cat /var/www/plantathome/shop-src/.next/BUILD_ID 2>/dev/null || echo "No BUILD_ID"
+            echo "=== curl localhost:3003/en ==="
+            curl -sL -o /dev/null -w "HTTP: %{http_code}" http://localhost:3003/en 2>/dev/null
 
             echo ""
-            echo "=== Current nginx shop config ==="
-            cat /etc/nginx/sites-enabled/shop 2>/dev/null || \
-            grep -r "plantathome.in" /etc/nginx/sites-enabled/ 2>/dev/null | head -20 || \
-            echo "No nginx config found for shop"
+            echo "=== All nginx config files ==="
+            find /etc/nginx -name "*.conf" -o -name "*plantathome*" 2>/dev/null | sort
+            ls /etc/nginx/sites-enabled/ 2>/dev/null
+            ls /etc/nginx/conf.d/ 2>/dev/null
 
             echo ""
-            echo "=== Port 3000 listening? ==="
-            ss -tlnp | grep 3000 || echo "Nothing on port 3000"
+            echo "=== nginx sites-enabled contents ==="
+            for f in /etc/nginx/sites-enabled/*; do
+              echo "--- $f ---"
+              cat "$f" 2>/dev/null | grep -E "server_name|proxy_pass|listen|root|location" | head -20
+            done
 
             echo ""
-            echo "=== curl localhost:3000 ==="
-            curl -s -o /dev/null -w "HTTP: %{http_code}" http://localhost:3000 2>/dev/null || echo "curl failed"
+            echo "=== .next/required-server-files.json (appDir?) ==="
+            cat /var/www/plantathome/shop-src/.next/required-server-files.json 2>/dev/null | python3 -c "import json,sys; d=json.load(sys.stdin); print('appDir:', d.get('appDir')); print('nextConfigOutput:', d.get('config',{}).get('output'))" 2>/dev/null
+
+            echo ""
+            echo "=== Standalone output? ==="
+            ls /var/www/plantathome/shop-src/.next/standalone 2>/dev/null || echo "No standalone directory"
 
       - name: Close port 22 for this runner
         if: always()
