@@ -175,8 +175,13 @@ jobs:
             tar -xzf /tmp/shop-build.tar.gz
             rm -f /tmp/shop-build.tar.gz
 
+            echo "==> Fixing build paths (runner path → EC2 path)..."
+            sed -i 's|"appDir":"[^"]*"|"appDir":"/var/www/plantathome/shop-src"|g' \
+              .next/required-server-files.json
+            echo "appDir patched to: /var/www/plantathome/shop-src"
+
             echo "==> Reloading PM2 (zero-downtime)..."
-            pm2 reload shop || pm2 start "yarn start" --name shop
+            pm2 reload shop || pm2 start "yarn start" --name shop --cwd /var/www/plantathome/shop-src
             pm2 save
 
             echo "==> Deploy complete"
