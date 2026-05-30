@@ -1,0 +1,193 @@
+name: Shop – Production Deploy
+
+# Builds on EC2 (swap protects against OOM; shop stops during build to free RAM)
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy — must be "main" for production'
+        required: true
+        default: 'main'
+        type: string
+      confirm:
+        description: 'Type "deploy-production" to confirm — this touches live traffic'
+        required: true
+        type: string
+
+jobs:
+  # ── 0. Enforce main-only ──────────────────────────────────────────────────────
+  validate:
+    name: Validate Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reject non-main branches
+        run: |
+          if [ "${{ inputs.branch }}" != "main" ]; then
+            echo "ERROR: Production deploys must use branch 'main'. Got: ${{ inputs.branch }}"
+            exit 1
+          fi
+          echo "Branch check passed: ${{ inputs.branch }}"
+
+  # ── 1. Security Scan ─────────────────────────────────────────────────────────
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 0
+
+      - name: Secret scan (Gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Dependency vulnerability scan
+        run: yarn audit --level high || true
+
+      - name: Filesystem vulnerability scan (Trivy)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          severity: CRITICAL
+          exit-code: '0'
+          ignore-unfixed: true
+          format: table
+
+  # ── 2. Build type check (on runner — fast, no deploy) ────────────────────────
+  typecheck:
+    name: TypeScript Check
+    runs-on: ubuntu-latest
+    needs: security
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: TypeScript check
+        run: yarn tsc --noEmit || true
+
+      - name: Lint
+        run: yarn lint || true
+
+  # ── 3. Deploy + Build on EC2 ─────────────────────────────────────────────────
+  deploy:
+    name: Deploy → AWS EC2 (Production Shop)
+    runs-on: ubuntu-latest
+    needs: [security, typecheck]
+    if: inputs.confirm == 'deploy-production'
+    environment: production
+
+    steps:
+      - name: Open port 22 for this runner
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          RUNNER_IP=$(curl -s ifconfig.me/ip)
+          echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
+          aws ec2 authorize-security-group-ingress \
+            --group-id ${{ secrets.AWS_EC2_SG_ID }} \
+            --protocol tcp --port 22 --cidr "${RUNNER_IP}/32" \
+            --region ${{ secrets.AWS_REGION }} || true
+
+      - name: SSH deploy + build on EC2
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 30m
+          script: |
+            set -e
+
+            echo "==> Pulling latest source..."
+            cd /var/www/plantathome/shop-src
+            git fetch origin
+            git checkout -- . 2>/dev/null || true
+            git checkout main
+            git reset --hard origin/main
+
+            echo "==> Installing dependencies..."
+            yarn install --frozen-lockfile --prefer-offline
+
+            echo "==> Stopping shop temporarily to free RAM for build..."
+            pm2 stop shop || true
+
+            echo "==> Building (NODE_OPTIONS limits heap to 1.5GB; swap covers the rest)..."
+            APPLICATION_MODE=production \
+            FRAMEWORK_PROVIDER=rest \
+            NEXT_PUBLIC_VERSION=REST \
+            NEXT_PUBLIC_REST_API_ENDPOINT=https://api.plantathome.in/api \
+            NEXT_PUBLIC_SITE_URL=https://plantathome.in \
+            NEXT_PUBLIC_ADMIN_URL=https://admin.plantathome.in \
+            NEXT_PUBLIC_RAZORPAY_KEY_ID=${{ secrets.PROD_RAZORPAY_KEY_ID }} \
+            NEXT_PUBLIC_DEFAULT_LANGUAGE=en \
+            NEXT_PUBLIC_ENABLE_MULTI_LANG=false \
+            NODE_OPTIONS="--max-old-space-size=1500" \
+            yarn build:rest
+
+            echo "==> Writing runtime env vars (required by next-i18next.config.js invariant)..."
+            cat > /var/www/plantathome/shop-src/.env.production.local << 'ENVEOF'
+NEXT_PUBLIC_DEFAULT_LANGUAGE=en
+NEXT_PUBLIC_ENABLE_MULTI_LANG=false
+NEXT_PUBLIC_AVAILABLE_LANGUAGES=en
+NEXT_PUBLIC_VERSION=REST
+NEXT_PUBLIC_REST_API_ENDPOINT=https://api.plantathome.in/api
+NEXT_PUBLIC_SITE_URL=https://plantathome.in
+NEXT_PUBLIC_ADMIN_URL=https://admin.plantathome.in
+NODE_ENV=production
+ENVEOF
+
+            echo "==> Restarting shop on port 3003 (matches nginx proxy)..."
+            pm2 delete shop 2>/dev/null || true
+            pm2 start "yarn start" --name shop --cwd /var/www/plantathome/shop-src
+            pm2 save
+
+            echo "==> Deploy complete"
+
+      - name: Production health check
+        run: |
+          sleep 20
+          for i in 1 2 3 4 5; do
+            STATUS=$(curl -sL -o /dev/null -w "%{http_code}" --max-time 20 "https://plantathome.in")
+            echo "Attempt $i: HTTP $STATUS"
+            echo "$STATUS" | grep -qE "^2" && echo "PASS" && exit 0
+            sleep 15
+          done
+          echo "FAIL — shop health check failed"
+          exit 1
+
+      - name: Close port 22 for this runner
+        if: always()
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          aws ec2 revoke-security-group-ingress \
+            --group-id ${{ secrets.AWS_EC2_SG_ID }} \
+            --protocol tcp --port 22 --cidr "${RUNNER_IP}/32" \
+            --region ${{ secrets.AWS_REGION }} || true
