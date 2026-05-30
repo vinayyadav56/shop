@@ -135,19 +135,22 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 30m
           script: |
             set -e
 
             echo "==> Pulling latest code..."
             cd /var/www/plantathome/shop-src
             git fetch origin
+            git checkout -- . 2>/dev/null || true
             git checkout main
             git reset --hard origin/main
 
             echo "==> Installing dependencies..."
-            npm ci --prefer-offline
+            yarn install --frozen-lockfile --prefer-offline
 
             echo "==> Building..."
+            NODE_OPTIONS="--max-old-space-size=1500" \
             FRAMEWORK_PROVIDER=rest \
             NEXT_PUBLIC_VERSION=REST \
             NEXT_PUBLIC_REST_API_ENDPOINT=https://api.plantathome.in/api \
@@ -156,10 +159,10 @@ jobs:
             NEXT_PUBLIC_RAZORPAY_KEY_ID="${{ secrets.PROD_RAZORPAY_KEY_ID }}" \
             NEXT_PUBLIC_DEFAULT_LANGUAGE=en \
             NEXT_PUBLIC_ENABLE_MULTI_LANG=false \
-            npm run build:rest
+            yarn build:rest
 
             echo "==> Reloading PM2 process (zero-downtime)..."
-            pm2 reload shop || pm2 start "npm run start:rest" --name shop
+            pm2 reload shop || pm2 start "yarn start:rest" --name shop
             pm2 save
 
             echo "==> Deploy complete"
