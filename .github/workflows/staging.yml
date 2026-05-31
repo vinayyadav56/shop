@@ -1,18 +1,21 @@
 name: Shop – Staging Deploy
 
-# ─── Manual trigger only ───────────────────────────────────────────────────────
+# ─── Auto-deploy on push to staging; manual trigger also available ─────────────
 # Requires GitHub Secrets: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_SHOP_PROJECT_ID
 on:
+  push:
+    branches: [staging]
   workflow_dispatch:
     inputs:
       branch:
         description: 'Branch to deploy (any branch allowed for staging)'
-        required: true
+        required: false
         default: 'staging'
         type: string
       confirm:
-        description: 'Type "deploy" to confirm staging deployment'
-        required: true
+        description: 'Type "deploy" to confirm (optional for manual run)'
+        required: false
+        default: 'deploy'
         type: string
 
 jobs:
