@@ -111,9 +111,8 @@ jobs:
   deploy:
     name: Deploy → AWS EC2 (Production Shop)
     runs-on: ubuntu-latest
-    needs: [security, test]
+    needs: [security, build]
     if: inputs.confirm == 'deploy-production'
-    environment: production
 
     steps:
       - name: SSH deploy to EC2

@@ -64,8 +64,24 @@ export const getStaticProps: GetStaticProps<
       ({ queryKey }) => client.types.all(queryKey[1] as TypeQueryOptions)
     );
   } catch {
-    // API unavailable at build time — page will be generated on first request via ISR
-    return { notFound: true, revalidate: 120 };
+    // API temporarily unavailable (e.g. mid-deploy). Return empty dehydrated state and
+    // revalidate in 15s so ISR retries quickly — avoids caching a 404 for 2 minutes.
+    return {
+      props: {
+        variables: {
+          popularProducts: {},
+          products: {},
+          categories: {},
+          bestSellingProducts: {},
+          layoutSettings: {},
+          types: { type: '' },
+        },
+        layout: 'default',
+        ...(await serverSideTranslations(locale!, ['common', 'banner'])),
+        dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+      },
+      revalidate: 15,
+    };
   }
 
   const { pages } = params!;
