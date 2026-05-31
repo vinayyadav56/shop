@@ -100,8 +100,7 @@ jobs:
     name: Deploy → Vercel (Staging Shop)
     runs-on: ubuntu-latest
     needs: [security, test]
-    if: inputs.confirm == 'deploy'
-    environment: staging
+    if: github.event_name == 'push' || inputs.confirm == 'deploy'
 
     steps:
       - uses: actions/checkout@v4
