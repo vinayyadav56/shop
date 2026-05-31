@@ -6,7 +6,13 @@ import Cookies from 'js-cookie';
 import Router from 'next/router';
 
 const Axios = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_REST_API_ENDPOINT,
+  // SSR (no window): call Railway directly. Browser: call /rest-api on this domain,
+  // which Vercel proxies to Railway — so users whose network can't reach railway.app
+  // still work, and it's same-origin (no CORS).
+  baseURL:
+    typeof window === 'undefined'
+      ? process.env.NEXT_PUBLIC_REST_API_ENDPOINT
+      : '/rest-api',
   timeout: 5000000,
   headers: {
     'Content-Type': 'application/json',

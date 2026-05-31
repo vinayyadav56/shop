@@ -11,6 +11,16 @@ const { i18n } = require('./next-i18next.config');
 module.exports = {
   reactStrictMode: true,
   i18n,
+  // Browser API calls go to /rest-api on this same Vercel domain (reachable by all
+  // users), and Vercel proxies them server-side to Railway. This avoids the case
+  // where a user's network cannot reach *.up.railway.app directly. SSR keeps calling
+  // Railway directly (Vercel's network can reach it).
+  async rewrites() {
+    const target =
+      process.env.NEXT_PUBLIC_REST_API_ENDPOINT ||
+      'https://plantathome-production.up.railway.app/api';
+    return [{ source: '/rest-api/:path*', destination: `${target}/:path*` }];
+  },
   images: {
     domains: [
       'plantathome-media-prod.s3.ap-south-1.amazonaws.com',
