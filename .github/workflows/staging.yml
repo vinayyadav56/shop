@@ -87,7 +87,7 @@ jobs:
           APPLICATION_MODE: staging
           FRAMEWORK_PROVIDER: rest
           NEXT_PUBLIC_VERSION: REST
-          NEXT_PUBLIC_REST_API_ENDPOINT: https://plantathome-production.up.railway.app
+          NEXT_PUBLIC_REST_API_ENDPOINT: https://plantathome-production.up.railway.app/api
           NEXT_PUBLIC_SITE_URL: https://plantathome-shop-staging.vercel.app
           NEXT_PUBLIC_ADMIN_URL: https://plantathome-admin-staging.vercel.app
           NEXT_PUBLIC_RAZORPAY_KEY_ID: ${{ secrets.STAGING_RAZORPAY_KEY_ID }}
@@ -121,7 +121,7 @@ jobs:
             --build-env "APPLICATION_MODE=staging" \
             --build-env "FRAMEWORK_PROVIDER=rest" \
             --build-env "NEXT_PUBLIC_VERSION=REST" \
-            --build-env "NEXT_PUBLIC_REST_API_ENDPOINT=https://plantathome-production.up.railway.app" \
+            --build-env "NEXT_PUBLIC_REST_API_ENDPOINT=https://plantathome-production.up.railway.app/api" \
             --build-env "NEXT_PUBLIC_SITE_URL=https://plantathome-shop-staging.vercel.app" \
             --build-env "NEXT_PUBLIC_ADMIN_URL=https://plantathome-admin-staging.vercel.app" \
             --build-env "NEXT_PUBLIC_DEFAULT_LANGUAGE=en" \
