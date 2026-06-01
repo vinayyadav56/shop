@@ -10,8 +10,16 @@ import {
 
 // Premium scroll/reveal motion primitives ported from the PlantAtHome prototype.
 // SSR-safe (window access guarded); works in the Next.js pages router.
+//
+// Reveal-on-scroll uses framer-motion's built-in `whileInView` + `viewport`
+// (NOT a manual `useInView`+`animate` toggle, which could leave an element stuck
+// in its hidden initial state if the observer didn't fire — that bug left the
+// "Three worlds" showcase cards clipped/invisible).
 
 export const EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+// trigger a touch before the element is fully in view, and only once
+const VIEWPORT = { once: true, amount: 0.2, margin: '0px 0px -10% 0px' } as const;
 
 /* Text-mask word reveal */
 export function WordReveal({
@@ -23,16 +31,15 @@ export function WordReveal({
   className?: string;
   delay?: number;
 }) {
-  const ref = React.useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.4 });
   return (
-    <span ref={ref} className={className}>
+    <span className={className}>
       {text.split(' ').map((w, i) => (
         <span key={i} className="inline-block overflow-hidden align-bottom">
           <motion.span
             className="inline-block"
             initial={{ y: '115%' }}
-            animate={inView ? { y: 0 } : {}}
+            whileInView={{ y: 0 }}
+            viewport={VIEWPORT}
             transition={{ duration: 0.85, delay: delay + i * 0.06, ease: EXPO }}
           >
             {w}&nbsp;
@@ -55,13 +62,11 @@ export function FadeUp({
   y?: number;
   className?: string;
 }) {
-  const ref = React.useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.2 });
   return (
     <motion.div
-      ref={ref}
       initial={{ opacity: 0, y }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={VIEWPORT}
       transition={{ duration: 0.75, delay, ease: EXPO }}
       className={className}
     >
@@ -80,13 +85,11 @@ export function ClipReveal({
   className?: string;
   delay?: number;
 }) {
-  const ref = React.useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.3 });
   return (
     <motion.div
-      ref={ref}
       initial={{ clipPath: 'inset(100% 0% 0% 0%)', scale: 1.12 }}
-      animate={inView ? { clipPath: 'inset(0% 0% 0% 0%)', scale: 1 } : {}}
+      whileInView={{ clipPath: 'inset(0% 0% 0% 0%)', scale: 1 }}
+      viewport={VIEWPORT}
       transition={{ duration: 1, delay, ease: EXPO }}
       className={className}
     >
