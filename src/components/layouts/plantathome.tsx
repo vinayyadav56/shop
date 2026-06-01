@@ -21,11 +21,16 @@ import { VERTICALS, HOME_SCENES, isVerticalKey } from '@/components/storefront/v
  */
 export default function PlantAtHomeLayout({ variables }: HomePageProps) {
   const { query } = useRouter();
-  const isRoot = !(query.pages as string[] | undefined)?.length;
+  // `query.text`/`query.category` are client-only filters (empty during SSG) —
+  // safe to read for the filtered view without an SSR/hydration flash.
   const isFiltering = Boolean(query.text || query.category);
 
   const typeSlug: string = variables?.types?.type || 'plants';
   const meta = isVerticalKey(typeSlug) ? VERTICALS[typeSlug] : VERTICALS.plants;
+  // Derive the "home" experience from SSR-stable type metadata (NOT router.query,
+  // which is empty during static generation) so /tools and /farmbox never flash
+  // the home hero. Plants is the home type → cinematic penthouse + showcase.
+  const isHome = meta.isHome;
 
   const { categories, isLoading: catLoading } = useCategories(
     variables.categories,
@@ -37,15 +42,15 @@ export default function PlantAtHomeLayout({ variables }: HomePageProps) {
   });
 
   // Hero: home = cinematic penthouse + brand copy; vertical = its own scenes
-  const scenes = isRoot ? HOME_SCENES : meta.scenes;
-  const eyebrow = isRoot
+  const scenes = isHome ? HOME_SCENES : meta.scenes;
+  const eyebrow = isHome
     ? 'PlantAtHome · Living greener'
     : `PlantAtHome · ${meta.label}`;
-  const tagline = isRoot ? 'Bring your home to life.' : meta.tagline;
+  const tagline = isHome ? 'Bring your home to life.' : meta.tagline;
   const words = tagline.split(' ');
   const titleA = words.slice(0, -1).join(' ');
   const titleB = words.slice(-1).join(' ');
-  const sub = isRoot
+  const sub = isHome
     ? 'Plants, premium tools and farm-fresh boxes — everything to make your home greener, calmer and more alive.'
     : meta.blurb;
 
@@ -57,10 +62,10 @@ export default function PlantAtHomeLayout({ variables }: HomePageProps) {
         titleA={titleA}
         titleB={titleB}
         sub={sub}
-        primary={isRoot ? 'Explore the collection' : `Shop ${meta.label}`}
+        primary={isHome ? 'Explore the collection' : `Shop ${meta.label}`}
         primaryTo="#categories"
         tourTitle={
-          isRoot
+          isHome
             ? 'Step inside a PlantAtHome home'
             : `Inside the world of ${meta.label}`
         }
@@ -69,7 +74,7 @@ export default function PlantAtHomeLayout({ variables }: HomePageProps) {
 
       <TrustStrip />
 
-      {isRoot && !isFiltering && <VerticalShowcase />}
+      {isHome && !isFiltering && <VerticalShowcase />}
 
       <CategoryGrid
         categories={categories}
@@ -77,7 +82,7 @@ export default function PlantAtHomeLayout({ variables }: HomePageProps) {
         isLoading={catLoading}
         eyebrow={`${meta.label} categories`}
         title="Shop by category."
-        tone={isRoot ? 'soft' : 'light'}
+        tone={isHome ? 'soft' : 'light'}
       />
 
       <Element name="grid">
