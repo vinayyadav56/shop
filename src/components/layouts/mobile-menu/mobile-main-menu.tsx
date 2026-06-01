@@ -5,16 +5,20 @@ import { useAtom } from 'jotai';
 import { drawerAtom } from '@/store/drawer-atom';
 import { siteSettings } from '@/config/site';
 import Link from '@/components/ui/link';
-import { VERTICAL_LIST } from '@/components/storefront/verticals';
+import { useTypes } from '@/framework/type';
+import { TYPES_PER_PAGE } from '@/framework/client/variables';
 
 export default function MobileMainMenu() {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [_, closeSidebar] = useAtom(drawerAtom);
   const { headerLinks } = siteSettings;
-  const current = (router.query.pages as string[] | undefined)?.[0];
-  const activeKey =
-    current === 'tools' || current === 'farmbox' ? current : 'plants';
+  const { types } = useTypes({ limit: TYPES_PER_PAGE });
+  const typeList = types ?? [];
+  const homeSlug =
+    typeList.find((tp) => tp?.settings?.isHome)?.slug ?? typeList[0]?.slug;
+  const currentSlug =
+    (router.query.pages as string[] | undefined)?.[0] ?? homeSlug;
 
   // function handleClick(path: string) {
   //   router.push(path);
@@ -29,18 +33,18 @@ export default function MobileMainMenu() {
           Shop by world
         </p>
         <div className="flex gap-2">
-          {VERTICAL_LIST.map((v) => (
+          {typeList.map((tp) => (
             <Link
-              key={v.key}
-              href={v.isHome ? '/' : v.path}
+              key={tp.slug}
+              href={tp.slug === homeSlug ? '/' : `/${tp.slug}`}
               onClick={() => closeSidebar({ display: false, view: '' })}
-              className={`flex-1 rounded-full py-2 text-center text-sm font-bold transition ${
-                activeKey === v.key
+              className={`flex-1 whitespace-nowrap rounded-full py-2 text-center text-sm font-bold transition ${
+                currentSlug === tp.slug
                   ? 'bg-leaf text-white'
                   : 'bg-forest/8 text-forest'
               }`}
             >
-              {v.label}
+              {tp.name}
             </Link>
           ))}
         </div>

@@ -1,8 +1,9 @@
-// Presentation config for the 3 PlantAtHome verticals.
-// Real categories/products come from the API; this holds only the cinematic
-// hero scenes, copy and promise bands that aren't stored in the catalogue.
-
-export type VerticalKey = 'plants' | 'tools' | 'farmbox';
+// Presentation config for the PlantAtHome verticals.
+// The set of verticals is DATA-DRIVEN (read from the API types at runtime) so the
+// storefront works on any catalogue — staging (plants/tools/farmbox) and
+// production (plants/equipment/fresh-fruits) alike. This file only holds the
+// cinematic hero scenes / copy / promise bands keyed by slug, with a graceful
+// generic fallback for any slug we don't have bespoke art for.
 
 export interface PromiseItem {
   icon:
@@ -18,66 +19,105 @@ export interface PromiseItem {
 }
 
 export interface VerticalMeta {
-  key: VerticalKey;
+  key: string;
   label: string;
-  /** route base — plants is the home page `/` */
   path: string;
-  isHome: boolean;
   tagline: string;
   blurb: string;
   scenes: string[];
   promise: PromiseItem[];
 }
 
-export const VERTICALS: Record<VerticalKey, VerticalMeta> = {
+const PLANTS_PROMISE: PromiseItem[] = [
+  { icon: 'truck', t: 'Delivered thriving', d: 'Insulated, water-locked packaging keeps roots happy on every mile.' },
+  { icon: 'shield', t: '30-day plant guarantee', d: 'If it doesn’t flourish in the first month, we replace it free.' },
+  { icon: 'spark', t: 'Lifetime care support', d: 'Chat with our botanists anytime — watering, light, repotting.' },
+];
+const TOOLS_PROMISE: PromiseItem[] = [
+  { icon: 'shield', t: 'Lifetime warranty', d: 'Forged brass & FSC wood — built to be handed down, not thrown away.' },
+  { icon: 'spark', t: 'Ergonomic by design', d: 'Balanced, comfortable tools tested by real gardeners.' },
+  { icon: 'truckFast', t: 'Free 2-day shipping', d: 'On every order above ₹999, across India.' },
+];
+const FARM_PROMISE: PromiseItem[] = [
+  { icon: 'truckFast', t: 'Harvested at dawn', d: 'Picked the morning of delivery — never cold-stored for weeks.' },
+  { icon: 'leaf', t: '100% certified organic', d: 'No pesticides, no chemicals — just clean, honest produce.' },
+  { icon: 'shield', t: 'Freshness promise', d: 'Not fresh? Full refund or a replacement box, no questions.' },
+];
+
+const PLANTS_SCENES = ['/plants-1.jpg', '/plants-2.jpg', '/plants-3.jpg'];
+const TOOLS_SCENES = ['/tools-1.jpg', '/tools-2.jpg', '/tools-3.jpg'];
+const FARM_SCENES = ['/farm-1.jpg', '/farm-2.jpg', '/farm-3.jpg'];
+
+/** Bespoke per-slug presentation. Covers staging + production vertical slugs. */
+const META: Record<string, Omit<VerticalMeta, 'key' | 'path'>> = {
   plants: {
-    key: 'plants',
     label: 'Plants',
-    path: '/plants',
-    isHome: true,
     tagline: 'Bring the wild indoors.',
     blurb:
       'Rare foliage, living water-gardens and statement plants — hand-picked by botanists, delivered fresh to your door.',
-    scenes: ['/plants-1.jpg', '/plants-2.jpg', '/plants-3.jpg'],
-    promise: [
-      { icon: 'truck', t: 'Delivered thriving', d: 'Insulated, water-locked packaging keeps roots happy on every mile.' },
-      { icon: 'shield', t: '30-day plant guarantee', d: 'If it doesn’t flourish in the first month, we replace it free.' },
-      { icon: 'spark', t: 'Lifetime care support', d: 'Chat with our botanists anytime — watering, light, repotting.' },
-    ],
+    scenes: PLANTS_SCENES,
+    promise: PLANTS_PROMISE,
   },
   tools: {
-    key: 'tools',
     label: 'Tools',
-    path: '/tools',
-    isHome: false,
     tagline: 'Tools that last a lifetime.',
     blurb:
       'Premium, ergonomic gardening tools and planters — brass, copper and FSC wood, built to be loved for years.',
-    scenes: ['/tools-1.jpg', '/tools-2.jpg', '/tools-3.jpg'],
-    promise: [
-      { icon: 'shield', t: 'Lifetime warranty', d: 'Forged brass & FSC wood — built to be handed down, not thrown away.' },
-      { icon: 'spark', t: 'Ergonomic by design', d: 'Balanced, comfortable tools tested by real gardeners.' },
-      { icon: 'truckFast', t: 'Free 2-day shipping', d: 'On every tool order above ₹999, across India.' },
-    ],
+    scenes: TOOLS_SCENES,
+    promise: TOOLS_PROMISE,
+  },
+  equipment: {
+    label: 'Equipment',
+    tagline: 'Equipment that lasts a lifetime.',
+    blurb:
+      'Premium gardening tools, planters and accessories — built to be loved for years and handed down.',
+    scenes: TOOLS_SCENES,
+    promise: TOOLS_PROMISE,
   },
   farmbox: {
-    key: 'farmbox',
     label: 'FarmBox',
-    path: '/farmbox',
-    isHome: false,
     tagline: 'Farm-fresh, every week.',
     blurb:
       'Organic fruits, vegetables and salad greens — harvested at dawn, delivered to your door the same day.',
-    scenes: ['/farm-1.jpg', '/farm-2.jpg', '/farm-3.jpg'],
-    promise: [
-      { icon: 'truckFast', t: 'Harvested at dawn', d: 'Picked the morning of delivery — never cold-stored for weeks.' },
-      { icon: 'leaf', t: '100% certified organic', d: 'No pesticides, no chemicals — just clean, honest produce.' },
-      { icon: 'shield', t: 'Freshness promise', d: 'Not fresh? Full refund or a replacement box, no questions.' },
-    ],
+    scenes: FARM_SCENES,
+    promise: FARM_PROMISE,
+  },
+  'fresh-fruits': {
+    label: 'Fresh Fruits',
+    tagline: 'Farm-fresh, every week.',
+    blurb:
+      'Sun-ripened seasonal fruit — harvested at its peak and delivered to your door the same day.',
+    scenes: FARM_SCENES,
+    promise: FARM_PROMISE,
   },
 };
 
-export const VERTICAL_LIST = [VERTICALS.plants, VERTICALS.tools, VERTICALS.farmbox];
+const titleCase = (slug: string) =>
+  slug
+    .replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .trim();
+
+/**
+ * Presentation meta for a vertical slug. Returns bespoke config when we have it,
+ * otherwise a premium generic fallback built from the type's name.
+ */
+export function getVerticalMeta(slug: string, name?: string): VerticalMeta {
+  const path = `/${slug}`;
+  const bespoke = META[slug];
+  if (bespoke) return { key: slug, path, ...bespoke };
+
+  const label = name || titleCase(slug);
+  return {
+    key: slug,
+    path,
+    label,
+    tagline: `Discover ${label}.`,
+    blurb: `Explore our ${label.toLowerCase()} — hand-picked and delivered fresh across India.`,
+    scenes: PLANTS_SCENES,
+    promise: PLANTS_PROMISE,
+  };
+}
 
 /** Home hero uses the cinematic luxury penthouse-in-forest scenes. */
 export const HOME_SCENES = [
@@ -97,8 +137,4 @@ export const TRUST_ITEMS = [
 export function formatINR(n?: number | null) {
   const v = Number(n ?? 0);
   return '₹' + v.toLocaleString('en-IN');
-}
-
-export function isVerticalKey(s?: string | null): s is VerticalKey {
-  return s === 'plants' || s === 'tools' || s === 'farmbox';
 }
