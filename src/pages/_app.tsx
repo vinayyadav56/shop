@@ -38,6 +38,8 @@ function CustomApp({
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
   const authenticationRequired = Component.authenticationRequired ?? false;
+  // Standalone pages (e.g. /prototype) render instantly without the settings/maintenance gate
+  const isStandalone = (Component as any).standalone ?? false;
   const { locale } = useRouter();
   const dir = getDirection(locale);
   return (
@@ -50,6 +52,9 @@ function CustomApp({
                 <CartProvider>
                   <>
                     <DefaultSeo />
+                    {isStandalone ? (
+                      getLayout(<Component {...pageProps} />)
+                    ) : (
                     <Maintenance>
                       <NotificationProvider>
                         {authenticationRequired ? (
@@ -61,6 +66,7 @@ function CustomApp({
                         )}
                       </NotificationProvider>
                     </Maintenance>
+                    )}
                     <ManagedModal />
                     <ManagedDrawer />
                     <ToastContainer autoClose={2000} theme="colored" />

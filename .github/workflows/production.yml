@@ -121,7 +121,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [security, build]
     if: inputs.confirm == 'deploy-production'
-    environment: production
 
     steps:
       - name: Download build artifact

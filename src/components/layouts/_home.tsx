@@ -19,25 +19,10 @@ export default function HomeLayout({
 }: React.PropsWithChildren<{ layout: string }>) {
   const { t } = useTranslation('common');
   const [, setDisplayMobileHeaderSearch] = useAtom(displayMobileHeaderSearchAtom);
-  const [barVisible, setBarVisible] = useState(true);
 
   return (
     <div className="flex min-h-screen flex-col transition-colors duration-150" style={{ background: 'var(--pa-bg)' }}>
-      {/* Announcement bar */}
-      {barVisible && (
-        <div className="pa-bar">
-          🌿 <strong>Free delivery</strong> on orders above ₹999 &nbsp;·&nbsp; Use code{' '}
-          <strong>PLANT10</strong> for 10% off &nbsp;·&nbsp; 840+ plants in stock 🪴
-          <button
-            className="pa-bar-close"
-            onClick={() => setBarVisible(false)}
-            aria-label="Close announcement"
-          >
-            ×
-          </button>
-        </div>
-      )}
-
+      {/* Brand header is fixed + transparent over the hero (see header.tsx) */}
       {['minimal', 'compact'].includes(layout) ? (
         <HeaderMinimal layout={layout} />
       ) : (
