@@ -11,26 +11,22 @@ import { ProductGrid } from '@/components/storefront/sections/product-grid';
 import { Benefits } from '@/components/storefront/sections/benefits';
 import { PromiseBand } from '@/components/storefront/sections/promise-band';
 import { StoryVideo } from '@/components/storefront/sections/story-video';
+import { Testimonials } from '@/components/storefront/sections/testimonials';
 import { RitualVideo } from '@/components/storefront/sections/ritual-video';
 import { VERTICALS, HOME_SCENES, isVerticalKey } from '@/components/storefront/verticals';
 
 /**
- * Premium PlantAtHome storefront layout — drives all three verticals.
- * `/` (isHome=plants) shows the brand intro + 3-vertical showcase; `/plants`
- * `/tools` `/farmbox` each render their own hero, real categories & products.
- * Wired to the SSR-prefetched react-query cache (no first-paint loading flash).
+ * Premium PlantAtHome storefront layout — mirrors the prototype's Home + Vertical
+ * pages exactly (copy + section order), wired to live API data + the SSR cache.
+ * `/` (isHome=plants) = brand intro + 3-vertical showcase; `/plants` `/tools`
+ * `/farmbox` = each vertical's hero, real categories & products.
  */
 export default function PlantAtHomeLayout({ variables }: HomePageProps) {
   const { query } = useRouter();
-  // `query.text`/`query.category` are client-only filters (empty during SSG) —
-  // safe to read for the filtered view without an SSR/hydration flash.
   const isFiltering = Boolean(query.text || query.category);
 
   const typeSlug: string = variables?.types?.type || 'plants';
   const meta = isVerticalKey(typeSlug) ? VERTICALS[typeSlug] : VERTICALS.plants;
-  // Derive the "home" experience from SSR-stable type metadata (NOT router.query,
-  // which is empty during static generation) so /tools and /farmbox never flash
-  // the home hero. Plants is the home type → cinematic penthouse + showcase.
   const isHome = meta.isHome;
 
   const { categories, isLoading: catLoading } = useCategories(
@@ -42,58 +38,63 @@ export default function PlantAtHomeLayout({ variables }: HomePageProps) {
     ...(query.text && { name: query.text }),
   });
 
-  // Hero: home = cinematic penthouse + brand copy; vertical = its own scenes
-  const scenes = isHome ? HOME_SCENES : meta.scenes;
-  const eyebrow = isHome
-    ? 'PlantAtHome · Living greener'
-    : `PlantAtHome · ${meta.label}`;
-  const tagline = isHome ? 'Bring your home to life.' : meta.tagline;
-  const words = tagline.split(' ');
-  const titleA = words.slice(0, -1).join(' ');
-  const titleB = words.slice(-1).join(' ');
-  const sub = isHome
-    ? 'Plants, premium tools and farm-fresh boxes — everything to make your home greener, calmer and more alive.'
-    : meta.blurb;
+  // ── Hero copy (exact prototype text) ──
+  const heroProps = isHome
+    ? {
+        scenes: HOME_SCENES,
+        eyebrow: 'India’s premium plant studio',
+        titleA: 'Bring the wild',
+        titleB: 'indoors.',
+        sub: 'Step into a home that breathes — plants, premium tools and farm-fresh organic produce, all delivered to your door across India.',
+        primary: 'Shop the collection',
+        primaryTo: '#products',
+        tourTitle: 'Step inside a PlantAtHome home',
+        tourSubtitle: meta.blurb,
+      }
+    : {
+        scenes: meta.scenes,
+        eyebrow: `PlantAtHome · ${meta.label}`,
+        titleA: meta.tagline.split(' ').slice(0, -1).join(' '),
+        titleB: meta.tagline.split(' ').slice(-1).join(' '),
+        sub: meta.blurb,
+        primary: `Shop ${meta.label}`,
+        primaryTo: '#categories',
+        tourTitle: `Inside the world of ${meta.label}`,
+        tourSubtitle: meta.blurb,
+      };
 
   return (
     <>
-      <Hero
-        scenes={scenes}
-        eyebrow={eyebrow}
-        titleA={titleA}
-        titleB={titleB}
-        sub={sub}
-        primary={isHome ? 'Explore the collection' : `Shop ${meta.label}`}
-        primaryTo="#categories"
-        tourTitle={
-          isHome
-            ? 'Step inside a PlantAtHome home'
-            : `Inside the world of ${meta.label}`
-        }
-        tourSubtitle={meta.blurb}
-      />
+      <Hero {...heroProps} />
 
       <TrustStrip />
 
+      {/* HOME → 3-vertical showcase; VERTICAL → real category grid */}
       {isHome && !isFiltering && <VerticalShowcase />}
-
-      <CategoryGrid
-        categories={categories}
-        typeSlug={typeSlug}
-        isLoading={catLoading}
-        eyebrow={`${meta.label} categories`}
-        title="Shop by category."
-        tone={isHome ? 'soft' : 'light'}
-      />
+      {!isHome && (
+        <CategoryGrid
+          categories={categories}
+          typeSlug={typeSlug}
+          isLoading={catLoading}
+          eyebrow={`${meta.label} categories`}
+          title="Shop by category."
+        />
+      )}
 
       <Element name="grid">
         <ProductGrid
           products={products}
           typeSlug={typeSlug}
           isLoading={isLoading}
-          eyebrow={isFiltering ? 'Search results' : `${meta.label} edit`}
+          eyebrow={
+            isFiltering ? 'Search results' : isHome ? 'Featured' : `${meta.label} bestsellers`
+          }
           title={
-            isFiltering ? 'What you’re looking for.' : `This week in ${meta.label}.`
+            isFiltering
+              ? 'What you’re looking for.'
+              : isHome
+              ? 'Signature plants, styled to impress.'
+              : `This week in ${meta.label}.`
           }
           viewAllTo={`/${typeSlug}/search`}
           hasMore={hasMore}
@@ -104,9 +105,15 @@ export default function PlantAtHomeLayout({ variables }: HomePageProps) {
 
       {!isFiltering && (
         <>
-          <Benefits />
-          {isHome && <StoryVideo />}
-          <PromiseBand items={meta.promise} />
+          {isHome ? (
+            <>
+              <Benefits />
+              <StoryVideo />
+            </>
+          ) : (
+            <PromiseBand items={meta.promise} />
+          )}
+          <Testimonials />
           <RitualVideo />
         </>
       )}

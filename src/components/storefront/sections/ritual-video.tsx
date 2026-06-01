@@ -19,8 +19,6 @@ export function RitualVideo() {
     offset: ['start end', 'end start'],
   });
   const y = useTransform(scrollYProgress, [0, 1], [-50, 50]);
-  const plantY = useTransform(scrollYProgress, [0, 1], [40, -40]);
-  const vineY = useTransform(scrollYProgress, [0, 1], [-30, 20]);
 
   return (
     <section
@@ -53,31 +51,6 @@ export function RitualVideo() {
       {/* greenish overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-deep/90 via-forest/45 to-leaf/20" />
       <div className="absolute inset-0 bg-forest/25" />
-
-      {/* foreground plants — brings real plants into the room */}
-      {/* eslint-disable @next/next/no-img-element */}
-      <motion.img
-        src="/foliage-vines.png"
-        alt=""
-        aria-hidden
-        style={{ y: vineY }}
-        className="pointer-events-none absolute -top-6 left-2 z-[5] h-40 w-auto opacity-90 sm:left-10 sm:h-56 lg:h-72"
-      />
-      <motion.img
-        src="/foliage-vines.png"
-        alt=""
-        aria-hidden
-        style={{ y: vineY }}
-        className="pointer-events-none absolute -top-6 right-2 z-[5] h-36 w-auto -scale-x-100 opacity-80 sm:right-12 sm:h-52"
-      />
-      <motion.img
-        src="/foliage-corner.png"
-        alt=""
-        aria-hidden
-        style={{ y: plantY }}
-        className="pointer-events-none absolute -bottom-3 -left-3 z-[5] h-32 w-auto opacity-95 drop-shadow-2xl sm:left-2 sm:h-44 lg:h-56"
-      />
-      {/* eslint-enable @next/next/no-img-element */}
 
       {/* content */}
       <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center py-20 text-center sm:py-28 lg:py-32">

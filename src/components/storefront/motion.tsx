@@ -4,24 +4,22 @@ import {
   AnimatePresence,
   useSpring,
   useMotionValue,
-  useInView,
   animate,
 } from 'framer-motion';
 
-// Premium scroll/reveal motion primitives ported from the PlantAtHome prototype.
+// Premium reveal/motion primitives ported from the PlantAtHome prototype.
 // SSR-safe (window access guarded); works in the Next.js pages router.
 //
-// Reveal-on-scroll uses framer-motion's built-in `whileInView` + `viewport`
-// (NOT a manual `useInView`+`animate` toggle, which could leave an element stuck
-// in its hidden initial state if the observer didn't fire — that bug left the
-// "Three worlds" showcase cards clipped/invisible).
+// IMPORTANT: reveals animate on MOUNT (`initial` + `animate`), NOT on viewport
+// entry. On the deployed Vercel build, framer-motion's IntersectionObserver
+// reveals (`whileInView`/`useInView`) do NOT fire, which left every heading
+// (translateY(115%)) and card (clip-path inset(100%)) stuck hidden. Mount-driven
+// animation runs deterministically after hydration, so content always appears.
+// Scroll-linked `useScroll` parallax (used in heroes) is unaffected and kept.
 
 export const EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-// trigger a touch before the element is fully in view, and only once
-const VIEWPORT = { once: true, amount: 0.2, margin: '0px 0px -10% 0px' } as const;
-
-/* Text-mask word reveal */
+/* Text-mask word reveal — animates on mount */
 export function WordReveal({
   text,
   className = '',
@@ -38,8 +36,7 @@ export function WordReveal({
           <motion.span
             className="inline-block"
             initial={{ y: '115%' }}
-            whileInView={{ y: 0 }}
-            viewport={VIEWPORT}
+            animate={{ y: 0 }}
             transition={{ duration: 0.85, delay: delay + i * 0.06, ease: EXPO }}
           >
             {w}&nbsp;
@@ -50,7 +47,7 @@ export function WordReveal({
   );
 }
 
-/* Fade + slide up on scroll-in */
+/* Fade + slide up — animates on mount */
 export function FadeUp({
   children,
   delay = 0,
@@ -65,8 +62,7 @@ export function FadeUp({
   return (
     <motion.div
       initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEWPORT}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.75, delay, ease: EXPO }}
       className={className}
     >
@@ -75,7 +71,7 @@ export function FadeUp({
   );
 }
 
-/* Clip-path image/element reveal (cinematic wipe + scale settle) */
+/* Clip-path reveal (cinematic wipe + scale settle) — animates on mount */
 export function ClipReveal({
   children,
   className = '',
@@ -88,8 +84,7 @@ export function ClipReveal({
   return (
     <motion.div
       initial={{ clipPath: 'inset(100% 0% 0% 0%)', scale: 1.12 }}
-      whileInView={{ clipPath: 'inset(0% 0% 0% 0%)', scale: 1 }}
-      viewport={VIEWPORT}
+      animate={{ clipPath: 'inset(0% 0% 0% 0%)', scale: 1 }}
       transition={{ duration: 1, delay, ease: EXPO }}
       className={className}
     >
@@ -172,20 +167,18 @@ export function Counter({
   decimals?: number;
   suffix?: string;
 }) {
-  const ref = React.useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
   const [val, setVal] = React.useState(0);
   React.useEffect(() => {
-    if (!inView) return;
+    // count up on mount (viewport observers don't fire on the deployed build)
     const c = animate(0, value, {
       duration: 1.7,
       ease: EXPO,
       onUpdate: (x) => setVal(x),
     });
     return () => c.stop();
-  }, [inView, value]);
+  }, [value]);
   return (
-    <span ref={ref}>
+    <span>
       {(val / divide).toLocaleString('en-IN', {
         minimumFractionDigits: decimals,
         maximumFractionDigits: decimals,
