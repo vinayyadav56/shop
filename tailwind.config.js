@@ -45,6 +45,17 @@ module.exports = {
         h6: 'var(--h6)',
       },
       colors: {
+        // ── PlantAtHome brand palette (Fresh Leaf Green) ──
+        leaf: '#43A047',
+        forest: '#2E7D52',
+        deep: '#1B5E3A',
+        cream: '#F4F7F1',
+        gold: '#B58E39',
+        goldlight: '#E3CE97',
+        mint: '#DCEFE0',
+        mintsoft: '#EAF4EC',
+        ink: '#1C3326',
+        sage: '#C8DBBF',
         light: withOpacity('--color-light'),
         dark: withOpacity('--color-dark'),
         accent: withOpacity('--color-accent'),

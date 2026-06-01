@@ -23,6 +23,13 @@ const RightSideView = dynamic(
   () => import('@/components/checkout/right-side-view'),
   { ssr: false }
 );
+const CheckoutRecommendations = dynamic(
+  () =>
+    import('@/components/checkout/checkout-recommendations').then(
+      (m) => m.CheckoutRecommendations
+    ),
+  { ssr: false }
+);
 
 export default function CheckoutPage() {
   const { t } = useTranslation();
@@ -87,6 +94,9 @@ export default function CheckoutPage() {
             <RightSideView />
           </div>
         </div>
+
+        {/* premium content: trust strip + product recommendations */}
+        <CheckoutRecommendations />
       </div>
     </>
   );

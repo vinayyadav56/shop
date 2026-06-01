@@ -21,14 +21,19 @@ const Standard = dynamic(() => import('@/components/layouts/standard'));
 const Modern = dynamic(() => import('@/components/layouts/modern'));
 const Minimal = dynamic(() => import('@/components/layouts/minimal'));
 const Compact = dynamic(() => import('@/components/layouts/compact'));
+const PlantAtHome = dynamic(() => import('@/components/layouts/plantathome'));
 
+// Single-brand shop: every PlantAtHome vertical (plants/tools/farmbox) renders
+// the premium immersive storefront. `classic` + `default` map to it so the
+// look is consistent regardless of the type's stored layoutType.
 const MAP_LAYOUT_TO_GROUP: Record<string, any> = {
-  classic: Classic,
+  classic: PlantAtHome,
+  plantathome: PlantAtHome,
   modern: Modern,
   standard: Standard,
   minimal: Minimal,
   compact: Compact,
-  default: Classic,
+  default: PlantAtHome,
 };
 const Home: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>

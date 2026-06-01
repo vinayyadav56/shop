@@ -1,18 +1,21 @@
 name: Shop – Staging Deploy
 
-# ─── Manual trigger only ───────────────────────────────────────────────────────
+# ─── Auto-deploy on push to staging; manual trigger also available ─────────────
 # Requires GitHub Secrets: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_SHOP_PROJECT_ID
 on:
+  push:
+    branches: [staging]
   workflow_dispatch:
     inputs:
       branch:
         description: 'Branch to deploy (any branch allowed for staging)'
-        required: true
+        required: false
         default: 'staging'
         type: string
       confirm:
-        description: 'Type "deploy" to confirm staging deployment'
-        required: true
+        description: 'Type "deploy" to confirm (optional for manual run)'
+        required: false
+        default: 'deploy'
         type: string
 
 jobs:
@@ -84,7 +87,7 @@ jobs:
           APPLICATION_MODE: staging
           FRAMEWORK_PROVIDER: rest
           NEXT_PUBLIC_VERSION: REST
-          NEXT_PUBLIC_REST_API_ENDPOINT: https://plantathome-production.up.railway.app
+          NEXT_PUBLIC_REST_API_ENDPOINT: https://plantathome-production.up.railway.app/api
           NEXT_PUBLIC_SITE_URL: https://plantathome-shop-staging.vercel.app
           NEXT_PUBLIC_ADMIN_URL: https://plantathome-admin-staging.vercel.app
           NEXT_PUBLIC_RAZORPAY_KEY_ID: ${{ secrets.STAGING_RAZORPAY_KEY_ID }}
@@ -97,8 +100,7 @@ jobs:
     name: Deploy → Vercel (Staging Shop)
     runs-on: ubuntu-latest
     needs: [security, test]
-    if: inputs.confirm == 'deploy'
-    environment: staging
+    if: github.event_name == 'push' || inputs.confirm == 'deploy'
 
     steps:
       - uses: actions/checkout@v4
@@ -118,7 +120,7 @@ jobs:
             --build-env "APPLICATION_MODE=staging" \
             --build-env "FRAMEWORK_PROVIDER=rest" \
             --build-env "NEXT_PUBLIC_VERSION=REST" \
-            --build-env "NEXT_PUBLIC_REST_API_ENDPOINT=https://plantathome-production.up.railway.app" \
+            --build-env "NEXT_PUBLIC_REST_API_ENDPOINT=https://plantathome-production.up.railway.app/api" \
             --build-env "NEXT_PUBLIC_SITE_URL=https://plantathome-shop-staging.vercel.app" \
             --build-env "NEXT_PUBLIC_ADMIN_URL=https://plantathome-admin-staging.vercel.app" \
             --build-env "NEXT_PUBLIC_DEFAULT_LANGUAGE=en" \

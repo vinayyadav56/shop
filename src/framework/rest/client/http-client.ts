@@ -6,7 +6,13 @@ import Cookies from 'js-cookie';
 import Router from 'next/router';
 
 const Axios = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_REST_API_ENDPOINT,
+  // SSR (no window): call Railway directly. Browser: call /rest-api on this domain,
+  // which Vercel proxies to Railway — so users whose network can't reach railway.app
+  // still work, and it's same-origin (no CORS).
+  baseURL:
+    typeof window === 'undefined'
+      ? process.env.NEXT_PUBLIC_REST_API_ENDPOINT
+      : '/rest-api',
   timeout: 5000000,
   headers: {
     'Content-Type': 'application/json',
@@ -31,7 +37,7 @@ Axios.interceptors.response.use(
       (error.response && error.response.status === 401) ||
       (error.response && error.response.status === 403) ||
       (error.response &&
-        error.response.data.message === 'PICKBAZAR_ERROR.NOT_AUTHORIZED')
+        error.response.data.message === 'PLANTATHOME_ERROR.NOT_AUTHORIZED')
     ) {
       Cookies.remove(AUTH_TOKEN_KEY);
       Router.replace(Routes.home);
