@@ -21,10 +21,10 @@ const BENEFITS = [
 ];
 
 const STATS = [
-  { value: 12000, divide: 1000, decimals: 0, suffix: 'k+', label: 'Happy customers' },
-  { value: 840, divide: 1, decimals: 0, suffix: '+', label: 'Varieties in stock' },
-  { value: 4.9, divide: 1, decimals: 1, suffix: '/5', label: 'Average rating' },
-  { value: 50, divide: 1, decimals: 0, suffix: '+', label: 'Cities served' },
+  { value: 12000, divide: 1, decimals: 0, suffix: '+', label: 'Happy plant parents' },
+  { value: 400, divide: 1, decimals: 0, suffix: '+', label: 'Curated varieties' },
+  { value: 24, divide: 1, decimals: 0, suffix: 'h', label: 'Fresh dispatch' },
+  { value: 49, divide: 10, decimals: 1, suffix: '★', label: 'Average rating' },
 ];
 
 const EDITORIAL_IMG =

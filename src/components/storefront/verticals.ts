@@ -87,12 +87,11 @@ export const HOME_SCENES = [
 ];
 
 export const TRUST_ITEMS = [
-  'Free delivery over ₹999',
-  '30-day healthy guarantee',
-  '12,000+ happy customers',
-  'Hand-picked & inspected',
-  'Lifetime care support',
-  'Same-day dispatch',
+  'Same-day metro delivery',
+  '30-day plant guarantee',
+  'Expert care support',
+  'Carbon-neutral packaging',
+  'Hand-picked by botanists',
 ];
 
 export function formatINR(n?: number | null) {
