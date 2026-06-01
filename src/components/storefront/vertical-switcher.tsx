@@ -2,10 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { VERTICAL_LIST, type VerticalKey } from './verticals';
+import { useTypes } from '@/framework/type';
+import { TYPES_PER_PAGE } from '@/framework/client/variables';
 
-/** Segmented Plants · Tools · FarmBox switcher — the single control to move
- *  between the three storefronts. Plants is the home route (`/`).
+/** Segmented switcher — data-driven from the live API types. The home type
+ *  (settings.isHome) links to `/`; every other type links to `/{slug}`.
  *  `light` styles it for a transparent header over the hero. */
 export function VerticalSwitcher({
   className = '',
@@ -15,9 +16,14 @@ export function VerticalSwitcher({
   light?: boolean;
 }) {
   const router = useRouter();
-  const current = (router.query.pages as string[] | undefined)?.[0];
-  const activeKey: VerticalKey =
-    current === 'tools' || current === 'farmbox' ? current : 'plants';
+  const { types } = useTypes({ limit: TYPES_PER_PAGE });
+  const list = types ?? [];
+  if (list.length === 0) return null;
+
+  const homeSlug =
+    list.find((t) => t?.settings?.isHome)?.slug ?? list[0]?.slug;
+  const currentSlug =
+    (router.query.pages as string[] | undefined)?.[0] ?? homeSlug;
 
   return (
     <div
@@ -25,14 +31,14 @@ export function VerticalSwitcher({
         light ? 'bg-white/15 backdrop-blur' : 'bg-forest/8'
       } ${className}`}
     >
-      {VERTICAL_LIST.map((v) => {
-        const active = activeKey === v.key;
-        const href = v.isHome ? '/' : v.path;
+      {list.map((t) => {
+        const active = currentSlug === t.slug;
+        const href = t.slug === homeSlug ? '/' : `/${t.slug}`;
         return (
           <Link
-            key={v.key}
+            key={t.slug}
             href={href}
-            className={`relative rounded-full px-4 py-1.5 text-sm font-semibold transition ${
+            className={`relative whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-semibold transition ${
               active
                 ? 'text-white'
                 : light
@@ -47,7 +53,7 @@ export function VerticalSwitcher({
                 transition={{ type: 'spring', stiffness: 400, damping: 32 }}
               />
             )}
-            {v.label}
+            {t.name}
           </Link>
         );
       })}

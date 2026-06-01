@@ -10,7 +10,8 @@ import { VerticalSwitcher } from '@/components/storefront/vertical-switcher';
 import { Icon } from '@/components/storefront/icons';
 import { EXPO } from '@/components/storefront/motion';
 import { SearchIcon } from '@/components/icons/search-icon';
-import { VERTICAL_LIST, type VerticalKey } from '@/components/storefront/verticals';
+import { useTypes } from '@/framework/type';
+import { TYPES_PER_PAGE } from '@/framework/client/variables';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { drawerAtom } from '@/store/drawer-atom';
 import { authorizationAtom } from '@/store/authorization-atom';
@@ -50,10 +51,13 @@ const Header = ({ layout }: { layout?: string }) => {
   const solid = scrolled || !isHomePage || searchOpen;
   const position = isHomePage ? 'fixed' : 'sticky';
 
-  const current = (router.query.pages as string[] | undefined)?.[0];
-  const activeKey: VerticalKey =
-    current === 'tools' || current === 'farmbox' ? current : 'plants';
-  const categoriesHref = `/${activeKey}/search`;
+  const { types } = useTypes({ limit: TYPES_PER_PAGE });
+  const typeList = types ?? [];
+  const homeSlug =
+    typeList.find((t) => t?.settings?.isHome)?.slug ?? typeList[0]?.slug ?? 'plants';
+  const currentSlug =
+    (router.query.pages as string[] | undefined)?.[0] ?? homeSlug;
+  const categoriesHref = `/${currentSlug}/search`;
 
   const openCart = () => setDrawer({ display: true, view: 'cart' });
   const onProfile = () => {
@@ -192,16 +196,16 @@ const Header = ({ layout }: { layout?: string }) => {
             </div>
 
             <div className="mb-6 flex rounded-full bg-white/10 p-1">
-              {VERTICAL_LIST.map((v) => (
+              {typeList.map((tp) => (
                 <Link
-                  key={v.key}
-                  href={v.isHome ? '/' : v.path}
+                  key={tp.slug}
+                  href={tp.slug === homeSlug ? '/' : `/${tp.slug}`}
                   onClick={() => setMenuOpen(false)}
-                  className={`flex-1 rounded-full py-2 text-center text-sm font-semibold ${
-                    activeKey === v.key ? 'bg-leaf text-white' : 'text-white/80'
+                  className={`flex-1 whitespace-nowrap rounded-full py-2 text-center text-sm font-semibold ${
+                    currentSlug === tp.slug ? 'bg-leaf text-white' : 'text-white/80'
                   }`}
                 >
-                  {v.label}
+                  {tp.name}
                 </Link>
               ))}
             </div>

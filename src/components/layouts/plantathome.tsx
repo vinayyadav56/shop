@@ -13,7 +13,9 @@ import { PromiseBand } from '@/components/storefront/sections/promise-band';
 import { StoryVideo } from '@/components/storefront/sections/story-video';
 import { Testimonials } from '@/components/storefront/sections/testimonials';
 import { RitualVideo } from '@/components/storefront/sections/ritual-video';
-import { VERTICALS, HOME_SCENES, isVerticalKey } from '@/components/storefront/verticals';
+import { getVerticalMeta, HOME_SCENES } from '@/components/storefront/verticals';
+import { useTypes } from '@/framework/type';
+import { TYPES_PER_PAGE } from '@/framework/client/variables';
 
 /**
  * Premium PlantAtHome storefront layout — mirrors the prototype's Home + Vertical
@@ -26,8 +28,16 @@ export default function PlantAtHomeLayout({ variables }: HomePageProps) {
   const isFiltering = Boolean(query.text || query.category);
 
   const typeSlug: string = variables?.types?.type || 'plants';
-  const meta = isVerticalKey(typeSlug) ? VERTICALS[typeSlug] : VERTICALS.plants;
-  const isHome = meta.isHome;
+  // Data-driven: the home experience belongs to the API's home type (first
+  // settings.isHome), so /equipment, /fresh-fruits etc. render as verticals even
+  // when production marks several types isHome. SSR prefetches TYPES → no flash.
+  const { types } = useTypes({ limit: TYPES_PER_PAGE });
+  const typeList = types ?? [];
+  const homeSlug =
+    typeList.find((t) => t?.settings?.isHome)?.slug ?? typeList[0]?.slug ?? typeSlug;
+  const isHome = typeSlug === homeSlug;
+  const currentType = typeList.find((t) => t.slug === typeSlug);
+  const meta = getVerticalMeta(typeSlug, currentType?.name);
 
   const { categories, isLoading: catLoading } = useCategories(
     variables.categories,
