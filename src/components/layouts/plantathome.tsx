@@ -10,6 +10,7 @@ import { CategoryGrid } from '@/components/storefront/sections/category-grid';
 import { ProductGrid } from '@/components/storefront/sections/product-grid';
 import { Benefits } from '@/components/storefront/sections/benefits';
 import { PromiseBand } from '@/components/storefront/sections/promise-band';
+import { StoryVideo } from '@/components/storefront/sections/story-video';
 import { RitualVideo } from '@/components/storefront/sections/ritual-video';
 import { VERTICALS, HOME_SCENES, isVerticalKey } from '@/components/storefront/verticals';
 
@@ -104,6 +105,7 @@ export default function PlantAtHomeLayout({ variables }: HomePageProps) {
       {!isFiltering && (
         <>
           <Benefits />
+          {isHome && <StoryVideo />}
           <PromiseBand items={meta.promise} />
           <RitualVideo />
         </>
