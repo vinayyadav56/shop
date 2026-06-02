@@ -46,7 +46,7 @@ const ManufacturerFilterView = ({ manufacturers }: Props) => {
         <span className="sr-only">{t('text-manufacturers')}</span>
         <div className="grid grid-cols-1 gap-4">
           <CheckboxGroup values={state} onChange={handleChange}>
-            {manufacturers.map((plan) => (
+            {manufacturers.filter(Boolean).map((plan) => (
               <Checkbox
                 key={plan.id}
                 label={plan.name}
