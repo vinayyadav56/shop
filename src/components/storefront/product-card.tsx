@@ -2,20 +2,25 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Icon } from './icons';
+import { PlantMark } from './logo-mark';
 import { formatINR } from './verticals';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { generateCartItem } from '@/store/quick-cart/generate-cart-item';
 import { cartAnimation } from '@/lib/cart-animation';
 import { useModalAction } from '@/components/ui/modal/modal.context';
-import { productPlaceholder } from '@/lib/placeholders';
 import type { Product } from '@/types';
 
-/** Immersive product card — full-bleed image, overlaid info, real add-to-cart. */
+/**
+ * Premium plant card (matches the reference): rounded white card with the real
+ * product photo (or a sage house-plant placeholder) up top, a clay "Sale" pill,
+ * heart wishlist, serif name, italic botanical, sage care chips, ₹ price +
+ * strikethrough, and a solid forest "+" add button.
+ */
 export function StorefrontProductCard({
   product,
-  tag,
 }: {
   product: Product;
+  /** kept for API compatibility with callers; no longer rendered */
   tag?: string;
 }) {
   const { addItemToCart, isInCart, updateCartLanguage, language } = useCart();
@@ -25,14 +30,13 @@ export function StorefrontProductCard({
   const regular = Number(product?.price ?? 0);
   const sale = Number(product?.sale_price ?? 0) || regular;
   const off = regular > sale ? Math.round((1 - sale / regular) * 100) : 0;
-  const rating = Number(product?.ratings ?? 0);
-  const image =
-    product?.image?.original || product?.image?.thumbnail || productPlaceholder;
+  const image = product?.image?.original || product?.image?.thumbnail || '';
+  const botanical = product?.scientific_name;
+  const care = product?.care ?? [];
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // Products with variations must be configured in the detail modal/page.
     if (Number(product?.quantity) < 1) return;
     if (product?.product_type === 'variable') {
       openModal('PRODUCT_DETAILS', product?.slug);
@@ -48,81 +52,91 @@ export function StorefrontProductCard({
 
   return (
     <motion.div
-      whileHover={{ y: -6 }}
+      whileHover={{ y: -5 }}
       transition={{ duration: 0.3 }}
-      className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-mintsoft"
+      className="group flex h-full flex-col overflow-hidden rounded-[1.6rem] bg-white shadow-[0_10px_40px_rgba(31,42,33,0.08)] transition-shadow duration-300 hover:shadow-[0_20px_55px_rgba(31,42,33,0.14)]"
     >
-      <Link href={`/products/${product?.slug}`} className="absolute inset-0">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={image}
-          alt={product?.name}
-          loading="lazy"
-          className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
-        />
-      </Link>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-deep via-deep/15 to-transparent" />
+      {/* image panel — real photo, or sage + house-plant placeholder */}
+      <Link
+        href={`/products/${product?.slug}`}
+        className="relative grid aspect-[1/0.92] place-items-center overflow-hidden bg-gradient-to-b from-[#DEE8D4] to-[#CBDDBF]"
+      >
+        {image ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={image}
+            alt={product?.name}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <PlantMark className="h-[45%] w-[45%]" stroke="#8FA373" />
+        )}
 
-      {/* top chips */}
-      <div className="absolute inset-x-0 top-0 flex items-start justify-between p-3.5">
-        <div className="flex flex-col gap-1.5">
-          {off > 0 && (
-            <span className="rounded-full bg-leaf px-2.5 py-1 text-[11px] font-bold text-white shadow">
-              {off}% OFF
-            </span>
-          )}
-          {tag && (
-            <span className="w-fit rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-forest">
-              {tag}
-            </span>
-          )}
-        </div>
+        {off > 0 && (
+          <span className="absolute left-4 top-4 z-10 rounded-full bg-clay px-3.5 py-1.5 text-xs font-semibold text-cream shadow-sm">
+            Sale
+          </span>
+        )}
         <button
           type="button"
           onClick={(e) => {
             e.preventDefault();
             setWish((w) => !w);
           }}
-          className={`grid h-9 w-9 place-items-center rounded-full backdrop-blur transition ${
-            wish ? 'bg-leaf text-white' : 'bg-white/80 text-forest hover:bg-white'
-          }`}
-          aria-label="wishlist"
+          className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-white shadow-[0_4px_14px_rgba(31,42,33,0.12)] transition"
+          aria-label="Add to wishlist"
         >
-          <Icon.leaf className="h-4 w-4" />
+          <Icon.heart
+            className="h-[18px] w-[18px]"
+            stroke={wish ? '#B5654A' : '#2E7D52'}
+            fill={wish ? '#B5654A' : 'none'}
+          />
         </button>
-      </div>
+      </Link>
 
-      {/* bottom info */}
-      <div className="absolute inset-x-0 bottom-0 p-4 text-white">
-        <div className="flex items-center justify-between gap-2">
-          <h3 className="font-heading text-base font-bold leading-tight drop-shadow line-clamp-2 sm:text-lg">
-            {product?.name}
-          </h3>
-          {rating > 0 && (
-            <span className="flex shrink-0 items-center gap-1 text-xs font-semibold">
-              <Icon.star className="h-3.5 w-3.5 text-goldlight" />
-              {rating.toFixed(1)}
-            </span>
-          )}
-        </div>
-        <div className="mt-1 flex items-baseline gap-2">
-          <span className="text-lg font-extrabold text-white">
-            {formatINR(sale)}
-          </span>
-          {off > 0 && (
-            <span className="text-sm text-white/60 line-through">
-              {formatINR(regular)}
-            </span>
-          )}
-        </div>
-        {/* add to cart — slides up on hover (always tappable on touch) */}
-        <div className="mt-3 max-h-16 overflow-hidden opacity-100 transition-all duration-300 sm:max-h-0 sm:opacity-0 sm:group-hover:max-h-16 sm:group-hover:opacity-100">
+      {/* info */}
+      <div className="flex flex-1 flex-col p-5">
+        <Link
+          href={`/products/${product?.slug}`}
+          className="font-serif text-2xl font-semibold leading-tight text-ink transition line-clamp-2 hover:text-forest"
+        >
+          {product?.name}
+        </Link>
+
+        {botanical && (
+          <p className="mt-0.5 font-serif text-base italic text-forest/55">{botanical}</p>
+        )}
+
+        {care.length > 0 && (
+          <div className="mt-3.5 flex flex-wrap gap-2">
+            {care.map((c) => (
+              <span
+                key={c}
+                className="rounded-full bg-mint px-3.5 py-1.5 text-xs font-medium text-forest"
+              >
+                {c}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-auto flex items-center justify-between pt-5">
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-ink">{formatINR(sale)}</span>
+            {off > 0 && (
+              <span className="text-base text-forest/40 line-through">
+                {formatINR(regular)}
+              </span>
+            )}
+          </div>
           <button
             type="button"
             onClick={handleAdd}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-white py-2.5 text-sm font-bold text-forest transition hover:bg-leaf hover:text-white"
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-forest text-cream transition hover:bg-deep"
+            aria-label={`Add ${product?.name} to cart`}
           >
-            <Icon.bag className="h-4 w-4" /> Add to cart
+            <Icon.plus className="h-5 w-5" />
           </button>
         </div>
       </div>

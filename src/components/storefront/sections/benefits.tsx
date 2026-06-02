@@ -62,7 +62,7 @@ export function Benefits() {
               Why a plant?
             </p>
           </FadeUp>
-          <h2 className="mb-8 font-heading text-4xl font-extrabold leading-tight text-forest sm:text-5xl">
+          <h2 className="mb-8 font-serif text-5xl font-semibold leading-tight text-forest sm:text-6xl">
             <WordReveal text="More than décor. A daily dose of calm." />
           </h2>
           <div className="space-y-5">

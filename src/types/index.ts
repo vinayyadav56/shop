@@ -272,6 +272,8 @@ export interface Product {
   }[];
   in_flash_sale: boolean;
   plant_attribute?: PlantAttribute | null;
+  scientific_name?: string | null;
+  care?: string[];
 }
 
 export interface PlantAttribute {

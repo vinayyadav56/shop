@@ -34,6 +34,7 @@ module.exports = {
       fontFamily: {
         body: ['Inter', 'system-ui', 'sans-serif'],
         heading: ['Montserrat', 'system-ui', 'sans-serif'],
+        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
       },
       fontSize: {
         '10px': '0.625rem',
@@ -56,6 +57,10 @@ module.exports = {
         mintsoft: '#EAF4EC',
         ink: '#1C3326',
         sage: '#C8DBBF',
+        kraft: '#C8B89A',
+        clay: '#B5654A',
+        sagedeep: '#7C8A66',
+        paper: '#F6F1E8',
         light: withOpacity('--color-light'),
         dark: withOpacity('--color-dark'),
         accent: withOpacity('--color-accent'),

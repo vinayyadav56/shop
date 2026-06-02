@@ -31,7 +31,7 @@ export function CategoryGrid({
                 {eyebrow}
               </p>
             </FadeUp>
-            <h2 className="max-w-xl font-heading text-3xl font-extrabold leading-tight text-forest sm:text-4xl lg:text-5xl">
+            <h2 className="max-w-xl font-serif text-4xl font-semibold leading-tight text-forest sm:text-5xl lg:text-6xl">
               <WordReveal text={title} />
             </h2>
           </div>

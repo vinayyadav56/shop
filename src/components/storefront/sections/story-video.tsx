@@ -6,10 +6,10 @@ import { Icon } from '../icons';
 
 // Premium nature footage (Pexels, hotlinkable) + local poster fallback.
 const STORY_VIDEO =
-  'https://videos.pexels.com/video-files/1918465/1918465-uhd_2560_1440_24fps.mp4';
+  'https://videos.pexels.com/video-files/3571264/3571264-hd_1920_1080_30fps.mp4';
 const STORY_VIDEO_ALT =
-  'https://videos.pexels.com/video-files/1918465/1918465-hd_1920_1080_24fps.mp4';
-const STORY_POSTER = '/story-poster.jpg';
+  'https://videos.pexels.com/video-files/3571264/3571264-hd_1920_1080_30fps.mp4';
+const STORY_POSTER = '/story-ocean-poster.png';
 
 /** Pinned full-screen video story block: content reveals over the clip on scroll. */
 export function StoryVideo() {
@@ -30,7 +30,7 @@ export function StoryVideo() {
         <div className="absolute inset-0 overflow-hidden">
           <motion.div style={{ y: bgY, scale: bgScale }} className="absolute inset-[-10%]">
             <video
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover contrast-[1.04] saturate-[1.06]"
               autoPlay
               muted
               loop
@@ -49,18 +49,20 @@ export function StoryVideo() {
               className="absolute inset-0 -z-10 h-full w-full object-cover"
             />
           </motion.div>
-          <div className="absolute inset-0 bg-gradient-to-b from-deep/85 via-deep/55 to-deep/85" />
+          <div className="absolute inset-0 bg-gradient-to-b from-deep/45 via-deep/10 to-deep/55" />
+          {/* soft scrim behind the centered text so the water stays crisp but copy is legible */}
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(8,24,16,0.4)_0%,transparent_62%)]" />
         </div>
 
         {/* content */}
         <motion.div
           style={{ y: textY, opacity: op }}
-          className="relative z-10 mx-auto flex h-full max-w-4xl flex-col items-center justify-center px-6 text-center"
+          className="relative z-10 mx-auto flex h-full max-w-4xl flex-col items-center justify-center px-6 text-center [text-shadow:0_2px_24px_rgba(8,20,12,0.55)]"
         >
           <span className="mb-5 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-white backdrop-blur-md">
             Our story
           </span>
-          <h2 className="font-heading text-5xl font-black leading-[0.98] text-white sm:text-6xl lg:text-7xl">
+          <h2 className="font-serif text-6xl font-semibold leading-[1] text-white sm:text-7xl lg:text-8xl">
             <WordReveal text="From wild greenhouses to your living room." />
           </h2>
           <p className="mt-6 max-w-xl text-base leading-7 text-white/80 sm:text-lg">
