@@ -8,6 +8,7 @@ import { TrustStrip } from '@/components/storefront/sections/trust-strip';
 import { VerticalShowcase } from '@/components/storefront/sections/vertical-showcase';
 import { CategoryGrid } from '@/components/storefront/sections/category-grid';
 import { ProductGrid } from '@/components/storefront/sections/product-grid';
+import { HomeVerticalGrids } from '@/components/storefront/sections/home-vertical-grids';
 import { Benefits } from '@/components/storefront/sections/benefits';
 import { PromiseBand } from '@/components/storefront/sections/promise-band';
 import { StoryVideo } from '@/components/storefront/sections/story-video';
@@ -92,25 +93,26 @@ export default function PlantAtHomeLayout({ variables }: HomePageProps) {
       )}
 
       <Element name="grid">
-        <ProductGrid
-          products={products}
-          typeSlug={typeSlug}
-          isLoading={isLoading}
-          eyebrow={
-            isFiltering ? 'Search results' : isHome ? 'Featured' : `${meta.label} bestsellers`
-          }
-          title={
-            isFiltering
-              ? 'What you’re looking for.'
-              : isHome
-              ? 'Signature plants, styled to impress.'
-              : `This week in ${meta.label}.`
-          }
-          viewAllTo={`/${typeSlug}/search`}
-          hasMore={hasMore}
-          onLoadMore={loadMore}
-          isLoadingMore={isLoadingMore}
-        />
+        {isHome && !isFiltering ? (
+          // HOME → all three verticals as their own section, each with View all
+          <HomeVerticalGrids />
+        ) : (
+          <ProductGrid
+            products={products}
+            typeSlug={typeSlug}
+            isLoading={isLoading}
+            eyebrow={isFiltering ? 'Search results' : `${meta.label} bestsellers`}
+            title={
+              isFiltering
+                ? 'What you’re looking for.'
+                : `This week in ${meta.label}.`
+            }
+            viewAllTo={`/${typeSlug}/search`}
+            hasMore={hasMore}
+            onLoadMore={loadMore}
+            isLoadingMore={isLoadingMore}
+          />
+        )}
       </Element>
 
       {!isFiltering && (
