@@ -78,8 +78,8 @@ const Header = ({ layout }: { layout?: string }) => {
         transition={{ duration: 0.7, ease: EXPO }}
         className={`${position} inset-x-0 top-0 z-50 w-full transition-all duration-300 ${
           solid
-            ? 'bg-cream/85 shadow-[0_8px_30px_rgba(31,42,33,0.08)] backdrop-blur-xl'
-            : 'bg-transparent'
+            ? 'bg-cream-50/90 shadow-[0_4px_24px_rgba(34,48,26,0.10)] backdrop-blur-xl'
+            : 'bg-gradient-to-b from-forest-900/35 via-forest-900/15 to-transparent backdrop-blur-[2px]'
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
