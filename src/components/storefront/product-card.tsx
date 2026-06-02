@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Icon } from './icons';
-import { PlantMark } from './logo-mark';
 import { formatINR } from './verticals';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { generateCartItem } from '@/store/quick-cart/generate-cart-item';
@@ -11,16 +10,16 @@ import { useModalAction } from '@/components/ui/modal/modal.context';
 import type { Product } from '@/types';
 
 /**
- * Premium plant card (matches the reference): rounded white card with the real
- * product photo (or a sage house-plant placeholder) up top, a clay "Sale" pill,
- * heart wishlist, serif name, italic botanical, sage care chips, ₹ price +
- * strikethrough, and a solid forest "+" add button.
+ * Plant At Home Design System product card: white surface, hairline kraft
+ * border, soft low shadow, 0.5rem radius. Real photo (or sage panel + house
+ * mark). Clay "Sale" badge, heart fav, serif name, italic botanical, sage
+ * care chips, ₹ price + strikethrough, forest "+" add button.
  */
 export function StorefrontProductCard({
   product,
 }: {
   product: Product;
-  /** kept for API compatibility with callers; no longer rendered */
+  /** kept for caller API compatibility; not rendered */
   tag?: string;
 }) {
   const { addItemToCart, isInCart, updateCartLanguage, language } = useCart();
@@ -52,14 +51,14 @@ export function StorefrontProductCard({
 
   return (
     <motion.div
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.3 }}
-      className="group flex h-full flex-col overflow-hidden rounded-[1.6rem] bg-white shadow-[0_10px_40px_rgba(31,42,33,0.08)] transition-shadow duration-300 hover:shadow-[0_20px_55px_rgba(31,42,33,0.14)]"
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.22 }}
+      className="group flex h-full flex-col overflow-hidden rounded-lg border border-kraft-200 bg-white shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition-shadow duration-200 hover:shadow-[0_8px_24px_rgba(34,48,26,0.10)]"
     >
-      {/* image panel — real photo, or sage + house-plant placeholder */}
+      {/* photo block — real photo, else sage panel + house-mark watermark */}
       <Link
         href={`/products/${product?.slug}`}
-        className="relative grid aspect-[1/0.92] place-items-center overflow-hidden bg-gradient-to-b from-[#DEE8D4] to-[#CBDDBF]"
+        className="relative grid aspect-[5/4] place-items-center overflow-hidden bg-[radial-gradient(120%_120%_at_30%_20%,#E7EEE2,#CFE0C6)]"
       >
         {image ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -67,14 +66,15 @@ export function StorefrontProductCard({
             src={image}
             alt={product?.name}
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+            className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
           />
         ) : (
-          <PlantMark className="h-[45%] w-[45%]" stroke="#8FA373" />
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src="/brand/mark-house.png" alt="" aria-hidden className="h-[52%] w-auto opacity-50" />
         )}
 
         {off > 0 && (
-          <span className="absolute left-4 top-4 z-10 rounded-full bg-clay px-3.5 py-1.5 text-xs font-semibold text-cream shadow-sm">
+          <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-clay-500 px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] text-white">
             Sale
           </span>
         )}
@@ -84,36 +84,32 @@ export function StorefrontProductCard({
             e.preventDefault();
             setWish((w) => !w);
           }}
-          className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-white shadow-[0_4px_14px_rgba(31,42,33,0.12)] transition"
-          aria-label="Add to wishlist"
+          className="absolute right-2.5 top-2.5 z-10 grid h-8 w-8 place-items-center rounded-full bg-white/85 transition hover:bg-white"
+          aria-label="Save to favourites"
         >
-          <Icon.heart
-            className="h-[18px] w-[18px]"
-            stroke={wish ? '#B5654A' : '#2E7D52'}
-            fill={wish ? '#B5654A' : 'none'}
-          />
+          <Icon.heart className="h-4 w-4" stroke={wish ? '#C26B45' : '#2E5E2A'} fill={wish ? '#C26B45' : 'none'} />
         </button>
       </Link>
 
-      {/* info */}
-      <div className="flex flex-1 flex-col p-5">
+      {/* body */}
+      <div className="flex flex-1 flex-col p-3.5">
         <Link
           href={`/products/${product?.slug}`}
-          className="font-serif text-2xl font-semibold leading-tight text-ink transition line-clamp-2 hover:text-forest"
+          className="font-serif text-xl font-semibold leading-[1.1] text-forest-900 transition line-clamp-2 hover:text-forest-700"
         >
           {product?.name}
         </Link>
 
         {botanical && (
-          <p className="mt-0.5 font-serif text-base italic text-forest/55">{botanical}</p>
+          <p className="mt-0.5 text-[13px] italic text-stone-500">{botanical}</p>
         )}
 
         {care.length > 0 && (
-          <div className="mt-3.5 flex flex-wrap gap-2">
+          <div className="mt-2.5 flex flex-wrap gap-1.5">
             {care.map((c) => (
               <span
                 key={c}
-                className="rounded-full bg-mint px-3.5 py-1.5 text-xs font-medium text-forest"
+                className="rounded-full bg-sage-100 px-2.5 py-[3px] text-[11px] font-medium text-forest-800"
               >
                 {c}
               </span>
@@ -121,22 +117,20 @@ export function StorefrontProductCard({
           </div>
         )}
 
-        <div className="mt-auto flex items-center justify-between pt-5">
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-ink">{formatINR(sale)}</span>
+        <div className="mt-auto flex items-center justify-between pt-3">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-[17px] font-bold text-forest-900">{formatINR(sale)}</span>
             {off > 0 && (
-              <span className="text-base text-forest/40 line-through">
-                {formatINR(regular)}
-              </span>
+              <span className="text-[13px] text-stone-500 line-through">{formatINR(regular)}</span>
             )}
           </div>
           <button
             type="button"
             onClick={handleAdd}
-            className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-forest text-cream transition hover:bg-deep"
+            className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-full bg-forest-700 text-white transition hover:bg-forest-800"
             aria-label={`Add ${product?.name} to cart`}
           >
-            <Icon.plus className="h-5 w-5" />
+            <Icon.plus className="h-[18px] w-[18px]" />
           </button>
         </div>
       </div>
