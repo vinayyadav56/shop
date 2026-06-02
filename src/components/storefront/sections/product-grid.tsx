@@ -41,7 +41,7 @@ export function ProductGrid({
               {eyebrow}
             </p>
           </FadeUp>
-          <h2 className="max-w-xl font-heading text-3xl font-extrabold leading-tight text-forest sm:text-4xl lg:text-5xl">
+          <h2 className="max-w-xl font-serif text-4xl font-semibold leading-tight text-forest sm:text-5xl lg:text-6xl">
             <WordReveal text={title} />
           </h2>
         </div>
@@ -49,9 +49,9 @@ export function ProductGrid({
           <FadeUp delay={0.1}>
             <Link
               href={viewAllTo}
-              className="group inline-flex items-center gap-2 text-sm font-semibold text-forest"
+              className="group inline-flex shrink-0 items-center gap-2 rounded-full border border-forest/20 px-5 py-2.5 text-sm font-semibold text-forest transition hover:border-forest hover:bg-forest hover:text-white"
             >
-              View all <Icon.arrow className="h-4 w-4 transition group-hover:translate-x-1" />
+              View more <Icon.arrow className="h-4 w-4 transition group-hover:translate-x-1" />
             </Link>
           </FadeUp>
         )}

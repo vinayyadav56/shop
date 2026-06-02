@@ -112,4 +112,15 @@ export const Icon = {
       <polyline points="9 18 15 12 9 6" />
     </svg>
   ),
+  heart: (p: P) => (
+    <svg viewBox="0 0 24 24" {...s} {...p}>
+      <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8Z" />
+    </svg>
+  ),
+  plus: (p: P) => (
+    <svg viewBox="0 0 24 24" {...s} strokeWidth={2} {...p}>
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  ),
 };

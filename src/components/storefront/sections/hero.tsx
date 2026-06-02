@@ -60,7 +60,7 @@ export function Hero({
           <Icon.spark className="h-3.5 w-3.5 text-goldlight" /> {eyebrow}
         </motion.span>
 
-        <h1 className="max-w-4xl font-heading text-[12vw] font-black leading-[0.9] tracking-tight text-white sm:text-7xl lg:text-[5.5rem]">
+        <h1 className="max-w-4xl font-serif text-[13vw] font-semibold leading-[0.95] tracking-tight text-white sm:text-7xl lg:text-[5.75rem]">
           <WordReveal text={titleA} delay={0.15} />
           <span className="block text-goldlight">
             <WordReveal text={titleB} delay={0.45} />
