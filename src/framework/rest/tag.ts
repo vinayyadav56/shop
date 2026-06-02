@@ -35,7 +35,7 @@ export const useTags = (options: Pick<QueryOptions, 'limit'>) => {
   }
 
   return {
-    tags: data?.pages?.flatMap((page: any) => page.data) ?? [],
+    tags: data?.pages?.flatMap((page: any) => page?.data ?? []).filter(Boolean) ?? [],
     paginatorInfo: Array.isArray(data?.pages)
       ? mapPaginatorData(data?.pages[data.pages.length - 1])
       : null,
