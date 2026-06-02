@@ -43,7 +43,7 @@ const TagFilterView = ({ tags }: Props) => {
         <span className="sr-only">{t('text-tags')}</span>
         <div className="grid grid-cols-1 gap-4">
           <CheckboxGroup values={state} onChange={handleChange}>
-            {tags.map((plan) => (
+            {tags.filter(Boolean).map((plan) => (
               <Checkbox
                 key={plan.id}
                 label={plan.name}

@@ -36,7 +36,7 @@ export function useCategories(options?: Partial<CategoryQueryOptions>) {
   }
 
   return {
-    categories: data?.pages?.flatMap((page) => page.data) ?? [],
+    categories: data?.pages?.flatMap((page) => page?.data ?? []).filter(Boolean) ?? [],
     paginatorInfo: Array.isArray(data?.pages)
       ? mapPaginatorData(data?.pages[data.pages.length - 1])
       : null,
