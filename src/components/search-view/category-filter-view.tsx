@@ -44,7 +44,7 @@ const CategoryFilterView = ({ categories }: Props) => {
         <span className="sr-only">{t('text-categories')}</span>
         <div className="grid grid-cols-1 gap-4">
           <CheckboxGroup values={state} onChange={handleChange}>
-            {categories.map((plan) => (
+            {categories.filter(Boolean).map((plan) => (
               <Checkbox
                 key={plan.id}
                 label={plan.name}

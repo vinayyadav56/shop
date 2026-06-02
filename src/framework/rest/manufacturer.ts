@@ -42,7 +42,7 @@ export function useManufacturers(options?: ManufacturerQueryOptions) {
   }
 
   return {
-    manufacturers: data?.pages?.flatMap((page) => page.data) ?? [],
+    manufacturers: data?.pages?.flatMap((page) => page?.data ?? []).filter(Boolean) ?? [],
     paginatorInfo: Array.isArray(data?.pages)
       ? mapPaginatorData(data?.pages[data.pages.length - 1])
       : null,

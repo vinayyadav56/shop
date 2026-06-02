@@ -271,6 +271,25 @@ export interface Product {
     url: string;
   }[];
   in_flash_sale: boolean;
+  plant_attribute?: PlantAttribute | null;
+}
+
+export interface PlantAttribute {
+  scientific_name?: string | null;
+  hindi_name?: string | null;
+  indoor_outdoor?: string | null;
+  temperature_range?: string | null;
+  height_range?: string | null;
+  life_span?: string | null;
+  sunlight?: string | null;
+  water_requirement?: string | null;
+  benefits?: string | null;
+  medicinal_uses?: string | null;
+  air_purifying?: boolean | null;
+  pet_friendly?: boolean | null;
+  growth_rate?: string | null;
+  flowering_season?: string | null;
+  native_region?: string | null;
 }
 
 export interface RatingCount {

@@ -3,6 +3,7 @@ import BackButton from '@/components/ui/back-button';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { ThumbsCarousel } from '@/components/ui/thumb-carousel';
 import Truncate from '@/components/ui/truncate';
+import PlantCareDetails from './plant-care-details';
 import { Routes } from '@/config/routes';
 import { displayImage } from '@/lib/display-product-preview-images';
 import { getVariations } from '@/lib/get-variations';
@@ -318,6 +319,9 @@ const Details: React.FC<Props> = ({
           ''
         )}
       </Element>
+
+      {/* PlantAtHome — botanical care details */}
+      <PlantCareDetails plantAttribute={(product as any)?.plant_attribute} />
     </article>
   );
 };
