@@ -274,6 +274,9 @@ export interface Product {
   plant_attribute?: PlantAttribute | null;
   scientific_name?: string | null;
   care?: string[];
+  bundle_items?: Product[];
+  bundle_total_value?: number | null;
+  addons?: Product[];
 }
 
 export interface PlantAttribute {

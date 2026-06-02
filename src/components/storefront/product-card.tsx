@@ -26,12 +26,17 @@ export function StorefrontProductCard({
   const { openModal } = useModalAction();
   const [wish, setWish] = React.useState(false);
 
+  const isBundle = product?.product_type === 'bundle';
+  const bundleTotal = Number(product?.bundle_total_value ?? 0);
   const regular = Number(product?.price ?? 0);
   const sale = Number(product?.sale_price ?? 0) || regular;
-  const off = regular > sale ? Math.round((1 - sale / regular) * 100) : 0;
+  // for bundles, compare the offer price against the items' total value
+  const compareAt = isBundle && bundleTotal > sale ? bundleTotal : regular;
+  const off = compareAt > sale ? Math.round((1 - sale / compareAt) * 100) : 0;
   const image = product?.image?.original || product?.image?.thumbnail || '';
   const botanical = product?.scientific_name;
   const care = product?.care ?? [];
+  const bundleCount = product?.bundle_items?.length ?? 0;
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -74,11 +79,15 @@ export function StorefrontProductCard({
           <img src="/brand/mark-house.png" alt="" aria-hidden className="h-[52%] w-auto opacity-50" />
         )}
 
-        {off > 0 && (
+        {isBundle ? (
+          <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-forest-700 px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] text-white">
+            Bundle{bundleCount ? ` · ${bundleCount}` : ''}
+          </span>
+        ) : off > 0 ? (
           <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-clay-500 px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] text-white">
             Sale
           </span>
-        )}
+        ) : null}
         <button
           type="button"
           onClick={(e) => {
@@ -122,7 +131,7 @@ export function StorefrontProductCard({
           <div className="flex items-baseline gap-1.5">
             <span className="text-[17px] font-bold text-forest-900">{formatINR(sale)}</span>
             {off > 0 && (
-              <span className="text-[13px] text-stone-500 line-through">{formatINR(regular)}</span>
+              <span className="text-[13px] text-stone-500 line-through">{formatINR(compareAt)}</span>
             )}
           </div>
           <button
