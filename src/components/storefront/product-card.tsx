@@ -58,7 +58,7 @@ export function StorefrontProductCard({
       {/* photo block — real photo, else sage panel + house-mark watermark */}
       <Link
         href={`/products/${product?.slug}`}
-        className="relative grid aspect-[5/4] place-items-center overflow-hidden bg-[radial-gradient(120%_120%_at_30%_20%,#E7EEE2,#CFE0C6)]"
+        className="relative grid aspect-[4/5] place-items-center overflow-hidden bg-[radial-gradient(120%_120%_at_30%_20%,#E7EEE2,#CFE0C6)]"
       >
         {image ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -66,6 +66,7 @@ export function StorefrontProductCard({
             src={image}
             alt={product?.name}
             loading="lazy"
+            decoding="async"
             className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
           />
         ) : (

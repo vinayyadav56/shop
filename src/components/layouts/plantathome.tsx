@@ -11,9 +11,21 @@ import { ProductGrid } from '@/components/storefront/sections/product-grid';
 import { HomeVerticalGrids } from '@/components/storefront/sections/home-vertical-grids';
 import { Benefits } from '@/components/storefront/sections/benefits';
 import { PromiseBand } from '@/components/storefront/sections/promise-band';
-import { StoryVideo } from '@/components/storefront/sections/story-video';
-import { Testimonials } from '@/components/storefront/sections/testimonials';
-import { RitualVideo } from '@/components/storefront/sections/ritual-video';
+import dynamic from 'next/dynamic';
+
+// Heavy, below-the-fold sections — lazy-loaded so the hero + first product rows
+// paint fast (video clips + framer-motion only load when needed).
+const StoryVideo = dynamic(
+  () => import('@/components/storefront/sections/story-video').then((m) => m.StoryVideo),
+  { ssr: false },
+);
+const RitualVideo = dynamic(
+  () => import('@/components/storefront/sections/ritual-video').then((m) => m.RitualVideo),
+  { ssr: false },
+);
+const Testimonials = dynamic(
+  () => import('@/components/storefront/sections/testimonials').then((m) => m.Testimonials),
+);
 import { getVerticalMeta, HOME_SCENES } from '@/components/storefront/verticals';
 import { useTypes } from '@/framework/type';
 import { TYPES_PER_PAGE } from '@/framework/client/variables';

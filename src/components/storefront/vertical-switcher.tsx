@@ -28,7 +28,7 @@ export function VerticalSwitcher({
   return (
     <div
       className={`inline-flex items-center rounded-full p-1 ${
-        light ? 'bg-white/15 backdrop-blur' : 'bg-forest/8'
+        light ? 'bg-white/15 backdrop-blur' : 'bg-sage-100'
       } ${className}`}
     >
       {list.map((t) => {
@@ -43,13 +43,13 @@ export function VerticalSwitcher({
                 ? 'text-white'
                 : light
                 ? 'text-white/80 hover:text-white'
-                : 'text-forest/70 hover:text-forest'
+                : 'text-forest-800/70 hover:text-forest-800'
             }`}
           >
             {active && (
               <motion.span
                 layoutId="vpill-header"
-                className="absolute inset-0 -z-10 rounded-full bg-leaf"
+                className={`absolute inset-0 -z-10 rounded-full ${light ? 'bg-leaf' : 'bg-forest-700'}`}
                 transition={{ type: 'spring', stiffness: 400, damping: 32 }}
               />
             )}

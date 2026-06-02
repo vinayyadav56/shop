@@ -61,7 +61,7 @@ export function ProductGrid({
         <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
           {isLoading
             ? Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="aspect-[5/4] animate-pulse rounded-lg bg-sage-200" />
+                <div key={i} className="aspect-[4/5] animate-pulse rounded-lg bg-sage-200" />
               ))
             : products.map((p, i) => (
                 <FadeUp key={p.id ?? p.slug} delay={(i % 4) * 0.05}>
