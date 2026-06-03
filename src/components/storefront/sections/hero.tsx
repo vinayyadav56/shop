@@ -46,8 +46,8 @@ export function Hero({
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-t from-deep/85 via-deep/25 to-deep/40" />
       <div className="absolute inset-0 bg-gradient-to-r from-deep/75 via-deep/10 to-transparent" />
-      {/* top scrim so the (white) navbar stays legible over bright hero scenes */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-40 bg-gradient-to-b from-deep/95 via-deep/60 to-transparent" />
+      {/* subtle scrim that blends the dark glass navbar into the hero */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-28 bg-gradient-to-b from-deep/45 to-transparent" />
 
       <motion.div
         style={{ y: contentY, opacity: fade }}
