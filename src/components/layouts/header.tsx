@@ -79,7 +79,7 @@ const Header = ({ layout }: { layout?: string }) => {
         className={`${position} inset-x-0 top-0 z-50 w-full transition-all duration-300 ${
           solid
             ? 'bg-cream-50/90 shadow-[0_4px_24px_rgba(34,48,26,0.10)] backdrop-blur-xl'
-            : 'bg-gradient-to-b from-deep/70 via-deep/35 to-transparent backdrop-blur-[2px]'
+            : 'bg-gradient-to-b from-deep/90 via-deep/70 to-deep/20 backdrop-blur-sm'
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
