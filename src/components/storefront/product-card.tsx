@@ -27,12 +27,17 @@ export function StorefrontProductCard({
   const [wish, setWish] = React.useState(false);
 
   const isBundle = product?.product_type === 'bundle';
+  // Variable plants carry no price/sale_price — they price per size, so show
+  // "from ₹{min_price}" and skip the sale/strikethrough.
+  const isVariable = product?.product_type === 'variable';
   const bundleTotal = Number(product?.bundle_total_value ?? 0);
   const regular = Number(product?.price ?? 0);
-  const sale = Number(product?.sale_price ?? 0) || regular;
+  const sale = isVariable
+    ? Number(product?.min_price ?? 0)
+    : Number(product?.sale_price ?? 0) || regular;
   // for bundles, compare the offer price against the items' total value
   const compareAt = isBundle && bundleTotal > sale ? bundleTotal : regular;
-  const off = compareAt > sale ? Math.round((1 - sale / compareAt) * 100) : 0;
+  const off = isVariable ? 0 : compareAt > sale ? Math.round((1 - sale / compareAt) * 100) : 0;
   const image = product?.image?.original || product?.image?.thumbnail || '';
   const botanical = product?.scientific_name;
   const care = product?.care ?? [];
@@ -129,6 +134,7 @@ export function StorefrontProductCard({
 
         <div className="mt-auto flex items-center justify-between pt-3">
           <div className="flex items-baseline gap-1.5">
+            {isVariable && <span className="text-[13px] text-stone-500">from</span>}
             <span className="text-[17px] font-bold text-forest-900">{formatINR(sale)}</span>
             {off > 0 && (
               <span className="text-[13px] text-stone-500 line-through">{formatINR(compareAt)}</span>

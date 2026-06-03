@@ -6,7 +6,9 @@ import { productPlaceholder } from '@/lib/placeholders';
 import type { Product } from '@/types';
 
 const fmtINR = (n: number) => '₹' + Number(n || 0).toLocaleString('en-IN');
-const unit = (p: any) => Number(p?.sale_price ?? 0) || Number(p?.price ?? 0);
+// variable items (size-priced) carry no price/sale_price → fall back to min_price
+const unit = (p: any) =>
+  Number(p?.sale_price) || Number(p?.price) || Number(p?.min_price) || 0;
 
 function Thumb({ p }: { p: any }) {
   return (
