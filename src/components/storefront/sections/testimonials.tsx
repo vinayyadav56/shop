@@ -7,21 +7,21 @@ const TESTIMONIALS = [
     city: 'Bengaluru',
     quote:
       'My living room finally feels alive. The Monstera arrived bigger and healthier than I imagined.',
-    img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
+    img: '/images/people/t1.jpg',
   },
   {
     name: 'Rohan M.',
     city: 'Mumbai',
     quote:
       'Packaging was unreal — not a single leaf bent. This is how premium plant delivery should feel.',
-    img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+    img: '/images/people/t2.jpg',
   },
   {
     name: 'Priya S.',
     city: 'Delhi',
     quote:
       'The care guide and reminders kept my brown thumb in check. Everything is thriving months later.',
-    img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=200&q=80',
+    img: '/images/people/t3.jpg',
   },
 ];
 

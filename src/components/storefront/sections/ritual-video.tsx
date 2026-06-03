@@ -9,8 +9,7 @@ const RITUAL_VIDEO =
   'https://videos.pexels.com/video-files/7048904/7048904-hd_1920_1080_30fps.mp4';
 const RITUAL_VIDEO_ALT =
   'https://videos.pexels.com/video-files/853915/853915-hd_1920_1080_25fps.mp4';
-const RITUAL_POSTER =
-  'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=1600&q=80';
+const RITUAL_POSTER = '/images/sections/ritual-bg.jpg';
 
 export function RitualVideo() {
   const ref = React.useRef<HTMLElement>(null);
