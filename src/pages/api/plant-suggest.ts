@@ -1,23 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getVoiceSettings } from '@/lib/server/voice-settings';
 
 const CATEGORIES = [
   'indoor', 'outdoor', 'flowering', 'foliage', 'air-purifying',
   'pet-friendly', 'succulents-cacti', 'medicinal', 'climbers-vines', 'herbs',
 ];
 
-// Deterministic fallback: map phrasings in the spoken query to a category slug.
-// Order matters — more specific themes first, broad indoor/outdoor/foliage last.
+// Deterministic fallback / fast-path: map phrasings (English + common Hindi /
+// transliterated terms) to a category slug. Order matters — specific first.
 const KEYWORD_TO_CATEGORY: Array<[RegExp, string]> = [
-  [/pet|cat\b|dog\b|animal/i, 'pet-friendly'],
-  [/air.?purif|purify|clean air|air quality/i, 'air-purifying'],
-  [/succulent|cact(us|i)/i, 'succulents-cacti'],
-  [/medicinal|healing|medicine|ayurved/i, 'medicinal'],
-  [/\bherb/i, 'herbs'],
-  [/climb|vine|creeper|trail/i, 'climbers-vines'],
-  [/flower|bloom|blossom/i, 'flowering'],
-  [/low.?light|shade|\bdark\b|bedroom|living room|office|desk|indoor/i, 'indoor'],
-  [/outdoor|garden|balcony|patio|terrace|lawn/i, 'outdoor'],
-  [/foliage|leafy|green leaves/i, 'foliage'],
+  [/pet|cat\b|dog\b|animal|janwar|billi|kutta/i, 'pet-friendly'],
+  [/air.?purif|purify|clean air|air quality|shudh|hawa saaf/i, 'air-purifying'],
+  [/succulent|cact(us|i)|raseele/i, 'succulents-cacti'],
+  [/medicinal|healing|medicine|ayurved|aushadhi|tulsi|aloe|neem|giloy/i, 'medicinal'],
+  [/\bherb|herbs|jadi.?buti|dhaniya|pudina|mint|basil/i, 'herbs'],
+  [/climb|vine|creeper|trail|bel\b|lata/i, 'climbers-vines'],
+  [/flower|bloom|blossom|phool|gulab|rose|marigold|genda/i, 'flowering'],
+  [/low.?light|shade|\bdark\b|bedroom|living room|office|desk|indoor|ghar ke andar|andar|kamre|money plant/i, 'indoor'],
+  [/outdoor|garden|balcony|patio|terrace|lawn|bagicha|bahar|chhat/i, 'outdoor'],
+  [/foliage|leafy|green leaves|patte|hare patte/i, 'foliage'],
 ];
 
 function keywordCategory(text: string): string {
@@ -32,6 +33,23 @@ interface SuggestResponse {
   category?: string;
 }
 
+// Fire-and-forget cost logging — never blocks the user's response.
+function logQuery(apiBase: string | undefined, payload: Record<string, unknown>) {
+  try {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (process.env.VOICE_SEARCH_INGEST_SECRET) {
+      headers['X-Ingest-Secret'] = process.env.VOICE_SEARCH_INGEST_SECRET;
+    }
+    void fetch(`${apiBase}/voice-search/log`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+    }).catch(() => {});
+  } catch {
+    /* ignore */
+  }
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -42,20 +60,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: 'Missing transcript' });
   }
 
-  // Railway REST endpoint already includes the /api prefix; reachable SSR-side.
   const apiBase = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
   try {
-    // Check if the feature is enabled
-    const settingsRes = await fetch(`${apiBase}/voice-search/settings`);
-    if (!settingsRes.ok) {
-      return res.status(503).json({ error: 'Feature unavailable' });
-    }
-    const settings = await settingsRes.json();
-    if (!settings.data?.enabled) {
+    const { enabled, openai_model } = await getVoiceSettings();
+    if (!enabled) {
       return res.status(503).json({ error: 'Feature disabled' });
     }
 
+    // FAST PATH — a clear thematic query maps to a category without OpenAI.
+    const fast = keywordCategory(transcript);
+    if (fast) {
+      logQuery(apiBase, {
+        transcript,
+        search_text: fast,
+        category: fast,
+        prompt_tokens: 0,
+        completion_tokens: 0,
+      });
+      return res.status(200).json({ category: fast } as SuggestResponse);
+    }
+
+    // Otherwise ask the model (handles plant names + any language).
     let aiCategory = '';
     let aiName = '';
     let usage: any = {};
@@ -67,31 +93,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: settings.data.openai_model || 'gpt-4o-mini',
+        model: openai_model || 'gpt-4o-mini',
         response_format: { type: 'json_object' },
         temperature: 0.2,
+        max_tokens: 30,
         messages: [
           {
             role: 'system',
-            content: `You convert a shopper's spoken request into a plant-store filter.
-Return ONLY JSON: {"category":"<slug or empty>","name":"<specific plant name or empty>"}.
+            content: `You convert a shopper's spoken request (in ANY language — English, Hindi, Hinglish, or other Indian languages) into a plant-store filter.
+Return ONLY JSON: {"category":"<slug or empty>","name":"<specific plant name in English or empty>"}.
 
-Rules:
-- If the request describes a TYPE or THEME of plant, set "category" to exactly one of:
+- If the request describes a TYPE/THEME of plant, set "category" to exactly one of:
   ${CATEGORIES.join(', ')}. Leave "name" empty.
-- If the request names a SPECIFIC plant (e.g. monstera, snake plant, areca palm),
-  set "name" to that plant and leave "category" empty.
-- Phrase mapping: bedroom/living room/office/low-light/shade → indoor; garden/balcony/patio → outdoor;
-  purify/clean air → air-purifying; pet/cat/dog safe → pet-friendly; cactus/succulent → succulents-cacti;
-  healing/medicine → medicinal; climbing/vine → climbers-vines; blossom/flower → flowering; leafy → foliage.
+- If the request names a SPECIFIC plant (e.g. monstera, snake plant, tulsi, money plant),
+  set "name" to that plant's common English name and leave "category" empty.
+- Understand Hindi/Indian terms: ghar ke andar/kamra→indoor, bahar/bagicha→outdoor,
+  phool/gulab→flowering, tulsi/aloe/neem→medicinal, jadi-buti→herbs, bel/lata→climbers-vines,
+  hawa saaf→air-purifying, paaltu/pet safe→pet-friendly.
 
 Examples:
 "indoor plants" → {"category":"indoor","name":""}
-"plants for my bedroom" → {"category":"indoor","name":""}
+"ghar ke andar wale paudhe" → {"category":"indoor","name":""}
 "pet safe plants" → {"category":"pet-friendly","name":""}
-"air purifying plants" → {"category":"air-purifying","name":""}
-"show me a monstera" → {"category":"","name":"monstera"}
-"snake plant" → {"category":"","name":"snake plant"}`,
+"mujhe gulab chahiye" → {"category":"","name":"rose"}
+"monstera" → {"category":"","name":"monstera"}`,
           },
           { role: 'user', content: transcript },
         ],
@@ -104,54 +129,28 @@ Examples:
       usage = openaiData.usage || {};
       try {
         const parsed = JSON.parse(content);
-        if (parsed.category && CATEGORIES.includes(parsed.category)) {
-          aiCategory = parsed.category;
-        }
-        const name = parsed.name ?? parsed.text; // tolerate older shape
-        if (name && typeof name === 'string') {
-          aiName = name.trim();
-        }
+        if (parsed.category && CATEGORIES.includes(parsed.category)) aiCategory = parsed.category;
+        const name = parsed.name ?? parsed.text;
+        if (name && typeof name === 'string') aiName = name.trim();
       } catch {
-        // non-JSON; fall through to keyword fallback
+        /* non-JSON — fall through */
       }
     } else {
       console.error('OpenAI error:', openaiRes.status, await openaiRes.text());
     }
 
-    // Resolve a category (AI first, then deterministic keyword fallback).
-    const category = aiCategory || keywordCategory(transcript);
-
-    // Theme → category filter (returns results); specific plant → name search;
-    // otherwise fall back to the raw transcript as a name search.
     let result: SuggestResponse;
-    if (category) {
-      result = { category };
-    } else if (aiName) {
-      result = { text: aiName };
-    } else {
-      result = { text: transcript };
-    }
+    if (aiCategory) result = { category: aiCategory };
+    else if (aiName) result = { text: aiName };
+    else result = { text: transcript };
 
-    // Log the query to the API (server-to-server ingest; cost computed there)
-    try {
-      const ingestHeaders: Record<string, string> = { 'Content-Type': 'application/json' };
-      if (process.env.VOICE_SEARCH_INGEST_SECRET) {
-        ingestHeaders['X-Ingest-Secret'] = process.env.VOICE_SEARCH_INGEST_SECRET;
-      }
-      await fetch(`${apiBase}/voice-search/log`, {
-        method: 'POST',
-        headers: ingestHeaders,
-        body: JSON.stringify({
-          transcript,
-          search_text: result.text || result.category || null,
-          category: result.category || null,
-          prompt_tokens: usage.prompt_tokens || 0,
-          completion_tokens: usage.completion_tokens || 0,
-        }),
-      });
-    } catch {
-      // Logging failed; don't block the response
-    }
+    logQuery(apiBase, {
+      transcript,
+      search_text: result.text || result.category || null,
+      category: result.category || null,
+      prompt_tokens: usage.prompt_tokens || 0,
+      completion_tokens: usage.completion_tokens || 0,
+    });
 
     return res.status(200).json(result);
   } catch (error) {
