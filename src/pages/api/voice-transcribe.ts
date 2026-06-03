@@ -6,10 +6,15 @@ export const config = {
   api: { bodyParser: { sizeLimit: '4mb' } },
 };
 
+// Map the browser's recording MIME to a file extension OpenAI accepts.
+// IMPORTANT: audio-only "audio/mp4" is semantically m4a — OpenAI accepts ".m4a"
+// for it but rejects ".mp4". And we must NOT set the Blob's content-type
+// (a part Content-Type like "audio/mp4"/"audio/webm;codecs=opus" gets rejected);
+// OpenAI detects the format from the filename extension + bytes.
 const EXT_BY_MIME: Record<string, string> = {
   'audio/webm': 'webm',
   'audio/ogg': 'ogg',
-  'audio/mp4': 'mp4',
+  'audio/mp4': 'm4a',
   'audio/mpeg': 'mp3',
   'audio/wav': 'wav',
   'audio/x-m4a': 'm4a',
@@ -38,10 +43,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const buffer = Buffer.from(audio, 'base64');
     const mime = (typeof mimeType === 'string' && mimeType.split(';')[0]) || 'audio/webm';
-    const ext = EXT_BY_MIME[mime] || 'webm';
+    const ext = EXT_BY_MIME[mime] || (mime.includes('mp4') ? 'm4a' : 'webm');
 
     const form = new FormData();
-    form.append('file', new Blob([buffer], { type: mime }), `clip.${ext}`);
+    // No content-type on the Blob — OpenAI infers format from the extension.
+    form.append('file', new Blob([new Uint8Array(buffer)]), `clip.${ext}`);
     form.append('model', 'whisper-1');
     // Auto-detect language; bias the transcriber toward our domain.
     form.append('prompt', 'Plant nursery voice search. Indoor, outdoor, succulent, herb, flowering plants.');
