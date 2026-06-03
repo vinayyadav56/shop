@@ -112,4 +112,52 @@ export const Icon = {
       <polyline points="9 18 15 12 9 6" />
     </svg>
   ),
+  heart: (p: P) => (
+    <svg viewBox="0 0 24 24" {...s} {...p}>
+      <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8Z" />
+    </svg>
+  ),
+  plus: (p: P) => (
+    <svg viewBox="0 0 24 24" {...s} strokeWidth={2} {...p}>
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  ),
+  search: (p: P) => (
+    <svg viewBox="0 0 24 24" {...s} {...p}>
+      <circle cx="11" cy="11" r="7" />
+      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    </svg>
+  ),
+  // ── thin botanical/benefit line icons (no emoji, per the design system) ──
+  wind: (p: P) => (
+    <svg viewBox="0 0 24 24" {...s} {...p}>
+      <path d="M9.6 4.6A2 2 0 1 1 11 8H2" />
+      <path d="M12.6 19.4A2 2 0 1 0 14 16H2" />
+      <path d="M17.7 8a2.5 2.5 0 1 1 1.8 4.3H2" />
+    </svg>
+  ),
+  moon: (p: P) => (
+    <svg viewBox="0 0 24 24" {...s} {...p}>
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+    </svg>
+  ),
+  home: (p: P) => (
+    <svg viewBox="0 0 24 24" {...s} {...p}>
+      <path d="M3 10.5 12 3l9 7.5" />
+      <path d="M5 9.5V21h14V9.5" />
+    </svg>
+  ),
+  zap: (p: P) => (
+    <svg viewBox="0 0 24 24" {...s} {...p}>
+      <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />
+    </svg>
+  ),
+  sprout: (p: P) => (
+    <svg viewBox="0 0 24 24" {...s} {...p}>
+      <path d="M12 21v-9" />
+      <path d="M12 12c0-3.3-2.7-6-6-6 0 3.3 2.7 6 6 6Z" />
+      <path d="M12 11c0-3.3 2.7-6 6-6 0 3.3-2.7 6-6 6Z" />
+    </svg>
+  ),
 };

@@ -1,3 +1,36 @@
+/** Larger house + plant line mark for the product-card placeholder (matches the
+ *  reference art): a rounded house outline with a sprout of leaves growing inside. */
+export function PlantMark({
+  className = '',
+  stroke = 'currentColor',
+}: {
+  className?: string;
+  stroke?: string;
+}) {
+  return (
+    <svg
+      viewBox="0 0 64 64"
+      className={className}
+      fill="none"
+      stroke={stroke}
+      strokeWidth={2.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {/* house */}
+      <path d="M13 32 32 15l19 17" />
+      <path d="M19 29v18h7" />
+      <path d="M45 29v18h-7" />
+      {/* plant — stem + two leaf pairs */}
+      <path d="M32 47V27" />
+      <path d="M32 30c-7 0-11-4-11-10 7 0 11 4 11 10Z" />
+      <path d="M32 30c7 0 11-4 11-10-7 0-11 4-11 10Z" />
+      <path d="M32 40c-5.5 0-9-3-9-7.5 5.5 0 9 3 9 7.5Z" />
+      <path d="M32 40c5.5 0 9-3 9-7.5-5.5 0-9 3-9 7.5Z" />
+    </svg>
+  );
+}
+
 /** Premium placeholder mark: a house roofline with a sprout/leaf rising through it.
  *  Single-colour, print-ready. Swap with the user's reference art when provided. */
 export function LogoMark({

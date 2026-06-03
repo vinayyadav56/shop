@@ -32,8 +32,13 @@ module.exports = {
         '-1': '-1',
       },
       fontFamily: {
-        body: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Montserrat', 'system-ui', 'sans-serif'],
+        // Plant At Home Design System type families
+        body: ['"Hanken Grotesk"', 'system-ui', 'sans-serif'],
+        sans: ['"Hanken Grotesk"', 'system-ui', 'sans-serif'],
+        heading: ['Jost', 'Century Gothic', 'sans-serif'],
+        display: ['Jost', 'Century Gothic', 'sans-serif'],
+        serif: ['"Cormorant Garamond"', 'Iowan Old Style', 'Georgia', 'serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       fontSize: {
         '10px': '0.625rem',
@@ -45,17 +50,51 @@ module.exports = {
         h6: 'var(--h6)',
       },
       colors: {
-        // ── PlantAtHome brand palette (Fresh Leaf Green) ──
-        leaf: '#43A047',
-        forest: '#2E7D52',
-        deep: '#1B5E3A',
-        cream: '#F4F7F1',
+        // ── Plant At Home Design System palette ──
+        forest: {
+          DEFAULT: '#2E5E2A', // primary brand green (buttons, mark)
+          900: '#16301A', // primary ink / wordmark
+          800: '#1E4023',
+          700: '#2E5E2A',
+          600: '#3A6B33',
+          500: '#4E8244', // leaf mid-tone
+        },
+        olive: { DEFAULT: '#6E8B4A', 500: '#6E8B4A' },
+        sage: {
+          DEFAULT: '#E7EEE2', // green tint background / chips
+          400: '#8FAE80',
+          300: '#B3C9A8',
+          200: '#D2E0CB',
+          100: '#E7EEE2',
+        },
+        clay: {
+          DEFAULT: '#C26B45', // warm accent, sale tags, pots
+          600: '#A8542F',
+          500: '#C26B45',
+          300: '#E0A989',
+          100: '#F3E2D8',
+        },
+        cream: {
+          DEFAULT: '#FAF9F6', // page background
+          50: '#FAF9F6',
+          100: '#F4F1EA',
+        },
+        kraft: {
+          DEFAULT: '#E9E3D6', // warm card border
+          200: '#E9E3D6',
+          300: '#DBD4C4',
+        },
+        stone: { 400: '#B6B0A4', 500: '#908A7E', 600: '#6F6A60' },
+        ink: { DEFAULT: '#16301A', 900: '#26261F' },
+        // back-compat aliases (older storefront usage)
+        leaf: '#4E8244',
+        deep: '#16301A',
         gold: '#B58E39',
         goldlight: '#E3CE97',
-        mint: '#DCEFE0',
-        mintsoft: '#EAF4EC',
-        ink: '#1C3326',
-        sage: '#C8DBBF',
+        mint: '#E7EEE2',
+        mintsoft: '#F4F1EA',
+        sagedeep: '#6E8B4A',
+        paper: '#F4F1EA',
         light: withOpacity('--color-light'),
         dark: withOpacity('--color-dark'),
         accent: withOpacity('--color-accent'),

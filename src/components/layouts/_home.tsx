@@ -34,8 +34,8 @@ export default function HomeLayout({
       {/* Newsletter */}
       <section className="pa-nl-section">
         <div className="pa-nl-inner">
-          <div className="pa-nl-tag">🌿 Stay in the Loop</div>
-          <h2 className="pa-nl-h2">Join the PlantAtHome Community</h2>
+          <div className="pa-nl-tag">Stay in the loop</div>
+          <h2 className="pa-nl-h2">Join the PlantAtHome community</h2>
           <p className="pa-nl-sub">
             Get plant care tips, seasonal offers, and early access to new arrivals — straight to your inbox. No spam, ever.
           </p>

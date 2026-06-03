@@ -4,6 +4,7 @@ import { useModalAction } from '@/components/ui/modal/modal.context';
 import { ThumbsCarousel } from '@/components/ui/thumb-carousel';
 import Truncate from '@/components/ui/truncate';
 import PlantCareDetails from './plant-care-details';
+import BundleAndAddons from './bundle-and-addons';
 import { Routes } from '@/config/routes';
 import { displayImage } from '@/lib/display-product-preview-images';
 import { getVariations } from '@/lib/get-variations';
@@ -319,6 +320,11 @@ const Details: React.FC<Props> = ({
           ''
         )}
       </Element>
+
+      {/* PlantAtHome — bundle contents + buy-together add-ons */}
+      <div className="mx-auto w-full max-w-6xl px-4 md:px-8">
+        <BundleAndAddons product={product as any} />
+      </div>
 
       {/* PlantAtHome — botanical care details */}
       <PlantCareDetails plantAttribute={(product as any)?.plant_attribute} />

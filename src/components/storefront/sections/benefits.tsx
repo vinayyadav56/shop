@@ -1,103 +1,69 @@
-import { motion } from 'framer-motion';
 import { Icon } from '../icons';
-import { FadeUp, WordReveal, ClipReveal, Counter } from '../motion';
+import { FadeUp, WordReveal } from '../motion';
 
 const BENEFITS = [
   {
-    icon: Icon.droplet,
-    title: 'Cleaner air, naturally',
-    text: 'NASA-studied species that filter indoor toxins and lift humidity for easier breathing.',
+    icon: Icon.wind,
+    title: 'Air purification',
+    text: 'Plants naturally filter toxins and lift oxygen levels, keeping your space fresh and clean.',
   },
   {
-    icon: Icon.sun,
-    title: 'Calmer, focused spaces',
-    text: 'Biophilic greenery proven to cut stress and sharpen focus at home and work.',
+    icon: Icon.sprout,
+    title: 'Stress reduction',
+    text: 'Time spent tending to plants lowers cortisol by up to 37%. Nature heals.',
   },
   {
-    icon: Icon.shield,
-    title: '30-day healthy guarantee',
-    text: 'Every plant arrives thriving — or we replace it free, no questions asked.',
+    icon: Icon.moon,
+    title: 'Better sleep',
+    text: 'Bedroom plants like lavender and peace lily create a calmer atmosphere for deeper rest.',
+  },
+  {
+    icon: Icon.home,
+    title: 'Living décor',
+    text: 'Transform any space instantly. Plants add colour, texture and organic warmth to interiors.',
+  },
+  {
+    icon: Icon.zap,
+    title: 'Productivity boost',
+    text: 'Greenery improves focus and creativity by 15%. Work smarter, surrounded by green.',
   },
 ];
-
-const STATS = [
-  { value: 12000, divide: 1, decimals: 0, suffix: '+', label: 'Happy plant parents' },
-  { value: 400, divide: 1, decimals: 0, suffix: '+', label: 'Curated varieties' },
-  { value: 24, divide: 1, decimals: 0, suffix: 'h', label: 'Fresh dispatch' },
-  { value: 49, divide: 10, decimals: 1, suffix: '★', label: 'Average rating' },
-];
-
-const EDITORIAL_IMG =
-  'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=1100&q=80';
 
 export function Benefits() {
   return (
-    <section id="benefits" className="bg-mintsoft">
-      <div className="mx-auto grid max-w-7xl gap-8 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-2 lg:items-center lg:gap-14 lg:py-24">
-        <ClipReveal>
-          <div className="relative overflow-hidden rounded-[2rem] shadow-[0_30px_70px_rgba(31,42,33,0.16)]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={EDITORIAL_IMG}
-              alt="Indoor botanical styling"
-              className="h-[340px] w-full object-cover sm:h-[460px] lg:h-[540px]"
-            />
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/30 bg-white/15 p-4 text-white backdrop-blur-xl sm:right-auto sm:w-72"
-            >
-              <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-goldlight">
-                Living interiors
-              </div>
-              <div className="mt-1 text-sm">
-                Foliage, planters & calm green corners — designed to breathe.
-              </div>
-            </motion.div>
-          </div>
-        </ClipReveal>
-        <div>
+    <section id="benefits" className="bg-cream-50">
+      <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24">
+        {/* centered editorial intro */}
+        <div className="mx-auto max-w-2xl text-center">
           <FadeUp>
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-gold">
-              Why a plant?
+            <span className="inline-flex items-center gap-2 rounded-full bg-sage-100 px-4 py-1.5 font-display text-[11px] font-medium uppercase tracking-[0.28em] text-forest-700">
+              <Icon.leaf className="h-3.5 w-3.5" /> Science-backed benefits
+            </span>
+          </FadeUp>
+          <h2 className="mt-5 font-serif text-4xl font-semibold leading-[1.05] text-forest-900 sm:text-5xl">
+            <WordReveal text="Why every home needs " />
+            <span className="text-forest-700">plants</span>
+          </h2>
+          <FadeUp delay={0.1}>
+            <p className="mx-auto mt-4 max-w-xl text-[17px] leading-7 text-stone-600">
+              Beyond beauty — plants actively improve your air quality, mental
+              health, and daily life.
             </p>
           </FadeUp>
-          <h2 className="mb-8 font-heading text-4xl font-extrabold leading-tight text-forest sm:text-5xl">
-            <WordReveal text="More than décor. A daily dose of calm." />
-          </h2>
-          <div className="space-y-5">
-            {BENEFITS.map((b, i) => (
-              <FadeUp key={b.title} delay={i * 0.08}>
-                <div className="flex gap-4 rounded-2xl bg-white p-5 shadow-[0_10px_30px_rgba(31,42,33,0.05)]">
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-mint text-forest">
-                    <b.icon className="h-6 w-6" />
-                  </span>
-                  <div>
-                    <h3 className="font-heading text-lg font-bold text-forest">
-                      {b.title}
-                    </h3>
-                    <p className="mt-1 text-sm leading-6 text-[#5e6d61]">{b.text}</p>
-                  </div>
-                </div>
-              </FadeUp>
-            ))}
-          </div>
         </div>
-      </div>
-      <div className="mx-auto max-w-7xl px-5 pb-14 sm:px-8 sm:pb-20 lg:pb-24">
-        <div className="grid grid-cols-2 gap-6 rounded-[2rem] bg-forest px-8 py-12 text-center sm:grid-cols-4">
-          {STATS.map((st, i) => (
-            <FadeUp key={st.label} delay={i * 0.08}>
-              <div className="font-heading text-4xl font-black text-goldlight sm:text-5xl">
-                <Counter
-                  value={st.value}
-                  divide={st.divide}
-                  decimals={st.decimals}
-                  suffix={st.suffix}
-                />
-              </div>
-              <div className="mt-2 text-xs uppercase tracking-wide text-white/70">
-                {st.label}
+
+        {/* benefit cards */}
+        <div className="mt-12 grid grid-cols-1 gap-5 sm:mt-14 sm:grid-cols-2 lg:grid-cols-5">
+          {BENEFITS.map((b, i) => (
+            <FadeUp key={b.title} delay={(i % 5) * 0.06}>
+              <div className="group flex h-full flex-col items-center rounded-lg border border-kraft-200 bg-white p-6 text-center shadow-[0_2px_8px_rgba(34,48,26,0.06)] transition-shadow hover:shadow-[0_8px_24px_rgba(34,48,26,0.10)]">
+                <span className="grid h-14 w-14 place-items-center rounded-full bg-sage-100 text-forest-700 transition-colors group-hover:bg-forest-700 group-hover:text-white">
+                  <b.icon className="h-6 w-6" />
+                </span>
+                <h3 className="mt-5 font-serif text-xl font-semibold text-forest-900">
+                  {b.title}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-stone-600">{b.text}</p>
               </div>
             </FadeUp>
           ))}
