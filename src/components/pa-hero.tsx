@@ -1,6 +1,5 @@
 import Link from '@/components/ui/link';
 import { Image } from '@/components/ui/image';
-import { VoiceSearchButton } from '@/components/ui/voice-search-button';
 import { useRouter } from 'next/router';
 
 const HERO_IMG = 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&q=80';
@@ -60,7 +59,6 @@ const PaHero: React.FC = () => {
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </Link>
-            <VoiceSearchButton />
           </div>
 
           <div className="pa-hero-badges">

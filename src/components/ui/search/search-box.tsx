@@ -3,6 +3,7 @@ import cn from 'classnames';
 import { SearchIcon } from '@/components/icons/search-icon';
 import { CloseIcon } from '@/components/icons/close-icon';
 import { useTranslation } from 'next-i18next';
+import VoiceMic from '@/components/ui/search/voice-mic';
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
@@ -58,6 +59,8 @@ const SearchBox: React.FC<Props> = ({
             'search item-center flex h-full w-full appearance-none overflow-hidden truncate rounded-lg text-sm text-heading placeholder-gray-500 transition duration-300 ease-in-out focus:outline-0 focus:ring-0',
             {
               'placeholder:text-slate-400': variant === 'flat',
+              // reserve room on the right for the always-visible voice mic
+              'ltr:!pr-12 rtl:!pl-12': variant !== 'normal',
             },
             inputClassName,
             classes[variant]
@@ -71,8 +74,9 @@ const SearchBox: React.FC<Props> = ({
             className={cn(
               'absolute flex h-full w-10 cursor-pointer items-center justify-center text-body transition-colors duration-200 hover:text-accent-hover focus:text-accent-hover focus:outline-0 md:w-14',
               {
-                'ltr:right-36 rtl:left-36': variant === 'normal',
-                'ltr:right-0 rtl:left-0': variant !== 'normal',
+                // sit to the left of the voice mic so they don't overlap
+                'ltr:right-[185px] rtl:left-[185px]': variant === 'normal',
+                'ltr:right-10 rtl:left-10': variant !== 'normal',
               }
             )}
           >
@@ -82,15 +86,21 @@ const SearchBox: React.FC<Props> = ({
         )}
 
         {variant === 'normal' ? (
-          <button className="flex h-full min-w-[143px] items-center justify-center rounded-lg bg-accent px-8 font-semibold text-light transition-colors duration-200 hover:bg-accent-hover focus:bg-accent-hover focus:outline-0 ltr:rounded-tl-none ltr:rounded-bl-none rtl:rounded-tr-none rtl:rounded-br-none">
-            <SearchIcon className="h-4 w-4 ltr:mr-2.5 rtl:ml-2.5" />
-            {t('common:text-search')}
-          </button>
+          <>
+            <VoiceMic className="z-10 shrink-0 self-center ltr:mr-1 rtl:ml-1" />
+            <button className="flex h-full min-w-[143px] items-center justify-center rounded-lg bg-accent px-8 font-semibold text-light transition-colors duration-200 hover:bg-accent-hover focus:bg-accent-hover focus:outline-0 ltr:rounded-tl-none ltr:rounded-bl-none rtl:rounded-tr-none rtl:rounded-br-none">
+              <SearchIcon className="h-4 w-4 ltr:mr-2.5 rtl:ml-2.5" />
+              {t('common:text-search')}
+            </button>
+          </>
         ) : (
-          <button className="absolute flex h-full w-10 items-center justify-center text-body transition-colors duration-200 hover:text-accent-hover focus:text-accent-hover focus:outline-0 ltr:left-0 rtl:right-0 md:w-14">
-            <span className="sr-only">{t('common:text-search')}</span>
-            <SearchIcon className="h-4 w-4" />
-          </button>
+          <>
+            <VoiceMic className="absolute top-0 z-10 h-full ltr:right-1 rtl:left-1" />
+            <button className="absolute flex h-full w-10 items-center justify-center text-body transition-colors duration-200 hover:text-accent-hover focus:text-accent-hover focus:outline-0 ltr:left-0 rtl:right-0 md:w-14">
+              <span className="sr-only">{t('common:text-search')}</span>
+              <SearchIcon className="h-4 w-4" />
+            </button>
+          </>
         )}
       </div>
     </form>
