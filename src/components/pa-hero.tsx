@@ -2,8 +2,10 @@ import Link from '@/components/ui/link';
 import { Image } from '@/components/ui/image';
 import { useRouter } from 'next/router';
 
-const HERO_IMG = 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1600&q=80';
-const FEATURED_IMG = 'https://images.unsplash.com/photo-1508385082359-a8ae0145b471?w=800&h=900&q=95&fit=crop&crop=entropy&auto=format';
+// Self-hosted (served by Vercel CDN) — no external Unsplash dependency, which
+// had already started failing for the featured image.
+const HERO_IMG = '/images/hero/hero-bg.jpg';
+const FEATURED_IMG = '/images/hero/hero-featured.jpg';
 
 const badges = [
   { icon: '🚚', text: 'Same Day Delivery' },

@@ -11,6 +11,9 @@ interface PlantVoiceState {
 // Confidence below this from the browser recognizer → fall back to Whisper.
 const CONFIDENCE_THRESHOLD = 0.6;
 const MAX_RECORD_MS = 7000;
+// Hard safety net: if nothing resolves by this point, reset so the mic/loader
+// can never get stuck (covers browsers where onend/onstop never fire).
+const WATCHDOG_MS = 15000;
 
 function getSpeechRecognition(): any {
   if (typeof window === 'undefined') return null;
@@ -46,22 +49,43 @@ export function usePlantVoice() {
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
+  const activeRef = useRef(false); // guard against re-entry
+  const watchdogRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const patch = (p: Partial<PlantVoiceState>) => setState((prev) => ({ ...prev, ...p }));
 
-  const stopStream = useCallback(() => {
+  // Release the mic + recorder. Idempotent — safe to call on every exit path.
+  const cleanupStream = useCallback(() => {
+    try {
+      const mr = recorderRef.current;
+      if (mr && mr.state !== 'inactive') mr.stop();
+    } catch {
+      /* ignore */
+    }
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
     recorderRef.current = null;
     chunksRef.current = [];
   }, []);
 
-  // transcript (any source) → classify → navigate. Always clears `processing`.
+  const finish = useCallback(
+    (patchState: Partial<PlantVoiceState>) => {
+      activeRef.current = false;
+      if (watchdogRef.current) clearTimeout(watchdogRef.current);
+      watchdogRef.current = null;
+      cleanupStream();
+      patch(patchState);
+    },
+    [cleanupStream]
+  );
+
+  // transcript (any source) → classify → navigate. Always ends cleanly.
   const resolveAndGo = useCallback(
     async (transcript: string) => {
       const text = transcript.trim();
+      cleanupStream(); // we have a transcript; release the mic now
       if (!text) {
-        patch({ processing: false, error: 'No speech detected — try again.' });
+        finish({ listening: false, processing: false, error: 'No speech detected — try again.' });
         return;
       }
       patch({ transcript: text, processing: true, listening: false });
@@ -77,45 +101,48 @@ export function usePlantVoice() {
           ? { category: data.category }
           : { text: data.text || text };
         await router.push({ pathname: '/plants/search', query });
+        finish({ processing: false });
       } catch (err) {
-        patch({ error: err instanceof Error ? err.message : 'Failed to process voice' });
-      } finally {
-        // Always return the icon to the mic (the mic persists in the header
-        // across navigation, so this must run on the success path too).
-        patch({ processing: false });
+        finish({
+          processing: false,
+          error: err instanceof Error ? err.message : 'Failed to process voice',
+        });
       }
     },
-    [router]
+    [router, cleanupStream, finish]
   );
 
   // Fallback: send the recorded audio to Whisper, then classify.
   const transcribeViaWhisper = useCallback(async () => {
-    const chunks = chunksRef.current;
+    const chunks = chunksRef.current.slice();
+    const mime = recorderRef.current?.mimeType || 'audio/webm';
     if (!chunks.length) {
-      patch({ processing: false, error: 'No speech detected — try again.' });
-      stopStream();
+      finish({ listening: false, processing: false, error: 'No speech detected — try again.' });
       return;
     }
     patch({ processing: true, listening: false });
     try {
-      const blob = new Blob(chunks, { type: recorderRef.current?.mimeType || 'audio/webm' });
+      const blob = new Blob(chunks, { type: mime });
       const audio = await blobToBase64(blob);
+      cleanupStream(); // audio captured; release the mic
       const res = await fetch('/api/voice-transcribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ audio, mimeType: blob.type }),
       });
-      stopStream();
       if (!res.ok) throw new Error(`Transcribe error: ${res.status}`);
       const { transcript } = await res.json();
       await resolveAndGo(transcript || '');
     } catch (err) {
-      stopStream();
-      patch({ processing: false, error: err instanceof Error ? err.message : 'Could not transcribe audio' });
+      finish({
+        processing: false,
+        error: err instanceof Error ? err.message : 'Could not transcribe audio',
+      });
     }
-  }, [resolveAndGo, stopStream]);
+  }, [resolveAndGo, cleanupStream, finish]);
 
   const startListening = useCallback(async () => {
+    if (activeRef.current) return; // already capturing
     const SpeechRecognition = getSpeechRecognition();
     const recordable = canRecord();
 
@@ -124,7 +151,14 @@ export function usePlantVoice() {
       return;
     }
 
+    activeRef.current = true;
     patch({ listening: true, error: null, transcript: '' });
+
+    // Watchdog: never let the mic/loader hang.
+    if (watchdogRef.current) clearTimeout(watchdogRef.current);
+    watchdogRef.current = setTimeout(() => {
+      finish({ listening: false, processing: false, error: 'Timed out — please try again.' });
+    }, WATCHDOG_MS);
 
     // Record the utterance in parallel (graceful if it fails) so we can fall
     // back to Whisper for non-English / low-confidence / unsupported cases.
@@ -138,22 +172,17 @@ export function usePlantVoice() {
         recorderRef.current = mr;
         mr.start();
       } catch {
-        // mic permission/record unavailable — browser recognizer alone
-        recorderRef.current = null;
+        recorderRef.current = null; // mic/record unavailable — recognizer alone
       }
     }
 
-    // No browser recognizer → record then Whisper.
+    // No browser recognizer → record for a bit, then Whisper.
     if (!SpeechRecognition) {
-      window.setTimeout(() => {
-        const mr = recorderRef.current;
-        if (mr && mr.state !== 'inactive') {
-          mr.onstop = () => transcribeViaWhisper();
-          mr.stop();
-        } else {
-          transcribeViaWhisper();
-        }
-      }, MAX_RECORD_MS);
+      if (!recorderRef.current) {
+        finish({ listening: false, error: 'Voice search needs Chrome, Edge, or Safari.' });
+        return;
+      }
+      setTimeout(() => transcribeViaWhisper(), MAX_RECORD_MS);
       return;
     }
 
@@ -178,25 +207,27 @@ export function usePlantVoice() {
       recognizerErr = true;
     };
     recognition.onend = () => {
-      const mr = recorderRef.current;
+      const haveAudio = chunksRef.current.length > 0;
       const useBrowser = best && !recognizerErr && confidence >= CONFIDENCE_THRESHOLD;
       if (useBrowser) {
-        stopStream(); // discard audio, use the instant result
-        resolveAndGo(best);
-      } else if (mr && mr.state !== 'inactive') {
-        mr.onstop = () => transcribeViaWhisper();
-        mr.stop();
-      } else if (chunksRef.current.length) {
+        resolveAndGo(best); // cleans up the (discarded) audio internally
+      } else if (haveAudio) {
         transcribeViaWhisper();
       } else if (best) {
         resolveAndGo(best); // low confidence but it's all we have
       } else {
-        patch({ listening: false, error: 'No speech detected — try again.' });
+        finish({ listening: false, error: 'No speech detected — try again.' });
       }
     };
 
-    recognition.start();
-  }, [resolveAndGo, transcribeViaWhisper, stopStream]);
+    try {
+      recognition.start();
+    } catch {
+      // start can throw if invoked twice; fall back to audio if we have it
+      if (chunksRef.current.length || recorderRef.current) transcribeViaWhisper();
+      else finish({ listening: false, error: 'Could not start voice search — try again.' });
+    }
+  }, [resolveAndGo, transcribeViaWhisper, finish]);
 
   return { ...state, startListening };
 }
