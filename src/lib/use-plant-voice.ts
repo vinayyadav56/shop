@@ -58,10 +58,12 @@ export function usePlantVoice() {
           throw new Error(`API error: ${res.status}`);
         }
         const data = await res.json();
-        const query: Record<string, string> = { text: data.text };
-        if (data.category) {
-          query.category = data.category;
-        }
+        // Theme queries must filter by category (the `text` param is a product
+        // NAME search, which returns nothing for phrases like "indoor plants").
+        // Prefer category; only use text for a specific plant name.
+        const query: Record<string, string> = data.category
+          ? { category: data.category }
+          : { text: data.text || transcript };
         await router.push({ pathname: '/plants/search', query });
       } catch (err) {
         const errorMsg = err instanceof Error ? err.message : 'Failed to process voice';
