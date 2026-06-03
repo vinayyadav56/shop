@@ -28,7 +28,7 @@ export function VerticalSwitcher({
   return (
     <div
       className={`inline-flex items-center rounded-full p-1 ${
-        light ? 'bg-white/15 backdrop-blur' : 'bg-sage-100'
+        light ? 'bg-white/20 backdrop-blur' : 'bg-sage-100'
       } ${className}`}
     >
       {list.map((t) => {
@@ -42,7 +42,7 @@ export function VerticalSwitcher({
               active
                 ? 'text-white'
                 : light
-                ? 'text-white/80 hover:text-white'
+                ? 'text-white/90 hover:text-white'
                 : 'text-forest-800/70 hover:text-forest-800'
             }`}
           >

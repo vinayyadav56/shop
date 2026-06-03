@@ -34,7 +34,8 @@ function PackageCard({ pkg }: { pkg: GardenPackage }) {
         </span>
       </div>
 
-      {/* Visits left */}
+      {/* Visits left (service packages only — gifting orders have no visits) */}
+      {pkg.total_visits > 0 && (
       <div className="mt-5 rounded-xl bg-green-50 p-4">
         <div className="flex items-end justify-between">
           <div>
@@ -47,6 +48,7 @@ function PackageCard({ pkg }: { pkg: GardenPackage }) {
           <div className="h-full rounded-full bg-green-600 transition-all" style={{ width: `${pct}%` }} />
         </div>
       </div>
+      )}
 
       {/* Meta */}
       <div className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">

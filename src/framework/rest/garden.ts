@@ -56,6 +56,24 @@ export function useGardenTemplates() {
   );
 }
 
+export function useGiftingTemplates() {
+  return useQuery(['gifting-templates'], () =>
+    HttpClient.get<{ data: GardenTemplate[] }>('garden-package-templates', { service: 'gifting' })
+  );
+}
+
+export function useSubmitCorporateLead() {
+  return useMutation((input: GardenLeadInput & { company?: string; occasion?: string; quantity?: string }) =>
+    HttpClient.post<{ data: { id: number }; message: string }>('corporate-leads', { ...input, source: 'corporate' })
+  );
+}
+
+export function useGiftingCheckout() {
+  return useMutation((templateId: number) =>
+    HttpClient.post<{ data: { url: string | null; package_id: number } }>('gifting/checkout', { template_id: templateId })
+  );
+}
+
 export function useSubmitGardenLead() {
   return useMutation((input: GardenLeadInput) =>
     HttpClient.post<{ data: { id: number }; message: string }>('garden-leads', input)
