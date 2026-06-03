@@ -12,7 +12,22 @@ export default function QueryProvider({
   pageProps,
   children,
 }: React.PropsWithChildren<QueryProviderProps>) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            // Catalog data (products/categories/types) is short-lived-cacheable
+            // and now edge-cached at the API. Treat client copies as fresh for
+            // 60s and don't refetch on every tab focus/reconnect — kills the
+            // redundant /products refetch storm the storefront grid caused.
+            staleTime: 60_000,
+            refetchOnWindowFocus: false,
+            refetchOnReconnect: false,
+          },
+        },
+      }),
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
