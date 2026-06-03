@@ -1,5 +1,7 @@
 export const Routes = {
   home: '/',
+  gardenService: '/garden-service',
+  myPackages: '/my-packages',
   checkout: '/checkout',
   checkoutDigital: '/checkout/digital',
   checkoutGuest: '/checkout/guest',
