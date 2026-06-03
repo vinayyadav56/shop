@@ -106,6 +106,13 @@ const Header = ({ layout }: { layout?: string }) => {
               Categories
             </Link>
 
+            <Link
+              href="/garden-service"
+              className="mr-1 hidden items-center gap-1.5 rounded-full bg-leaf px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-leaf/90 lg:inline-flex"
+            >
+              🌿 Garden Service
+            </Link>
+
             <button
               type="button"
               onClick={() => setSearchOpen((s) => !s)}
@@ -211,6 +218,7 @@ const Header = ({ layout }: { layout?: string }) => {
             </div>
 
             {[
+              { label: '🌿 Garden Service', onClick: () => router.push('/garden-service') },
               { label: 'Categories', onClick: () => router.push(categoriesHref) },
               {
                 label: 'Search',
