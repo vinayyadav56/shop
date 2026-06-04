@@ -55,11 +55,11 @@ export function Grid({
       <div
         className={cn(
           {
-            'grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3':
+            'grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]':
               column === 'auto',
-            'grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 gap-y-10 lg:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] xl:grid-cols-[repeat(auto-fill,minmax(220px,1fr))] xl:gap-8 xl:gap-y-11 2xl:grid-cols-5 3xl:grid-cols-[repeat(auto-fill,minmax(360px,1fr))]':
+            'grid grid-cols-2 gap-3 gap-y-6 sm:gap-4 md:grid-cols-3 md:gap-5 md:gap-y-8 lg:grid-cols-4 xl:grid-cols-5 xl:gap-6':
               column === 'five',
-            'grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4 md:gap-6 lg:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] xl:grid-cols-[repeat(auto-fill,minmax(220px,1fr))] 2xl:grid-cols-5 3xl:grid-cols-[repeat(auto-fill,minmax(360px,1fr))]':
+            'grid grid-cols-2 gap-3 gap-y-6 sm:gap-4 md:grid-cols-3 md:gap-5 md:gap-y-8 lg:grid-cols-4 xl:grid-cols-5 xl:gap-6':
               column === 'six',
           },
           gridClassName,
