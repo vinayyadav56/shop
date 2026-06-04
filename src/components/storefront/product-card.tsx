@@ -25,6 +25,7 @@ export function StorefrontProductCard({
   const { addItemToCart, isInCart, updateCartLanguage, language } = useCart();
   const { openModal } = useModalAction();
   const [wish, setWish] = React.useState(false);
+  const [imgError, setImgError] = React.useState(false);
 
   const isBundle = product?.product_type === 'bundle';
   // Variable plants carry no price/sale_price — they price per size, so show
@@ -70,13 +71,14 @@ export function StorefrontProductCard({
         href={`/products/${product?.slug}`}
         className="relative block aspect-[4/5] overflow-hidden bg-[radial-gradient(130%_130%_at_30%_15%,#FAF9F6,#E7EEE2_60%,#D2E0CB)]"
       >
-        {image ? (
+        {image && !imgError ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={image}
             alt={product?.name}
             loading="lazy"
             decoding="async"
+            onError={() => setImgError(true)}
             className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
           />
         ) : (
