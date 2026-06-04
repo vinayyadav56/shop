@@ -98,6 +98,15 @@ const Header = ({ layout }: { layout?: string }) => {
             }`}
           >
             <Link
+              href="/plant-doctor"
+              className={`hidden rounded-full px-3 py-2 text-sm font-medium lg:block ${
+                solid ? 'hover:text-leaf' : 'hover:text-white/80'
+              }`}
+            >
+              🩺 Plant Doctor
+            </Link>
+
+            <Link
               href="/corporate-gifting"
               className={`hidden rounded-full px-3 py-2 text-sm font-medium lg:block ${
                 solid ? 'hover:text-leaf' : 'hover:text-white/80'
@@ -227,6 +236,7 @@ const Header = ({ layout }: { layout?: string }) => {
             </div>
 
             {[
+              { label: '🩺 Plant Doctor', onClick: () => router.push('/plant-doctor') },
               { label: '🌿 Garden Service', onClick: () => router.push('/garden-service') },
               { label: '🎁 Corporate Gifting', onClick: () => router.push('/corporate-gifting') },
               { label: 'Categories', onClick: () => router.push(categoriesHref) },
