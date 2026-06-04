@@ -7,6 +7,7 @@ const Seo = ({ title, description, images, url, ...props }: SeoProps) => {
   return (
     <NextSeo
       title={title}
+      description={description}
       openGraph={{
         ...(Boolean(url) && {
           url: `${process.env.NEXT_PUBLIC_SITE_URL}/${url}`,

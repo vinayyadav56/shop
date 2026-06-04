@@ -10,6 +10,7 @@ import { CategoryGrid } from '@/components/storefront/sections/category-grid';
 import { ProductGrid } from '@/components/storefront/sections/product-grid';
 import { HomeVerticalGrids } from '@/components/storefront/sections/home-vertical-grids';
 import { Benefits } from '@/components/storefront/sections/benefits';
+import { GardenServiceBand } from '@/components/storefront/sections/garden-service-band';
 import { PromiseBand } from '@/components/storefront/sections/promise-band';
 import dynamic from 'next/dynamic';
 
@@ -137,6 +138,7 @@ export default function PlantAtHomeLayout({ variables }: HomePageProps) {
           ) : (
             <PromiseBand items={meta.promise} />
           )}
+          <GardenServiceBand />
           <Testimonials />
           <RitualVideo />
         </>

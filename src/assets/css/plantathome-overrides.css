@@ -29,9 +29,11 @@
   --pa-grad-accent: linear-gradient(135deg, #81C784 0%, #43A047 100%);
   --pa-grad-light:  linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
 
-  /* Typography */
-  --font-heading: 'Montserrat', system-ui, -apple-system, sans-serif;
-  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* Typography — light editorial luxury: elegant serif display + clean body.
+     These map to the fonts actually loaded in _document.tsx. */
+  --font-heading: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+  --font-body:    'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-eyebrow: 'Jost', 'Century Gothic', system-ui, sans-serif;
 
   /* Radius */
   --pa-radius:      20px;
@@ -72,8 +74,13 @@ body {
 
 h1, h2, h3, h4, h5 {
   font-family: var(--font-heading) !important;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  letter-spacing: 0;
+  line-height: 1.08;
+  font-weight: 600;
+}
+/* small uppercase eyebrow labels (editorial luxury) */
+.pa-eyebrow, [class*="eyebrow"], .uppercase.tracking-\[0\.22em\] {
+  font-family: var(--font-eyebrow);
 }
 
 /* ── Layout wrapper ─────────────────────────────────────────── */
@@ -160,10 +167,13 @@ h1, h2, h3, h4, h5 {
 }
 .pa-bar-close:hover { color: #fff; background: rgba(255,255,255,0.15); }
 
-/* ── Header ─────────────────────────────────────────────────── */
-header,
+/* ── Header ───────────────────────────────────────────────────
+   NOTE: the brand header (#site-header) manages its own background
+   (transparent over the hero → solid on scroll), so it is excluded
+   here — otherwise this forced white bg makes the white menu text
+   invisible over the hero. */
 .site-header-with-search,
-[class*="site-header"] {
+[class*="site-header"]:not(#site-header) {
   background: rgba(250,250,248,0.95) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;

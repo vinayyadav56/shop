@@ -67,6 +67,10 @@ export const siteSettings = {
       label: 'profile-sidebar-orders',
     },
     {
+      href: Routes.myPackages,
+      label: 'My Garden Packages',
+    },
+    {
       href: Routes.downloads,
       label: 'profile-sidebar-downloads',
     },

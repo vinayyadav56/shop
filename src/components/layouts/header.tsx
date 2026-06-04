@@ -79,7 +79,7 @@ const Header = ({ layout }: { layout?: string }) => {
         className={`${position} inset-x-0 top-0 z-50 w-full transition-all duration-300 ${
           solid
             ? 'bg-cream-50/90 shadow-[0_4px_24px_rgba(34,48,26,0.10)] backdrop-blur-xl'
-            : 'bg-gradient-to-b from-forest-900/35 via-forest-900/15 to-transparent backdrop-blur-[2px]'
+            : 'bg-gradient-to-b from-deep/85 via-deep/55 to-transparent'
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
@@ -98,12 +98,37 @@ const Header = ({ layout }: { layout?: string }) => {
             }`}
           >
             <Link
+              href="/plant-doctor"
+              className={`hidden rounded-full px-3 py-2 text-sm font-medium lg:block ${
+                solid ? 'hover:text-leaf' : 'hover:text-white/80'
+              }`}
+            >
+              🩺 Plant Doctor
+            </Link>
+
+            <Link
+              href="/corporate-gifting"
+              className={`hidden rounded-full px-3 py-2 text-sm font-medium lg:block ${
+                solid ? 'hover:text-leaf' : 'hover:text-white/80'
+              }`}
+            >
+              Gifting
+            </Link>
+
+            <Link
               href={categoriesHref}
               className={`hidden rounded-full px-3 py-2 text-sm font-medium lg:block ${
                 solid ? 'hover:text-leaf' : 'hover:text-white/80'
               }`}
             >
               Categories
+            </Link>
+
+            <Link
+              href="/garden-service"
+              className="mr-1 hidden items-center gap-1.5 rounded-full bg-leaf px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-leaf/90 lg:inline-flex"
+            >
+              🌿 Garden Service
             </Link>
 
             <button
@@ -211,6 +236,9 @@ const Header = ({ layout }: { layout?: string }) => {
             </div>
 
             {[
+              { label: '🩺 Plant Doctor', onClick: () => router.push('/plant-doctor') },
+              { label: '🌿 Garden Service', onClick: () => router.push('/garden-service') },
+              { label: '🎁 Corporate Gifting', onClick: () => router.push('/corporate-gifting') },
               { label: 'Categories', onClick: () => router.push(categoriesHref) },
               {
                 label: 'Search',

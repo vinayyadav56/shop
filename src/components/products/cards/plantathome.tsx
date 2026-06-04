@@ -1,13 +1,10 @@
 'use client';
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { useToggleWishlist } from '@/framework/wishlist';
 import usePrice from '@/lib/use-price';
-import { useRouter } from 'next/router';
-import { productPlaceholder } from '@/lib/placeholders';
 import type { Product, Tag } from '@/types';
 
 const AddToCart = dynamic(
@@ -27,16 +24,16 @@ const BENEFIT_SLUGS = new Set([
   'drought-tolerant',
 ]);
 
-const BADGE_MAP: Record<string, { label: string; cls: string }> = {
-  'best-seller':   { label: 'Best Seller',    cls: 'pa-badge-gold'  },
-  'bestseller':    { label: 'Best Seller',    cls: 'pa-badge-gold'  },
-  'best seller':   { label: 'Best Seller',    cls: 'pa-badge-gold'  },
-  'editors-pick':  { label: "Editor's Pick",  cls: 'pa-badge-dark'  },
-  "editor's pick": { label: "Editor's Pick",  cls: 'pa-badge-dark'  },
-  'new-arrival':   { label: 'New Arrival',    cls: 'pa-badge-green' },
-  'new arrival':   { label: 'New Arrival',    cls: 'pa-badge-green' },
-  'air-purifier':  { label: 'Air Purifier',   cls: 'pa-badge-sage'  },
-  'air purifier':  { label: 'Air Purifier',   cls: 'pa-badge-sage'  },
+const BADGE_MAP: Record<string, string> = {
+  'best-seller':   'Best Seller',
+  'bestseller':    'Best Seller',
+  'best seller':   'Best Seller',
+  'editors-pick':  "Editor's Pick",
+  "editor's pick": "Editor's Pick",
+  'new-arrival':   'New Arrival',
+  'new arrival':   'New Arrival',
+  'air-purifier':  'Air Purifier',
+  'air purifier':  'Air Purifier',
 };
 
 function getBadge(tags: Tag[] = []) {
@@ -53,53 +50,47 @@ function getBenefits(tags: Tag[] = []) {
   return tags
     .filter((t) => BENEFIT_SLUGS.has((t.slug ?? t.name ?? '').toLowerCase()) ||
                    BENEFIT_SLUGS.has((t.name ?? '').toLowerCase()))
-    .slice(0, 3)
+    .slice(0, 2)
     .map((t) => t.name);
 }
 
-function getBotanicalName(product: Product): string {
+function getBotanical(product: Product): string {
+  // prefer a real scientific name if present
+  const sci = (product as any)?.scientific_name as string | undefined;
+  if (sci) return sci;
   const firstLine = product.description?.split(/\n|<br/)[0]?.replace(/<[^>]+>/g, '').trim();
-  if (firstLine && firstLine.length < 60) return firstLine;
-  const catName = product.categories?.[0]?.name;
-  return catName ? `${catName} variety` : '';
+  if (firstLine && firstLine.length < 48) return firstLine;
+  return '';
 }
-
-/* ─── Star rating ──────────────────────────────────────────────── */
-const StarRating = ({ rating, count }: { rating: number; count: number }) => (
-  <div className="flex items-center gap-1">
-    {[1, 2, 3, 4, 5].map((s) => (
-      <svg key={s} width="10" height="10" viewBox="0 0 12 12" fill="none">
-        <path
-          d="M6 1l1.24 2.51L10 3.93l-2 1.95.47 2.76L6 7.36l-2.47 1.28.47-2.76L2 3.93l2.76-.42L6 1z"
-          fill={s <= Math.round(rating) ? '#C7A76C' : '#E5E0D5'}
-        />
-      </svg>
-    ))}
-    {count > 0 && <span className="text-[10px] text-[#9E9589] ml-0.5">({count})</span>}
-  </div>
-);
 
 /* ─── Loading Skeleton ─────────────────────────────────────────── */
 export const PlantAtHomeCardSkeleton: React.FC = () => (
-  <div className="pa-card-skeleton">
-    <div className="pa-skel-img" />
-    <div className="pa-skel-body">
-      <div className="pa-skel-line pa-skel-title" />
-      <div className="pa-skel-line pa-skel-sub" />
-      <div className="pa-skel-tags">
-        <div className="pa-skel-tag" /><div className="pa-skel-tag" />
+  <div className="flex h-full flex-col overflow-hidden rounded-md border border-kraft-200/70 bg-white">
+    <div className="aspect-[4/5] w-full animate-pulse bg-gradient-to-br from-[#F2F1EC] to-[#E7EEE2]" />
+    <div className="flex flex-1 flex-col gap-2 p-3">
+      <div className="h-3.5 w-4/5 animate-pulse rounded bg-stone-200/80" />
+      <div className="h-2.5 w-2/5 animate-pulse rounded bg-stone-200/60" />
+      <div className="mt-auto flex items-center justify-between pt-3">
+        <div className="h-4 w-1/3 animate-pulse rounded bg-stone-200/80" />
+        <div className="h-8 w-8 animate-pulse rounded-full bg-stone-200/70" />
       </div>
-      <div className="pa-skel-line pa-skel-price" />
-      <div className="pa-skel-btn" />
     </div>
   </div>
 );
 
-/* ─── Main Premium Card ────────────────────────────────────────── */
+/* ─── Heart icon ───────────────────────────────────────────────── */
+const Heart = ({ active }: { active: boolean }) => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill={active ? '#C26B45' : 'none'}
+    stroke={active ? '#C26B45' : '#2E5E2A'} strokeWidth="1.8">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </svg>
+);
+
+/* ─── Main small-luxury listing card ──────────────────────────── */
 type Props = { product: Product; className?: string };
 
 const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
-  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const [wishlisting, setWishlisting] = useState(false);
   const { openModal } = useModalAction();
   const { toggleWishlist } = useToggleWishlist(product.id);
@@ -109,16 +100,15 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
     baseAmount: product.price,
   });
   const { price: minPrice } = usePrice({ amount: product.min_price });
-  const { price: maxPrice } = usePrice({ amount: product.max_price });
 
-  const badge    = getBadge(product.tags);
-  const benefits = getBenefits(product.tags);
-  const botanical = getBotanicalName(product);
-  const inStock  = Number(product.quantity) > 0;
+  const badge     = getBadge(product.tags);
+  const benefits  = getBenefits(product.tags);
+  const botanical = getBotanical(product);
+  const inStock   = Number(product.quantity) > 0;
   const isVariable = product.product_type?.toLowerCase() === 'variable';
+  const image = product.image?.original ?? product.image?.thumbnail ?? '';
 
-  function handleQuickView(e: React.MouseEvent) {
-    e.stopPropagation();
+  function handleQuickView() {
     openModal('PRODUCT_DETAILS', product.slug);
   }
 
@@ -131,157 +121,130 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
 
   return (
     <motion.article
-      className={`pa-premium-card ${className}`}
-      initial={false}
-      whileHover="hovered"
-      onClick={handleQuickView}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && handleQuickView(e as any)}
-      aria-label={`View ${product.name}`}
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.25 }}
+      className={`group flex h-full flex-col overflow-hidden rounded-md border border-kraft-200/80 bg-white transition-all duration-300 hover:border-[#B58E39]/40 hover:shadow-[0_10px_30px_-12px_rgba(34,48,26,0.18)] ${className}`}
     >
-      {/* ── Image zone (70%) ──────────────────────────── */}
-      <div className="pa-card-img-zone">
-        {/* Shimmer while loading */}
-        {!imgLoaded && <div className="pa-card-shimmer" />}
-
-        <motion.div
-          className="pa-card-img-inner"
-          variants={{ hovered: { scale: 1.05 } }}
-          transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
-        >
-          <Image
-            src={product.image?.original ?? productPlaceholder}
+      {/* photo — real photo, else cream→sage panel with mark + name */}
+      <button
+        type="button"
+        onClick={handleQuickView}
+        aria-label={`View ${product.name}`}
+        className="relative block aspect-[4/5] w-full overflow-hidden bg-[radial-gradient(130%_130%_at_30%_15%,#FAF9F6,#E7EEE2_60%,#D2E0CB)] text-left"
+      >
+        {image && !imgError ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={image}
             alt={product.name}
-            fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="pa-card-img"
-            onLoad={() => setImgLoaded(true)}
+            loading="lazy"
+            decoding="async"
+            onError={() => setImgError(true)}
+            className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
           />
-        </motion.div>
-
-        {/* Gold glow overlay on hover */}
-        <motion.div
-          className="pa-card-glow"
-          variants={{ hovered: { opacity: 1 } }}
-          initial={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-        />
-
-        {/* Badge */}
-        {badge && (
-          <div className={`pa-badge ${badge.cls}`}>{badge.label}</div>
+        ) : (
+          <span className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-3 text-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/mark-house.png" alt="" aria-hidden className="h-12 w-auto opacity-35" />
+            <span className="font-serif text-sm italic text-forest-800/70 line-clamp-2">{product.name}</span>
+          </span>
         )}
 
-        {/* Flash sale pill */}
-        {product.in_flash_sale && !badge && (
-          <div className="pa-badge pa-badge-gold">Flash Deal</div>
-        )}
+        {/* badge / flash / discount — single, top-left */}
+        {badge ? (
+          <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-forest-900/90 px-2 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur">
+            {badge}
+          </span>
+        ) : product.in_flash_sale ? (
+          <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-[#C26B45]/95 px-2 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur">
+            Flash Deal
+          </span>
+        ) : discount ? (
+          <span className="absolute left-2.5 top-2.5 z-10 rounded-full border border-[#B58E39]/60 bg-white/85 px-2 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em] text-[#8a6a23] backdrop-blur">
+            {discount}
+          </span>
+        ) : null}
 
-        {/* Discount chip */}
-        {discount && (
-          <div className="pa-discount-chip">{discount}</div>
-        )}
-
-        {/* Wishlist */}
-        <motion.button
-          className="pa-wishlist-btn"
+        {/* wishlist */}
+        <button
+          type="button"
           onClick={handleWishlist}
-          whileTap={{ scale: 0.85 }}
-          animate={wishlisting ? { scale: [1, 1.3, 1] } : {}}
-          transition={{ duration: 0.3 }}
+          disabled={wishlisting}
+          className="absolute right-2.5 top-2.5 z-10 grid h-7 w-7 place-items-center rounded-full bg-white/80 opacity-0 backdrop-blur transition group-hover:opacity-100 hover:bg-white focus:opacity-100 disabled:opacity-60"
           aria-label="Add to wishlist"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill={product.in_wishlist ? '#C7A76C' : 'none'}
-            stroke={product.in_wishlist ? '#C7A76C' : '#6B7280'} strokeWidth="1.8">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-        </motion.button>
+          <Heart active={!!product.in_wishlist} />
+        </button>
 
-        {/* Quick view button */}
-        <motion.button
-          className="pa-quickview-btn"
-          onClick={handleQuickView}
-          variants={{
-            hovered: { opacity: 1, y: 0 },
-          }}
-          initial={{ opacity: 0, y: 8 }}
-          transition={{ duration: 0.25 }}
-          aria-label="Quick view"
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-          </svg>
-          Quick View
-        </motion.button>
-
-        {/* Out of stock overlay */}
+        {/* out of stock */}
         {!inStock && (
-          <div className="pa-out-of-stock">
-            <span>Out of Stock</span>
-          </div>
+          <span className="absolute inset-0 z-10 flex items-center justify-center bg-white/55 backdrop-blur-[1px]">
+            <span className="rounded-full bg-forest-900/85 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+              Out of Stock
+            </span>
+          </span>
         )}
-      </div>
+      </button>
 
-      {/* ── Info zone (30%) ───────────────────────────── */}
-      <div className="pa-card-info">
-        {/* Rating */}
-        {product.ratings > 0 && (
-          <StarRating rating={product.ratings} count={product.total_reviews} />
-        )}
+      {/* body — tight, editorial */}
+      <div className="flex flex-1 flex-col p-3">
+        <button
+          type="button"
+          onClick={handleQuickView}
+          className="text-left font-serif text-[15px] font-semibold leading-[1.15] text-forest-900 transition line-clamp-2 hover:text-forest-700 sm:text-base"
+        >
+          {product.name}
+        </button>
 
-        {/* Name */}
-        <h3 className="pa-card-name">{product.name}</h3>
-
-        {/* Botanical name */}
         {botanical && (
-          <p className="pa-card-botanical">{botanical}</p>
+          <p className="mt-0.5 font-serif text-[11px] italic text-stone-500 line-clamp-1">{botanical}</p>
         )}
 
-        {/* Benefit tags */}
         {benefits.length > 0 && (
-          <div className="pa-benefit-tags">
+          <div className="mt-2 flex flex-wrap gap-1">
             {benefits.map((b) => (
-              <span key={b} className="pa-benefit-tag">{b}</span>
+              <span
+                key={b}
+                className="rounded-full bg-sage-100/70 px-2 py-[2px] text-[10px] font-medium text-forest-800"
+              >
+                {b}
+              </span>
             ))}
           </div>
         )}
 
-        {/* Price row */}
-        <div className="pa-price-row">
-          {isVariable ? (
-            <span className="pa-price">{minPrice} – {maxPrice}</span>
-          ) : (
-            <>
-              <span className="pa-price">{price}</span>
-              {basePrice && <del className="pa-base-price">{basePrice}</del>}
-            </>
-          )}
-          {product.unit && (
-            <span className="pa-unit">/ {product.unit}</span>
-          )}
-        </div>
+        <div className="mt-auto flex items-end justify-between gap-2 pt-3">
+          <div className="flex flex-col">
+            {isVariable && (
+              <span className="text-[9px] uppercase tracking-[0.14em] text-stone-400">from</span>
+            )}
+            <span className="flex items-baseline gap-1.5">
+              <span className="font-serif text-[17px] font-semibold leading-none text-forest-900">
+                {isVariable ? minPrice : price}
+              </span>
+              {!isVariable && basePrice && (
+                <del className="text-[11px] text-stone-400">{basePrice}</del>
+              )}
+            </span>
+            {product.unit && (
+              <span className="mt-0.5 text-[10px] text-stone-400">/ {product.unit}</span>
+            )}
+          </div>
 
-        {/* CTA */}
-        <motion.div
-          className="pa-cta-wrap"
-          variants={{ hovered: { y: 0, opacity: 1 } }}
-          initial={{ y: 4, opacity: 0.85 }}
-          transition={{ duration: 0.2 }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {inStock ? (
-            <AddToCart
-              variant="argon"
-              data={product}
-              counterClass="pa-counter"
-            />
-          ) : (
-            <button className="pa-card-atc pa-card-atc--disabled" disabled>
-              Notify Me
-            </button>
-          )}
-        </motion.div>
+          <div onClick={(e) => e.stopPropagation()} className="shrink-0">
+            {inStock ? (
+              <AddToCart variant="argon" data={product} />
+            ) : (
+              <button
+                type="button"
+                onClick={handleQuickView}
+                className="rounded-full border border-forest-700/30 px-3 py-1.5 text-[11px] font-medium text-forest-700 transition hover:bg-forest-700 hover:text-white"
+              >
+                Notify
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </motion.article>
   );
