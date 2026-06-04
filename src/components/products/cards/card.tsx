@@ -1,22 +1,15 @@
 import type { Product } from '@/types';
 import dynamic from 'next/dynamic';
-const Helium = dynamic(() => import('@/components/products/cards/helium'));
-const Neon = dynamic(() => import('@/components/products/cards/neon'));
-const Argon = dynamic(() => import('@/components/products/cards/argon'));
-const Krypton = dynamic(() => import('@/components/products/cards/krypton'));
-const Xenon = dynamic(() => import('@/components/products/cards/xenon'));
-const Radon = dynamic(() => import('@/components/products/cards/radon'));
-const PlantAtHome = dynamic(() => import('@/components/products/cards/plantathome'));
 
-const MAP_PRODUCT_TO_CARD: Record<string, any> = {
-  neon: Neon,
-  helium: Helium,
-  argon: Argon,
-  krypton: Krypton,
-  xenon: Xenon,
-  radon: Radon,
-  plantathome: PlantAtHome,
-};
+// Plant At Home uses ONE consistent small-luxury product card across every
+// product type, so the listing matches the home grid. (Upstream Pickbazar
+// routed by `type.settings.productCard` to per-type cards — neon/helium/etc.
+// Those products are configured with non-plantathome settings, which meant
+// the listing rendered an off-brand card with price ranges + boxed "+".)
+const PlantAtHome = dynamic(
+  () => import('@/components/products/cards/plantathome'),
+);
+
 interface ProductCardProps {
   product: Product;
   className?: string;
@@ -27,9 +20,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   className,
   ...props
 }) => {
-  const Component = product?.type?.settings?.productCard
-    ? (MAP_PRODUCT_TO_CARD[product?.type?.settings?.productCard] ?? PlantAtHome)
-    : PlantAtHome;
-  return <Component product={product} {...props} className={className} />;
+  return <PlantAtHome product={product} {...props} className={className} />;
 };
 export default ProductCard;
