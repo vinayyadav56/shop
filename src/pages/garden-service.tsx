@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { getLayout as getSiteLayout } from '@/components/layouts/layout';
+import Seo from '@/components/seo/seo';
 import { useGardenTemplates, useSubmitGardenLead, GardenLeadInput } from '@/framework/garden';
 
 export { getStaticProps } from '@/framework/general.ssr';
@@ -99,6 +100,11 @@ export default function GardenServicePage() {
 
   return (
     <div className="bg-white">
+      <Seo
+        title="Garden Service — bespoke home gardens, planted & maintained"
+        description="Get a free, no-obligation garden plan tailored to your balcony, terrace or backyard. Hand-picked plants, premium soil, tools and scheduled gardener visits — all tracked in your account."
+        url="garden-service"
+      />
       {/* HERO */}
       <section className="relative isolate overflow-hidden">
         <img src="/images/garden/hero.jpg" alt="Lush home garden" className="absolute inset-0 h-full w-full object-cover" />

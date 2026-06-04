@@ -15,8 +15,17 @@ import { TYPES_PER_PAGE } from '@/framework/client/variables';
 export const getServerSideProps: GetServerSideProps = async ({
   locale,
   params,
+  res,
 }) => {
   invariant(params, 'params is required');
+  // This page prefetches only anonymous, language-keyed data (settings, types,
+  // categories) — safe to cache at the edge. Serve repeat requests from the CDN
+  // for 60s and revalidate in the background for up to 5min so we don't hit the
+  // API origin on every listing visit.
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=60, stale-while-revalidate=300'
+  );
   const { searchType } = params;
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useAtom } from 'jotai';
 import { toast } from 'react-toastify';
 import { getLayout as getSiteLayout } from '@/components/layouts/layout';
+import Seo from '@/components/seo/seo';
 import { authorizationAtom } from '@/store/authorization-atom';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import {
@@ -111,6 +112,11 @@ export default function CorporateGiftingPage() {
 
   return (
     <div className="bg-white">
+      <Seo
+        title="Corporate Plant Gifting — festive hampers & employee kits"
+        description="Memorable, sustainable plant gifts for employees, clients and festive occasions. Ready-to-buy hampers and kits, or enquire for bespoke bulk gifting tailored to your brand."
+        url="corporate-gifting"
+      />
       {/* HERO */}
       <section className="relative isolate overflow-hidden">
         <img src="/images/gifting/hero.jpg" alt="Corporate plant gifting" className="absolute inset-0 h-full w-full object-cover" />
