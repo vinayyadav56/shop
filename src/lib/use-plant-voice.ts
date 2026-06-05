@@ -112,19 +112,43 @@ export function usePlantVoice() {
     [router, cleanupStream, finish]
   );
 
+  // Stop the recorder and wait for the final `dataavailable`/`onstop` flush, then
+  // return the complete audio blob. Critical: reading `chunksRef` while the
+  // recorder is still running yields an EMPTY buffer (data only flushes on stop),
+  // which silently broke the Whisper fallback → "sometimes works, sometimes not".
+  const stopAndCollect = useCallback((): Promise<Blob | null> => {
+    return new Promise((resolve) => {
+      const mr = recorderRef.current;
+      const mime = mr?.mimeType || 'audio/webm';
+      const collect = () => {
+        const chunks = chunksRef.current.slice();
+        resolve(chunks.length ? new Blob(chunks, { type: mime }) : null);
+      };
+      if (!mr || mr.state === 'inactive') {
+        collect();
+        return;
+      }
+      mr.onstop = collect;
+      try {
+        mr.requestData?.(); // flush buffered audio before stopping
+        mr.stop();
+      } catch {
+        collect();
+      }
+    });
+  }, []);
+
   // Fallback: send the recorded audio to Whisper, then classify.
   const transcribeViaWhisper = useCallback(async () => {
-    const chunks = chunksRef.current.slice();
-    const mime = recorderRef.current?.mimeType || 'audio/webm';
-    if (!chunks.length) {
-      finish({ listening: false, processing: false, error: 'No speech detected — try again.' });
-      return;
-    }
     patch({ processing: true, listening: false });
     try {
-      const blob = new Blob(chunks, { type: mime });
+      const blob = await stopAndCollect(); // stops recorder + flushes before read
+      if (!blob || !blob.size) {
+        finish({ listening: false, processing: false, error: 'No speech detected — try again.' });
+        return;
+      }
       const audio = await blobToBase64(blob);
-      cleanupStream(); // audio captured; release the mic
+      cleanupStream(); // recorder already stopped; release the mic stream
       const res = await fetch('/api/voice-transcribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -139,7 +163,7 @@ export function usePlantVoice() {
         error: err instanceof Error ? err.message : 'Could not transcribe audio',
       });
     }
-  }, [resolveAndGo, cleanupStream, finish]);
+  }, [resolveAndGo, cleanupStream, finish, stopAndCollect]);
 
   const startListening = useCallback(async () => {
     if (activeRef.current) return; // already capturing
@@ -170,7 +194,9 @@ export function usePlantVoice() {
         const mr = new MediaRecorder(stream);
         mr.ondataavailable = (e) => e.data.size && chunksRef.current.push(e.data);
         recorderRef.current = mr;
-        mr.start();
+        // Timeslice so `ondataavailable` fires *during* recording → chunks
+        // accumulate and the Whisper fallback always has audio (not just on stop).
+        mr.start(250);
       } catch {
         recorderRef.current = null; // mic/record unavailable — recognizer alone
       }

@@ -32,12 +32,13 @@ module.exports = {
         '-1': '-1',
       },
       fontFamily: {
-        // Plant At Home Design System type families
-        body: ['"Hanken Grotesk"', 'system-ui', 'sans-serif'],
-        sans: ['"Hanken Grotesk"', 'system-ui', 'sans-serif'],
-        heading: ['Jost', 'Century Gothic', 'sans-serif'],
-        display: ['Jost', 'Century Gothic', 'sans-serif'],
-        serif: ['"Cormorant Garamond"', 'Iowan Old Style', 'Georgia', 'serif'],
+        // Inter throughout (matches the reference site) — every alias resolves to
+        // Inter so existing font-serif/heading/display classes render in Inter.
+        body: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        heading: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       fontSize: {
