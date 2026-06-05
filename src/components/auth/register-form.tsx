@@ -1,10 +1,13 @@
 import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react';
 import Logo from '@/components/ui/logo';
 import Input from '@/components/ui/forms/input';
 import PasswordInput from '@/components/ui/forms/password-input';
 import Button from '@/components/ui/button';
 import { useTranslation } from 'next-i18next';
 import { useModalAction } from '@/components/ui/modal/modal.context';
+import { GoogleIcon } from '@/components/icons/google';
+import { MobileIcon } from '@/components/icons/mobile-icon';
 import { Form } from '@/components/ui/forms/form';
 import type { RegisterUserInput } from '@/types';
 import * as yup from 'yup';
@@ -83,6 +86,28 @@ function RegisterForm() {
           {t('text-or')}
         </span>
       </div>
+
+      {/* Social + phone sign-up (NextAuth session is bridged to the API by the
+          global <SocialLogin/> in _app.tsx; OTP_LOGIN handles phone sign-up). */}
+      <div className="mb-8 grid grid-cols-1 gap-4">
+        <Button
+          className="!bg-social-google !text-light hover:!bg-social-google-hover"
+          disabled={isLoading}
+          onClick={() => signIn('google')}
+        >
+          <GoogleIcon className="w-4 h-4 ltr:mr-3 rtl:ml-3" />
+          {t('text-login-google')}
+        </Button>
+        <Button
+          className="h-11 w-full !bg-gray-500 !text-light hover:!bg-gray-600 sm:h-12"
+          disabled={isLoading}
+          onClick={() => openModal('OTP_LOGIN')}
+        >
+          <MobileIcon className="h-5 text-light ltr:mr-2 rtl:ml-2" />
+          {t('text-login-mobile')}
+        </Button>
+      </div>
+
       <div className="text-center text-sm text-body sm:text-base">
         {t('text-already-account')}{' '}
         <button
