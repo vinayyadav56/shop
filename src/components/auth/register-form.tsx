@@ -8,6 +8,7 @@ import { useTranslation } from 'next-i18next';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { GoogleIcon } from '@/components/icons/google';
 import { MobileIcon } from '@/components/icons/mobile-icon';
+import { WhatsAppIcon } from '@/components/icons/whatsapp';
 import { Form } from '@/components/ui/forms/form';
 import type { RegisterUserInput } from '@/types';
 import * as yup from 'yup';
@@ -99,12 +100,12 @@ function RegisterForm() {
           {t('text-login-google')}
         </Button>
         <Button
-          className="h-11 w-full !bg-gray-500 !text-light hover:!bg-gray-600 sm:h-12"
+          className="h-11 w-full !bg-[#25D366] !text-light hover:!bg-[#1da851] sm:h-12"
           disabled={isLoading}
           onClick={() => openModal('OTP_LOGIN')}
         >
-          <MobileIcon className="h-5 text-light ltr:mr-2 rtl:ml-2" />
-          {t('text-login-mobile')}
+          <WhatsAppIcon className="h-5 w-5 text-light ltr:mr-2 rtl:ml-2" />
+          Continue with WhatsApp
         </Button>
       </div>
 

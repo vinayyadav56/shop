@@ -279,7 +279,7 @@
   "text-confirm": "Confirm",
   "text-check-availability": "Check Availability",
   "text-no-delivery-time-found": "No delivery schedules found",
-  "otp-login-helper": "Login with your mobile number. We'll send you a code to the given mobile number to login into your account",
+  "otp-login-helper": "Continue with WhatsApp. Enter your WhatsApp number and we'll send a one-time code to it to log you in.",
   "button-cancel": "Cancel",
   "button-delete": "Delete",
   "delete-item-confirm": "Are you sure, you want to delete?",

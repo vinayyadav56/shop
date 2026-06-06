@@ -9,6 +9,7 @@ import * as yup from 'yup';
 import { GoogleIcon } from '@/components/icons/google';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { MobileIcon } from '@/components/icons/mobile-icon';
+import { WhatsAppIcon } from '@/components/icons/whatsapp';
 import { Form } from '@/components/ui/forms/form';
 import { useLogin } from '@/framework/user';
 import type { LoginUserInput } from '@/types';
@@ -104,12 +105,12 @@ function LoginForm() {
         </Button>
 
         <Button
-          className="h-11 w-full !bg-gray-500 !text-light hover:!bg-gray-600 sm:h-12"
+          className="h-11 w-full !bg-[#25D366] !text-light hover:!bg-[#1da851] sm:h-12"
           disabled={isLoading}
           onClick={() => openModal('OTP_LOGIN')}
         >
-          <MobileIcon className="h-5 text-light ltr:mr-2 rtl:ml-2" />
-          {t('text-login-mobile')}
+          <WhatsAppIcon className="h-5 w-5 text-light ltr:mr-2 rtl:ml-2" />
+          Continue with WhatsApp
         </Button>
 
         {isCheckout && guestCheckout && (
