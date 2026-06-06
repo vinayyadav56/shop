@@ -307,8 +307,14 @@ export interface Category {
   name: string;
   slug: string;
   description: string;
+  details?: string;
   image: Attachment;
+  banner_image?: Attachment;
+  icon?: string;
+  type?: Type;
   parent_id?: number | null;
+  children?: Category[];
+  products_count?: number;
 }
 
 export interface Banner {

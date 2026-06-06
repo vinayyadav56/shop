@@ -4,6 +4,7 @@ import type {
   AuthorPaginator,
   AuthorQueryOptions,
   AuthResponse,
+  Category,
   CategoryPaginator,
   CategoryQueryOptions,
   ChangePasswordUserInput,
@@ -224,6 +225,11 @@ class Client {
         searchJoin: 'and',
         ...params,
         ...(type && { search: HttpClient.formatSearchParams({ type }) }),
+      }),
+    get: ({ slug, language }: GetParams) =>
+      HttpClient.get<Category>(`${API_ENDPOINTS.CATEGORIES}/${slug}`, {
+        language,
+        with: 'type',
       }),
   };
   tags = {

@@ -3,6 +3,7 @@ import Card from '@/components/ui/cards/card';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { useTranslation } from 'next-i18next';
 import PhoneInput from '@/components/ui/forms/phone-input';
+import { WhatsAppIcon } from '@/components/icons/whatsapp';
 
 interface Props {
   userId: string;
@@ -23,9 +24,13 @@ const ProfileContact = ({ userId, profileId, contact }: Props) => {
   }
   return (
     <Card className="flex w-full flex-col">
-      <div className="mb-5 flex items-center justify-between md:mb-8">
-        <p className="text-lg capitalize text-heading lg:text-xl">
+      <div className="mb-2 flex items-center justify-between">
+        <p className="flex items-center gap-2 text-lg capitalize text-heading lg:text-xl">
           {t('text-contact-number')}
+          <span className="inline-flex items-center gap-1 rounded-full bg-[#25D366]/10 px-2 py-0.5 text-xs font-medium normal-case text-[#1da851]">
+            <WhatsAppIcon className="h-3.5 w-3.5" />
+            {t('text-whatsapp-number')}
+          </span>
         </p>
 
         {onAdd && (
@@ -38,6 +43,10 @@ const ProfileContact = ({ userId, profileId, contact }: Props) => {
           </button>
         )}
       </div>
+
+      <p className="mb-5 text-sm text-body md:mb-6">
+        {t('whatsapp-contact-helper')}
+      </p>
 
       <div className="grid grid-cols-1">
         <PhoneInput

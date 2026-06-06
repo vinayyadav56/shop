@@ -13,7 +13,8 @@ export function StorefrontCategoryCard({
   typeSlug: string;
 }) {
   const image = category?.image?.original || category?.image?.thumbnail || productPlaceholder;
-  const href = `/${typeSlug}/search?category=${category?.slug}`;
+  // Dedicated category page (banner + products). typeSlug retained for callers/back-compat.
+  const href = `/c/${category?.slug}`;
   const subtitle = (category as any)?.products_count
     ? `${(category as any).products_count} products`
     : 'Explore';

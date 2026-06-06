@@ -146,6 +146,8 @@
   "text-subject": "Subject",
   "text-description": "Description",
   "text-contact-number": "Contact Number",
+  "text-whatsapp-number": "WhatsApp Number",
+  "whatsapp-contact-helper": "We send order confirmations and delivery updates to this number on WhatsApp. Make sure it's a WhatsApp-enabled number.",
   "text-save": "Save",
   "text-update": "Update",
   "text-submit-email": "Submit Email",

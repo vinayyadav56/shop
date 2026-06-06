@@ -1,9 +1,25 @@
-import type { CategoryPaginator, CategoryQueryOptions } from '@/types';
-import { useInfiniteQuery } from 'react-query';
+import type { Category, CategoryPaginator, CategoryQueryOptions } from '@/types';
+import { useInfiniteQuery, useQuery } from 'react-query';
 import client from './client';
 import { API_ENDPOINTS } from './client/api-endpoints';
 import { mapPaginatorData } from '@/framework/utils/data-mappers';
 import { useRouter } from 'next/router';
+
+export function useCategory({ slug }: { slug: string }) {
+  const { locale } = useRouter();
+
+  const { data, isLoading, error } = useQuery<Category, Error>(
+    [`${API_ENDPOINTS.CATEGORIES}/${slug}`, { language: locale }],
+    () => client.categories.get({ slug, language: locale as string }),
+    { enabled: Boolean(slug) },
+  );
+
+  return {
+    category: data,
+    isLoading,
+    error,
+  };
+}
 
 export function useCategories(options?: Partial<CategoryQueryOptions>) {
   const { locale } = useRouter();

@@ -56,7 +56,7 @@ const PaShopByCategory: React.FC<Props> = ({ variables }) => {
           {rootCats.map((cat: any, i: number) => (
             <Link
               key={cat.id}
-              href={`/${cat.type?.slug ?? 'plants'}/search/?category=${cat.slug}`}
+              href={`/c/${cat.slug}`}
               className="pa-cat-card group"
             >
               {/* Background: real image or gradient fallback */}
