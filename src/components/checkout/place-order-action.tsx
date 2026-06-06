@@ -43,6 +43,7 @@ export const PlaceOrderAction: React.FC<{
       note,
       token,
       payable_amount,
+      delivery_verification,
     },
   ] = useAtom(checkoutAtom);
   const [discount] = useAtom(discountAtom);
@@ -79,6 +80,24 @@ export const PlaceOrderAction: React.FC<{
       return;
     }
 
+    // Fold the optional shared-location check into the order note so it's
+    // persisted + visible to admins without an API change.
+    let locationLine = '';
+    if (delivery_verification) {
+      const dv: any = delivery_verification;
+      const coords = `${Number(dv.lat).toFixed(5)}, ${Number(dv.lng).toFixed(5)}`;
+      if (dv.at_delivery_location === true) {
+        locationLine = `📍 Location verified: customer at delivery address (${coords}).`;
+      } else if (dv.at_delivery_location === false) {
+        const km =
+          dv.distance_km != null ? `${Number(dv.distance_km).toFixed(2)} km` : 'unknown';
+        locationLine = `⚠️ Location mismatch: customer ~${km} from delivery address (${coords}).`;
+      } else {
+        locationLine = `📍 Customer location: ${coords} (delivery address has no map coordinates).`;
+      }
+    }
+    const finalNote = [note, locationLine].filter(Boolean).join('\n');
+
     const isFullWalletPayment =
       use_wallet_points && payable_amount == 0 ? true : false;
     const gateWay = isFullWalletPayment
@@ -98,7 +117,7 @@ export const PlaceOrderAction: React.FC<{
       delivery_time: delivery_time?.title,
       customer_contact,
       customer_name,
-      note,
+      note: finalNote,
       payment_gateway: gateWay,
       payment_sub_gateway,
       use_wallet_points,

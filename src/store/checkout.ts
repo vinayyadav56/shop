@@ -148,3 +148,24 @@ export const payableAmountAtom = atom(
     return set(checkoutAtom, { ...prev, payable_amount: data });
   }
 );
+
+export interface DeliveryLocationVerification {
+  lat: number;
+  lng: number;
+  distance_km: number | null;
+  at_delivery_location: boolean | null;
+  checked_at: string;
+}
+
+// Captured at checkout when the customer taps "Share my current location".
+export const deliveryVerificationAtom = atom(
+  (get) =>
+    get(checkoutAtom).delivery_verification as
+      | DeliveryLocationVerification
+      | null
+      | undefined,
+  (get, set, data: DeliveryLocationVerification | null) => {
+    const prev = get(checkoutAtom);
+    return set(checkoutAtom, { ...prev, delivery_verification: data });
+  }
+);

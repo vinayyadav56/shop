@@ -30,6 +30,10 @@ const CheckoutRecommendations = dynamic(
     ),
   { ssr: false }
 );
+const DeliveryLocationVerification = dynamic(
+  () => import('@/components/checkout/delivery-location-verification'),
+  { ssr: false }
+);
 
 export default function CheckoutPage() {
   const { t } = useTranslation();
@@ -88,7 +92,11 @@ export default function CheckoutPage() {
               label={t('text-delivery-schedule')}
               count={4}
             />
-            <OrderNote count={5} label={t('Order Note')} />
+            <DeliveryLocationVerification
+              count={5}
+              label={t('Verify delivery location')}
+            />
+            <OrderNote count={6} label={t('Order Note')} />
           </div>
           <div className="mt-10 mb-10 w-full sm:mb-12 lg:mb-0 lg:w-96">
             <RightSideView />
