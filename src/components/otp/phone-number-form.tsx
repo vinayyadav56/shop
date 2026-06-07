@@ -40,7 +40,7 @@ export default function PhoneNumberForm({
     >
       {({ control, formState: { errors } }) => (
         <div className="flex flex-col">
-          <div className="flex w-full items-center md:min-w-[360px]">
+          <div className="pa-phone-row flex w-full items-stretch md:min-w-[360px]">
             <Controller
               name="phone_number"
               control={control}

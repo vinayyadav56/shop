@@ -95,31 +95,41 @@ export const AddressForm: React.FC<any> = ({
               className="col-span-2"
             />
             {
+              // Render the Places search whenever a Maps key is configured, so it
+              // works regardless of the backend `useGoogleMap` toggle.
               //@ts-ignore
-              settings?.useGoogleMap && (
+              (settings?.useGoogleMap ||
+                process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY) && (
                 <div className="col-span-2">
                   <Label>{t('text-location')}</Label>
                   <Controller
                     control={control}
                     name="location"
-                    render={({ field: { onChange } }) => (
-                      <GooglePlacesAutocomplete
-                        register={register}
-                        // @ts-ignore
-                        onChange={(location: any) => {
-                          onChange(location);
-                          setValue('address.country', location?.country);
-                          setValue('address.city', location?.city);
-                          setValue('address.state', location?.state);
-                          setValue('address.zip', location?.zip);
-                          setValue(
-                            'address.street_address',
-                            location?.street_address,
-                          );
-                        }}
-                        data={getValues('location')!}
-                      />
-                    )}
+                    render={({ field: { onChange } }) => {
+                      // Auto-fill the address fields from a selected place OR from
+                      // "use current location" (both call this).
+                      const fill = (location: any) => {
+                        onChange(location);
+                        setValue('address.country', location?.country);
+                        setValue('address.city', location?.city);
+                        setValue('address.state', location?.state);
+                        setValue('address.zip', location?.zip);
+                        setValue(
+                          'address.street_address',
+                          location?.street_address,
+                        );
+                      };
+                      return (
+                        <GooglePlacesAutocomplete
+                          register={register}
+                          // @ts-ignore
+                          onChange={fill}
+                          // @ts-ignore
+                          onChangeCurrentLocation={fill}
+                          data={getValues('location')!}
+                        />
+                      );
+                    }}
                   />
                 </div>
               )

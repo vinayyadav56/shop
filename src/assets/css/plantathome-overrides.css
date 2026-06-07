@@ -2950,6 +2950,80 @@ textarea:focus {
   box-shadow: 0 2px 8px rgba(46,94,58,0.22);
 }
 .pa-mcbar-cta:hover { background: #244B2E; }
+
+/* ── Contact modal: flush phone input + button (single outline) ── */
+.pa-phone-row {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border: 1px solid #E4E5E1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  transition: border-color 0.2s ease;
+}
+.pa-phone-row:focus-within { border-color: #2E5E3A; }
+.pa-phone-row .react-tel-input { flex: 1 1 auto; min-width: 0; }
+.pa-phone-row .react-tel-input .form-control {
+  height: 50px !important;
+  width: 100% !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+.pa-phone-row .react-tel-input .flag-dropdown,
+.pa-phone-row .react-tel-input .flag-dropdown.open,
+.pa-phone-row .react-tel-input .selected-flag {
+  border: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+.pa-phone-row > button {
+  height: 50px !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  flex-shrink: 0;
+  box-shadow: none !important;
+  background: #2E5E3A !important;
+}
+.pa-phone-row > button:hover { background: #244B2E !important; }
+
+/* ── Checkout wizard navigation ──────────────────────────────── */
+.pa-wizard-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+}
+.pa-wizard-back {
+  background: none;
+  border: none;
+  color: #5B5F58;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 6px;
+  transition: color 0.2s ease;
+}
+.pa-wizard-back:hover { color: #1A1A1A; }
+.pa-wizard-next {
+  background: #2E5E3A;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  height: 48px;
+  padding: 0 28px;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(46,94,58,0.22);
+  transition: background 0.2s ease;
+  margin-left: auto;
+}
+.pa-wizard-next:hover { background: #244B2E; }
+.pa-wizard-next:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
 @media (max-width: 1023px) {
   .pa-checkout-page { padding-bottom: 92px; }
 }

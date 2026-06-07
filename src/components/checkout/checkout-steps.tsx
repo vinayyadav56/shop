@@ -14,11 +14,20 @@ const CheckIcon = () => (
   </svg>
 );
 
+export const CHECKOUT_STEPS = ['Contact', 'Address', 'Delivery', 'Review'];
+
 /**
- * Top progress stepper for checkout. Purely presentational — derives
- * done/active state from the existing checkout atoms (no logic changes).
+ * Clickable checkout progress bar. Derives done state from the checkout atoms;
+ * `current` + `onStepClick` make it navigate the wizard (back/visited freely,
+ * forward only once the previous steps are complete).
  */
-export default function CheckoutSteps() {
+export default function CheckoutSteps({
+  current = 0,
+  onStepClick,
+}: {
+  current?: number;
+  onStepClick?: (index: number) => void;
+}) {
   const [contact] = useAtom(customerContactAtom);
   const [billing] = useAtom(billingAddressAtom);
   const [shipping] = useAtom(shippingAddressAtom);
@@ -28,16 +37,12 @@ export default function CheckoutSteps() {
   const steps = [
     { label: 'Contact', done: !!contact },
     { label: 'Address', done: !!billing && !!shipping },
-    { label: 'Schedule', done: !!deliveryTime },
-    { label: 'Verify', done: !isEmpty(verified) },
-    { label: 'Payment', done: false },
+    { label: 'Delivery', done: !!deliveryTime },
+    { label: 'Review', done: !isEmpty(verified) },
   ];
 
-  // current = first not-done step
-  const currentIndex = steps.findIndex((s) => !s.done);
-  const activeIndex = currentIndex === -1 ? steps.length - 1 : currentIndex;
-  const doneCount = steps.filter((s) => s.done).length;
-  const progress = Math.min(100, (doneCount / (steps.length - 1)) * 100);
+  const progress = Math.min(100, (current / (steps.length - 1)) * 100);
+  const prevDone = (i: number) => steps.slice(0, i).every((s) => s.done);
 
   return (
     <div className="pa-steps" aria-label="Checkout progress">
@@ -45,14 +50,22 @@ export default function CheckoutSteps() {
         <div className="pa-steps-fill" style={{ width: `${progress}%` }} />
       </div>
       {steps.map((s, i) => {
-        const state = s.done ? 'done' : i === activeIndex ? 'active' : 'upcoming';
+        const state = i === current ? 'active' : s.done ? 'done' : 'upcoming';
+        const clickable = !!onStepClick && (i <= current || prevDone(i));
         return (
-          <div className={`pa-step pa-step--${state}`} key={s.label}>
+          <button
+            type="button"
+            key={s.label}
+            className={`pa-step pa-step--${state}`}
+            disabled={!clickable}
+            onClick={() => clickable && onStepClick?.(i)}
+            style={{ background: 'none', border: 'none', padding: 0, cursor: clickable ? 'pointer' : 'default' }}
+          >
             <span className="pa-step-dot">
-              {s.done ? <CheckIcon /> : <span>{i + 1}</span>}
+              {s.done && i !== current ? <CheckIcon /> : <span>{i + 1}</span>}
             </span>
             <span className="pa-step-label">{s.label}</span>
-          </div>
+          </button>
         );
       })}
     </div>

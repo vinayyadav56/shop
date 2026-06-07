@@ -27,12 +27,12 @@ const ContactGrid = ({
   const { t } = useTranslation('common');
 
   useEffect(() => {
-    if (contact) {
+    // Seed from the saved profile only when the checkout has no contact yet.
+    // Never clear a number the user just entered (that caused it to be lost).
+    if (contact && !contactNumber) {
       setContactNumber(contact);
-      return;
     }
-    setContactNumber('');
-  }, [contact, setContactNumber]);
+  }, [contact, contactNumber, setContactNumber]);
 
   function onAddOrChange() {
     openModal('ADD_OR_UPDATE_CHECKOUT_CONTACT');
