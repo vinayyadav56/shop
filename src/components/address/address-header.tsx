@@ -21,7 +21,7 @@ export const AddressHeader: React.FC<AddressHeaderProps> = ({
       </div>
       {onAdd && (
         <button
-          style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 600, color: '#2C5F2E', background: 'none', border: 'none', cursor: 'pointer' }}
+          style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 600, color: '#5B5F58', background: 'none', border: 'none', cursor: 'pointer' }}
           onClick={onAdd}
         >
           <PlusIcon className="h-4 w-4 stroke-2" />

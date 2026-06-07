@@ -46,7 +46,7 @@ const ContactGrid = ({
           <span className="pa-checkout-step-label">{label}</span>
         </div>
         <button
-          style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 600, color: '#2C5F2E', background: 'none', border: 'none', cursor: 'pointer' }}
+          style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 600, color: '#5B5F58', background: 'none', border: 'none', cursor: 'pointer' }}
           onClick={onAddOrChange}
         >
           <PlusIcon className="h-4 w-4 stroke-2" />
