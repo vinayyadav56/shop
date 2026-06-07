@@ -213,6 +213,18 @@ jobs:
           echo "FAIL — shop health check failed"
           exit 1
 
+      - name: Purge Cloudflare cache
+        if: success()
+        run: |
+          RESP=$(curl -s -X POST \
+            "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}')
+          echo "$RESP" | grep -q '"success":true' \
+            && echo "Cloudflare cache purged" \
+            || echo "WARNING: cache purge failed: $RESP"
+
       - name: Close port 22 for this runner
         if: always()
         env:
