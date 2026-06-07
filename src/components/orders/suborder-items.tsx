@@ -21,6 +21,17 @@ const SuborderItems: React.FC<SuborderItemsProps> = ({ items }) => {
 
   const orderTableColumns = [
     {
+      title: 'Shipment',
+      dataIndex: 'vertical',
+      key: 'vertical',
+      align: alignLeft,
+      render: (vertical: any) => (
+        <span className="inline-flex items-center whitespace-nowrap rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent">
+          {vertical?.name ?? '—'}
+        </span>
+      ),
+    },
+    {
       title: t('text-tracking-number'),
       dataIndex: 'tracking_number',
       key: 'tracking_number',
