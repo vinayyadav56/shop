@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import { useLogout, useUser } from '@/framework/user';
 import { PaymentGateway } from '@/types';
 import { useSettings } from '@/framework/settings';
+import { usePincodeServiceability } from '@/lib/use-pincode-serviceability';
 import Cookies from 'js-cookie';
 import { REVIEW_POPUP_MODAL_KEY } from '@/lib/constants';
 
@@ -49,6 +50,11 @@ export const PlaceOrderAction: React.FC<{
   const [discount] = useAtom(discountAtom);
   const [use_wallet_points] = useAtom(walletAtom);
 
+  // Hard-block ordering to a non-serviceable pincode (admin allow-list).
+  const shippingZip = (shipping_address as any)?.address?.zip as string | undefined;
+  const { result: pincodeResult } = usePincodeServiceability(shippingZip);
+  const pincodeBlocked = pincodeResult?.serviceable === false;
+
   useEffect(() => {
     setErrorMessage(null);
   }, [payment_gateway]);
@@ -73,6 +79,12 @@ export const PlaceOrderAction: React.FC<{
   const handlePlaceOrder = () => {
     if (!customer_contact) {
       setErrorMessage('Contact Number Is Required');
+      return;
+    }
+    if (pincodeBlocked) {
+      setErrorMessage(
+        `We don't deliver to ${pincodeResult?.pincode ?? shippingZip} yet. Please use a serviceable delivery address.`,
+      );
       return;
     }
     if (!use_wallet_points && !payment_gateway) {
@@ -161,7 +173,7 @@ export const PlaceOrderAction: React.FC<{
       <button
         className="pa-place-order-btn"
         onClick={handlePlaceOrder}
-        disabled={!isAllRequiredFieldSelected || !!isLoading}
+        disabled={!isAllRequiredFieldSelected || !!isLoading || pincodeBlocked}
       >
         {isLoading ? (
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ animation: 'spin 1s linear infinite' }}>
@@ -174,6 +186,13 @@ export const PlaceOrderAction: React.FC<{
         )}
         {props.children ?? t('text-place-order')}
       </button>
+      {pincodeBlocked && (
+        <div className="mt-3">
+          <ValidationError
+            message={`We don't deliver to ${pincodeResult?.pincode ?? shippingZip} yet. Please use a serviceable delivery address.`}
+          />
+        </div>
+      )}
       {errorMessage && (
         <div className="mt-3">
           <ValidationError message={errorMessage} />

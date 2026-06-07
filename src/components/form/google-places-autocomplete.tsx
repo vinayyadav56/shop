@@ -56,6 +56,7 @@ export default function GooglePlacesAutocomplete({
           'formatted_address',
         ]}
         types={['address']}
+        restrictions={{ country: 'in' }}
       >
         <input
           type="text"

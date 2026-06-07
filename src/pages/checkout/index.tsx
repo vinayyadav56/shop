@@ -48,6 +48,10 @@ const CheckoutWizard = dynamic(
   () => import('@/components/checkout/checkout-wizard'),
   { ssr: false }
 );
+const PincodeServiceability = dynamic(
+  () => import('@/components/checkout/pincode-serviceability'),
+  { ssr: false }
+);
 
 export default function CheckoutPage() {
   const { t } = useTranslation();
@@ -98,6 +102,7 @@ export default function CheckoutPage() {
             atom={shippingAddressAtom}
             type={AddressType.Shipping}
           />
+          <PincodeServiceability />
         </div>
       ),
     },
