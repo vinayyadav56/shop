@@ -6,6 +6,8 @@ import usePrice from '@/lib/use-price';
 import { ItemInfoRow } from './item-info-row';
 import { CheckAvailabilityAction } from '@/components/checkout/check-availability-action';
 
+const FREE_DELIVERY_THRESHOLD = 999;
+
 const UnverifiedItemList = ({ hideTitle = false }: { hideTitle?: boolean }) => {
   const { t } = useTranslation('common');
   const { items, total, isEmpty } = useCart();
@@ -14,6 +16,10 @@ const UnverifiedItemList = ({ hideTitle = false }: { hideTitle?: boolean }) => {
       amount: total,
     }
   );
+  const remaining = Math.max(0, FREE_DELIVERY_THRESHOLD - total);
+  const { price: remainingPrice } = usePrice({ amount: remaining });
+  const shipProgress = Math.min(100, (total / FREE_DELIVERY_THRESHOLD) * 100);
+  const isFreeDelivery = total >= FREE_DELIVERY_THRESHOLD;
   return (
     <div className="pa-order-summary">
       {!hideTitle && (
@@ -23,6 +29,19 @@ const UnverifiedItemList = ({ hideTitle = false }: { hideTitle?: boolean }) => {
           </svg>
           {t('text-your-order')}
         </h3>
+      )}
+
+      {!isEmpty && (
+        <div className={`pa-od-ship${isFreeDelivery ? ' is-free' : ''}`}>
+          <p className="pa-od-ship-label">
+            {isFreeDelivery
+              ? '🎉 You’ve unlocked FREE delivery!'
+              : `Add ${remainingPrice} more for FREE delivery`}
+          </p>
+          <div className="pa-od-ship-track">
+            <div className="pa-od-ship-fill" style={{ width: `${shipProgress}%` }} />
+          </div>
+        </div>
       )}
       {isEmpty ? (
         <div className="pa-empty-state" style={{ padding: '32px 0' }}>
@@ -51,6 +70,21 @@ const UnverifiedItemList = ({ hideTitle = false }: { hideTitle?: boolean }) => {
       <CheckAvailabilityAction>
         {t('text-check-availability')}
       </CheckAvailabilityAction>
+
+      <div className="pa-od-trust">
+        <span className="pa-od-trust-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Secure
+        </span>
+        <span className="pa-od-trust-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Encrypted
+        </span>
+        <span className="pa-od-trust-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          Easy returns
+        </span>
+      </div>
     </div>
   );
 };

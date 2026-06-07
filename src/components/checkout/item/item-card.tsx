@@ -1,6 +1,8 @@
 import usePrice from '@/lib/use-price';
 import cn from 'classnames';
 import { useTranslation } from 'next-i18next';
+import { Image } from '@/components/ui/image';
+import { siteSettings } from '@/config/site';
 interface Props {
   item: any;
   notAvailable?: boolean;
@@ -13,6 +15,18 @@ const ItemCard = ({ item, notAvailable }: Props) => {
   });
   return (
     <div className="pa-order-item">
+      <div className="pa-order-item-thumb">
+        <Image
+          src={item?.image ?? siteSettings?.product?.placeholderImage}
+          alt={item.name}
+          fill
+          sizes="44px"
+          className="object-cover"
+        />
+        {item?.quantity > 1 && (
+          <span className="pa-order-item-badge">{item.quantity}</span>
+        )}
+      </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <span
           className={cn('pa-order-item-name', notAvailable && 'text-red-500')}

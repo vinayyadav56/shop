@@ -2194,9 +2194,18 @@ select:focus {
   background: #fff;
   border-radius: 20px;
   padding: 24px;
-  border: 1.5px solid rgba(46,107,74,0.10);
+  border: 1px solid rgba(46,107,74,0.10);
   box-shadow: 0 2px 16px rgba(46,107,74,0.06);
   margin-bottom: 16px;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.pa-checkout-step:hover {
+  box-shadow: 0 6px 26px rgba(46,107,74,0.10);
+  border-color: rgba(46,107,74,0.18);
+}
+.pa-checkout-step-header {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(46,107,74,0.08);
 }
 @media (min-width: 768px) { .pa-checkout-step { padding: 28px 32px; } }
 
@@ -2730,25 +2739,224 @@ textarea:focus {
 }
 
 /* ── Checkout page header ────────────────────────────────────── */
+.pa-checkout-eyebrow {
+  font-family: var(--font-eyebrow, var(--font-heading)) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.26em;
+  font-size: 11px;
+  font-weight: 600;
+  color: #3A6B33;
+  margin: 0 0 8px;
+}
 .pa-checkout-page-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-heading) !important;
-  font-size: clamp(22px, 3vw, 30px);
-  font-weight: 800;
-  color: #1C3326;
-  margin: 0 0 6px;
+  font-family: var(--font-serif, var(--font-heading)) !important;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #16301A;
+  margin: 0 0 8px;
 }
 .pa-checkout-page-sub {
   font-size: 12.5px;
   color: #6B8C6B;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 .pa-checkout-page-sub::before {
   content: '🔒';
   font-size: 13px;
+}
+
+/* ── Progress stepper ────────────────────────────────────────── */
+.pa-steps {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 6px;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(46,107,74,0.10);
+  border-radius: 16px;
+  padding: 18px 18px 14px;
+  box-shadow: 0 2px 14px rgba(46,107,74,0.05);
+  overflow-x: auto;
+}
+.pa-steps-track {
+  position: absolute;
+  top: 35px;
+  left: 42px;
+  right: 42px;
+  height: 2px;
+  background: #E1EADD;
+  border-radius: 2px;
+  z-index: 0;
+}
+.pa-steps-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2E7D52, #43A047);
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.pa-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 0;
+  min-width: 64px;
+}
+.pa-step-dot {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  background: #fff;
+  color: #8FAE80;
+  border: 2px solid #DCE7D6;
+  transition: all 0.3s ease;
+}
+.pa-step-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #8AA088;
+  white-space: nowrap;
+}
+.pa-step--active .pa-step-dot {
+  background: #fff;
+  color: #2E7D52;
+  border-color: #2E7D52;
+  box-shadow: 0 0 0 4px rgba(46,125,82,0.12);
+}
+.pa-step--active .pa-step-label { color: #1C3326; }
+.pa-step--done .pa-step-dot {
+  background: linear-gradient(135deg, #2E7D52, #43A047);
+  color: #fff;
+  border-color: transparent;
+}
+.pa-step--done .pa-step-label { color: #2E6B4A; }
+
+/* ── Order summary: item thumbnail ───────────────────────────── */
+.pa-order-item-thumb {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #EAF4EC;
+  margin-right: 12px;
+  border: 1px solid rgba(46,107,74,0.08);
+}
+.pa-order-item-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: #2E7D52;
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(44,95,46,0.35);
+}
+
+/* ── Order summary: free-delivery progress ───────────────────── */
+.pa-od-ship {
+  background: #F4F7F1;
+  border: 1px solid rgba(46,107,74,0.10);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+.pa-od-ship-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4A7C59;
+  margin: 0 0 8px;
+}
+.pa-od-ship.is-free .pa-od-ship-label { color: #2E7D52; font-weight: 600; }
+.pa-od-ship-track {
+  height: 5px;
+  background: #E3ECDF;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.pa-od-ship-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2E7D52, #43A047);
+  border-radius: 99px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ── Order summary: trust badges ─────────────────────────────── */
+.pa-od-trust {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(46,107,74,0.08);
+}
+.pa-od-trust-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #6B8C6B;
+}
+.pa-od-trust-item svg { color: #2E7D52; }
+
+/* ── Mobile sticky checkout bar ──────────────────────────────── */
+.pa-mcbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(46,107,74,0.12);
+  box-shadow: 0 -4px 20px rgba(44,95,46,0.10);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+}
+.pa-mcbar-info { display: flex; flex-direction: column; line-height: 1.15; }
+.pa-mcbar-count { font-size: 11.5px; color: #6B8C6B; font-weight: 500; }
+.pa-mcbar-total { font-size: 18px; font-weight: 800; color: #1C3326; }
+.pa-mcbar-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 46px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 99px;
+  background: linear-gradient(135deg, #2E7D52 0%, #43A047 100%);
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(44,95,46,0.35);
+}
+@media (max-width: 1023px) {
+  .pa-checkout-page { padding-bottom: 92px; }
 }
