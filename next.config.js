@@ -35,6 +35,36 @@ module.exports = {
       'via.placeholder.com',
       'images.unsplash.com',
     ],
+    // Serve modern formats (huge size cut vs the full-size S3 JPEGs) + responsive
+    // widths, and cache the optimized variants for 30 days.
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [360, 480, 640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [120, 160, 200, 256, 320, 384],
+    minimumCacheTTL: 2592000,
+  },
+  compress: true,
+  productionBrowserSourceMaps: false,
+  experimental: {
+    optimizePackageImports: [
+      'framer-motion',
+      'lodash',
+      '@headlessui/react',
+      'react-icons',
+    ],
+  },
+  async headers() {
+    return [
+      {
+        // Long-cache immutable static assets in /public.
+        source: '/:dir(images|brand|fonts|icons)/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
   },
   ...(process.env.FRAMEWORK_PROVIDER === 'graphql' && {
     webpack(config, options) {

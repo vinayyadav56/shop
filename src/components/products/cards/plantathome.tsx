@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { useToggleWishlist } from '@/framework/wishlist';
 import usePrice from '@/lib/use-price';
@@ -133,14 +134,13 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
         className="relative block aspect-[4/5] w-full overflow-hidden bg-[radial-gradient(130%_130%_at_30%_15%,#FAF9F6,#E7EEE2_60%,#D2E0CB)] text-left"
       >
         {image && !imgError ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={image}
             alt={product.name}
-            loading="lazy"
-            decoding="async"
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
             onError={() => setImgError(true)}
-            className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
+            className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
           />
         ) : (
           <span className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-3 text-center">
