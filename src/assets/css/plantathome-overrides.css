@@ -3009,8 +3009,8 @@ textarea:focus {
 }
 .pa-wizard-back:hover { color: #1A1A1A; }
 .pa-wizard-next {
-  background: #2E5E3A;
-  color: #fff;
+  background: #2E5E3A !important;
+  color: #fff !important;
   border: none;
   border-radius: 12px;
   height: 48px;
@@ -3022,8 +3022,14 @@ textarea:focus {
   transition: background 0.2s ease;
   margin-left: auto;
 }
-.pa-wizard-next:hover { background: #244B2E; }
-.pa-wizard-next:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+.pa-wizard-next:hover { background: #244B2E !important; }
+/* Clearly-visible disabled state (not a faint ghost) */
+.pa-wizard-next:disabled {
+  background: #E4E5E1 !important;
+  color: #9AA096 !important;
+  cursor: not-allowed;
+  box-shadow: none;
+}
 @media (max-width: 1023px) {
   .pa-checkout-page { padding-bottom: 92px; }
 }

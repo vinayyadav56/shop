@@ -141,7 +141,7 @@ export default function CheckoutPage() {
           <div className="w-full lg:max-w-2xl">
             <CheckoutWizard step={step} setStep={setStep} panels={panels} />
           </div>
-          <div className="mt-10 mb-10 w-full sm:mb-12 lg:mb-0 lg:w-96">
+          <div className="mt-10 mb-10 w-full sm:mb-12 lg:mt-0 lg:mb-0 lg:w-96">
             <RightSideView />
           </div>
         </div>
