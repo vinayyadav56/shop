@@ -3,6 +3,32 @@ import { DefaultSeo as NextDefaultSeo } from 'next-seo';
 
 const DefaultSeo = () => {
   const { settings } : any = useSettings();
+
+  // Admin-managed favicon (Tools → Logo & Branding). When set, it becomes the
+  // browser-tab / search icon site-wide with no redeploy; otherwise the built-in
+  // PlantAtHome icon files are used.
+  const favicon: string | undefined = settings?.favicon?.original;
+  const faviconType = favicon
+    ? /\.svg(\?|$)/i.test(favicon)
+      ? 'image/svg+xml'
+      : /\.png(\?|$)/i.test(favicon)
+      ? 'image/png'
+      : 'image/x-icon'
+    : undefined;
+
+  const iconTags = favicon
+    ? [
+        { rel: 'icon', type: faviconType, href: favicon },
+        { rel: 'apple-touch-icon', href: favicon },
+      ]
+    : [
+        // Built-in PlantAtHome favicon (absolute paths so they resolve on deep routes).
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/icons/favicon-32.png' },
+        { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/icons/manifest-icon-192.png' },
+        { rel: 'apple-touch-icon', href: '/icons/apple-icon-180.png' },
+      ];
+
   return (
     <NextDefaultSeo
       additionalMetaTags={[
@@ -20,30 +46,7 @@ const DefaultSeo = () => {
         },
       ]}
       additionalLinkTags={[
-        // PlantAtHome favicon (replaces the default Pickbazar icon in browser
-        // tabs + Google search results). Absolute paths so they resolve on
-        // deep routes too.
-        {
-          rel: 'icon',
-          type: 'image/x-icon',
-          href: '/favicon.ico',
-        },
-        {
-          rel: 'icon',
-          type: 'image/png',
-          sizes: '32x32',
-          href: '/icons/favicon-32.png',
-        },
-        {
-          rel: 'icon',
-          type: 'image/png',
-          sizes: '192x192',
-          href: '/icons/manifest-icon-192.png',
-        },
-        {
-          rel: 'apple-touch-icon',
-          href: '/icons/apple-icon-180.png',
-        },
+        ...iconTags,
         {
           rel: 'manifest',
           href: '/manifest.json',
