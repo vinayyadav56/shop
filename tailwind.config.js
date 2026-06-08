@@ -39,6 +39,8 @@ module.exports = {
         heading: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         display: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         serif: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        // Editorial serif for premium display headings (product title, section titles).
+        cormorant: ['"Cormorant Garamond"', 'Georgia', 'Cambria', 'serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       fontSize: {

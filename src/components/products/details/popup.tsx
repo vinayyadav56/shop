@@ -2,6 +2,7 @@ import Spinner from '@/components/ui/loaders/spinner/spinner';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import Details from './details';
+import PlantAtHomeProductDetails from './plantathome-details';
 import ShortDetails from './short-details';
 import { stickyShortDetailsAtom } from '@/store/sticky-short-details-atom';
 import { useAtom } from 'jotai';
@@ -33,7 +34,11 @@ const Popup: React.FC<ProductPopupProps> = ({ productSlug }) => {
         {/* Sticky bar */}
         <ShortDetails product={productItem} isSticky={showStickyShortDetails} />
         {/* End of sticky bar */}
-        <Details product={productItem} backBtn={false} isModal={true} />
+        {productItem?.type?.slug === 'books' ? (
+          <Details product={productItem} backBtn={false} isModal={true} />
+        ) : (
+          <PlantAtHomeProductDetails product={productItem} isModal={true} />
+        )}
 
         {related_products?.length! > 1 && (
           <div className="p-5 md:pb-10 lg:p-14 xl:p-16">

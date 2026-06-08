@@ -13,7 +13,9 @@ import dynamic from 'next/dynamic';
 import { getStaticPaths, getStaticProps } from '@/framework/product.ssr';
 export { getStaticPaths, getStaticProps };
 //FIXME: typescript and layout
-const Details = dynamic(() => import('@/components/products/details/details'));
+const PlantAtHomeProductDetails = dynamic(
+  () => import('@/components/products/details/plantathome-details')
+);
 const BookDetails = dynamic(
   () => import('@/components/products/details/book-details')
 );
@@ -37,12 +39,12 @@ const ProductPage: NextPageWithLayout<
         images={!isEmpty(product?.image) ? [product.image] : []}
       />
       <AttributesProvider>
-        <div className="min-h-screen bg-light">
+        <div className="min-h-screen bg-cream-100">
           {product.type?.slug === 'books' ? (
             <BookDetails product={product} />
           ) : (
             <>
-              <Details product={product} />
+              <PlantAtHomeProductDetails product={product} />
               <AverageRatings
                 title={product?.name}
                 ratingCount={product?.rating_count}
