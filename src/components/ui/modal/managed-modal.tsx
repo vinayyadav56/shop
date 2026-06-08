@@ -85,6 +85,10 @@ const ReviewPopupModal = dynamic(() => import('@/components/review-popup'), {
   ssr: false,
 });
 
+const AskAiChat = dynamic(() => import('@/components/ask-ai/ask-ai-chat'), {
+  ssr: false,
+});
+
 const ManagedModal = () => {
   const { isOpen, view, data } = useModalState();
   const { closeModal } = useModalAction();
@@ -145,6 +149,7 @@ const ManagedModal = () => {
       {view === 'GATEWAY_MODAL' && <GateWayControlModal />}
       {view === 'STRIPE_ELEMENT_MODAL' && <StripeElementModal />}
       {view === 'NEWSLETTER_MODAL' && <NewsLetterModal />}
+      {view === 'ASK_AI' && <AskAiChat />}
     </Modal>
   );
 };
