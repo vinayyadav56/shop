@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useModalAction } from '@/components/ui/modal/modal.context';
-import { useToggleWishlist } from '@/framework/wishlist';
+import { useToggleWishlist, useInWishlist } from '@/framework/wishlist';
+import { useUser } from '@/framework/user';
 import usePrice from '@/lib/use-price';
 import type { Product, Tag } from '@/types';
 
@@ -116,9 +117,13 @@ type Props = { product: Product; className?: string };
 
 const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
   const [imgError, setImgError] = useState(false);
-  const [wishlisting, setWishlisting] = useState(false);
   const { openModal } = useModalAction();
+  const { isAuthorized } = useUser();
   const { toggleWishlist } = useToggleWishlist(product.id);
+  const { inWishlist } = useInWishlist({
+    product_id: product.id,
+    enabled: isAuthorized,
+  });
 
   const { price, basePrice, discount } = usePrice({
     amount: product.sale_price ? product.sale_price : product.price,
@@ -135,11 +140,14 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
   function handleQuickView() {
     openModal('PRODUCT_DETAILS', product.slug);
   }
-  async function handleWishlist(e: React.MouseEvent) {
+  function handleWishlist(e: React.MouseEvent) {
     e.stopPropagation();
-    setWishlisting(true);
-    await toggleWishlist({ product_id: product.id });
-    setWishlisting(false);
+    e.preventDefault();
+    if (!isAuthorized) {
+      openModal('LOGIN_VIEW');
+      return;
+    }
+    toggleWishlist({ product_id: product.id });
   }
 
   return (
@@ -148,7 +156,8 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
       transition={{ duration: 0.25 }}
       className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-kraft-200/80 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-all duration-300 hover:border-[#B58E39]/40 hover:shadow-[0_14px_34px_-14px_rgba(34,48,26,0.22)] ${className}`}
     >
-      {/* photo */}
+      {/* photo + wishlist (heart is a sibling of the image button — not nested) */}
+      <div className="relative">
       <button
         type="button"
         onClick={handleQuickView}
@@ -187,17 +196,6 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
           </span>
         ) : null}
 
-        {/* wishlist — always-visible white circle (reference) */}
-        <button
-          type="button"
-          onClick={handleWishlist}
-          disabled={wishlisting}
-          className="absolute right-3 top-3 z-10 grid h-8 w-8 place-items-center rounded-full bg-white/95 shadow-sm backdrop-blur transition hover:scale-105 hover:bg-white disabled:opacity-60"
-          aria-label="Add to wishlist"
-        >
-          <Heart active={!!product.in_wishlist} />
-        </button>
-
         {!inStock && (
           <span className="absolute inset-0 z-10 flex items-center justify-center bg-white/55 backdrop-blur-[1px]">
             <span className="rounded-full bg-forest-900/85 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
@@ -206,6 +204,17 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
           </span>
         )}
       </button>
+
+        {/* wishlist — sibling of the image button (valid HTML, reliable click) */}
+        <button
+          type="button"
+          onClick={handleWishlist}
+          className="absolute right-3 top-3 z-10 grid h-8 w-8 place-items-center rounded-full bg-white/95 shadow-sm backdrop-blur transition hover:scale-105 hover:bg-white"
+          aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+        >
+          <Heart active={inWishlist} />
+        </button>
+      </div>
 
       {/* body */}
       <div className="flex flex-1 flex-col p-4">
@@ -263,7 +272,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
               <button
                 type="button"
                 onClick={handleQuickView}
-                className="flex w-full items-center justify-center rounded-full bg-forest-900 px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-forest-800"
+                className="flex w-full items-center justify-center rounded-full bg-forest-600 px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-forest-700"
               >
                 Select Options
               </button>
