@@ -12,7 +12,8 @@ type Props = {
     | 'oganesson'
     | 'single'
     | 'big'
-    | 'text';
+    | 'text'
+    | 'plantathome';
   onClick(event: React.MouseEvent<HTMLButtonElement | MouseEvent>): void;
   disabled?: boolean;
 };
@@ -81,6 +82,23 @@ const AddToCartBtn: React.FC<Props> = ({ variant, onClick, disabled }) => {
             }
           )}
         >
+          <span>{t('text-add-cart')}</span>
+        </button>
+      );
+    case 'plantathome':
+      return (
+        <button
+          onClick={onClick}
+          disabled={disabled}
+          className={cn(
+            'flex w-full items-center justify-center gap-2 rounded-full bg-forest-900 px-5 py-2.5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-forest-800 focus:outline-0',
+            {
+              'cursor-not-allowed !bg-stone-300 !text-stone-500 hover:!bg-stone-300':
+                disabled,
+            }
+          )}
+        >
+          <CartIcon className="h-4 w-4" />
           <span>{t('text-add-cart')}</span>
         </button>
       );

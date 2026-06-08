@@ -57,10 +57,8 @@ export function Grid({
           {
             'grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]':
               column === 'auto',
-            'grid grid-cols-2 gap-3 gap-y-6 sm:gap-4 md:grid-cols-3 md:gap-5 md:gap-y-8 lg:grid-cols-4 xl:grid-cols-5 xl:gap-6':
-              column === 'five',
-            'grid grid-cols-2 gap-3 gap-y-6 sm:gap-4 md:grid-cols-3 md:gap-5 md:gap-y-8 lg:grid-cols-4 xl:grid-cols-5 xl:gap-6':
-              column === 'six',
+            'grid grid-cols-2 gap-3 gap-y-6 sm:gap-4 md:grid-cols-2 md:gap-5 md:gap-y-8 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4':
+              column === 'five' || column === 'six',
           },
           gridClassName,
         )}

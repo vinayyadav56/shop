@@ -25,6 +25,10 @@ const MobileNavigation = dynamic(
     ssr: false,
   },
 );
+const FeaturedPlants = dynamic(
+  () => import('@/components/products/featured-plants'),
+  { ssr: false },
+);
 
 export { getServerSideProps } from '@/framework/search.ssr';
 
@@ -53,6 +57,7 @@ export default function SearchPage() {
   if (error) return <ErrorMessage message={error.message} />;
   return (
     <div className="w-full">
+      <FeaturedPlants />
       <div className="flex flex-col items-center justify-between mb-7 md:flex-row">
         {/* //FIXME: */}
         <SearchCount
@@ -86,7 +91,7 @@ const GetLayout = (page: React.ReactElement) => {
   return (
     <GeneralLayout>
       <>
-        <div className="w-full bg-light">
+        <div className="w-full bg-[linear-gradient(180deg,#FFFFFF_0%,#FBF8F2_48%,#EFF4EC_100%)]">
           <div className="flex w-full min-h-screen px-5 py-10 mx-auto max-w-1920 rtl:space-x-reverse lg:space-x-10 xl:py-14 xl:px-16">
             <div className="hidden w-80 shrink-0 lg:block">
               <StickyBox offsetTop={140} offsetBottom={30}>

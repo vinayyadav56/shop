@@ -27,6 +27,7 @@ interface Props {
     | 'single'
     | 'big'
     | 'text'
+    | 'plantathome'
     | 'florine';
   counterVariant?:
     | 'helium'
@@ -35,6 +36,7 @@ interface Props {
     | 'oganesson'
     | 'single'
     | 'details'
+    | 'plantathome'
     | 'florine';
   counterClass?: string;
   variation?: any;

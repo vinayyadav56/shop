@@ -2,10 +2,16 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { useToggleWishlist } from '@/framework/wishlist';
 import usePrice from '@/lib/use-price';
 import type { Product, Tag } from '@/types';
+
+const AddToCart = dynamic(
+  () => import('@/components/products/add-to-cart/add-to-cart').then((m) => m.AddToCart),
+  { ssr: false },
+);
 
 /* ─── badge helpers ───────────────────────────────────────────── */
 const BADGE_MAP: Record<string, string> = {
@@ -227,32 +233,44 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
           </>
         )}
 
-        <div className="mt-auto flex items-end justify-between gap-2 pt-4">
-          <div className="flex flex-col">
+        <div className="mt-auto pt-4">
+          <div className="mb-3 flex items-end gap-1.5">
             {isVariable && (
-              <span className="text-[9px] uppercase tracking-[0.14em] text-stone-400">from</span>
+              <span className="self-end pb-0.5 text-[9px] uppercase tracking-[0.14em] text-stone-400">from</span>
             )}
-            <span className="flex items-baseline gap-1.5">
-              <span className="text-[19px] font-bold leading-none text-forest-900">
-                {isVariable ? minPrice : price}
-              </span>
-              {!isVariable && basePrice && (
-                <del className="text-[12px] text-stone-400">{basePrice}</del>
-              )}
+            <span className="text-[20px] font-bold leading-none text-forest-900">
+              {isVariable ? minPrice : price}
             </span>
+            {!isVariable && basePrice && (
+              <del className="text-[12px] text-stone-400">{basePrice}</del>
+            )}
             {product.unit && !features.some((f) => f.icon === 'box') && (
-              <span className="mt-0.5 text-[10px] text-stone-400">/ {product.unit}</span>
+              <span className="text-[10px] text-stone-400">/ {product.unit}</span>
             )}
           </div>
 
-          <button
-            type="button"
-            onClick={handleQuickView}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-forest-900 px-4 py-2.5 text-[12.5px] font-semibold text-white transition hover:bg-forest-800"
-          >
-            View Details
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
-          </button>
+          {/* Add to Cart → becomes a quantity counter on click */}
+          <div onClick={(e) => e.stopPropagation()}>
+            {!inStock ? (
+              <button
+                type="button"
+                onClick={handleQuickView}
+                className="flex w-full items-center justify-center rounded-full border border-forest-700/30 px-5 py-2.5 text-[13px] font-semibold text-forest-700 transition hover:bg-forest-700 hover:text-white"
+              >
+                Notify me
+              </button>
+            ) : isVariable ? (
+              <button
+                type="button"
+                onClick={handleQuickView}
+                className="flex w-full items-center justify-center rounded-full bg-forest-900 px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-forest-800"
+              >
+                Select Options
+              </button>
+            ) : (
+              <AddToCart variant="plantathome" counterVariant="plantathome" data={product} />
+            )}
+          </div>
         </div>
       </div>
     </motion.article>
