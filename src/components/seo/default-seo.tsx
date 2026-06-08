@@ -20,9 +20,29 @@ const DefaultSeo = () => {
         },
       ]}
       additionalLinkTags={[
+        // PlantAtHome favicon (replaces the default Pickbazar icon in browser
+        // tabs + Google search results). Absolute paths so they resolve on
+        // deep routes too.
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/favicon.ico',
+        },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '32x32',
+          href: '/icons/favicon-32.png',
+        },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '192x192',
+          href: '/icons/manifest-icon-192.png',
+        },
         {
           rel: 'apple-touch-icon',
-          href: 'icons/apple-icon-180.png',
+          href: '/icons/apple-icon-180.png',
         },
         {
           rel: 'manifest',
