@@ -1,40 +1,23 @@
 'use client';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { useToggleWishlist } from '@/framework/wishlist';
 import usePrice from '@/lib/use-price';
 import type { Product, Tag } from '@/types';
 
-const AddToCart = dynamic(
-  () => import('@/components/products/add-to-cart/add-to-cart').then((m) => m.AddToCart),
-  { ssr: false },
-);
-
-/* ─── helpers ─────────────────────────────────────────────────── */
-const BENEFIT_SLUGS = new Set([
-  'air-purifying','air-purifier','air purifying',
-  'pet-friendly','pet friendly',
-  'low-light','low light',
-  'easy-care','easy care','easy to grow',
-  'rare','rare plant',
-  'flowering','blooms',
-  'fast-growing','fast growing',
-  'drought-tolerant',
-]);
-
+/* ─── badge helpers ───────────────────────────────────────────── */
 const BADGE_MAP: Record<string, string> = {
-  'best-seller':   'Best Seller',
-  'bestseller':    'Best Seller',
-  'best seller':   'Best Seller',
-  'editors-pick':  "Editor's Pick",
+  'best-seller': 'Best Seller',
+  bestseller: 'Best Seller',
+  'best seller': 'Best Seller',
+  'editors-pick': "Editor's Pick",
   "editor's pick": "Editor's Pick",
-  'new-arrival':   'New Arrival',
-  'new arrival':   'New Arrival',
-  'air-purifier':  'Air Purifier',
-  'air purifier':  'Air Purifier',
+  'new-arrival': 'New Arrival',
+  'new arrival': 'New Arrival',
+  'air-purifier': 'Air Purifier',
+  'air purifier': 'Air Purifier',
 };
 
 function getBadge(tags: Tag[] = []) {
@@ -47,33 +30,69 @@ function getBadge(tags: Tag[] = []) {
   return null;
 }
 
-function getBenefits(tags: Tag[] = []) {
-  return tags
-    .filter((t) => BENEFIT_SLUGS.has((t.slug ?? t.name ?? '').toLowerCase()) ||
-                   BENEFIT_SLUGS.has((t.name ?? '').toLowerCase()))
-    .slice(0, 2)
-    .map((t) => t.name);
+/* ─── feature-grid icons (reference: car-spec row → plant attrs) ── */
+const FeatIcon: Record<string, React.ReactNode> = {
+  sun: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" /></svg>
+  ),
+  water: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" /></svg>
+  ),
+  ruler: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 8l13 13 5-5L8 3z" /><path d="M7 7l2 2M11 5l2 2M15 9l2 2M9 13l2 2" /></svg>
+  ),
+  paw: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="4" r="2" /><circle cx="18" cy="8" r="2" /><circle cx="5" cy="9" r="2" /><path d="M8.5 14a3.5 3.5 0 0 1 7 0c0 1.5-1 2-1 3.5a2.5 2.5 0 0 1-5 0c0-1.5-1-2-1-3.5z" /></svg>
+  ),
+  box: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" /></svg>
+  ),
+  leaf: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z" /><path d="M2 21c0-3 1.85-5.36 5.08-6" /></svg>
+  ),
+  pin: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+  ),
+};
+
+/** Map whatever attributes a product has into a small icon feature grid. */
+function getFeatures(product: Product): { icon: string; label: string }[] {
+  const pa: any = (product as any)?.plant_attribute ?? {};
+  const out: { icon: string; label: string }[] = [];
+  const push = (icon: string, label?: string | null) => {
+    if (label && String(label).trim()) out.push({ icon, label: String(label).trim() });
+  };
+  push('sun', pa.sunlight);
+  push('water', pa.water_requirement);
+  push('ruler', pa.height_range);
+  if (pa.pet_friendly ?? (product as any)?.pet_friendly) out.push({ icon: 'paw', label: 'Pet-friendly' });
+  push('pin', pa.origin ?? (product as any)?.origin);
+  push('box', product.unit);
+  // fallback: surface benefit/care tags so the grid is never empty
+  if (out.length < 2 && Array.isArray(product.tags)) {
+    for (const t of product.tags) {
+      if (out.length >= 4) break;
+      if (t?.name) out.push({ icon: 'leaf', label: t.name });
+    }
+  }
+  return out.slice(0, 4);
 }
 
-function getBotanical(product: Product): string {
-  // prefer a real scientific name if present
-  const sci = (product as any)?.scientific_name as string | undefined;
-  if (sci) return sci;
-  const firstLine = product.description?.split(/\n|<br/)[0]?.replace(/<[^>]+>/g, '').trim();
-  if (firstLine && firstLine.length < 48) return firstLine;
-  return '';
-}
-
-/* ─── Loading Skeleton ─────────────────────────────────────────── */
+/* ─── Loading Skeleton (export kept for callers) ───────────────── */
 export const PlantAtHomeCardSkeleton: React.FC = () => (
-  <div className="flex h-full flex-col overflow-hidden rounded-md border border-kraft-200/70 bg-white">
-    <div className="aspect-[4/5] w-full animate-pulse bg-gradient-to-br from-[#F2F1EC] to-[#E7EEE2]" />
-    <div className="flex flex-1 flex-col gap-2 p-3">
-      <div className="h-3.5 w-4/5 animate-pulse rounded bg-stone-200/80" />
-      <div className="h-2.5 w-2/5 animate-pulse rounded bg-stone-200/60" />
+  <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-kraft-200/70 bg-white">
+    <div className="aspect-[4/3] w-full animate-pulse bg-gradient-to-br from-[#F2F1EC] to-[#E7EEE2]" />
+    <div className="flex flex-1 flex-col gap-2 p-4">
+      <div className="h-4 w-4/5 animate-pulse rounded bg-stone-200/80" />
+      <div className="grid grid-cols-2 gap-2 pt-1">
+        <div className="h-3 w-full animate-pulse rounded bg-stone-200/60" />
+        <div className="h-3 w-full animate-pulse rounded bg-stone-200/60" />
+        <div className="h-3 w-full animate-pulse rounded bg-stone-200/60" />
+        <div className="h-3 w-full animate-pulse rounded bg-stone-200/60" />
+      </div>
       <div className="mt-auto flex items-center justify-between pt-3">
-        <div className="h-4 w-1/3 animate-pulse rounded bg-stone-200/80" />
-        <div className="h-8 w-8 animate-pulse rounded-full bg-stone-200/70" />
+        <div className="h-5 w-1/3 animate-pulse rounded bg-stone-200/80" />
+        <div className="h-9 w-28 animate-pulse rounded-full bg-stone-200/70" />
       </div>
     </div>
   </div>
@@ -81,13 +100,12 @@ export const PlantAtHomeCardSkeleton: React.FC = () => (
 
 /* ─── Heart icon ───────────────────────────────────────────────── */
 const Heart = ({ active }: { active: boolean }) => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill={active ? '#C26B45' : 'none'}
-    stroke={active ? '#C26B45' : '#2E5E2A'} strokeWidth="1.8">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill={active ? '#C26B45' : 'none'} stroke={active ? '#C26B45' : '#2E5E2A'} strokeWidth="1.8">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
   </svg>
 );
 
-/* ─── Main small-luxury listing card ──────────────────────────── */
+/* ─── Reference-style listing card ─────────────────────────────── */
 type Props = { product: Product; className?: string };
 
 const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
@@ -102,17 +120,15 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
   });
   const { price: minPrice } = usePrice({ amount: product.min_price });
 
-  const badge     = getBadge(product.tags);
-  const benefits  = getBenefits(product.tags);
-  const botanical = getBotanical(product);
-  const inStock   = Number(product.quantity) > 0;
+  const badge = getBadge(product.tags);
+  const features = getFeatures(product);
+  const inStock = Number(product.quantity) > 0;
   const isVariable = product.product_type?.toLowerCase() === 'variable';
   const image = product.image?.original ?? product.image?.thumbnail ?? '';
 
   function handleQuickView() {
     openModal('PRODUCT_DETAILS', product.slug);
   }
-
   async function handleWishlist(e: React.MouseEvent) {
     e.stopPropagation();
     setWishlisting(true);
@@ -122,23 +138,23 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
 
   return (
     <motion.article
-      whileHover={{ y: -3 }}
+      whileHover={{ y: -4 }}
       transition={{ duration: 0.25 }}
-      className={`group flex h-full flex-col overflow-hidden rounded-md border border-kraft-200/80 bg-white transition-all duration-300 hover:border-[#B58E39]/40 hover:shadow-[0_10px_30px_-12px_rgba(34,48,26,0.18)] ${className}`}
+      className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-kraft-200/80 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-all duration-300 hover:border-[#B58E39]/40 hover:shadow-[0_14px_34px_-14px_rgba(34,48,26,0.22)] ${className}`}
     >
-      {/* photo — real photo, else cream→sage panel with mark + name */}
+      {/* photo */}
       <button
         type="button"
         onClick={handleQuickView}
         aria-label={`View ${product.name}`}
-        className="relative block aspect-[4/5] w-full overflow-hidden bg-[radial-gradient(130%_130%_at_30%_15%,#FAF9F6,#E7EEE2_60%,#D2E0CB)] text-left"
+        className="relative block aspect-[4/3] w-full overflow-hidden bg-[radial-gradient(130%_130%_at_30%_15%,#FAF9F6,#E7EEE2_60%,#D2E0CB)] text-left"
       >
         {image && !imgError ? (
           <Image
             src={image}
             alt={product.name}
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             onError={() => setImgError(true)}
             className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
           />
@@ -150,33 +166,32 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
           </span>
         )}
 
-        {/* badge / flash / discount — single, top-left */}
+        {/* badge / flash / discount — top-left pill */}
         {badge ? (
-          <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-forest-900/90 px-2 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur">
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold text-forest-900 shadow-sm backdrop-blur">
             {badge}
           </span>
         ) : product.in_flash_sale ? (
-          <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-[#C26B45]/95 px-2 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur">
-            Flash Deal
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-[#FCE9D9] px-2.5 py-1 text-[10px] font-bold text-[#B4501E] shadow-sm">
+            🔥 Flash Deal
           </span>
         ) : discount ? (
-          <span className="absolute left-2.5 top-2.5 z-10 rounded-full border border-[#B58E39]/60 bg-white/85 px-2 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em] text-[#8a6a23] backdrop-blur">
-            {discount}
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-[#E8F3EC] px-2.5 py-1 text-[10px] font-bold text-[#1F6B3B] shadow-sm">
+            {discount} Off
           </span>
         ) : null}
 
-        {/* wishlist */}
+        {/* wishlist — always-visible white circle (reference) */}
         <button
           type="button"
           onClick={handleWishlist}
           disabled={wishlisting}
-          className="absolute right-2.5 top-2.5 z-10 grid h-7 w-7 place-items-center rounded-full bg-white/80 opacity-0 backdrop-blur transition group-hover:opacity-100 hover:bg-white focus:opacity-100 disabled:opacity-60"
+          className="absolute right-3 top-3 z-10 grid h-8 w-8 place-items-center rounded-full bg-white/95 shadow-sm backdrop-blur transition hover:scale-105 hover:bg-white disabled:opacity-60"
           aria-label="Add to wishlist"
         >
           <Heart active={!!product.in_wishlist} />
         </button>
 
-        {/* out of stock */}
         {!inStock && (
           <span className="absolute inset-0 z-10 flex items-center justify-center bg-white/55 backdrop-blur-[1px]">
             <span className="rounded-full bg-forest-900/85 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
@@ -186,64 +201,58 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
         )}
       </button>
 
-      {/* body — tight, editorial */}
-      <div className="flex flex-1 flex-col p-3">
+      {/* body */}
+      <div className="flex flex-1 flex-col p-4">
         <button
           type="button"
           onClick={handleQuickView}
-          className="text-left font-serif text-[15px] font-semibold leading-[1.15] text-forest-900 transition line-clamp-2 hover:text-forest-700 sm:text-base"
+          className="text-left text-[15px] font-semibold leading-snug text-forest-900 transition line-clamp-1 hover:text-forest-700"
         >
           {product.name}
         </button>
 
-        {botanical && (
-          <p className="mt-0.5 font-serif text-[11px] italic text-stone-500 line-clamp-1">{botanical}</p>
+        {features.length > 0 && (
+          <>
+            <p className="mt-2 text-[10px] font-medium uppercase tracking-[0.12em] text-stone-400">
+              Features
+            </p>
+            <div className="mt-1.5 grid grid-cols-2 gap-x-3 gap-y-1.5">
+              {features.map((f, i) => (
+                <span key={i} className="flex items-center gap-1.5 text-[11.5px] text-stone-600">
+                  <span className="text-forest-600">{FeatIcon[f.icon]}</span>
+                  <span className="truncate capitalize">{f.label}</span>
+                </span>
+              ))}
+            </div>
+          </>
         )}
 
-        {benefits.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-1">
-            {benefits.map((b) => (
-              <span
-                key={b}
-                className="rounded-full bg-sage-100/70 px-2 py-[2px] text-[10px] font-medium text-forest-800"
-              >
-                {b}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <div className="mt-auto flex items-end justify-between gap-2 pt-3">
+        <div className="mt-auto flex items-end justify-between gap-2 pt-4">
           <div className="flex flex-col">
             {isVariable && (
               <span className="text-[9px] uppercase tracking-[0.14em] text-stone-400">from</span>
             )}
             <span className="flex items-baseline gap-1.5">
-              <span className="font-serif text-[17px] font-semibold leading-none text-forest-900">
+              <span className="text-[19px] font-bold leading-none text-forest-900">
                 {isVariable ? minPrice : price}
               </span>
               {!isVariable && basePrice && (
-                <del className="text-[11px] text-stone-400">{basePrice}</del>
+                <del className="text-[12px] text-stone-400">{basePrice}</del>
               )}
             </span>
-            {product.unit && (
+            {product.unit && !features.some((f) => f.icon === 'box') && (
               <span className="mt-0.5 text-[10px] text-stone-400">/ {product.unit}</span>
             )}
           </div>
 
-          <div onClick={(e) => e.stopPropagation()} className="shrink-0">
-            {inStock ? (
-              <AddToCart variant="argon" data={product} />
-            ) : (
-              <button
-                type="button"
-                onClick={handleQuickView}
-                className="rounded-full border border-forest-700/30 px-3 py-1.5 text-[11px] font-medium text-forest-700 transition hover:bg-forest-700 hover:text-white"
-              >
-                Notify
-              </button>
-            )}
-          </div>
+          <button
+            type="button"
+            onClick={handleQuickView}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-forest-900 px-4 py-2.5 text-[12.5px] font-semibold text-white transition hover:bg-forest-800"
+          >
+            View Details
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+          </button>
         </div>
       </div>
     </motion.article>
