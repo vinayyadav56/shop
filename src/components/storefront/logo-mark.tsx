@@ -1,3 +1,5 @@
+import { useSettings } from '@/framework/settings';
+
 /** Larger house + plant line mark for the product-card placeholder (matches the
  *  reference art): a rounded house outline with a sprout of leaves growing inside. */
 export function PlantMark({
@@ -68,6 +70,27 @@ export function BrandLogo({
   light?: boolean;
   className?: string;
 }) {
+  // Admin-managed logos (Tools → Logo & Branding). The transparent-over-hero
+  // header uses the light variant; the solid header uses the dark variant (or the
+  // main logo). Falls back to the built-in PlantAtHome mark when unset.
+  const { settings }: any = useSettings();
+  const uploaded = light
+    ? settings?.headerLogoLight?.original
+    : settings?.headerLogoDark?.original || settings?.logo?.original;
+
+  if (uploaded) {
+    return (
+      <span className={`inline-flex items-center ${className}`}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={uploaded}
+          alt={settings?.siteTitle || 'PlantAtHome'}
+          className="h-9 w-auto object-contain object-left"
+        />
+      </span>
+    );
+  }
+
   const fg = light ? 'text-white' : 'text-forest';
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
