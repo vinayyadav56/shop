@@ -3,16 +3,23 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { WordReveal, Magnetic } from '../motion';
 import { Icon } from '../icons';
+import { useSettings } from '@/framework/settings';
 
-// Premium nature footage (Pexels, hotlinkable) + local poster fallback.
-const STORY_VIDEO =
+// Defaults (used when admin → Storefront Media hasn't set a custom clip).
+const DEFAULT_STORY_VIDEO =
   'https://videos.pexels.com/video-files/3571264/3571264-hd_1920_1080_30fps.mp4';
-const STORY_VIDEO_ALT =
+const DEFAULT_STORY_VIDEO_ALT =
   'https://videos.pexels.com/video-files/3571264/3571264-hd_1920_1080_30fps.mp4';
-const STORY_POSTER = '/story-ocean-poster.png';
+const DEFAULT_STORY_POSTER = '/story-ocean-poster.png';
 
 /** Pinned full-screen video story block: content reveals over the clip on scroll. */
 export function StoryVideo() {
+  const { settings } = useSettings();
+  const sm = (settings as any)?.sectionMedia ?? {};
+  const STORY_VIDEO = sm.storyVideo || DEFAULT_STORY_VIDEO;
+  const STORY_VIDEO_ALT = sm.storyVideoAlt || DEFAULT_STORY_VIDEO_ALT;
+  const STORY_POSTER = sm.storyPoster || DEFAULT_STORY_POSTER;
+
   const ref = React.useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,

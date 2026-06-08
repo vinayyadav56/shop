@@ -1,4 +1,7 @@
 import Link from 'next/link';
+import { useSettings } from '@/framework/settings';
+
+const DEFAULT_GARDEN_BAND_IMG = '/images/garden/hero.jpg';
 
 /**
  * Homepage CTA band promoting the home-garden service (lead-gen + packages).
@@ -6,11 +9,15 @@ import Link from 'next/link';
  * curated needs or buy a gardening package.
  */
 export function GardenServiceBand() {
+  const { settings } = useSettings();
+  const gardenImg =
+    (settings as any)?.sectionMedia?.gardenBandImage || DEFAULT_GARDEN_BAND_IMG;
   return (
     <section className="px-5 py-10 sm:px-8">
       <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/garden/hero.jpg"
+          src={gardenImg}
           alt="Home garden built by experts"
           className="absolute inset-0 h-full w-full object-cover"
         />

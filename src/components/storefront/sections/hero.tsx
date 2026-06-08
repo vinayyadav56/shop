@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Icon } from '../icons';
 import { Magnetic, WordReveal, KenBurns, EXPO } from '../motion';
 import { VideoModal } from './video-modal';
+import { useSettings } from '@/framework/settings';
 
 export function Hero({
   scenes,
@@ -26,6 +27,11 @@ export function Hero({
   tourTitle?: string;
   tourSubtitle?: string;
 }) {
+  const { settings } = useSettings();
+  // admin → Storefront Media can override the hero background with one image
+  const heroImage = (settings as any)?.sectionMedia?.heroImage;
+  const heroScenes = heroImage ? [heroImage] : scenes;
+
   const [tour, setTour] = React.useState(false);
   const ref = React.useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -42,7 +48,7 @@ export function Hero({
   return (
     <section ref={ref} className="relative h-[100svh] min-h-[640px] w-full overflow-hidden">
       <motion.div style={{ y: bgY, scale: bgScale }} className="absolute inset-0">
-        <KenBurns images={scenes} interval={6} />
+        <KenBurns images={heroScenes} interval={6} />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-t from-deep/85 via-deep/25 to-deep/40" />
       <div className="absolute inset-0 bg-gradient-to-r from-deep/75 via-deep/10 to-transparent" />

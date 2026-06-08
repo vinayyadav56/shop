@@ -2,16 +2,22 @@ import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { WordReveal, Magnetic } from '../motion';
+import { useSettings } from '@/framework/settings';
 
-// Business-relevant plant-care footage (Pexels, hotlinkable) + matching poster.
-// 7048904 = hands watering young seedlings in pots; 853915 = watering fresh greens.
-const RITUAL_VIDEO =
+// Defaults (used when admin → Storefront Media hasn't set a custom clip).
+const DEFAULT_RITUAL_VIDEO =
   'https://videos.pexels.com/video-files/7048904/7048904-hd_1920_1080_30fps.mp4';
-const RITUAL_VIDEO_ALT =
+const DEFAULT_RITUAL_VIDEO_ALT =
   'https://videos.pexels.com/video-files/853915/853915-hd_1920_1080_25fps.mp4';
-const RITUAL_POSTER = '/images/sections/ritual-bg.jpg';
+const DEFAULT_RITUAL_POSTER = '/images/sections/ritual-bg.jpg';
 
 export function RitualVideo() {
+  const { settings } = useSettings();
+  const sm = (settings as any)?.sectionMedia ?? {};
+  const RITUAL_VIDEO = sm.ritualVideo || DEFAULT_RITUAL_VIDEO;
+  const RITUAL_VIDEO_ALT = sm.ritualVideoAlt || DEFAULT_RITUAL_VIDEO_ALT;
+  const RITUAL_POSTER = sm.ritualPoster || DEFAULT_RITUAL_POSTER;
+
   const ref = React.useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
