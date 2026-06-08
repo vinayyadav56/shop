@@ -125,10 +125,13 @@ jobs:
             --build-env "NEXT_PUBLIC_ADMIN_URL=https://plantathome-admin-staging.vercel.app" \
             --build-env "NEXT_PUBLIC_DEFAULT_LANGUAGE=en" \
             --build-env "NEXT_PUBLIC_ENABLE_MULTI_LANG=false" \
-            --build-env "NEXT_PUBLIC_GOOGLE_MAP_API_KEY=$GOOGLE_MAP_API_KEY"
+            --build-env "NEXT_PUBLIC_GOOGLE_MAP_API_KEY=$GOOGLE_MAP_API_KEY" \
+            --env "CHATBOT_SERVICE_URL=https://chatbot-service-production-321d.up.railway.app" \
+            --env "CHATBOT_SERVICE_API_KEY=$AI_CHAT_SHARED_SECRET"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_SHOP_PROJECT_ID }}
           STAGING_RAZORPAY_KEY_ID: ${{ secrets.STAGING_RAZORPAY_KEY_ID }}
           GOOGLE_MAP_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAP_API_KEY }}
+          AI_CHAT_SHARED_SECRET: ${{ secrets.AI_CHAT_SHARED_SECRET }}
