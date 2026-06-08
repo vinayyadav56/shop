@@ -111,6 +111,7 @@ export const siteSettings = {
     app_store_link: '/',
   },
   headerLinks: [
+    { href: Routes.trackOrder, icon: null, label: 'Track Order' },
     { href: Routes.shops, icon: null, label: 'nav-menu-shops' },
     { href: Routes.coupons, icon: null, label: 'nav-menu-offer' },
     { href: Routes.flashSale, label: 'nav-menu-flash-sale' },

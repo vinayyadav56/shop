@@ -10,6 +10,7 @@ export const Routes = {
   verifyEmail: '/verify-email',
   changePassword: '/change-password',
   orders: '/orders',
+  trackOrder: '/track-order',
   order: (tracking_number: string) =>
     `/orders/${encodeURIComponent(tracking_number)}`,
   refunds: '/refunds',
