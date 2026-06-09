@@ -40,6 +40,11 @@ export default class CustomDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap"
             rel="stylesheet"
           />
+          {/* Poppins (geometric headings) + Caveat (script subtitle) for the product page */}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <Main />

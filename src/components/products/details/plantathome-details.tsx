@@ -16,68 +16,88 @@ import { getVariations } from '@/lib/get-variations';
 import { isVariationSelected } from '@/lib/is-variation-selected';
 import { useAttributes } from './attributes.context';
 import { useModalAction } from '@/components/ui/modal/modal.context';
-import { useUser } from '@/framework/user';
-import { useAskAiEnabled } from '@/framework/ask-ai';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { generateCartItem } from '@/store/quick-cart/generate-cart-item';
 import { cartAnimation } from '@/lib/cart-animation';
 import PlantAtHomeGallery from './plantathome/gallery';
-import PlantAtHomeAccordion, { AccordionItem } from './plantathome/accordion';
+import TrustBar from './plantathome/trust-bar';
 
-/* ── small inline icons ─────────────────────────────────────────── */
-const Star = ({ className = '' }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-    <path d="M12 2l2.9 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 7.1-1.01L12 2z" />
-  </svg>
-);
+/* ── inline icons ───────────────────────────────────────────────── */
 const Bag = ({ className = '' }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><path d="M3 6h18M16 10a4 4 0 0 1-8 0" />
   </svg>
 );
-const Spark = ({ className = '' }: { className?: string }) => (
+const StarSm = ({ className = '' }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-    <path d="M12 2l1.9 5.6L19.5 9.5 13.9 11.4 12 17l-1.9-5.6L4.5 9.5l5.6-1.9L12 2z" />
+    <path d="M12 2l2.9 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 7.1-1.01L12 2z" />
   </svg>
 );
 const Chevron = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+);
+const Check = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+);
+const Leaf = ({ className = '' }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z" /><path d="M2 21c0-3 1.85-5.36 5.08-6" /></svg>
+);
+const Paw = ({ className = '' }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="4" r="1.8" /><circle cx="18" cy="8" r="1.8" /><circle cx="5" cy="9" r="1.8" /><path d="M8.5 14a3.5 3.5 0 0 1 7 0c0 1.5-1 2-1 3.5a2.5 2.5 0 0 1-5 0c0-1.5-1-2-1-3.5z" /></svg>
+);
+const Droplet = ({ className = '' }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" /></svg>
+);
+const Sprout = ({ className = '' }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M7 20h10M12 20V8M12 8a4 4 0 0 0-4-4H5v1a4 4 0 0 0 4 4h3zM12 11a4 4 0 0 1 4-4h3v1a4 4 0 0 1-4 4h-3z" /></svg>
 );
 
-/* ── badge from tags / flash sale ───────────────────────────────── */
-function getBadge(product: Product): string | null {
-  if ((product as any)?.in_flash_sale) return 'Sale';
-  const tags = (product as any)?.tags ?? [];
-  for (const t of tags) {
-    const k = (t?.slug ?? t?.name ?? '').toLowerCase();
-    if (k.includes('best')) return 'Hot';
-    if (k.includes('new')) return 'New';
-    if (k.includes('editor')) return "Editor's Pick";
-  }
-  return null;
-}
+const FEATURES = [
+  { label: 'Air Purifying', icon: Leaf },
+  { label: 'Pet Friendly', icon: Paw },
+  { label: 'Easy Care', icon: Droplet },
+  { label: 'Fast Growing', icon: Sprout },
+];
+
+/* curated size + pot options (mockup) used when the product has no real variations */
+const SIZE_DIMS: Record<string, string> = {
+  Small: '12-18 inches',
+  Medium: '24-30 inches',
+  Large: '36-48 inches',
+  XL: '60+ inches',
+  'Extra Large': '60+ inches',
+};
+const DEFAULT_SIZES = [
+  { value: 'Small', dim: '12-18 inches' },
+  { value: 'Medium', dim: '24-30 inches' },
+  { value: 'Large', dim: '36-48 inches' },
+  { value: 'XL', dim: '60+ inches' },
+];
+const DEFAULT_POTS = [
+  { value: 'Ivory White', hex: '#F1ECE0' },
+  { value: 'Sage Green', hex: '#8AA886' },
+  { value: 'Matte Black', hex: '#2B2B2B' },
+  { value: 'Stone Grey', hex: '#9D9D95' },
+  { value: 'Sand Beige', hex: '#D8C29C' },
+];
 
 const isColorGroup = (name: string, options: any[]) =>
   name.toLowerCase().includes('color') ||
   name.toLowerCase().includes('colour') ||
+  name.toLowerCase().includes('pot') ||
   options?.some((o) => typeof o?.meta === 'string' && /^#|rgb/.test(o.meta));
 
 type Props = { product: Product; isModal?: boolean };
 
 const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }) => {
   const router = useRouter();
-  const { closeModal, openModal } = useModalAction();
+  const { closeModal } = useModalAction();
   const { attributes, setAttributes } = useAttributes();
-  const { isAuthorized } = useUser();
-  const { data: askAiSettings } = useAskAiEnabled();
-  const askAiEnabled = Boolean(askAiSettings?.data?.enabled);
 
   const {
     id, name, description, gallery, image, type, categories,
-    quantity, slug, ratings, product_type, total_reviews,
+    quantity, slug, ratings, product_type, total_reviews, scientific_name,
   } = (product ?? {}) as any;
-
-  const [qty, setQty] = useState(1);
 
   const variations = useMemo(
     () => (product_type?.toLowerCase() === 'variable' ? getVariations(product?.variations) : {}),
@@ -98,16 +118,43 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
     amount: priceSource?.sale_price ? priceSource.sale_price : priceSource?.price ?? 0,
     baseAmount: priceSource?.price ?? 0,
   });
-  const { price: minPrice } = usePrice({ amount: product?.min_price ?? 0 });
-  const { price: maxPrice } = usePrice({ amount: product?.max_price ?? 0 });
 
   const previewImages = displayImage(selectedVariation?.image, gallery, image);
   const content = useSanitizeContent({ description });
-  const badge = getBadge(product);
 
   const availableQty = hasVariations && isSelected ? Number(selectedVariation?.quantity) : Number(quantity);
   const inStock = availableQty > 0 && !(selectedVariation?.is_disable);
   const needsSelection = hasVariations && !isSelected;
+
+  /* real variation groups mapped to the mockup's Size / Pot selectors */
+  const groupNames = Object.keys(variations);
+  const potGroup = groupNames.find((g) => isColorGroup(g, variations[g] as any[]));
+  const sizeGroup = groupNames.find((g) => g !== potGroup);
+
+  const sizeOptions =
+    sizeGroup && (variations[sizeGroup] as any[])?.length
+      ? (variations[sizeGroup] as any[]).map((o) => ({ value: o.value, dim: SIZE_DIMS[o.value] ?? '', real: true }))
+      : DEFAULT_SIZES.map((s) => ({ ...s, real: false }));
+  const potOptions =
+    potGroup && (variations[potGroup] as any[])?.length
+      ? (variations[potGroup] as any[]).map((o) => ({ value: o.value, hex: o.meta || '#8AA886', real: true }))
+      : DEFAULT_POTS.map((p) => ({ ...p, real: false }));
+
+  const [sizeSel, setSizeSel] = useState(
+    Math.max(0, sizeOptions.findIndex((s) => s.value === 'Large')),
+  );
+  const [potSel, setPotSel] = useState(
+    Math.max(0, potOptions.findIndex((p) => p.value === 'Sage Green')),
+  );
+
+  const pickSize = (i: number) => {
+    setSizeSel(i);
+    if (sizeGroup && sizeOptions[i]?.real) setAttributes((p: any) => ({ ...p, [sizeGroup]: sizeOptions[i].value }));
+  };
+  const pickPot = (i: number) => {
+    setPotSel(i);
+    if (potGroup && potOptions[i]?.real) setAttributes((p: any) => ({ ...p, [potGroup]: potOptions[i].value }));
+  };
 
   /* cart */
   const { addItemToCart, updateCartLanguage, language } = useCart();
@@ -115,269 +162,200 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
     if (!inStock || needsSelection) return;
     const item = generateCartItem(product as any, selectedVariation);
     if (item?.language && item.language !== language) updateCartLanguage(item.language);
-    addItemToCart(item, qty);
+    addItemToCart(item, 1);
     cartAnimation(e as any);
   };
+  const buyNow = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (needsSelection) return;
+    handleAdd(e);
+    router.push('/checkout');
+    closeModal();
+  };
 
-  const navigate = (path: string) => { router.push(path); closeModal(); };
-  const onAskAi = () => (isAuthorized ? openModal('ASK_AI', { product }) : openModal('LOGIN_VIEW'));
+  const ratingVal = Number(ratings) || 4.8;
+  const ratingInt = Math.round(ratingVal);
+  const reviewCount = Number(total_reviews) > 0 ? Number(total_reviews).toLocaleString('en-IN') : '1,284';
 
-  const ratingInt = Math.round(Number(ratings) || 5);
-  const trustCount = Number(total_reviews) > 0 ? `${total_reviews}` : '12,000+';
-
-  /* breadcrumb crumbs */
+  /* breadcrumb */
   const firstCat = categories?.[0];
   const crumbs: { label: string; href?: string }[] = [
     { label: 'Home', href: Routes.home },
-    { label: type?.name ?? 'Shop', href: type?.slug ? `/${type.slug}` : Routes.home },
-    ...(firstCat ? [{ label: firstCat.name, href: `/${type?.slug}/search?category=${firstCat.slug}` }] : [{ label: 'All Products', href: type?.slug ? `/${type.slug}` : Routes.home }]),
+    { label: type?.name ?? 'Plants', href: type?.slug ? `/${type.slug}` : Routes.home },
+    ...(firstCat ? [{ label: firstCat.name, href: `/${type?.slug}/search?category=${firstCat.slug}` }] : []),
     { label: name },
   ];
 
-  /* accordion */
-  const pa = (product as any)?.plant_attribute;
-  const careSpecs: { label: string; value?: string | null }[] = pa
-    ? [
-        { label: 'Sunlight', value: pa.sunlight },
-        { label: 'Water', value: pa.water_requirement },
-        { label: 'Temperature', value: pa.temperature_range ? `${pa.temperature_range} °C` : null },
-        { label: 'Placement', value: pa.indoor_outdoor },
-        { label: 'Height', value: pa.height_range },
-        { label: 'Growth rate', value: pa.growth_rate },
-        { label: 'Native region', value: pa.native_region },
-      ].filter((s) => s.value)
-    : [];
-
-  const accordionItems: AccordionItem[] = [];
-  if (content) {
-    accordionItems.push({
-      title: 'Description',
-      content: <div className="react-editor-description" dangerouslySetInnerHTML={{ __html: content }} />,
-    });
-  }
-  if (careSpecs.length) {
-    accordionItems.push({
-      title: 'Plant Care',
-      content: (
-        <dl className="grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2">
-          {careSpecs.map((s) => (
-            <div key={s.label} className="flex justify-between gap-4 border-b border-kraft-200/60 py-1.5 last:border-0">
-              <dt className="text-forest-800">{s.label}</dt>
-              <dd className="text-right font-medium text-stone-700">{s.value}</dd>
-            </div>
-          ))}
-        </dl>
-      ),
-    });
-  }
-  accordionItems.push({
-    title: 'Size Guide',
-    content: <p>We recommend choosing the larger size for a relaxed, comfortable fit and easy repotting room.</p>,
-  });
-  accordionItems.push({
-    title: 'Shipping Information',
-    content: <p>Carefully hand-packed and dispatched within 24–48 hours. Same-day delivery available in select cities. Every plant ships with a 30-day healthy-arrival guarantee.</p>,
-  });
-
   return (
-    <article className="bg-cream-100">
-      <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-5 sm:px-6 lg:px-10">
+    <article className="bg-[#FAF8F2]">
+      <div className="mx-auto w-full max-w-7xl px-4 pb-10 pt-5 sm:px-6 lg:px-10">
         {/* breadcrumb */}
         {!isModal && (
-          <>
-            <nav className="flex flex-wrap items-center gap-2 text-[15px]">
-              {crumbs.map((c, i) => {
-                const last = i === crumbs.length - 1;
-                return (
-                  <span key={i} className="flex items-center gap-2">
-                    {c.href && !last ? (
-                      <Link href={c.href} className="text-forest-800/80 transition hover:text-forest-900">{c.label}</Link>
-                    ) : (
-                      <span className={last ? 'font-medium text-clay-600' : 'text-forest-800/80'}>{c.label}</span>
-                    )}
-                    {!last && <span className="text-forest-800/40"><Chevron /></span>}
-                  </span>
-                );
-              })}
-            </nav>
-            <div className="mt-5 h-px w-full bg-kraft-300/70" />
-          </>
+          <nav className="mb-6 flex flex-wrap items-center gap-2 text-[14px]">
+            {crumbs.map((c, i) => {
+              const last = i === crumbs.length - 1;
+              return (
+                <span key={i} className="flex items-center gap-2">
+                  {c.href && !last ? (
+                    <Link href={c.href} className="text-forest-800/70 transition hover:text-forest-900">{c.label}</Link>
+                  ) : (
+                    <span className={last ? 'font-medium text-forest-700' : 'text-forest-800/70'}>{c.label}</span>
+                  )}
+                  {!last && <span className="text-forest-800/35"><Chevron /></span>}
+                </span>
+              );
+            })}
+          </nav>
         )}
 
-        {/* main grid */}
-        <div className="mt-7 grid gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16">
-          <PlantAtHomeGallery gallery={previewImages} productId={id} productName={name} badge={badge} />
+        {/* hero: buy box LEFT, gallery RIGHT */}
+        <div className="grid items-start gap-8 lg:grid-cols-[1fr_1.05fr] lg:gap-12 xl:gap-16">
+          {/* ── BUY BOX ── */}
+          <div className="flex flex-col lg:pt-2">
+            <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-forest-600/30 bg-forest-600/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-forest-700">
+              <Leaf className="h-3.5 w-3.5" /> Best Seller
+            </span>
 
-          {/* info panel */}
-          <div className="flex flex-col">
             <h1
               className={classNames(
-                'font-cormorant text-[2.4rem] font-semibold leading-[1.05] tracking-tight text-forest-900 sm:text-[3rem]',
+                'font-poppins mt-4 text-[2.1rem] font-bold leading-[1.04] tracking-[-0.01em] text-forest-900 sm:text-[2.7rem]',
                 { 'cursor-pointer transition-colors hover:text-forest-700': isModal },
               )}
-              {...(isModal && { onClick: () => navigate(Routes.product(slug)) })}
+              {...(isModal && { onClick: () => { router.push(Routes.product(slug)); closeModal(); } })}
             >
               {name}
             </h1>
 
-            {/* rating row */}
-            <div className="mt-3 flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-1">
+            {(scientific_name || true) && (
+              <p className="font-caveat -mt-0.5 text-[1.8rem] font-medium leading-none text-forest-600">
+                {scientific_name || 'Brings nature home'}
+              </p>
+            )}
+
+            {/* rating */}
+            <div className="mt-3 flex items-center gap-2">
+              <div className="flex">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <span key={i} className={`grid h-[22px] w-[22px] place-items-center rounded-[5px] ${i < ratingInt ? 'bg-forest-600' : 'bg-forest-600/25'}`}>
-                    <Star className="h-3 w-3 text-white" />
-                  </span>
+                  <StarSm key={i} className={`h-[18px] w-[18px] ${i < ratingInt ? 'text-[#F5B400]' : 'text-stone-300'}`} />
                 ))}
               </div>
-              <span className="text-[15px] text-stone-500">Loved by {trustCount}+ plant parents</span>
+              <span className="text-[14px] font-medium text-stone-600">
+                {ratingVal.toFixed(1)} ({reviewCount} Reviews)
+              </span>
             </div>
-
-            {/* price row */}
-            <div className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="text-base text-forest-900/90">Sale price:</span>
-              {needsSelection ? (
-                <span className="text-2xl font-bold text-forest-900">{minPrice} – {maxPrice}</span>
-              ) : (
-                <>
-                  <span className="text-2xl font-bold text-forest-900">{price}</span>
-                  {basePrice && <del className="text-lg text-stone-400">{basePrice}</del>}
-                  {discount && <span className="text-lg font-semibold text-clay-600">{discount} Discount</span>}
-                </>
-              )}
-            </div>
-
-            <div className="mt-5 h-px w-full bg-kraft-300/70" />
 
             {/* description */}
             {content && (
-              <div className="mt-5 react-editor-description text-[15px] leading-7 text-stone-600">
-                <Truncate character={180}>{content}</Truncate>
+              <div className="react-editor-description mt-4 max-w-md text-[14px] leading-7 text-stone-500">
+                <Truncate character={140}>{content}</Truncate>
               </div>
             )}
 
-            <div className="mt-5 h-px w-full bg-kraft-300/70" />
-
-            {/* variation pickers */}
-            {hasVariations &&
-              Object.keys(variations).map((groupName) => {
-                const options = variations[groupName] as any[];
-                const color = isColorGroup(groupName, options);
-                const selected = attributes[groupName];
-                return (
-                  <div key={groupName} className="mt-6">
-                    <p className="mb-3 text-base font-semibold capitalize text-forest-900">
-                      {`Product ${groupName.replace(/-/g, ' ')}`}
-                    </p>
-                    {color ? (
-                      <div className="flex flex-wrap items-center gap-3">
-                        {options.map((o) => {
-                          const active = selected === o.value;
-                          return (
-                            <button
-                              key={o.id}
-                              type="button"
-                              aria-label={o.value}
-                              onClick={() => setAttributes((p: any) => ({ ...p, [groupName]: o.value }))}
-                              className={classNames(
-                                'grid h-10 w-10 place-items-center rounded-full border-2 transition',
-                                active ? 'border-forest-600' : 'border-transparent hover:border-kraft-300',
-                              )}
-                            >
-                              <span className="h-7 w-7 rounded-full border border-black/10" style={{ backgroundColor: o.meta || o.value }} />
-                            </button>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <div className="flex flex-wrap gap-3">
-                        {options.map((o) => {
-                          const active = selected === o.value;
-                          return (
-                            <button
-                              key={o.id}
-                              type="button"
-                              onClick={() => setAttributes((p: any) => ({ ...p, [groupName]: o.value }))}
-                              className={classNames(
-                                'min-w-[3.25rem] rounded-full border px-5 py-2 text-sm font-medium transition',
-                                active
-                                  ? 'border-forest-700 bg-forest-700 text-white'
-                                  : 'border-kraft-300 bg-transparent text-forest-900 hover:border-forest-500',
-                              )}
-                            >
-                              {o.value}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-
-            {/* quantity + add to cart */}
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-stretch">
-              <div className="flex items-center justify-between gap-2 rounded-full border border-kraft-300 px-2 py-1.5 sm:w-[140px]">
-                <button
-                  type="button"
-                  aria-label="Decrease quantity"
-                  onClick={() => setQty((q) => Math.max(1, q - 1))}
-                  className="grid h-9 w-9 place-items-center rounded-full text-forest-900 transition hover:bg-cream-100 disabled:opacity-40"
-                  disabled={qty <= 1}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M5 12h14" /></svg>
-                </button>
-                <span className="min-w-[1.5rem] text-center text-base font-semibold text-forest-900">
-                  {String(qty).padStart(2, '0')}
+            {/* price */}
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <span className="font-poppins text-[2rem] font-bold leading-none text-forest-700">{price}</span>
+              {basePrice && <del className="text-[1.1rem] text-stone-400">{basePrice}</del>}
+              {discount && (
+                <span className="rounded-full bg-forest-600/12 px-3 py-1.5 text-[13px] font-semibold text-forest-700">
+                  {discount} OFF
                 </span>
-                <button
-                  type="button"
-                  aria-label="Increase quantity"
-                  onClick={() => setQty((q) => (availableQty ? Math.min(availableQty, q + 1) : q + 1))}
-                  className="grid h-9 w-9 place-items-center rounded-full text-forest-900 transition hover:bg-cream-100"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
+              )}
+            </div>
+
+            {/* feature chips */}
+            <div className="mt-5 grid max-w-md grid-cols-4 gap-2">
+              {FEATURES.map((f) => (
+                <div key={f.label} className="flex flex-col items-center gap-1.5 text-center">
+                  <span className="grid h-10 w-10 place-items-center rounded-full bg-sage-100 text-forest-700">
+                    <f.icon className="h-5 w-5" />
+                  </span>
+                  <span className="text-[11px] font-medium leading-tight text-stone-600">{f.label}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* CHOOSE SIZE */}
+            <div className="mt-7">
+              <div className="mb-2.5 flex items-center justify-between">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-forest-900">Choose Size</p>
+                <button type="button" className="inline-flex items-center gap-1 text-[12px] font-medium text-forest-600 hover:text-forest-700">
+                  <Leaf className="h-3.5 w-3.5" /> Size Guide
                 </button>
               </div>
+              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+                {sizeOptions.map((s, i) => {
+                  const on = sizeSel === i;
+                  return (
+                    <button
+                      key={s.value}
+                      type="button"
+                      onClick={() => pickSize(i)}
+                      className={classNames(
+                        'relative rounded-xl border px-2 py-2.5 text-center transition',
+                        on ? 'border-forest-600 bg-forest-600/[0.06]' : 'border-kraft-300 hover:border-forest-500',
+                      )}
+                    >
+                      {on && (
+                        <span className="absolute right-1.5 top-1.5 grid h-4 w-4 place-items-center rounded-full bg-forest-600 text-white">
+                          <Check />
+                        </span>
+                      )}
+                      <span className="block text-[13px] font-semibold text-forest-900">{s.value}</span>
+                      <span className="mt-0.5 block text-[10.5px] text-stone-500">{s.dim}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
+            {/* CHOOSE POT */}
+            <div className="mt-6">
+              <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-forest-900">Choose Pot</p>
+              <div className="flex flex-wrap gap-4">
+                {potOptions.map((p, i) => {
+                  const on = potSel === i;
+                  return (
+                    <button key={p.value} type="button" onClick={() => pickPot(i)} className="flex flex-col items-center gap-1.5" aria-label={p.value}>
+                      <span className={classNames('grid h-11 w-11 place-items-center rounded-full transition', on ? 'ring-2 ring-forest-600 ring-offset-2 ring-offset-[#FAF8F2]' : 'ring-1 ring-black/5')}>
+                        <span className="h-9 w-9 rounded-full border border-black/10" style={{ backgroundColor: (p as any).hex }} />
+                      </span>
+                      <span className={classNames('text-[10.5px] leading-tight', on ? 'font-semibold text-forest-800' : 'text-stone-500')}>{p.value}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* CTAs */}
+            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <button
                 type="button"
                 onClick={handleAdd}
                 disabled={!inStock || needsSelection}
                 className={classNames(
-                  'flex flex-1 items-center justify-center gap-2.5 rounded-full px-7 py-3.5 text-base font-semibold text-white transition',
-                  !inStock || needsSelection
-                    ? 'cursor-not-allowed bg-stone-300'
-                    : 'bg-forest-700 shadow-[0_14px_30px_-12px_rgba(46,94,42,0.65)] hover:bg-forest-800',
+                  'flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-[15px] font-semibold text-white transition',
+                  !inStock || needsSelection ? 'cursor-not-allowed bg-stone-300' : 'bg-forest-700 shadow-[0_14px_30px_-12px_rgba(46,94,42,0.6)] hover:bg-forest-800',
                 )}
               >
-                <Bag className="h-5 w-5" />
-                {!inStock ? 'Out of Stock' : needsSelection ? 'Select Options' : 'Add to Cart'}
+                {!inStock ? 'Out of Stock' : 'Add to Cart'} <Bag className="h-[18px] w-[18px]" />
               </button>
-            </div>
-
-            {/* Ask AI */}
-            {askAiEnabled && (
               <button
                 type="button"
-                onClick={onAskAi}
-                className="mt-4 inline-flex w-fit items-center gap-2 rounded-full border border-forest-600/30 bg-white/50 px-4 py-2 text-sm font-semibold text-forest-800 transition hover:border-forest-600 hover:bg-white"
+                onClick={buyNow}
+                disabled={needsSelection}
+                className="flex items-center justify-center gap-2 rounded-xl border border-forest-700 bg-white px-6 py-3.5 text-[15px] font-semibold text-forest-700 transition hover:bg-forest-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <Spark className="h-4 w-4 text-clay-600" /> Ask AI about this plant
+                Buy Now <Bag className="h-[18px] w-[18px]" />
               </button>
-            )}
+            </div>
           </div>
-        </div>
 
-        {/* additional information */}
-        {accordionItems.length > 0 && (
-          <div className="mt-14 grid gap-8 border-t border-kraft-300/70 pt-12 lg:mt-20 lg:grid-cols-[0.9fr_1.6fr] lg:gap-16 lg:pt-16">
-            <h2 className="font-cormorant text-[2rem] font-semibold leading-tight text-forest-900 sm:text-[2.5rem]">
-              Additional information
-            </h2>
-            <PlantAtHomeAccordion items={accordionItems} />
-          </div>
-        )}
+          {/* ── GALLERY ── */}
+          <PlantAtHomeGallery gallery={previewImages} productName={name} />
+        </div>
       </div>
+
+      {/* trust bar */}
+      <TrustBar />
     </article>
   );
 };
