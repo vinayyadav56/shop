@@ -34,6 +34,9 @@ module.exports = {
       's3.amazonaws.com',
       'via.placeholder.com',
       'images.unsplash.com',
+      // API-hosted media (admin uploads land here when not on S3): staging Railway + prod
+      'plantathome-production.up.railway.app',
+      'api.plantathome.in',
     ],
     // Serve modern formats (huge size cut vs the full-size S3 JPEGs) + responsive
     // widths, and cache the optimized variants for 30 days.
