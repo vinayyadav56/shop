@@ -1135,6 +1135,14 @@ article.product-card:hover {
   letter-spacing: 0.02em;
 }
 
+/* Product images fill their frame edge-to-edge (object-cover, no contain padding)
+   in every view — listing cards, quick-view and any default Pickbazar card. */
+.product-image,
+img.product-image {
+  object-fit: cover !important;
+  padding: 0 !important;
+}
+
 /* Product image shine */
 .product-image::after {
   content: '';

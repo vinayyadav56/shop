@@ -67,7 +67,7 @@ const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productId, productName, 
                 }`}
               >
                 {src ? (
-                  <Image src={src} alt={`${productName} ${i + 1}`} fill sizes="104px" className="object-contain p-1.5" />
+                  <Image src={src} alt={`${productName} ${i + 1}`} fill sizes="104px" className="object-cover" />
                 ) : (
                   <span className="grid h-full w-full place-items-center text-forest-700/40">🌿</span>
                 )}
@@ -88,7 +88,7 @@ const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productId, productName, 
               priority
               sizes="(max-width:1024px) 90vw, 560px"
               onError={() => setImgErr((e) => ({ ...e, [active]: true }))}
-              className="object-contain p-8 sm:p-10"
+              className="object-cover"
             />
           ) : (
             <span className="absolute inset-0 grid place-items-center text-forest-800/40">
