@@ -22,17 +22,17 @@ const ITEMS = [
 
 export default function WhyPlantAtHome() {
   return (
-    <div className="rounded-2xl bg-white p-6 shadow-[0_12px_34px_-22px_rgba(34,48,26,0.28)]">
-      <h3 className="font-poppins text-[1.2rem] font-bold text-forest-700">Why PlantAtHome?</h3>
-      <div className="mt-5 grid grid-cols-2 gap-5 sm:grid-cols-4">
+    <div className="rounded-2xl bg-white p-4 shadow-[0_12px_34px_-22px_rgba(34,48,26,0.28)] sm:p-5">
+      <h3 className="font-poppins text-[1.05rem] font-bold text-forest-700">Why PlantAtHome?</h3>
+      <div className="mt-3.5 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {ITEMS.map((it) => (
-          <div key={it.title} className="flex flex-col items-center gap-2 text-center">
-            <span className="grid h-12 w-12 place-items-center rounded-full bg-sage-100 text-forest-700">
-              <it.icon className="h-5 w-5" />
+          <div key={it.title} className="flex flex-col items-center gap-1.5 text-center">
+            <span className="grid h-9 w-9 place-items-center rounded-full bg-sage-100 text-forest-700">
+              <it.icon className="h-[18px] w-[18px]" />
             </span>
-            <span className="text-[12.5px] font-semibold leading-tight text-forest-900">{it.title}</span>
+            <span className="text-[11.5px] font-semibold leading-tight text-forest-900">{it.title}</span>
             <span
-              className="text-[11px] leading-tight text-stone-500"
+              className="text-[10px] leading-tight text-stone-500"
               dangerouslySetInnerHTML={{ __html: it.sub }}
             />
           </div>

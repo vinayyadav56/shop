@@ -33,11 +33,11 @@ export default function SizeGuide({ product }: { product: Product }) {
         Choose the perfect size for your space
       </h3>
 
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-6 flex snap-x gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-4">
         {SIZES.map((s) => (
           <div
             key={s.name}
-            className={`relative flex min-h-[280px] flex-col rounded-2xl border bg-white p-5 ${
+            className={`relative flex min-h-[280px] w-[80%] shrink-0 snap-start flex-col rounded-2xl border bg-white p-5 sm:w-auto ${
               s.highlight ? 'border-forest-600 shadow-[0_14px_34px_-20px_rgba(46,94,42,0.45)]' : 'border-kraft-200'
             }`}
           >

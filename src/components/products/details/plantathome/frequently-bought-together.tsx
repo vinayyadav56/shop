@@ -50,7 +50,7 @@ export default function FrequentlyBoughtTogether({ product }: { product: Product
   return (
     <div className="rounded-2xl bg-white p-6 shadow-[0_12px_34px_-22px_rgba(34,48,26,0.28)]">
       <h3 className="font-poppins text-[1.2rem] font-bold text-forest-700">Frequently Bought Together</h3>
-      <div className="mt-5 flex flex-wrap items-start gap-2">
+      <div className="mt-5 flex flex-nowrap items-start gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {items.map((it: any, i) => (
           <React.Fragment key={i}>
             <div className="flex w-[84px] flex-col items-center text-center">

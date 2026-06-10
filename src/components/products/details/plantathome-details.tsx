@@ -100,7 +100,12 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   const {
     id, name, description, gallery, image, type, categories,
     quantity, slug, ratings, product_type, total_reviews, scientific_name,
+    plant_attribute,
   } = (product ?? {}) as any;
+
+  const pa = (plant_attribute ?? {}) as any;
+  const knownName = (pa.hindi_name || '').trim();
+  const sciName = (pa.scientific_name || scientific_name || '').trim();
 
   const variations = useMemo(
     () => (product_type?.toLowerCase() === 'variable' ? getVariations(product?.variations) : {}),
@@ -205,9 +210,14 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
         {name}
       </h1>
 
-      <p className="font-caveat mt-0.5 text-[1.5rem] font-medium leading-none text-forest-600 sm:text-[1.8rem]">
-        {scientific_name || 'Brings nature home'}
-      </p>
+      {knownName && (
+        <p className="font-caveat mt-1 text-[1.5rem] font-medium leading-none text-forest-600 sm:text-[1.85rem]">
+          {knownName}
+        </p>
+      )}
+      {sciName && (
+        <p className="mt-1 text-[13px] italic text-stone-500">{sciName}</p>
+      )}
 
       <div className="mt-3 flex items-center gap-2">
         <div className="flex">
@@ -220,21 +230,22 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
         </span>
       </div>
 
-      {content && (
-        <div className="react-editor-description mt-4 max-w-md text-[14px] leading-7 text-stone-500">
-          <Truncate character={140}>{content}</Truncate>
-        </div>
-      )}
-
-      <div className="mt-5 flex flex-wrap items-center gap-3">
-        <span className="font-poppins text-[2rem] font-bold leading-none text-forest-700">{price}</span>
-        {basePrice && <del className="text-[1.1rem] text-stone-400">{basePrice}</del>}
+      {/* price — kept high so it's always visible */}
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <span className="font-poppins text-[1.85rem] font-bold leading-none text-forest-700 sm:text-[2rem]">{price}</span>
+        {basePrice && <del className="text-[1.05rem] text-stone-400">{basePrice}</del>}
         {discount && (
           <span className="rounded-full bg-forest-600/12 px-3 py-1.5 text-[13px] font-semibold text-forest-700">
             {discount} OFF
           </span>
         )}
       </div>
+
+      {content && (
+        <div className="react-editor-description mt-4 max-w-md text-[14px] leading-7 text-stone-500">
+          <Truncate character={120}>{content}</Truncate>
+        </div>
+      )}
 
       <div className="mt-5 grid max-w-md grid-cols-4 gap-2">
         {FEATURES.map((f) => (
