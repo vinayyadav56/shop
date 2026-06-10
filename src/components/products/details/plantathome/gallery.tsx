@@ -9,9 +9,9 @@ type Props = {
   productName: string;
 };
 
-// Organic concave curve on the image's RIGHT edge (the boundary with the details).
-// objectBoundingBox units (0..1) → responsive to the panel size.
-const CURVE = 'M0,0 L1,0 C0.83,0.34 0.86,0.74 1,1 L0,1 Z';
+// Multi-lobe organic curve on the image's RIGHT edge (objectBoundingBox 0..1).
+const CURVE =
+  'M0,0 L1,0 C0.82,0.10 0.95,0.20 0.84,0.30 C0.73,0.40 0.95,0.50 0.84,0.60 C0.73,0.70 0.92,0.83 1,1 L0,1 Z';
 
 const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName }) => {
   const images = (gallery?.length ? gallery : [{ original: '', thumbnail: '' }]) as GalleryImage[];
@@ -20,22 +20,30 @@ const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName }) => {
 
   const mainSrc = images[active]?.original || images[active]?.thumbnail || '';
   const thumbs = images.slice(0, 4);
+  const clip = { clipPath: 'url(#pdp-img-curve)', WebkitClipPath: 'url(#pdp-img-curve)' } as React.CSSProperties;
 
   return (
     <div className="relative h-full min-h-[460px] w-full lg:min-h-[620px]">
       {/* responsive clip-path def */}
       <svg width="0" height="0" className="absolute" aria-hidden>
         <defs>
-          <clipPath id="pdp-image-curve" clipPathUnits="objectBoundingBox">
+          <clipPath id="pdp-img-curve" clipPathUnits="objectBoundingBox">
             <path d={CURVE} />
           </clipPath>
         </defs>
       </svg>
 
-      {/* image panel — bleeds left, curved right edge */}
+      {/* back echo layer — same curve, shifted right → a 2nd visible curve */}
+      <div
+        aria-hidden
+        className="absolute inset-0 translate-x-[14px] bg-gradient-to-br from-sage-200 to-sage-100 sm:translate-x-[22px]"
+        style={clip}
+      />
+
+      {/* front image panel — bleeds left, multi-curve right edge */}
       <div
         className="absolute inset-0 bg-gradient-to-br from-[#E9F0E2] via-[#F1F3E8] to-[#F6F2E6]"
-        style={{ clipPath: 'url(#pdp-image-curve)', WebkitClipPath: 'url(#pdp-image-curve)' } as React.CSSProperties}
+        style={clip}
       >
         {mainSrc && !err[active] ? (
           <Image
@@ -79,7 +87,6 @@ const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName }) => {
           );
         })}
 
-        {/* 360° view tile */}
         <button
           type="button"
           aria-label="360 degree view"

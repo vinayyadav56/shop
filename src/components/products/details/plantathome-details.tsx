@@ -21,6 +21,7 @@ import { generateCartItem } from '@/store/quick-cart/generate-cart-item';
 import { cartAnimation } from '@/lib/cart-animation';
 import PlantAtHomeGallery from './plantathome/gallery';
 import TrustBar from './plantathome/trust-bar';
+import SizeGuide from './plantathome/size-guide';
 
 /* ── inline icons ───────────────────────────────────────────────── */
 const Bag = ({ className = '' }: { className?: string }) => (
@@ -81,14 +82,6 @@ const DEFAULT_POTS = [
   { value: 'Matte Black', hex: '#2B2B2B' },
   { value: 'Stone Grey', hex: '#9D9D95' },
   { value: 'Sand Beige', hex: '#D8C29C' },
-];
-
-/* Size Guide chart */
-const SIZE_GUIDE = [
-  { size: 'Small', height: '12 – 18 in', pot: '4 in pot', best: 'Desks, shelves & tabletops' },
-  { size: 'Medium', height: '24 – 30 in', pot: '6 in pot', best: 'Side tables & countertops' },
-  { size: 'Large', height: '36 – 48 in', pot: '8 in pot', best: 'Floor corners & living rooms' },
-  { size: 'XL', height: '60+ in', pot: '12 in pot', best: 'Large rooms, lobbies & villas' },
 ];
 
 const isColorGroup = (name: string, options: any[]) =>
@@ -379,38 +372,16 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
       {sizeGuideOpen && (
         <div className="fixed inset-0 z-[80] grid place-items-center p-4" role="dialog" aria-modal="true" aria-label="Size guide">
           <button type="button" aria-label="Close size guide" onClick={() => setSizeGuideOpen(false)} className="absolute inset-0 cursor-default bg-forest-900/40 backdrop-blur-sm" />
-          <div className="relative w-full max-w-xl overflow-hidden rounded-2xl bg-white shadow-[0_30px_80px_-30px_rgba(34,48,26,0.5)]">
-            <div className="flex items-center justify-between border-b border-kraft-200 px-6 py-4">
-              <h3 className="font-poppins text-lg font-bold text-forest-900">Size Guide</h3>
-              <button type="button" onClick={() => setSizeGuideOpen(false)} aria-label="Close" className="grid h-8 w-8 place-items-center rounded-full text-forest-900 transition hover:bg-cream-100">
-                <X />
-              </button>
-            </div>
-            <div className="p-6">
-              <p className="mb-4 text-[13px] leading-6 text-stone-500">
-                Pick the size that fits your space. Heights are approximate and include the pot.
-              </p>
-              <table className="w-full text-left text-[13px]">
-                <thead>
-                  <tr className="border-b border-kraft-200 text-[11px] font-semibold uppercase tracking-wide text-forest-700">
-                    <th className="py-2 pr-3">Size</th>
-                    <th className="py-2 pr-3">Plant height</th>
-                    <th className="py-2 pr-3">Pot size</th>
-                    <th className="py-2">Best for</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {SIZE_GUIDE.map((r) => (
-                    <tr key={r.size} className="border-b border-kraft-200/60 last:border-0">
-                      <td className="py-2.5 pr-3 font-semibold text-forest-900">{r.size}</td>
-                      <td className="py-2.5 pr-3 text-stone-600">{r.height}</td>
-                      <td className="py-2.5 pr-3 text-stone-600">{r.pot}</td>
-                      <td className="py-2.5 text-stone-600">{r.best}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          <div className="relative max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-2xl bg-[#FAF8F2] p-6 shadow-[0_30px_80px_-30px_rgba(34,48,26,0.5)] sm:p-8">
+            <button
+              type="button"
+              onClick={() => setSizeGuideOpen(false)}
+              aria-label="Close"
+              className="absolute right-4 top-4 z-10 grid h-9 w-9 place-items-center rounded-full bg-white text-forest-900 shadow-sm transition hover:bg-cream-100"
+            >
+              <X />
+            </button>
+            <SizeGuide product={product} />
           </div>
         </div>
       )}
