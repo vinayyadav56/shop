@@ -29,21 +29,21 @@ export function Testimonials() {
   return (
     <section
       id="reviews"
-      className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20 lg:py-24"
+      className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:py-20"
     >
       <FadeUp>
         <p className="mb-3 text-center text-xs font-bold uppercase tracking-[0.25em] text-gold">
           Reviews
         </p>
       </FadeUp>
-      <h2 className="mx-auto mb-10 max-w-2xl text-center font-serif text-4xl font-semibold text-forest sm:mb-14 sm:text-5xl lg:text-6xl">
+      <h2 className="mx-auto mb-10 max-w-2xl text-center font-cormorant text-4xl font-semibold not-italic text-forest sm:mb-14 sm:text-5xl lg:text-6xl">
         <WordReveal text="Plant parents, in their words" />
       </h2>
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3 md:gap-6">
         {TESTIMONIALS.map((t, i) => (
           <FadeUp key={t.name} delay={i * 0.08}>
-            <div className="flex h-full flex-col rounded-[1.6rem] bg-white p-7 shadow-[0_18px_40px_rgba(31,42,33,0.07)]">
-              <Icon.quote className="h-8 w-8 text-[#e1d4b3]" />
+            <div className="flex h-full flex-col rounded-2xl bg-white p-5 shadow-[0_22px_50px_rgba(31,42,33,0.08)] sm:p-7">
+              <Icon.quote className="h-8 w-8 text-goldlight" />
               <p className="mt-4 flex-1 text-[15px] leading-7 text-[#3a4a3e]">
                 “{t.quote}”
               </p>

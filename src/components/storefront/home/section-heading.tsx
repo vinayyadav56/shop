@@ -5,9 +5,11 @@ import { Icon } from '../icons';
 /** Centred eyebrow heading used by the mockup ("SHOP BY CATEGORY", "BEST SELLERS"). */
 export function CenterHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="flex items-center justify-center gap-2 text-center text-[13px] font-bold uppercase tracking-[0.22em] text-forest-800">
+    <h2 className="flex items-center justify-center gap-2.5 text-center text-[13px] font-bold uppercase tracking-[0.25em] text-forest-800">
+      <span aria-hidden className="h-px w-8 bg-gold/50" />
       {children}
-      <Icon.leaf className="h-4 w-4 text-forest-500" />
+      <Icon.leaf className="h-4 w-4 text-gold" />
+      <span aria-hidden className="h-px w-8 bg-gold/50" />
     </h2>
   );
 }

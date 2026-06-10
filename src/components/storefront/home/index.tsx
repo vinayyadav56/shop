@@ -2,6 +2,7 @@
 import React from 'react';
 import type { Category, Product } from '@/types';
 import { HeroPlant } from './hero-plant';
+import { VerticalsShowcase } from './verticals-showcase';
 import { ShopByCategory } from './shop-by-category';
 import { BenefitsStrip } from './benefits-strip';
 import { WhyPlants } from './why-plants';
@@ -29,6 +30,7 @@ export function PlantCompanyHome({
   return (
     <>
       <HeroPlant />
+      <VerticalsShowcase />
       <ShopByCategory categories={categories} isLoading={catLoading} />
       <BenefitsStrip />
       <WhyPlants />

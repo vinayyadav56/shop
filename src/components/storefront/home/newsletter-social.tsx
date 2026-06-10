@@ -14,7 +14,7 @@ export function NewsletterSocial() {
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-14">
         {/* newsletter */}
         <div>
-          <h2 className="text-[13px] font-bold uppercase tracking-[0.22em] text-forest-800">Stay Green, Stay Inspired</h2>
+          <h2 className="text-[12px] font-bold uppercase tracking-[0.22em] text-forest-800 sm:text-[13px]">Stay Green, Stay Inspired</h2>
           <p className="mt-3 max-w-md text-[14px] leading-7 text-forest-800/70">
             Subscribe to get plant care tips, exclusive offers and more.
           </p>
@@ -47,8 +47,8 @@ export function NewsletterSocial() {
 
         {/* follow us */}
         <div>
-          <h2 className="text-[13px] font-bold uppercase tracking-[0.22em] text-forest-800">Follow Us @PlantAtHome</h2>
-          <div className="mt-5 grid grid-cols-5 gap-3">
+          <h2 className="text-[12px] font-bold uppercase tracking-[0.22em] text-forest-800 sm:text-[13px]">Follow Us @PlantAtHome</h2>
+          <div className="mt-5 grid grid-cols-5 gap-2 sm:gap-3">
             {SOCIAL.map((src, i) => (
               <a
                 key={i}

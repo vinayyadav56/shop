@@ -201,22 +201,22 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
 
         {/* badge / flash / discount — top-left pill */}
         {badge ? (
-          <span className="absolute left-3 top-3 z-10 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold text-forest-900 shadow-sm backdrop-blur">
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-white/90 px-2.5 py-1 text-[10.5px] font-bold text-forest-900 shadow-sm backdrop-blur">
             {badge}
           </span>
         ) : product.in_flash_sale ? (
-          <span className="absolute left-3 top-3 z-10 rounded-full bg-[#FCE9D9] px-2.5 py-1 text-[10px] font-bold text-[#B4501E] shadow-sm">
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-[#FCE9D9] px-2.5 py-1 text-[10.5px] font-bold text-[#B4501E] shadow-sm">
             🔥 Flash Deal
           </span>
         ) : discount ? (
-          <span className="absolute left-3 top-3 z-10 rounded-full bg-[#E8F3EC] px-2.5 py-1 text-[10px] font-bold text-[#1F6B3B] shadow-sm">
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-[#E8F3EC] px-2.5 py-1 text-[10.5px] font-bold text-[#1F6B3B] shadow-sm">
             {discount} Off
           </span>
         ) : null}
 
         {!inStock && (
           <span className="absolute inset-0 z-10 flex items-center justify-center bg-white/55 backdrop-blur-[1px]">
-            <span className="rounded-full bg-forest-900/85 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+            <span className="rounded-full bg-forest-900/85 px-3 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-white">
               Out of Stock
             </span>
           </span>
@@ -240,23 +240,23 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
         <button
           type="button"
           onClick={handleQuickView}
-          className="text-left text-[15px] font-semibold leading-snug text-forest-900 transition line-clamp-1 hover:text-forest-700"
+          className="text-left text-[14px] font-semibold leading-snug text-forest-900 transition line-clamp-1 hover:text-forest-700 sm:text-[15px]"
         >
           {product.name}
         </button>
 
         <div className="mt-1.5 flex items-end gap-1.5">
           {isVariable && (
-            <span className="self-end pb-0.5 text-[9px] uppercase tracking-[0.14em] text-stone-400">from</span>
+            <span className="self-end pb-0.5 text-[10.5px] uppercase tracking-[0.14em] text-stone-400">from</span>
           )}
-          <span className="text-[17px] font-bold leading-none text-forest-900">
+          <span className="text-[16px] font-bold leading-none text-forest-900 sm:text-[17px]">
             {isVariable ? minPrice : price}
           </span>
           {!isVariable && basePrice && (
             <del className="text-[11.5px] text-stone-400">{basePrice}</del>
           )}
           {product.unit && (
-            <span className="text-[9px] text-stone-400">/ {product.unit}</span>
+            <span className="text-[10.5px] text-stone-400">/ {product.unit}</span>
           )}
         </div>
 
@@ -268,7 +268,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
             <button
               type="button"
               onClick={handleQuickView}
-              className="flex w-full items-center justify-center rounded-md border border-forest-800/40 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-forest-800 transition hover:bg-forest-800 hover:text-white"
+              className="inline-flex h-10 w-full items-center justify-center rounded-md border border-forest-800/40 px-5 text-[10.5px] font-bold uppercase tracking-[0.12em] text-forest-800 transition hover:bg-forest-800 hover:text-white sm:text-[11px]"
             >
               Notify me
             </button>
@@ -276,7 +276,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
             <button
               type="button"
               onClick={handleQuickView}
-              className="flex w-full items-center justify-center rounded-md bg-forest-800 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-forest-700"
+              className="inline-flex h-10 w-full items-center justify-center rounded-md bg-forest-800 px-5 text-[10.5px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-forest-700 sm:text-[11px]"
             >
               Select Options
             </button>
