@@ -63,7 +63,7 @@ export function HeroPlant() {
           <span className="h-px w-8 bg-goldlight/60" /> India’s Premium Plant Studio
         </motion.span>
 
-        <h1 className="max-w-3xl font-cormorant text-[2.6rem] font-bold leading-[1.02] tracking-tight text-white sm:text-[3.6rem] lg:text-[4.3rem]">
+        <h1 className="max-w-3xl font-cormorant text-[2.6rem] font-medium leading-[1.02] tracking-tight text-white sm:text-[3.6rem] lg:text-[4.6rem]">
           <WordReveal text="Bring Nature" delay={0.1} />
           <span className="block text-goldlight">
             <WordReveal text="Into Your Space" delay={0.35} />
@@ -74,7 +74,7 @@ export function HeroPlant() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.7, ease: EXPO }}
-          className="mt-6 max-w-md text-[14px] leading-7 text-white/80 sm:text-[15.5px]"
+          className="mt-6 max-w-md text-[14px] leading-7 text-white/75 sm:text-[15.5px]"
         >
           Curated plants and planters to elevate your home, office and lifestyle.
         </motion.p>

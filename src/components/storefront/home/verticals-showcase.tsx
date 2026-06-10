@@ -14,13 +14,14 @@ export function VerticalsShowcase() {
   if (list.length === 0) return null;
 
   return (
-    <section className="bg-cream-50">
-      <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:py-20">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#081209] via-[#0E2415] to-[#143420]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_70%_20%,rgba(227,206,151,0.10),transparent_70%)]" />
+      <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:py-24">
         <div className="mb-8 text-center lg:mb-12">
-          <p className="mb-3 flex items-center justify-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.25em] text-gold">
-            <span className="h-px w-8 bg-gold/50" /> One Home, Three Worlds <span className="h-px w-8 bg-gold/50" />
+          <p className="mb-3 flex items-center justify-center gap-2.5 text-[10.5px] font-bold uppercase tracking-[0.3em] text-goldlight">
+            <span className="h-px w-8 bg-goldlight/50" /> One Home, Three Worlds <span className="h-px w-8 bg-goldlight/50" />
           </p>
-          <h2 className="mx-auto max-w-2xl font-cormorant text-[2.1rem] font-bold leading-[1.08] text-forest-900 sm:text-[2.8rem]">
+          <h2 className="mx-auto max-w-2xl font-cormorant text-[2.1rem] font-medium leading-[1.08] text-white sm:text-[2.8rem]">
             Everything to grow your green life.
           </h2>
         </div>
@@ -33,7 +34,7 @@ export function VerticalsShowcase() {
                 <motion.div
                   whileHover={{ y: -6 }}
                   transition={{ duration: 0.3 }}
-                  className="group relative h-64 overflow-hidden rounded-2xl sm:h-72 lg:h-80"
+                  className="group relative h-64 overflow-hidden rounded-2xl ring-1 ring-white/10 sm:h-72 lg:h-80"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -44,7 +45,7 @@ export function VerticalsShowcase() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#081209]/85 via-[#0E2415]/30 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-                    <h3 className="font-cormorant text-[1.6rem] font-bold leading-tight text-white">{t.name}</h3>
+                    <h3 className="font-cormorant text-[1.6rem] font-medium leading-tight text-white">{t.name}</h3>
                     <p className="mt-1 max-w-xs text-[13px] leading-snug text-white/75">{meta.tagline}</p>
                     <span className="mt-3.5 inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.14em] text-goldlight">
                       Explore {t.name}

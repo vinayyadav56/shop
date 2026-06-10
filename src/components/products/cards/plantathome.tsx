@@ -87,8 +87,8 @@ function getFeatures(product: Product): { icon: string; label: string }[] {
 
 /* ─── Loading Skeleton (export kept for callers) ───────────────── */
 export const PlantAtHomeCardSkeleton: React.FC = () => (
-  <div className="flex h-full flex-col overflow-hidden rounded-xl border border-kraft-200 bg-white">
-    <div className="aspect-square w-full animate-pulse bg-gradient-to-br from-[#FBFBF8] to-[#EEF2EA]" />
+  <div className="flex h-full flex-col overflow-hidden rounded-xl border border-forest-900/10 bg-white/80 backdrop-blur-[2px]">
+    <div className="aspect-square w-full animate-pulse bg-gradient-to-br from-[#FBFCF8] to-[#E9F0E3]" />
     <div className="flex flex-1 flex-col gap-2 p-4">
       <div className="h-4 w-4/5 animate-pulse rounded bg-stone-200/80" />
       <div className="h-4 w-1/2 animate-pulse rounded bg-stone-200/70" />
@@ -109,7 +109,7 @@ const Heart = ({ active }: { active: boolean }) => (
 
 /* ─── Star rating row (matches the mockup's bestseller card) ─────── */
 const Star = ({ on }: { on: boolean }) => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill={on ? '#3A6B33' : 'none'} stroke={on ? '#3A6B33' : '#C9D3C0'} strokeWidth="1.6">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill={on ? '#B58E39' : 'none'} stroke={on ? '#B58E39' : '#D9D2BC'} strokeWidth="1.6">
     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
   </svg>
 );
@@ -172,7 +172,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
     <motion.article
       whileHover={{ y: -4 }}
       transition={{ duration: 0.25 }}
-      className={`group flex h-full flex-col overflow-hidden rounded-xl border border-kraft-200 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-all duration-300 hover:border-[#B58E39]/40 hover:shadow-[0_14px_34px_-14px_rgba(34,48,26,0.22)] ${className}`}
+      className={`group flex h-full flex-col overflow-hidden rounded-xl border border-forest-900/10 bg-white/80 backdrop-blur-[2px] transition-all duration-300 hover:border-[#B58E39]/40 hover:shadow-[0_18px_40px_-28px_rgba(22,48,26,0.35)] ${className}`}
     >
       {/* photo + wishlist (heart is a sibling of the image button — not nested) */}
       <div className="relative">
@@ -180,7 +180,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
         type="button"
         onClick={handleQuickView}
         aria-label={`View ${product.name}`}
-        className="relative block aspect-square w-full overflow-hidden bg-[radial-gradient(130%_130%_at_30%_15%,#FBFBF8,#EEF2EA)] text-left"
+        className="relative block aspect-square w-full overflow-hidden bg-[radial-gradient(130%_130%_at_30%_15%,#FBFCF8,#E9F0E3_70%,#DEE9D6)] text-left"
       >
         {image && !imgError ? (
           <Image
@@ -276,7 +276,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
             <button
               type="button"
               onClick={handleQuickView}
-              className="inline-flex h-10 w-full items-center justify-center rounded-md bg-forest-800 px-5 text-[10.5px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-forest-700 sm:text-[11px]"
+              className="inline-flex h-10 w-full items-center justify-center rounded-md bg-gradient-to-r from-forest-800 to-forest-600 px-5 text-[10.5px] font-bold uppercase tracking-[0.12em] text-white transition hover:brightness-110 sm:text-[11px]"
             >
               Select Options
             </button>

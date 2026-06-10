@@ -21,8 +21,8 @@ export function BestSellers({
   const list = (products ?? []).slice(0, 12);
 
   return (
-    <section className="bg-[#F3F7F1]">
-      <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:py-20">
+    <section className="bg-gradient-to-b from-[#EDF4E8] to-[#E3EDDC]">
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:py-24">
         <CenterHeading>Best Sellers</CenterHeading>
 
         <div className="relative mt-8">
@@ -71,7 +71,7 @@ export function BestSellers({
         <div className="mt-8 flex justify-center">
           <Link
             href={viewAllTo}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-forest-800 px-7 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-forest-800 transition hover:bg-forest-800 hover:text-white sm:w-auto"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-forest-800 to-forest-600 px-7 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-white shadow-[0_18px_40px_-28px_rgba(22,48,26,0.35)] transition hover:brightness-110 sm:w-auto"
           >
             View All Plants <Icon.arrow className="h-4 w-4" />
           </Link>

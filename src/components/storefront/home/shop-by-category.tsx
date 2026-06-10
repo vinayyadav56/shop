@@ -15,7 +15,7 @@ function CategoryTile({ category }: { category: Category }) {
   return (
     <Link
       href={`/c/${category.slug}`}
-      className="group block w-[46%] shrink-0 snap-start rounded-xl border border-kraft-200 bg-white p-2 shadow-[0_14px_34px_-24px_rgba(34,48,26,0.25)] transition hover:-translate-y-1 hover:shadow-[0_24px_48px_-24px_rgba(34,48,26,0.32)] sm:w-[30%] lg:w-[13.2%]"
+      className="group block w-[46%] shrink-0 snap-start rounded-xl border border-forest-900/10 bg-white/70 p-2 backdrop-blur-[2px] shadow-[0_18px_40px_-28px_rgba(22,48,26,0.35)] transition hover:-translate-y-1 hover:shadow-[0_24px_48px_-28px_rgba(22,48,26,0.42)] sm:w-[30%] lg:w-[13.2%]"
     >
       <div className="relative grid aspect-square w-full place-items-center overflow-hidden rounded-lg bg-[radial-gradient(130%_130%_at_30%_15%,#FAF9F6,#E7EEE2_70%,#D2E0CB)]">
         {img ? (
@@ -30,7 +30,7 @@ function CategoryTile({ category }: { category: Category }) {
           <Icon.leaf className="h-10 w-10 text-forest-500/60" />
         )}
       </div>
-      <div className="pb-3 pt-2 text-center text-[13px] font-semibold text-forest-900">
+      <div className="pb-3 pt-2 text-center text-[12.5px] font-semibold tracking-[0.06em] text-forest-900">
         {category.name}
       </div>
     </Link>
@@ -69,8 +69,8 @@ export function ShopByCategory({
   const list = (categories ?? []).slice(0, 12);
 
   return (
-    <section className="bg-white">
-      <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:py-20">
+    <section className="bg-gradient-to-b from-[#F8FBF5] to-[#EDF4E8]">
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:py-24">
         <CenterHeading>Shop by Category</CenterHeading>
 
         <div className="relative mt-8">
@@ -82,7 +82,7 @@ export function ShopByCategory({
               ? Array.from({ length: 7 }).map((_, i) => (
                   <div
                     key={i}
-                    className="w-[46%] shrink-0 snap-start rounded-xl border border-kraft-200 bg-white p-2 sm:w-[30%] lg:w-[13.2%]"
+                    className="w-[46%] shrink-0 snap-start rounded-xl border border-forest-900/10 bg-white/70 p-2 backdrop-blur-[2px] sm:w-[30%] lg:w-[13.2%]"
                   >
                     <div className="aspect-square w-full animate-pulse rounded-lg bg-sage-100" />
                     <div className="mx-auto mb-3 mt-2 h-3 w-2/3 animate-pulse rounded bg-sage-100" />

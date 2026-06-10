@@ -82,7 +82,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-forest-900 text-white">
+    <footer className="border-t border-gold/20 bg-gradient-to-b from-[#0A1810] to-[#16301A] text-white">
       <div className="mx-auto max-w-7xl px-5 pb-10 pt-14 sm:px-8 lg:pt-16">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-10 lg:grid-cols-[1.4fr_repeat(4,1fr)_1.2fr]">
           {/* brand */}
@@ -115,7 +115,7 @@ const Footer = () => {
               <ul className="mt-4 space-y-2.5">
                 {col.links.map((l) => (
                   <li key={l.name}>
-                    <Link href={l.href} className="text-[13px] leading-7 text-white/65 transition hover:text-white">
+                    <Link href={l.href} className="text-[13px] leading-7 text-white/65 transition hover:text-goldlight">
                       {l.name}
                     </Link>
                   </li>
@@ -129,7 +129,7 @@ const Footer = () => {
             <h3 className="text-[12px] font-bold uppercase tracking-[0.16em] text-goldlight/80">Contact</h3>
             <ul className="mt-4 space-y-3">
               <li>
-                <a href={`mailto:${email}`} className="flex items-center gap-2 text-[13px] leading-7 text-white/65 transition hover:text-white">
+                <a href={`mailto:${email}`} className="flex items-center gap-2 text-[13px] leading-7 text-white/65 transition hover:text-goldlight">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-sage-300" aria-hidden>
                     <rect x="3" y="5" width="18" height="14" rx="2.5" />
                     <path d="m3.5 7 8.5 6 8.5-6" />
@@ -138,7 +138,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href={`tel:${phone}`} className="flex items-center gap-2 text-[13px] leading-7 text-white/65 transition hover:text-white">
+                <a href={`tel:${phone}`} className="flex items-center gap-2 text-[13px] leading-7 text-white/65 transition hover:text-goldlight">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-sage-300" aria-hidden>
                     <path d="M5.5 3h3l1.7 4.3-2 1.6a13.5 13.5 0 0 0 6 6l1.6-2L20 14.6v3.1A2.3 2.3 0 0 1 17.7 20 15.8 15.8 0 0 1 4 6.3 2.3 2.3 0 0 1 5.5 3Z" />
                   </svg>
@@ -152,8 +152,8 @@ const Footer = () => {
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 sm:flex-row">
           <p className="text-[12px] text-white/50">© {year} PlantAtHome. All Rights Reserved.</p>
           <div className="flex items-center gap-5 text-[12px] text-white/50">
-            <Link href="/terms" className="transition hover:text-white">Terms</Link>
-            <Link href="/privacy" className="transition hover:text-white">Privacy</Link>
+            <Link href="/terms" className="transition hover:text-goldlight">Terms</Link>
+            <Link href="/privacy" className="transition hover:text-goldlight">Privacy</Link>
           </div>
         </div>
       </div>

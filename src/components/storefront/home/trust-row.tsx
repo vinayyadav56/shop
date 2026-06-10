@@ -11,7 +11,7 @@ const ITEMS: { icon: keyof typeof Icon; title: string; sub: string }[] = [
 
 export function TrustRow() {
   return (
-    <section className="border-y border-kraft-200 bg-white">
+    <section className="border-y border-forest-900/10 bg-gradient-to-b from-[#EDF4E8] to-[#E3EDDC]">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 gap-y-5 px-5 py-8 sm:px-8 lg:grid-cols-4">
         {ITEMS.map((it) => {
           const Ico = Icon[it.icon];

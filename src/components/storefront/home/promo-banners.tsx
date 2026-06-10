@@ -5,13 +5,17 @@ import Image from 'next/image';
 
 export function PromoBanners() {
   return (
-    <section className="bg-white">
+    <section className="bg-gradient-to-b from-[#F8FBF5] to-[#EDF4E8]">
       <div className="container mx-auto grid max-w-7xl gap-5 px-5 py-6 sm:px-8 lg:grid-cols-2">
         {/* left — dark green with photo */}
-        <div className="grid min-h-[260px] grid-cols-1 overflow-hidden rounded-3xl bg-gradient-to-r from-[#081209] via-[#0E2415] to-forest-700 sm:grid-cols-[1.1fr_0.9fr]">
-          <div className="flex flex-col items-start justify-center p-6 sm:p-10">
+        <div className="grid min-h-[260px] grid-cols-1 overflow-hidden rounded-3xl bg-gradient-to-br from-[#081209] via-[#0E2415] to-[#143420] sm:grid-cols-[1.1fr_0.9fr]">
+          <div className="relative flex flex-col items-start justify-center p-6 sm:p-10">
+            <div
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_70%_20%,rgba(227,206,151,0.10),transparent_70%)]"
+              aria-hidden="true"
+            />
             <span className="mb-3 block h-px w-10 bg-goldlight/70" aria-hidden="true" />
-            <h3 className="font-cormorant text-[1.7rem] font-bold leading-[1.05] text-white sm:text-[2.3rem]">
+            <h3 className="font-cormorant text-[1.7rem] font-medium leading-[1.05] text-white sm:text-[2.3rem]">
               Bring Green to Every Corner
             </h3>
             <p className="mt-2.5 text-[13px] leading-6 text-white/75">Plants for every space, style and mood.</p>
@@ -36,10 +40,10 @@ export function PromoBanners() {
         </div>
 
         {/* right — light consultation with photo */}
-        <div className="grid min-h-[260px] grid-cols-1 overflow-hidden rounded-3xl border border-kraft-200 bg-sage-100 sm:grid-cols-[1.1fr_0.9fr]">
+        <div className="grid min-h-[260px] grid-cols-1 overflow-hidden rounded-3xl border border-forest-900/10 bg-gradient-to-br from-sage-100 to-[#D8E5CF] sm:grid-cols-[1.1fr_0.9fr]">
           <div className="flex flex-col items-start justify-center p-6 sm:p-10">
             <span className="mb-3 block h-px w-10 bg-gold/50" aria-hidden="true" />
-            <h3 className="font-cormorant text-[1.7rem] font-bold leading-[1.05] text-forest-900 sm:text-[2.3rem]">
+            <h3 className="font-cormorant text-[1.7rem] font-medium leading-[1.05] text-forest-900 sm:text-[2.3rem]">
               Not Sure Which Plant is Right for You?
             </h3>
             <p className="mt-2.5 text-[13px] leading-6 text-stone-600">
@@ -47,7 +51,7 @@ export function PromoBanners() {
             </p>
             <Link
               href="/garden-service"
-              className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-forest-800 px-6 py-3 text-[11.5px] font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-forest-700 sm:w-auto"
+              className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-gradient-to-r from-forest-800 to-forest-600 px-6 py-3 text-[11.5px] font-semibold uppercase tracking-[0.12em] text-white transition hover:from-forest-700 hover:to-forest-500 sm:w-auto"
             >
               Get Free Consultation
             </Link>

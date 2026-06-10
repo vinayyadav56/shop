@@ -7,6 +7,7 @@ import { ShopByCategory } from './shop-by-category';
 import { BenefitsStrip } from './benefits-strip';
 import { WhyPlants } from './why-plants';
 import { BestSellers } from './best-sellers';
+import { StatementBand } from './statement-band';
 import { PromoBanners } from './promo-banners';
 import { TrustRow } from './trust-row';
 import { NewsletterSocial } from './newsletter-social';
@@ -35,6 +36,7 @@ export function PlantCompanyHome({
       <BenefitsStrip />
       <WhyPlants />
       <BestSellers products={products} isLoading={productsLoading} />
+      <StatementBand />
       <PromoBanners />
       <TrustRow />
       <NewsletterSocial />
