@@ -266,7 +266,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
             <Leaf className="h-3.5 w-3.5" /> Size Guide
           </button>
         </div>
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+        <div className="grid grid-cols-4 gap-1.5 sm:gap-2.5">
           {sizeOptions.map((s, i) => {
             const on = sizeSel === i;
             return (
@@ -275,17 +275,17 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
                 type="button"
                 onClick={() => pickSize(i)}
                 className={classNames(
-                  'relative rounded-xl border px-2 py-2.5 text-center transition',
+                  'relative rounded-lg border px-1 py-2 text-center transition',
                   on ? 'border-forest-600 bg-forest-600/[0.06]' : 'border-kraft-300 hover:border-forest-500',
                 )}
               >
                 {on && (
-                  <span className="absolute right-1.5 top-1.5 grid h-4 w-4 place-items-center rounded-full bg-forest-600 text-white">
+                  <span className="absolute right-1 top-1 grid h-3.5 w-3.5 place-items-center rounded-full bg-forest-600 text-white">
                     <Check />
                   </span>
                 )}
-                <span className="block text-[13px] font-semibold text-forest-900">{s.value}</span>
-                <span className="mt-0.5 block text-[10.5px] text-stone-500">{s.dim}</span>
+                <span className="block text-[11.5px] font-semibold leading-tight text-forest-900 sm:text-[13px]">{s.value}</span>
+                <span className="mt-0.5 block text-[9px] leading-tight text-stone-500 sm:text-[10.5px]">{s.dim}</span>
               </button>
             );
           })}

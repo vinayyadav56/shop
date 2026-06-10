@@ -63,6 +63,14 @@ const ProductPage: NextPageWithLayout<
             <>
               <PlantAtHomeProductDetails product={product} />
 
+              {/* Frequently Bought Together + Why PlantAtHome */}
+              <section className="bg-[#FAF8F2]">
+                <div className="mx-auto grid max-w-7xl gap-5 px-5 pb-2 pt-6 sm:px-8 lg:grid-cols-2">
+                  <FrequentlyBoughtTogether product={product} />
+                  <WhyPlantAtHome />
+                </div>
+              </section>
+
               {/* You May Also Like */}
               {related.length > 0 && (
                 <section className="bg-[#FAF8F2]">
@@ -94,14 +102,6 @@ const ProductPage: NextPageWithLayout<
 
               {/* Styled in Real Spaces */}
               <StyledSpaces />
-
-              {/* Frequently Bought Together + Why PlantAtHome */}
-              <section className="bg-[#FAF8F2]">
-                <div className="mx-auto grid max-w-7xl gap-5 px-5 pb-12 pt-4 sm:px-8 lg:grid-cols-2">
-                  <FrequentlyBoughtTogether product={product} />
-                  <WhyPlantAtHome />
-                </div>
-              </section>
 
               {/* functional reviews + questions (kept) */}
               <ProductReviews
