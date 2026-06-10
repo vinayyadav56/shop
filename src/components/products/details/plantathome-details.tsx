@@ -197,7 +197,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
 
       <h1
         className={classNames(
-          'font-poppins mt-4 text-[2.1rem] font-bold leading-[1.04] tracking-[-0.01em] text-forest-900 sm:text-[2.7rem]',
+          'font-poppins mt-3 text-[1.6rem] font-bold leading-[1.06] tracking-[-0.01em] text-forest-900 sm:mt-4 sm:text-[2.2rem] lg:text-[2.7rem]',
           { 'cursor-pointer transition-colors hover:text-forest-700': isModal },
         )}
         {...(isModal && { onClick: () => { router.push(Routes.product(slug)); closeModal(); } })}
@@ -205,7 +205,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
         {name}
       </h1>
 
-      <p className="font-caveat -mt-0.5 text-[1.8rem] font-medium leading-none text-forest-600">
+      <p className="font-caveat mt-0.5 text-[1.5rem] font-medium leading-none text-forest-600 sm:text-[1.8rem]">
         {scientific_name || 'Brings nature home'}
       </p>
 

@@ -1143,6 +1143,14 @@ img.product-image {
   padding: 0 !important;
 }
 
+/* PDP hero image — organic curve only on desktop; full-width rectangle on mobile. */
+@media (min-width: 1024px) {
+  .pdp-curve {
+    clip-path: url(#pdp-img-curve);
+    -webkit-clip-path: url(#pdp-img-curve);
+  }
+}
+
 /* Product image shine */
 .product-image::after {
   content: '';
