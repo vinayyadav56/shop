@@ -112,6 +112,28 @@ const Heart = ({ active }: { active: boolean }) => (
   </svg>
 );
 
+/* ─── Star rating row (matches the mockup's bestseller card) ─────── */
+const Star = ({ on }: { on: boolean }) => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill={on ? '#3A6B33' : 'none'} stroke={on ? '#3A6B33' : '#C9D3C0'} strokeWidth="1.6">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+  </svg>
+);
+const StarRow = ({ rating, count }: { rating: number; count: number }) => {
+  const r = Math.round(rating);
+  return (
+    <div className="mt-2 flex items-center gap-1.5">
+      <span className="flex">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star key={i} on={i < r} />
+        ))}
+      </span>
+      <span className="text-[11.5px] font-medium text-stone-500">
+        {count > 0 ? `(${count.toLocaleString('en-IN')})` : 'New'}
+      </span>
+    </div>
+  );
+};
+
 /* ─── Reference-style listing card ─────────────────────────────── */
 type Props = { product: Product; className?: string };
 
@@ -132,7 +154,8 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
   const { price: minPrice } = usePrice({ amount: product.min_price });
 
   const badge = getBadge(product.tags);
-  const features = getFeatures(product);
+  const ratingVal = Number((product as any).ratings) || 0;
+  const reviewCount = Number((product as any).total_reviews) || 0;
   const inStock = Number(product.quantity) > 0;
   const isVariable = product.product_type?.toLowerCase() === 'variable';
   const image = product.image?.original ?? product.image?.thumbnail ?? '';
@@ -227,21 +250,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
           {product.name}
         </button>
 
-        {features.length > 0 && (
-          <>
-            <p className="mt-2 text-[10px] font-medium uppercase tracking-[0.12em] text-stone-400">
-              Features
-            </p>
-            <div className="mt-1.5 grid grid-cols-2 gap-x-3 gap-y-1.5">
-              {features.map((f, i) => (
-                <span key={i} className="flex items-center gap-1.5 text-[11.5px] text-stone-600">
-                  <span className="text-forest-600">{FeatIcon[f.icon]}</span>
-                  <span className="truncate capitalize">{f.label}</span>
-                </span>
-              ))}
-            </div>
-          </>
-        )}
+        <StarRow rating={ratingVal} count={reviewCount} />
 
         <div className="mt-auto pt-4">
           <div className="mb-3 flex items-end gap-1.5">
@@ -254,7 +263,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
             {!isVariable && basePrice && (
               <del className="text-[12px] text-stone-400">{basePrice}</del>
             )}
-            {product.unit && !features.some((f) => f.icon === 'box') && (
+            {product.unit && (
               <span className="text-[10px] text-stone-400">/ {product.unit}</span>
             )}
           </div>

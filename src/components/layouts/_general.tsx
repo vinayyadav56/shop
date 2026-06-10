@@ -1,4 +1,5 @@
 import Header from './header';
+import Footer from './footer';
 import dynamic from 'next/dynamic';
 
 const MobileNavigation = dynamic(
@@ -15,6 +16,7 @@ export default function GeneralLayout({
     <div className="flex min-h-screen flex-col bg-gray-100 transition-colors duration-150">
       <Header layout={layout} />
       {children}
+      <Footer />
       <MobileNavigation />
     </div>
   );

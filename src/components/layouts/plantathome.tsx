@@ -14,6 +14,12 @@ import { GardenServiceBand } from '@/components/storefront/sections/garden-servi
 import { PromiseBand } from '@/components/storefront/sections/promise-band';
 import dynamic from 'next/dynamic';
 
+// New "THE PLANT COMPANY" homepage (the user's mockup) — only the home type uses
+// it; per-vertical pages keep the cinematic sections below.
+const PlantCompanyHome = dynamic(
+  () => import('@/components/storefront/home').then((m) => m.PlantCompanyHome),
+);
+
 // Heavy, below-the-fold sections — lazy-loaded so the hero + first product rows
 // paint fast (video clips + framer-motion only load when needed).
 const StoryVideo = dynamic(
@@ -86,6 +92,18 @@ export default function PlantAtHomeLayout({ variables }: HomePageProps) {
         tourTitle: `Inside the world of ${meta.label}`,
         tourSubtitle: meta.blurb,
       };
+
+  // HOME (not filtering) → the new "THE PLANT COMPANY" mockup homepage.
+  if (isHome && !isFiltering) {
+    return (
+      <PlantCompanyHome
+        categories={categories}
+        catLoading={catLoading}
+        products={products}
+        productsLoading={isLoading}
+      />
+    );
+  }
 
   return (
     <>

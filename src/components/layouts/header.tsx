@@ -18,12 +18,16 @@ import { useIsHomePage } from '@/lib/use-is-homepage';
 
 const Search = dynamic(() => import('@/components/ui/search/search'));
 
+// 7-item nav from the mockup, mapped to the closest real routes (some are
+// pragmatic placeholders until dedicated landing pages exist).
 const NAV = [
+  { label: 'Shop', href: '/plants/search' },
   { label: 'Plants', href: '/plants' },
-  { label: 'Pots', href: '/tools' },
-  { label: 'Plant Care', href: '/plant-doctor' },
-  { label: 'About Us', href: '/contact' },
-  { label: 'Blog', href: '/garden-service' },
+  { label: 'Planters', href: '/tools' },
+  { label: 'Care', href: '/plant-doctor' },
+  { label: 'Accessories', href: '/tools' },
+  { label: 'Gifting', href: '/corporate-gifting' },
+  { label: 'Corporate', href: '/corporate-gifting' },
 ];
 
 /**
@@ -76,6 +80,23 @@ const Header = ({ layout }: { layout?: string }) => {
             : 'bg-gradient-to-b from-deep/85 via-deep/45 to-transparent'
         }`}
       >
+        {/* announcement bar — always dark green, sits above the (transparent/solid) main bar */}
+        <div className="bg-forest-900 text-white">
+          <div className="mx-auto flex max-w-7xl items-center justify-center gap-3 px-5 py-1.5 text-[11px] font-medium tracking-wide sm:gap-5 sm:px-8">
+            <span className="flex items-center gap-1.5">
+              <Icon.truckFast className="h-3.5 w-3.5" /> Free Delivery on Orders Above ₹999
+            </span>
+            <span className="hidden h-3 w-px bg-white/25 sm:block" />
+            <span className="hidden items-center gap-1.5 sm:flex">
+              <Icon.lock className="h-3.5 w-3.5" /> Secure Payments
+            </span>
+            <span className="hidden h-3 w-px bg-white/25 sm:block" />
+            <span className="hidden items-center gap-1.5 sm:flex">
+              <Icon.shield className="h-3.5 w-3.5" /> Easy Returns
+            </span>
+          </div>
+        </div>
+
         {/* main bar */}
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
           <Link href="/" aria-label="PlantAtHome home" className="shrink-0">
@@ -84,7 +105,7 @@ const Header = ({ layout }: { layout?: string }) => {
 
           {/* centred nav */}
           <nav
-            className={`hidden items-center gap-7 lg:flex ${
+            className={`hidden items-center gap-4 lg:flex xl:gap-7 ${
               solid ? 'text-forest-900' : 'text-white'
             }`}
           >
@@ -92,7 +113,7 @@ const Header = ({ layout }: { layout?: string }) => {
               <Link
                 key={n.label}
                 href={n.href}
-                className={`text-[14px] font-medium transition ${
+                className={`text-[13px] font-medium transition xl:text-[14px] ${
                   solid ? 'hover:text-forest-600' : 'hover:text-white/80'
                 }`}
               >
@@ -106,15 +127,15 @@ const Header = ({ layout }: { layout?: string }) => {
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="hidden w-[210px] items-center gap-2 rounded-full border border-kraft-300 bg-white px-4 py-2.5 text-[13px] text-stone-400 transition hover:border-forest-500 lg:flex"
+              className="hidden w-[180px] items-center gap-2 rounded-full border border-kraft-300 bg-white px-4 py-2.5 text-[13px] text-stone-400 transition hover:border-forest-500 xl:flex xl:w-[210px]"
             >
-              <SearchIcon className="h-4 w-4" /> Search plants, pots…
+              <SearchIcon className="h-4 w-4" /> Search plants, planters…
             </button>
 
             <button
               type="button"
               onClick={() => setSearchOpen((s) => !s)}
-              className={`${iconBtn} lg:hidden`}
+              className={`${iconBtn} xl:hidden`}
               aria-label={t('text-search') ?? 'Search'}
             >
               <SearchIcon className="h-[18px] w-[18px]" />

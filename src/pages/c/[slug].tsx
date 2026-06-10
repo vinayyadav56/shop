@@ -49,7 +49,7 @@ export default function CategoryPage() {
   const children = category?.children ?? [];
 
   return (
-    <div className="bg-white">
+    <div className="bg-cream-50">
       <Seo
         title={
           category?.name
@@ -82,7 +82,7 @@ export default function CategoryPage() {
               ← {(category?.type as any)?.name ?? 'All products'}
             </Link>
           )}
-          <h1 className="font-heading text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+          <h1 className="font-cormorant text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
             {category?.name ?? (loadingCategory ? 'Loading…' : 'Category')}
           </h1>
           {(category?.details || category?.description) && (
@@ -101,7 +101,7 @@ export default function CategoryPage() {
               <Link
                 key={child.id ?? child.slug}
                 href={`/c/${child.slug}`}
-                className="rounded-full border border-border-base bg-light px-4 py-2 text-sm font-medium text-heading transition hover:border-accent hover:text-accent"
+                className="rounded-full border border-kraft-300 bg-white px-4 py-2 text-sm font-medium text-forest-800 transition hover:border-forest-500 hover:text-forest-600"
               >
                 {child.name}
               </Link>

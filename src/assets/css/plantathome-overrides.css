@@ -1849,11 +1849,11 @@ select:focus {
   flex-shrink: 0;
 }
 .pa-cart-header-title {
-  font-family: var(--font-heading) !important;
-  font-size: 17px;
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: 22px;
   font-weight: 700;
   color: #fff;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.005em;
   margin: 0;
 }
 .pa-cart-header-count {
@@ -2758,12 +2758,12 @@ textarea:focus {
   margin: 0 0 8px;
 }
 .pa-checkout-page-title {
-  font-family: var(--font-heading) !important;
-  font-size: clamp(26px, 3.4vw, 36px);
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: clamp(30px, 3.8vw, 42px);
   font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: #1A1A1A;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #16301A;
   margin: 0 0 8px;
 }
 .pa-checkout-page-sub {
