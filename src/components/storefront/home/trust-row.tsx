@@ -11,20 +11,17 @@ const ITEMS: { icon: keyof typeof Icon; title: string; sub: string }[] = [
 
 export function TrustRow() {
   return (
-    <section className="border-y border-kraft-200 bg-cream-100">
+    <section className="border-y border-kraft-200 bg-white">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-6 px-5 py-8 sm:px-8 lg:grid-cols-4">
-        {ITEMS.map((it, i) => {
+        {ITEMS.map((it) => {
           const Ico = Icon[it.icon];
           return (
-            <div
-              key={it.title}
-              className={`flex items-center gap-3 px-2 ${i > 0 ? 'lg:border-l lg:border-kraft-200' : ''}`}
-            >
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-sage-100 text-forest-700">
-                <Ico className="h-[18px] w-[18px]" />
+            <div key={it.title} className="flex items-center gap-3 px-2">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-forest-700/25 text-forest-700">
+                <Ico className="h-5 w-5" />
               </span>
               <div>
-                <div className="text-[13px] font-semibold text-forest-900">{it.title}</div>
+                <div className="text-[13px] font-bold text-forest-900">{it.title}</div>
                 <div className="text-[11.5px] leading-tight text-stone-500">{it.sub}</div>
               </div>
             </div>

@@ -12,25 +12,25 @@ const ITEMS: { icon: keyof typeof Icon; title: string; sub: string }[] = [
 
 export function BenefitsStrip() {
   return (
-    <section className="bg-sage-100">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 gap-y-7 px-5 py-10 sm:px-8 md:grid-cols-3 lg:grid-cols-5 lg:gap-4">
-        {ITEMS.map((it, i) => {
-          const Ico = Icon[it.icon];
-          return (
-            <div
-              key={it.title}
-              className={`flex items-center gap-3 ${i === ITEMS.length - 1 ? 'col-span-2 justify-center md:col-span-1 md:justify-start' : ''}`}
-            >
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-forest-600 shadow-sm">
-                <Ico className="h-5 w-5" />
-              </span>
-              <div>
-                <div className="text-[13px] font-semibold text-forest-900">{it.title}</div>
-                <div className="text-[11.5px] leading-tight text-forest-800/70">{it.sub}</div>
+    <section className="bg-white py-10">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-6 rounded-2xl border border-sage-200/50 bg-sage-100/70 px-6 py-7 sm:px-8 md:grid-cols-3 lg:grid-cols-5">
+          {ITEMS.map((it, i) => {
+            const Ico = Icon[it.icon];
+            return (
+              <div
+                key={it.title}
+                className={`flex items-start gap-3 ${i === ITEMS.length - 1 ? 'col-span-2 justify-center md:col-span-1 md:justify-start' : ''}`}
+              >
+                <Ico className="h-7 w-7 shrink-0 text-forest-700" />
+                <div>
+                  <div className="text-[13px] font-bold text-forest-900">{it.title}</div>
+                  <div className="text-[11.5px] leading-snug text-stone-500">{it.sub}</div>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </section>
   );

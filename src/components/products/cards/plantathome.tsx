@@ -87,19 +87,14 @@ function getFeatures(product: Product): { icon: string; label: string }[] {
 
 /* ─── Loading Skeleton (export kept for callers) ───────────────── */
 export const PlantAtHomeCardSkeleton: React.FC = () => (
-  <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-kraft-200/70 bg-white">
-    <div className="aspect-[4/3] w-full animate-pulse bg-gradient-to-br from-[#F2F1EC] to-[#E7EEE2]" />
+  <div className="flex h-full flex-col overflow-hidden rounded-xl border border-kraft-200 bg-white">
+    <div className="aspect-square w-full animate-pulse bg-gradient-to-br from-[#FBFBF8] to-[#EEF2EA]" />
     <div className="flex flex-1 flex-col gap-2 p-4">
       <div className="h-4 w-4/5 animate-pulse rounded bg-stone-200/80" />
-      <div className="grid grid-cols-2 gap-2 pt-1">
-        <div className="h-3 w-full animate-pulse rounded bg-stone-200/60" />
-        <div className="h-3 w-full animate-pulse rounded bg-stone-200/60" />
-        <div className="h-3 w-full animate-pulse rounded bg-stone-200/60" />
-        <div className="h-3 w-full animate-pulse rounded bg-stone-200/60" />
-      </div>
-      <div className="mt-auto flex items-center justify-between pt-3">
-        <div className="h-5 w-1/3 animate-pulse rounded bg-stone-200/80" />
-        <div className="h-9 w-28 animate-pulse rounded-full bg-stone-200/70" />
+      <div className="h-4 w-1/2 animate-pulse rounded bg-stone-200/70" />
+      <div className="h-3 w-2/5 animate-pulse rounded bg-stone-200/60" />
+      <div className="mt-auto pt-3">
+        <div className="h-9 w-full animate-pulse rounded-md bg-stone-200/70" />
       </div>
     </div>
   </div>
@@ -177,7 +172,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
     <motion.article
       whileHover={{ y: -4 }}
       transition={{ duration: 0.25 }}
-      className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-kraft-200/80 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-all duration-300 hover:border-[#B58E39]/40 hover:shadow-[0_14px_34px_-14px_rgba(34,48,26,0.22)] ${className}`}
+      className={`group flex h-full flex-col overflow-hidden rounded-xl border border-kraft-200 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] transition-all duration-300 hover:border-[#B58E39]/40 hover:shadow-[0_14px_34px_-14px_rgba(34,48,26,0.22)] ${className}`}
     >
       {/* photo + wishlist (heart is a sibling of the image button — not nested) */}
       <div className="relative">
@@ -185,7 +180,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
         type="button"
         onClick={handleQuickView}
         aria-label={`View ${product.name}`}
-        className="relative block aspect-[4/3] w-full overflow-hidden bg-[radial-gradient(130%_130%_at_30%_15%,#FAF9F6,#E7EEE2_60%,#D2E0CB)] text-left"
+        className="relative block aspect-square w-full overflow-hidden bg-[radial-gradient(130%_130%_at_30%_15%,#FBFBF8,#EEF2EA)] text-left"
       >
         {image && !imgError ? (
           <Image
@@ -200,7 +195,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
           <span className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-3 text-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/mark-house.png" alt="" aria-hidden className="h-12 w-auto opacity-35" />
-            <span className="font-serif text-sm italic text-forest-800/70 line-clamp-2">{product.name}</span>
+            <span className="font-cormorant text-sm font-semibold text-forest-800/70 line-clamp-2">{product.name}</span>
           </span>
         )}
 
@@ -232,7 +227,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
         <button
           type="button"
           onClick={handleWishlist}
-          className="absolute right-3 top-3 z-10 grid h-8 w-8 place-items-center rounded-full bg-white/95 shadow-sm backdrop-blur transition hover:scale-105 hover:bg-white"
+          className="absolute right-2 top-2 z-10 grid h-7 w-7 place-items-center rounded-full bg-white/90 shadow-sm backdrop-blur transition hover:scale-105 hover:bg-white"
           aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
         >
           <Heart active={inWishlist} />
@@ -250,46 +245,44 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
           {product.name}
         </button>
 
+        <div className="mt-1.5 flex items-end gap-1.5">
+          {isVariable && (
+            <span className="self-end pb-0.5 text-[9px] uppercase tracking-[0.14em] text-stone-400">from</span>
+          )}
+          <span className="text-[17px] font-bold leading-none text-forest-900">
+            {isVariable ? minPrice : price}
+          </span>
+          {!isVariable && basePrice && (
+            <del className="text-[11.5px] text-stone-400">{basePrice}</del>
+          )}
+          {product.unit && (
+            <span className="text-[9px] text-stone-400">/ {product.unit}</span>
+          )}
+        </div>
+
         <StarRow rating={ratingVal} count={reviewCount} />
 
-        <div className="mt-auto pt-4">
-          <div className="mb-3 flex items-end gap-1.5">
-            {isVariable && (
-              <span className="self-end pb-0.5 text-[9px] uppercase tracking-[0.14em] text-stone-400">from</span>
-            )}
-            <span className="text-[20px] font-bold leading-none text-forest-900">
-              {isVariable ? minPrice : price}
-            </span>
-            {!isVariable && basePrice && (
-              <del className="text-[12px] text-stone-400">{basePrice}</del>
-            )}
-            {product.unit && (
-              <span className="text-[10px] text-stone-400">/ {product.unit}</span>
-            )}
-          </div>
-
-          {/* Add to Cart → becomes a quantity counter on click */}
-          <div onClick={(e) => e.stopPropagation()}>
-            {!inStock ? (
-              <button
-                type="button"
-                onClick={handleQuickView}
-                className="flex w-full items-center justify-center rounded-full border border-forest-700/30 px-5 py-2.5 text-[13px] font-semibold text-forest-700 transition hover:bg-forest-700 hover:text-white"
-              >
-                Notify me
-              </button>
-            ) : isVariable ? (
-              <button
-                type="button"
-                onClick={handleQuickView}
-                className="flex w-full items-center justify-center rounded-full bg-forest-600 px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-forest-700"
-              >
-                Select Options
-              </button>
-            ) : (
-              <AddToCart variant="plantathome" counterVariant="plantathome" data={product} />
-            )}
-          </div>
+        {/* Add to Cart → becomes a quantity counter on click */}
+        <div className="mt-auto pt-3" onClick={(e) => e.stopPropagation()}>
+          {!inStock ? (
+            <button
+              type="button"
+              onClick={handleQuickView}
+              className="flex w-full items-center justify-center rounded-md border border-forest-800/40 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-forest-800 transition hover:bg-forest-800 hover:text-white"
+            >
+              Notify me
+            </button>
+          ) : isVariable ? (
+            <button
+              type="button"
+              onClick={handleQuickView}
+              className="flex w-full items-center justify-center rounded-md bg-forest-800 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-forest-700"
+            >
+              Select Options
+            </button>
+          ) : (
+            <AddToCart variant="plantathome" counterVariant="plantathome" data={product} />
+          )}
         </div>
       </div>
     </motion.article>

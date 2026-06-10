@@ -23,7 +23,7 @@ export function NewsletterSocial() {
               e.preventDefault();
               if (email.trim()) setDone(true);
             }}
-            className="mt-5 flex max-w-md items-center gap-2 rounded-full border border-forest-700/15 bg-white p-1.5 pl-5 shadow-sm"
+            className="mt-5 flex max-w-md gap-2"
           >
             <input
               type="email"
@@ -32,12 +32,12 @@ export function NewsletterSocial() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               aria-label="Email address"
-              className="min-w-0 flex-1 bg-transparent text-[14px] text-forest-900 outline-none placeholder:text-stone-400"
+              className="h-12 min-w-0 flex-1 rounded-lg border border-kraft-300 bg-white px-4 text-[14px] text-forest-900 outline-none placeholder:text-stone-400 focus:border-forest-500"
             />
             <button
               type="submit"
               aria-label="Subscribe"
-              className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-forest-700 text-white transition hover:bg-forest-600"
+              className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-forest-800 text-white transition hover:bg-forest-700"
             >
               <Icon.arrow className="h-5 w-5" />
             </button>
@@ -55,7 +55,7 @@ export function NewsletterSocial() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noreferrer"
-                className="group relative aspect-square overflow-hidden rounded-xl bg-white"
+                className="group relative aspect-square overflow-hidden rounded-lg bg-white"
               >
                 <Image src={src} alt="PlantAtHome on Instagram" fill sizes="18vw" className="object-cover transition duration-500 group-hover:scale-110" />
               </a>

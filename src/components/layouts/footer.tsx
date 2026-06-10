@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { useSettings } from '@/framework/settings';
-import { BrandLogo } from '@/components/storefront/logo-mark';
-import { Icon } from '@/components/storefront/icons';
+import { WordmarkStacked } from '@/components/storefront/logo-mark';
 
 const COLS: { title: string; links: { name: string; href: string }[] }[] = [
   {
@@ -11,6 +10,15 @@ const COLS: { title: string; links: { name: string; href: string }[] }[] = [
       { name: 'Indoor Plants', href: '/plants/search' },
       { name: 'Planters', href: '/tools' },
       { name: 'Plant Care', href: '/plant-doctor' },
+    ],
+  },
+  {
+    title: 'Explore',
+    links: [
+      { name: 'Gifting', href: '/corporate-gifting' },
+      { name: 'Corporate', href: '/corporate-gifting' },
+      { name: 'Garden Service', href: '/garden-service' },
+      { name: 'Plant Doctor', href: '/plant-doctor' },
     ],
   },
   {
@@ -33,6 +41,39 @@ const COLS: { title: string; links: { name: string; href: string }[] }[] = [
   },
 ];
 
+const SOCIALS: { name: string; href: string; icon: JSX.Element }[] = [
+  {
+    name: 'Instagram',
+    href: 'https://instagram.com',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden>
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Facebook',
+    href: 'https://facebook.com',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden>
+        <path d="M14.5 21v-7h2.6l.4-3h-3V9.1c0-.9.3-1.5 1.6-1.5h1.5V4.9c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8V11H9v3h2.7v7" />
+      </svg>
+    ),
+  },
+  {
+    name: 'YouTube',
+    href: 'https://youtube.com',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden>
+        <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
+        <path d="M10.2 9.5l5 2.5-5 2.5Z" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+];
+
 const Footer = () => {
   const { settings }: any = useSettings();
   const contact = settings?.contactDetails ?? {};
@@ -43,14 +84,28 @@ const Footer = () => {
   return (
     <footer className="bg-forest-900 text-white">
       <div className="mx-auto max-w-7xl px-5 pb-10 pt-14 sm:px-8 lg:pt-16">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_repeat(3,1fr)_1.2fr]">
+        <div className="grid gap-10 md:grid-cols-3 lg:grid-cols-[1.4fr_repeat(4,1fr)_1.2fr]">
           {/* brand */}
-          <div className="lg:pr-6">
-            <BrandLogo light />
+          <div className="md:col-span-3 lg:col-span-1 lg:pr-6">
+            <WordmarkStacked light />
             <p className="mt-4 max-w-xs text-[13px] leading-6 text-white/60">
               Bringing nature closer to you — curated plants and planters to elevate every home, office and
               lifestyle.
             </p>
+            <div className="mt-5 flex items-center gap-4">
+              {SOCIALS.map((s) => (
+                <a
+                  key={s.name}
+                  href={s.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={s.name}
+                  className="text-white/60 transition hover:text-white"
+                >
+                  {s.icon}
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* link columns */}
@@ -75,12 +130,19 @@ const Footer = () => {
             <ul className="mt-4 space-y-3">
               <li>
                 <a href={`mailto:${email}`} className="flex items-center gap-2 text-[13px] text-white/65 transition hover:text-white">
-                  <Icon.leaf className="h-4 w-4 text-sage-300" /> {email}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-sage-300" aria-hidden>
+                    <rect x="3" y="5" width="18" height="14" rx="2.5" />
+                    <path d="m3.5 7 8.5 6 8.5-6" />
+                  </svg>
+                  {email}
                 </a>
               </li>
               <li>
                 <a href={`tel:${phone}`} className="flex items-center gap-2 text-[13px] text-white/65 transition hover:text-white">
-                  <Icon.shield className="h-4 w-4 text-sage-300" /> {phone}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-sage-300" aria-hidden>
+                    <path d="M5.5 3h3l1.7 4.3-2 1.6a13.5 13.5 0 0 0 6 6l1.6-2L20 14.6v3.1A2.3 2.3 0 0 1 17.7 20 15.8 15.8 0 0 1 4 6.3 2.3 2.3 0 0 1 5.5 3Z" />
+                  </svg>
+                  {phone}
                 </a>
               </li>
             </ul>

@@ -6,11 +6,11 @@ import { Icon } from '../icons';
 import { KenBurns, EXPO, WordReveal } from '../motion';
 
 // The two luxury villa photos the user supplied — they crossfade + slow-zoom via
-// KenBurns so the still hero reads like a running video. Original penthouse heroes
-// are preserved in /public for the vertical pages.
+// KenBurns so the still hero reads like a running video. The mockup's light split
+// look comes from the left cream gradient; text sits dark-on-light.
 const HERO_SCENES = ['/hero-villa-interior.jpg', '/hero-villa-exterior.jpg'];
 
-const PILLS: { icon: keyof typeof Icon; title: string; sub: string }[] = [
+const FEATURES: { icon: keyof typeof Icon; title: string; sub: string }[] = [
   { icon: 'wind', title: 'Air Purifying', sub: 'Better air, better life' },
   { icon: 'heart', title: 'Stress Relief', sub: 'Creates a calming environment' },
   { icon: 'sprout', title: 'Sustainable Living', sub: 'Good for you and the planet' },
@@ -18,81 +18,69 @@ const PILLS: { icon: keyof typeof Icon; title: string; sub: string }[] = [
 
 export function HeroPlant() {
   return (
-    <section className="relative flex min-h-[88svh] w-full items-center overflow-hidden sm:min-h-[92svh]">
-      {/* cinematic crossfading background (looks like video) */}
+    <section className="relative w-full overflow-hidden bg-[#FAF9F2]">
+      {/* crossfading villa photos (video feel) */}
       <KenBurns images={HERO_SCENES} interval={7} />
 
-      {/* soft green overlay so the heading + pills stay legible */}
-      <div className="absolute inset-0 bg-gradient-to-r from-forest-900/85 via-forest-900/55 to-forest-900/20" />
-      <div className="absolute inset-0 bg-gradient-to-t from-forest-900/70 via-transparent to-forest-900/45" />
+      {/* mockup overlay: solid light left fading into the photo on the right */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#FAF9F2]/95 via-[#FAF9F2]/80 to-[#FAF9F2]/25 lg:from-[#FAF9F2] lg:via-[#FAF9F2]/85 lg:to-transparent" />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 pt-28 sm:px-8 sm:pt-32 lg:pb-24 lg:pt-36">
-        <div className="max-w-2xl">
-          <motion.span
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.7, ease: EXPO }}
-            className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-md"
-          >
-            <Icon.leaf className="h-3.5 w-3.5 text-sage-300" /> India’s premium plant studio
-          </motion.span>
-
-          <h1 className="font-cormorant text-[14vw] font-bold leading-[0.98] tracking-tight text-white sm:text-[5.5rem] lg:text-[6.5rem]">
+      <div className="relative z-10 mx-auto flex min-h-[480px] max-w-7xl flex-col justify-between px-5 sm:px-8 lg:min-h-[540px]">
+        {/* copy block */}
+        <div className="max-w-xl pb-10 pt-12 sm:pt-16 lg:pt-20">
+          <h1 className="font-cormorant text-[2.6rem] font-bold leading-[1.04] tracking-tight text-forest-900 sm:text-[3.4rem] lg:text-[4rem]">
             <WordReveal text="Bring Nature" delay={0.1} />
-            <span className="block italic text-sage-300">
-              <WordReveal text="Into Your Space" delay={0.4} />
+            <span className="block">
+              <WordReveal text="Into Your Space" delay={0.35} />
             </span>
           </h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.7, ease: EXPO }}
-            className="mt-6 max-w-md text-[15px] leading-7 text-white/90 sm:text-lg"
+            transition={{ delay: 0.6, duration: 0.7, ease: EXPO }}
+            className="mt-5 max-w-sm text-[14px] leading-7 text-stone-500 sm:text-[15px]"
           >
             Curated plants and planters to elevate your home, office and lifestyle.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.85, duration: 0.7, ease: EXPO }}
-            className="mt-8"
+            transition={{ delay: 0.75, duration: 0.7, ease: EXPO }}
+            className="mt-7"
           >
             <Link
               href="/plants/search"
-              className="inline-flex items-center gap-2.5 rounded-full bg-forest-700 px-8 py-4 text-[14px] font-semibold uppercase tracking-[0.06em] text-white shadow-[0_18px_44px_-16px_rgba(20,40,20,0.9)] transition hover:bg-forest-600"
+              className="inline-flex items-center gap-2.5 rounded-md bg-forest-800 px-7 py-3.5 text-[12px] font-semibold uppercase tracking-[0.12em] text-white shadow-[0_10px_24px_-12px_rgba(20,40,20,0.7)] transition hover:bg-forest-700"
             >
               Shop Now <Icon.arrow className="h-4 w-4" />
             </Link>
           </motion.div>
+        </div>
 
-          {/* three feature pills */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.05, duration: 0.8 }}
-            className="mt-10 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-3"
-          >
-            {PILLS.map((p) => {
-              const Ico = Icon[p.icon];
+        {/* feature strip — hairline-divided, on a translucent white bar (mockup bottom-left) */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.95, duration: 0.8 }}
+          className="w-full max-w-2xl rounded-t-xl bg-white/85 backdrop-blur-sm"
+        >
+          <div className="flex flex-col divide-y divide-kraft-200 sm:flex-row sm:divide-x sm:divide-y-0">
+            {FEATURES.map((f) => {
+              const Ico = Icon[f.icon];
               return (
-                <div
-                  key={p.title}
-                  className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-3.5 py-3 backdrop-blur-md sm:flex-col sm:items-start sm:gap-2"
-                >
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/15 text-sage-300">
-                    <Ico className="h-[18px] w-[18px]" />
-                  </span>
+                <div key={f.title} className="flex flex-1 items-center gap-3 px-4 py-3.5 sm:px-5">
+                  <Ico className="h-6 w-6 shrink-0 text-forest-600" />
                   <span>
-                    <span className="block text-[12.5px] font-semibold leading-tight text-white">{p.title}</span>
-                    <span className="block text-[11px] leading-tight text-white/70">{p.sub}</span>
+                    <span className="block text-[12.5px] font-bold leading-tight text-forest-900">{f.title}</span>
+                    <span className="block text-[11px] leading-tight text-stone-500">{f.sub}</span>
                   </span>
                 </div>
               );
             })}
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

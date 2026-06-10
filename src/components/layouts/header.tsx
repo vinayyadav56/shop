@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence, useScroll } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAtom } from 'jotai';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -14,7 +14,6 @@ import { drawerAtom } from '@/store/drawer-atom';
 import { authorizationAtom } from '@/store/authorization-atom';
 import { displayMobileHeaderSearchAtom } from '@/store/display-mobile-header-search-atom';
 import { useModalAction } from '@/components/ui/modal/modal.context';
-import { useIsHomePage } from '@/lib/use-is-homepage';
 
 const Search = dynamic(() => import('@/components/ui/search/search'));
 
@@ -38,24 +37,17 @@ const NAV = [
 const Header = ({ layout }: { layout?: string }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const isHomePage = useIsHomePage();
-  const { scrollY } = useScroll();
   const { totalUniqueItems } = useCart();
   const [, setDrawer] = useAtom(drawerAtom);
   const [isAuthorize] = useAtom(authorizationAtom);
   const { openModal } = useModalAction();
 
-  const [scrolled, setScrolled] = React.useState(false);
   const [searchOpen, setSearchOpen] = useAtom(displayMobileHeaderSearchAtom);
   const [menuOpen, setMenuOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    const unsub = scrollY.on('change', (v) => setScrolled(v > 40));
-    return () => unsub();
-  }, [scrollY]);
-
-  const solid = scrolled || !isHomePage || searchOpen;
-  const position = isHomePage ? 'fixed' : 'sticky';
+  // Mockup: solid white header on every page — the hero sits BELOW it, never behind.
+  const solid = true;
+  const position = 'sticky';
 
   const openCart = () => setDrawer({ display: true, view: 'cart' });
   const onProfile = () => {

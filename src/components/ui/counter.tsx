@@ -50,7 +50,7 @@ const variantClasses = {
   bordered:
     'h-14 rounded text-heading bg-transparent inline-flex justify-between shrink-0',
   plantathome:
-    'w-full h-[42px] rounded-full text-white bg-forest-900 inline-flex justify-between',
+    'w-full h-[38px] rounded-md text-white bg-forest-800 inline-flex justify-between',
   florine: '',
 };
 
@@ -87,7 +87,7 @@ const Counter: React.FC<CounterProps> = ({
                   'border border-gray-300 px-5 hover:border-accent hover:!bg-transparent ltr:rounded-l rtl:rounded-r':
                     variant === 'bordered',
                   'hover:!bg-gray-100': variant === 'pillVertical',
-                  'px-5 hover:!bg-forest-800': variant === 'plantathome',
+                  'px-5 hover:!bg-forest-700': variant === 'plantathome',
                 }
               )
             : cn('p-2 text-base', disabled ? 'text-[#c1c1c1]' : 'text-accent')
@@ -123,7 +123,7 @@ const Counter: React.FC<CounterProps> = ({
                   'border border-gray-300 px-5 hover:border-accent hover:!bg-transparent hover:!text-accent ltr:rounded-r rtl:rounded-l':
                     variant === 'bordered',
                   'hover:!bg-gray-100': variant === 'pillVertical',
-                  'px-5 hover:!bg-forest-800': variant === 'plantathome',
+                  'px-5 hover:!bg-forest-700': variant === 'plantathome',
                 }
               )
             : cn('p-2 text-base', disabled ? 'text-[#c1c1c1]' : 'text-accent')
