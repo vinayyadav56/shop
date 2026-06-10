@@ -9,6 +9,10 @@ type Props = {
   productName: string;
 };
 
+// Organic concave curve on the image's RIGHT edge (the boundary with the details).
+// objectBoundingBox units (0..1) → responsive to the panel size.
+const CURVE = 'M0,0 L1,0 C0.83,0.34 0.86,0.74 1,1 L0,1 Z';
+
 const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName }) => {
   const images = (gallery?.length ? gallery : [{ original: '', thumbnail: '' }]) as GalleryImage[];
   const [active, setActive] = useState(0);
@@ -18,16 +22,28 @@ const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName }) => {
   const thumbs = images.slice(0, 4);
 
   return (
-    <div className="relative">
-      {/* main image — soft sunlit panel, organic rounded edge */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#E9F0E2] via-[#F1F3E8] to-[#F6F2E6] shadow-[0_34px_80px_-34px_rgba(34,48,26,0.32)] sm:rounded-[2.5rem] sm:rounded-tl-[6rem]">
+    <div className="relative h-full min-h-[460px] w-full lg:min-h-[620px]">
+      {/* responsive clip-path def */}
+      <svg width="0" height="0" className="absolute" aria-hidden>
+        <defs>
+          <clipPath id="pdp-image-curve" clipPathUnits="objectBoundingBox">
+            <path d={CURVE} />
+          </clipPath>
+        </defs>
+      </svg>
+
+      {/* image panel — bleeds left, curved right edge */}
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-[#E9F0E2] via-[#F1F3E8] to-[#F6F2E6]"
+        style={{ clipPath: 'url(#pdp-image-curve)', WebkitClipPath: 'url(#pdp-image-curve)' } as React.CSSProperties}
+      >
         {mainSrc && !err[active] ? (
           <Image
             src={mainSrc}
             alt={productName}
             fill
             priority
-            sizes="(max-width:1024px) 92vw, 620px"
+            sizes="(max-width:1024px) 100vw, 55vw"
             onError={() => setErr((e) => ({ ...e, [active]: true }))}
             className="object-cover"
           />
@@ -38,8 +54,8 @@ const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName }) => {
         )}
       </div>
 
-      {/* floating vertical thumbnail strip (right edge) */}
-      <div className="absolute right-2.5 top-6 flex flex-col gap-3 sm:right-4 sm:top-9">
+      {/* vertical thumbnail strip — outer (left) side */}
+      <div className="absolute left-3 top-8 z-10 flex flex-col gap-3 sm:left-6 sm:top-10">
         {thumbs.map((img, i) => {
           const src = img.thumbnail || img.original || '';
           return (
@@ -63,7 +79,7 @@ const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName }) => {
           );
         })}
 
-        {/* 360° view thumb (decorative, matches mockup) */}
+        {/* 360° view tile */}
         <button
           type="button"
           aria-label="360 degree view"

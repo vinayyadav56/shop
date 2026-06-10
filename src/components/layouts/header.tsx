@@ -76,13 +76,6 @@ const Header = ({ layout }: { layout?: string }) => {
             : 'bg-gradient-to-b from-deep/85 via-deep/45 to-transparent'
         }`}
       >
-        {/* announcement bar */}
-        <div className="bg-[#EEE8DC] text-center">
-          <div className="mx-auto flex max-w-7xl items-center justify-center gap-1.5 px-5 py-2 text-[12px] font-medium text-forest-800/85">
-            <Icon.truck className="h-3.5 w-3.5" /> Free Shipping Above ₹999
-          </div>
-        </div>
-
         {/* main bar */}
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
           <Link href="/" aria-label="PlantAtHome home" className="shrink-0">

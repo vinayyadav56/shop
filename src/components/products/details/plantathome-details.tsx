@@ -39,6 +39,9 @@ const Chevron = () => (
 const Check = () => (
   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
 );
+const X = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+);
 const Leaf = ({ className = '' }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z" /><path d="M2 21c0-3 1.85-5.36 5.08-6" /></svg>
 );
@@ -59,7 +62,6 @@ const FEATURES = [
   { label: 'Fast Growing', icon: Sprout },
 ];
 
-/* curated size + pot options (mockup) used when the product has no real variations */
 const SIZE_DIMS: Record<string, string> = {
   Small: '12-18 inches',
   Medium: '24-30 inches',
@@ -79,6 +81,14 @@ const DEFAULT_POTS = [
   { value: 'Matte Black', hex: '#2B2B2B' },
   { value: 'Stone Grey', hex: '#9D9D95' },
   { value: 'Sand Beige', hex: '#D8C29C' },
+];
+
+/* Size Guide chart */
+const SIZE_GUIDE = [
+  { size: 'Small', height: '12 – 18 in', pot: '4 in pot', best: 'Desks, shelves & tabletops' },
+  { size: 'Medium', height: '24 – 30 in', pot: '6 in pot', best: 'Side tables & countertops' },
+  { size: 'Large', height: '36 – 48 in', pot: '8 in pot', best: 'Floor corners & living rooms' },
+  { size: 'XL', height: '60+ in', pot: '12 in pot', best: 'Large rooms, lobbies & villas' },
 ];
 
 const isColorGroup = (name: string, options: any[]) =>
@@ -146,6 +156,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   const [potSel, setPotSel] = useState(
     Math.max(0, potOptions.findIndex((p) => p.value === 'Sage Green')),
   );
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
 
   const pickSize = (i: number) => {
     setSizeSel(i);
@@ -176,7 +187,6 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   const ratingInt = Math.round(ratingVal);
   const reviewCount = Number(total_reviews) > 0 ? Number(total_reviews).toLocaleString('en-IN') : '1,284';
 
-  /* breadcrumb */
   const firstCat = categories?.[0];
   const crumbs: { label: string; href?: string }[] = [
     { label: 'Home', href: Routes.home },
@@ -185,12 +195,150 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
     { label: name },
   ];
 
+  /* ── buy box (shared between modal + page layouts) ── */
+  const buyBox = (
+    <div className="flex flex-col">
+      <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-forest-600/30 bg-forest-600/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-forest-700">
+        <Leaf className="h-3.5 w-3.5" /> Best Seller
+      </span>
+
+      <h1
+        className={classNames(
+          'font-poppins mt-4 text-[2.1rem] font-bold leading-[1.04] tracking-[-0.01em] text-forest-900 sm:text-[2.7rem]',
+          { 'cursor-pointer transition-colors hover:text-forest-700': isModal },
+        )}
+        {...(isModal && { onClick: () => { router.push(Routes.product(slug)); closeModal(); } })}
+      >
+        {name}
+      </h1>
+
+      <p className="font-caveat -mt-0.5 text-[1.8rem] font-medium leading-none text-forest-600">
+        {scientific_name || 'Brings nature home'}
+      </p>
+
+      <div className="mt-3 flex items-center gap-2">
+        <div className="flex">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <StarSm key={i} className={`h-[18px] w-[18px] ${i < ratingInt ? 'text-[#F5B400]' : 'text-stone-300'}`} />
+          ))}
+        </div>
+        <span className="text-[14px] font-medium text-stone-600">
+          {ratingVal.toFixed(1)} ({reviewCount} Reviews)
+        </span>
+      </div>
+
+      {content && (
+        <div className="react-editor-description mt-4 max-w-md text-[14px] leading-7 text-stone-500">
+          <Truncate character={140}>{content}</Truncate>
+        </div>
+      )}
+
+      <div className="mt-5 flex flex-wrap items-center gap-3">
+        <span className="font-poppins text-[2rem] font-bold leading-none text-forest-700">{price}</span>
+        {basePrice && <del className="text-[1.1rem] text-stone-400">{basePrice}</del>}
+        {discount && (
+          <span className="rounded-full bg-forest-600/12 px-3 py-1.5 text-[13px] font-semibold text-forest-700">
+            {discount} OFF
+          </span>
+        )}
+      </div>
+
+      <div className="mt-5 grid max-w-md grid-cols-4 gap-2">
+        {FEATURES.map((f) => (
+          <div key={f.label} className="flex flex-col items-center gap-1.5 text-center">
+            <span className="grid h-10 w-10 place-items-center rounded-full bg-sage-100 text-forest-700">
+              <f.icon className="h-5 w-5" />
+            </span>
+            <span className="text-[11px] font-medium leading-tight text-stone-600">{f.label}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* CHOOSE SIZE */}
+      <div className="mt-7">
+        <div className="mb-2.5 flex items-center justify-between">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-forest-900">Choose Size</p>
+          <button type="button" onClick={() => setSizeGuideOpen(true)} className="inline-flex items-center gap-1 text-[12px] font-medium text-forest-600 hover:text-forest-700">
+            <Leaf className="h-3.5 w-3.5" /> Size Guide
+          </button>
+        </div>
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+          {sizeOptions.map((s, i) => {
+            const on = sizeSel === i;
+            return (
+              <button
+                key={s.value}
+                type="button"
+                onClick={() => pickSize(i)}
+                className={classNames(
+                  'relative rounded-xl border px-2 py-2.5 text-center transition',
+                  on ? 'border-forest-600 bg-forest-600/[0.06]' : 'border-kraft-300 hover:border-forest-500',
+                )}
+              >
+                {on && (
+                  <span className="absolute right-1.5 top-1.5 grid h-4 w-4 place-items-center rounded-full bg-forest-600 text-white">
+                    <Check />
+                  </span>
+                )}
+                <span className="block text-[13px] font-semibold text-forest-900">{s.value}</span>
+                <span className="mt-0.5 block text-[10.5px] text-stone-500">{s.dim}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* CHOOSE POT */}
+      <div className="mt-6">
+        <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-forest-900">Choose Pot</p>
+        <div className="flex flex-wrap gap-4">
+          {potOptions.map((p, i) => {
+            const on = potSel === i;
+            return (
+              <button key={p.value} type="button" onClick={() => pickPot(i)} className="flex flex-col items-center gap-1.5" aria-label={p.value}>
+                <span className={classNames('grid h-11 w-11 place-items-center rounded-full transition', on ? 'ring-2 ring-forest-600 ring-offset-2 ring-offset-[#FAF8F2]' : 'ring-1 ring-black/5')}>
+                  <span className="h-9 w-9 rounded-full border border-black/10" style={{ backgroundColor: (p as any).hex }} />
+                </span>
+                <span className={classNames('text-[10.5px] leading-tight', on ? 'font-semibold text-forest-800' : 'text-stone-500')}>{p.value}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* CTAs */}
+      <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <button
+          type="button"
+          onClick={handleAdd}
+          disabled={!inStock || needsSelection}
+          className={classNames(
+            'flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-[15px] font-semibold text-white transition',
+            !inStock || needsSelection ? 'cursor-not-allowed bg-stone-300' : 'bg-forest-700 shadow-[0_14px_30px_-12px_rgba(46,94,42,0.6)] hover:bg-forest-800',
+          )}
+        >
+          {!inStock ? 'Out of Stock' : 'Add to Cart'} <Bag className="h-[18px] w-[18px]" />
+        </button>
+        <button
+          type="button"
+          onClick={buyNow}
+          disabled={needsSelection}
+          className="flex items-center justify-center gap-2 rounded-xl border border-forest-700 bg-white px-6 py-3.5 text-[15px] font-semibold text-forest-700 transition hover:bg-forest-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Buy Now <Bag className="h-[18px] w-[18px]" />
+        </button>
+      </div>
+    </div>
+  );
+
+  const galleryEl = <PlantAtHomeGallery gallery={previewImages} productName={name} />;
+
   return (
     <article className="bg-[#FAF8F2]">
-      <div className="mx-auto w-full max-w-7xl px-4 pb-10 pt-5 sm:px-6 lg:px-10">
-        {/* breadcrumb */}
-        {!isModal && (
-          <nav className="mb-6 flex flex-wrap items-center gap-2 text-[14px]">
+      {/* breadcrumb (in container) */}
+      {!isModal && (
+        <div className="mx-auto w-full max-w-7xl px-4 pt-5 sm:px-6 lg:px-10">
+          <nav className="flex flex-wrap items-center gap-2 text-[14px]">
             {crumbs.map((c, i) => {
               const last = i === crumbs.length - 1;
               return (
@@ -205,157 +353,67 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
               );
             })}
           </nav>
-        )}
+        </div>
+      )}
 
-        {/* hero: buy box LEFT, gallery RIGHT */}
-        <div className="grid items-start gap-8 lg:grid-cols-[1fr_1.05fr] lg:gap-12 xl:gap-16">
-          {/* ── BUY BOX ── */}
-          <div className="flex flex-col lg:pt-2">
-            <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-forest-600/30 bg-forest-600/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-forest-700">
-              <Leaf className="h-3.5 w-3.5" /> Best Seller
-            </span>
+      {/* hero */}
+      {isModal ? (
+        <div className="grid gap-6 px-4 pb-4 pt-4 sm:px-6 lg:grid-cols-2">
+          <div className="relative min-h-[360px]">{galleryEl}</div>
+          <div>{buyBox}</div>
+        </div>
+      ) : (
+        <div className="mt-4 grid lg:grid-cols-[1.08fr_1fr] lg:items-stretch">
+          {/* image — bleeds to the LEFT page edge */}
+          <div className="relative">{galleryEl}</div>
+          {/* details — padded, right-aligned to the 1280px container */}
+          <div className="flex items-center px-5 py-8 sm:px-8 lg:py-12 lg:pl-12 xl:pr-[calc((100vw-80rem)/2+2rem)]">
+            <div className="mx-auto w-full max-w-xl lg:mx-0">{buyBox}</div>
+          </div>
+        </div>
+      )}
 
-            <h1
-              className={classNames(
-                'font-poppins mt-4 text-[2.1rem] font-bold leading-[1.04] tracking-[-0.01em] text-forest-900 sm:text-[2.7rem]',
-                { 'cursor-pointer transition-colors hover:text-forest-700': isModal },
-              )}
-              {...(isModal && { onClick: () => { router.push(Routes.product(slug)); closeModal(); } })}
-            >
-              {name}
-            </h1>
+      <TrustBar />
 
-            {(scientific_name || true) && (
-              <p className="font-caveat -mt-0.5 text-[1.8rem] font-medium leading-none text-forest-600">
-                {scientific_name || 'Brings nature home'}
+      {/* Size Guide modal */}
+      {sizeGuideOpen && (
+        <div className="fixed inset-0 z-[80] grid place-items-center p-4" role="dialog" aria-modal="true" aria-label="Size guide">
+          <button type="button" aria-label="Close size guide" onClick={() => setSizeGuideOpen(false)} className="absolute inset-0 cursor-default bg-forest-900/40 backdrop-blur-sm" />
+          <div className="relative w-full max-w-xl overflow-hidden rounded-2xl bg-white shadow-[0_30px_80px_-30px_rgba(34,48,26,0.5)]">
+            <div className="flex items-center justify-between border-b border-kraft-200 px-6 py-4">
+              <h3 className="font-poppins text-lg font-bold text-forest-900">Size Guide</h3>
+              <button type="button" onClick={() => setSizeGuideOpen(false)} aria-label="Close" className="grid h-8 w-8 place-items-center rounded-full text-forest-900 transition hover:bg-cream-100">
+                <X />
+              </button>
+            </div>
+            <div className="p-6">
+              <p className="mb-4 text-[13px] leading-6 text-stone-500">
+                Pick the size that fits your space. Heights are approximate and include the pot.
               </p>
-            )}
-
-            {/* rating */}
-            <div className="mt-3 flex items-center gap-2">
-              <div className="flex">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <StarSm key={i} className={`h-[18px] w-[18px] ${i < ratingInt ? 'text-[#F5B400]' : 'text-stone-300'}`} />
-                ))}
-              </div>
-              <span className="text-[14px] font-medium text-stone-600">
-                {ratingVal.toFixed(1)} ({reviewCount} Reviews)
-              </span>
-            </div>
-
-            {/* description */}
-            {content && (
-              <div className="react-editor-description mt-4 max-w-md text-[14px] leading-7 text-stone-500">
-                <Truncate character={140}>{content}</Truncate>
-              </div>
-            )}
-
-            {/* price */}
-            <div className="mt-5 flex flex-wrap items-center gap-3">
-              <span className="font-poppins text-[2rem] font-bold leading-none text-forest-700">{price}</span>
-              {basePrice && <del className="text-[1.1rem] text-stone-400">{basePrice}</del>}
-              {discount && (
-                <span className="rounded-full bg-forest-600/12 px-3 py-1.5 text-[13px] font-semibold text-forest-700">
-                  {discount} OFF
-                </span>
-              )}
-            </div>
-
-            {/* feature chips */}
-            <div className="mt-5 grid max-w-md grid-cols-4 gap-2">
-              {FEATURES.map((f) => (
-                <div key={f.label} className="flex flex-col items-center gap-1.5 text-center">
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-sage-100 text-forest-700">
-                    <f.icon className="h-5 w-5" />
-                  </span>
-                  <span className="text-[11px] font-medium leading-tight text-stone-600">{f.label}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* CHOOSE SIZE */}
-            <div className="mt-7">
-              <div className="mb-2.5 flex items-center justify-between">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-forest-900">Choose Size</p>
-                <button type="button" className="inline-flex items-center gap-1 text-[12px] font-medium text-forest-600 hover:text-forest-700">
-                  <Leaf className="h-3.5 w-3.5" /> Size Guide
-                </button>
-              </div>
-              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-                {sizeOptions.map((s, i) => {
-                  const on = sizeSel === i;
-                  return (
-                    <button
-                      key={s.value}
-                      type="button"
-                      onClick={() => pickSize(i)}
-                      className={classNames(
-                        'relative rounded-xl border px-2 py-2.5 text-center transition',
-                        on ? 'border-forest-600 bg-forest-600/[0.06]' : 'border-kraft-300 hover:border-forest-500',
-                      )}
-                    >
-                      {on && (
-                        <span className="absolute right-1.5 top-1.5 grid h-4 w-4 place-items-center rounded-full bg-forest-600 text-white">
-                          <Check />
-                        </span>
-                      )}
-                      <span className="block text-[13px] font-semibold text-forest-900">{s.value}</span>
-                      <span className="mt-0.5 block text-[10.5px] text-stone-500">{s.dim}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* CHOOSE POT */}
-            <div className="mt-6">
-              <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-forest-900">Choose Pot</p>
-              <div className="flex flex-wrap gap-4">
-                {potOptions.map((p, i) => {
-                  const on = potSel === i;
-                  return (
-                    <button key={p.value} type="button" onClick={() => pickPot(i)} className="flex flex-col items-center gap-1.5" aria-label={p.value}>
-                      <span className={classNames('grid h-11 w-11 place-items-center rounded-full transition', on ? 'ring-2 ring-forest-600 ring-offset-2 ring-offset-[#FAF8F2]' : 'ring-1 ring-black/5')}>
-                        <span className="h-9 w-9 rounded-full border border-black/10" style={{ backgroundColor: (p as any).hex }} />
-                      </span>
-                      <span className={classNames('text-[10.5px] leading-tight', on ? 'font-semibold text-forest-800' : 'text-stone-500')}>{p.value}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* CTAs */}
-            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <button
-                type="button"
-                onClick={handleAdd}
-                disabled={!inStock || needsSelection}
-                className={classNames(
-                  'flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-[15px] font-semibold text-white transition',
-                  !inStock || needsSelection ? 'cursor-not-allowed bg-stone-300' : 'bg-forest-700 shadow-[0_14px_30px_-12px_rgba(46,94,42,0.6)] hover:bg-forest-800',
-                )}
-              >
-                {!inStock ? 'Out of Stock' : 'Add to Cart'} <Bag className="h-[18px] w-[18px]" />
-              </button>
-              <button
-                type="button"
-                onClick={buyNow}
-                disabled={needsSelection}
-                className="flex items-center justify-center gap-2 rounded-xl border border-forest-700 bg-white px-6 py-3.5 text-[15px] font-semibold text-forest-700 transition hover:bg-forest-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Buy Now <Bag className="h-[18px] w-[18px]" />
-              </button>
+              <table className="w-full text-left text-[13px]">
+                <thead>
+                  <tr className="border-b border-kraft-200 text-[11px] font-semibold uppercase tracking-wide text-forest-700">
+                    <th className="py-2 pr-3">Size</th>
+                    <th className="py-2 pr-3">Plant height</th>
+                    <th className="py-2 pr-3">Pot size</th>
+                    <th className="py-2">Best for</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {SIZE_GUIDE.map((r) => (
+                    <tr key={r.size} className="border-b border-kraft-200/60 last:border-0">
+                      <td className="py-2.5 pr-3 font-semibold text-forest-900">{r.size}</td>
+                      <td className="py-2.5 pr-3 text-stone-600">{r.height}</td>
+                      <td className="py-2.5 pr-3 text-stone-600">{r.pot}</td>
+                      <td className="py-2.5 text-stone-600">{r.best}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-
-          {/* ── GALLERY ── */}
-          <PlantAtHomeGallery gallery={previewImages} productName={name} />
         </div>
-      </div>
-
-      {/* trust bar */}
-      <TrustBar />
+      )}
     </article>
   );
 };
