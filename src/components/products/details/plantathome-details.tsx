@@ -370,9 +370,9 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
         <div className="mt-4 grid lg:grid-cols-[1.08fr_1fr] lg:items-stretch">
           {/* image — bleeds to the LEFT page edge */}
           <div className="relative">{galleryEl}</div>
-          {/* details — padded, right-aligned to the 1280px container */}
-          <div className="flex items-center px-5 py-8 sm:px-8 lg:py-12 lg:pl-12 xl:pr-[calc((100vw-80rem)/2+2rem)]">
-            <div className="mx-auto w-full max-w-xl lg:mx-0">{buyBox}</div>
+          {/* details — padded, centred in its column (no 100vw → no h-overflow) */}
+          <div className="flex items-center px-5 py-8 sm:px-8 lg:py-12 lg:pl-12 lg:pr-8">
+            <div className="mx-auto w-full max-w-xl">{buyBox}</div>
           </div>
         </div>
       )}
@@ -381,9 +381,9 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
 
       {/* Size Guide modal */}
       {sizeGuideOpen && (
-        <div className="fixed inset-0 z-[80] grid place-items-center p-4" role="dialog" aria-modal="true" aria-label="Size guide">
+        <div className="fixed inset-0 z-[80] grid place-items-center p-3 sm:p-4" role="dialog" aria-modal="true" aria-label="Size guide">
           <button type="button" aria-label="Close size guide" onClick={() => setSizeGuideOpen(false)} className="absolute inset-0 cursor-default bg-forest-900/40 backdrop-blur-sm" />
-          <div className="relative max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-2xl bg-[#FAF8F2] p-6 shadow-[0_30px_80px_-30px_rgba(34,48,26,0.5)] sm:p-8">
+          <div className="relative max-h-[88vh] w-full max-w-5xl overflow-y-auto rounded-2xl bg-[#FAF8F2] p-4 shadow-[0_30px_80px_-30px_rgba(34,48,26,0.5)] sm:p-6 lg:p-8">
             <button
               type="button"
               onClick={() => setSizeGuideOpen(false)}

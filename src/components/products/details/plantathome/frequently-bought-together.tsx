@@ -52,8 +52,8 @@ export default function FrequentlyBoughtTogether({ product }: { product: Product
       <h3 className="font-poppins text-[1.2rem] font-bold text-forest-700">Frequently Bought Together</h3>
 
       <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center">
-        {/* scrollable product track (left/right) */}
-        <div className="flex flex-1 flex-nowrap items-start gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {/* scrollable product track (left/right) — min-w-0 so ONLY this scrolls, not the page */}
+        <div className="flex min-w-0 flex-1 flex-nowrap items-start gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((it: any, i) => (
             <React.Fragment key={i}>
               <div className="flex w-[84px] shrink-0 flex-col items-center text-center">
