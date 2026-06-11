@@ -82,7 +82,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-gold/20 bg-gradient-to-b from-[#0F3A2C] to-[#1B5A42] text-white">
+    <footer className="border-t border-gold/20 g-footer text-white">
       <div className="mx-auto max-w-7xl px-5 pb-10 pt-14 sm:px-8 lg:pt-16">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-10 lg:grid-cols-[1.4fr_repeat(4,1fr)_1.2fr]">
           {/* brand */}

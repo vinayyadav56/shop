@@ -26,7 +26,7 @@ export default function TermsPage() {
   return (
     <>
       <Seo title="Terms" url="terms" />
-      <section className="mx-auto w-full max-w-1920 bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC] pb-8 lg:pb-10 xl:pb-14">
+      <section className="mx-auto w-full max-w-1920 g-light-a pb-8 lg:pb-10 xl:pb-14">
         <PageBanner
           title={t('text-terms-condition')}
           breadcrumbTitle={t('text-home')}

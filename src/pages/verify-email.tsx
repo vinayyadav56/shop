@@ -34,7 +34,7 @@ const VerifyEmail = () => {
     useResendVerificationEmail();
 
   return (
-    <section className="relative flex min-h-screen w-full items-center justify-center bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC] py-5 px-5 md:py-8">
+    <section className="relative flex min-h-screen w-full items-center justify-center g-light-a py-5 px-5 md:py-8">
       <div className="max-w-[36rem]">
         <Card className="text-center !shadow-900 md:px-[4.375rem] md:py-[2.875rem]">
           <Logo />

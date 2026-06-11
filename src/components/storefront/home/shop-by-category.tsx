@@ -86,7 +86,7 @@ export function ShopByCategory({
   const loading = isHomeTab ? Boolean(isLoading) && list.length === 0 : tabLoading;
 
   return (
-    <section className="bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC]">
+    <section className="g-light-a">
       <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:py-20">
         <CenterHeading>Shop by Category</CenterHeading>
         <VerticalTabs active={activeSlug} onChange={setPicked} />

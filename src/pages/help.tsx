@@ -23,7 +23,7 @@ export default function HelpPage() {
   return (
     <>
       <Seo title="Help" url="help" />
-      <section className="w-full min-h-screen pb-16 mx-auto max-w-1920 bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC] lg:pb-10 xl:pb-14">
+      <section className="w-full min-h-screen pb-16 mx-auto max-w-1920 g-light-a lg:pb-10 xl:pb-14">
         <PageBanner
           title={t('text-faq-title')}
           breadcrumbTitle={t('text-home')}

@@ -22,7 +22,7 @@ export const ContactPage = () => {
   return (
     <>
       <Seo title={'Contact'} url={'contact'} />
-      <div className="w-full bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC]">
+      <div className="w-full g-light-a">
         <div className="mx-auto flex w-full max-w-7xl flex-col px-5 py-10 pb-20 md:flex-row md:pb-10 xl:py-14 xl:px-8 xl:pb-14 2xl:px-14">
           {/* sidebar */}
           <div className="order-2 w-full shrink-0 rounded-xl border border-forest-900/10 bg-white p-5 md:order-1 md:w-72 lg:w-96">

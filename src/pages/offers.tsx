@@ -37,11 +37,11 @@ const OffersPage: NextPageWithLayout = () => {
         breadcrumbTitle={t('text-home')}
       />
       {!isLoading && isEmpty(coupons) ? (
-        <div className="max-w-lg px-5 pt-6 pb-8 mx-auto bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC] lg:p-8">
+        <div className="max-w-lg px-5 pt-6 pb-8 mx-auto g-light-a lg:p-8">
           <NotFound text="text-no-coupon" />
         </div>
       ) : (
-        <div className="w-full px-5 py-12 mx-auto bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC] max-w-1920 lg:py-14 lg:px-8 xl:py-24 xl:px-16 2xl:px-20">
+        <div className="w-full px-5 py-12 mx-auto g-light-a max-w-1920 lg:py-14 lg:px-8 xl:py-24 xl:px-16 2xl:px-20">
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 xl:gap-8 2xl:grid-cols-6">
             {isLoading && isEmpty(isValidCoupon) ? (
               rangeMap(6, (i) => (

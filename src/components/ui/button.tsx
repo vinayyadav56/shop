@@ -13,7 +13,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const classes = {
   root: 'inline-flex items-center justify-center shrink-0 font-semibold leading-none rounded outline-none transition duration-300 ease-in-out focus:outline-0 focus:shadow focus:ring-1 focus:ring-[#1B6B50]',
   normal:
-    'bg-gradient-to-r from-[#175840] to-[#2E8B63] hover:brightness-110 text-white border border-transparent',
+    'g-cta hover:brightness-110 text-white border border-transparent',
   custom: 'border border-transparent',
   outline:
     'border border-border-400 bg-transparent text-body hover:text-light hover:bg-[#175840] hover:border-[#175840]',

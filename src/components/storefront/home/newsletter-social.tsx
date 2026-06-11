@@ -16,7 +16,7 @@ export function NewsletterSocial() {
   const [done, setDone] = React.useState(false);
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#0D3B2E] via-[#13503E] to-[#1B6B50]">
+    <section className="relative overflow-hidden g-band">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_70%_20%,rgba(227,206,151,0.10),transparent_70%)]" />
       <div className="relative mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-14">
         {/* newsletter */}

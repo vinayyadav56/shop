@@ -5,10 +5,10 @@ import Image from 'next/image';
 
 export function PromoBanners() {
   return (
-    <section className="bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC]">
+    <section className="g-light-a">
       <div className="container mx-auto grid max-w-7xl gap-5 px-5 py-6 sm:px-8 lg:grid-cols-2">
         {/* left — dark green with photo */}
-        <div className="grid min-h-[260px] grid-cols-1 overflow-hidden rounded-3xl bg-gradient-to-br from-[#0D3B2E] via-[#13503E] to-[#1B6B50] sm:grid-cols-[1.1fr_0.9fr]">
+        <div className="grid min-h-[260px] grid-cols-1 overflow-hidden rounded-3xl g-band sm:grid-cols-[1.1fr_0.9fr]">
           <div className="relative flex flex-col items-start justify-center p-6 sm:p-10">
             <div
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_70%_20%,rgba(227,206,151,0.10),transparent_70%)]"
@@ -40,7 +40,7 @@ export function PromoBanners() {
         </div>
 
         {/* right — light consultation with photo */}
-        <div className="grid min-h-[260px] grid-cols-1 overflow-hidden rounded-3xl border border-forest-900/10 bg-gradient-to-br from-[#EAF6EF] to-[#D9EDE2] sm:grid-cols-[1.1fr_0.9fr]">
+        <div className="grid min-h-[260px] grid-cols-1 overflow-hidden rounded-3xl border border-forest-900/10 g-light-b sm:grid-cols-[1.1fr_0.9fr]">
           <div className="flex flex-col items-start justify-center p-6 sm:p-10">
             <span className="mb-3 block h-px w-10 bg-gold/50" aria-hidden="true" />
             <h3 className="font-cormorant text-[1.7rem] font-medium leading-[1.05] text-forest-900 sm:text-[2.3rem]">
@@ -51,7 +51,7 @@ export function PromoBanners() {
             </p>
             <Link
               href="/garden-service"
-              className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-gradient-to-r from-[#175840] to-[#2E8B63] px-6 py-3 text-[11.5px] font-semibold uppercase tracking-[0.12em] text-white transition hover:from-[#1B6B50] hover:to-[#35A175] sm:w-auto"
+              className="mt-6 inline-flex w-full items-center justify-center rounded-md g-cta px-6 py-3 text-[11.5px] font-semibold uppercase tracking-[0.12em] text-white transition hover:from-[#1B6B50] hover:to-[#35A175] sm:w-auto"
             >
               Get Free Consultation
             </Link>

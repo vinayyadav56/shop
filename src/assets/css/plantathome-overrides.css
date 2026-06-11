@@ -3062,3 +3062,42 @@ textarea:focus {
 @media (max-width: 1023px) {
   .pa-checkout-page { padding-bottom: 92px; }
 }
+
+/* ── Round 8: switchable green palettes (picked via html[data-green]) ──
+   Gradient surfaces across the storefront read these vars; ?green=1..5 or the
+   staging palette picker switches them live. Palette 1 is the default. */
+:root {
+  --g-band-from: #16704F; --g-band-via: #1E8A62; --g-band-to: #27A374;
+  --g-lighta-from: #F5FCF8; --g-lighta-to: #E8F6EE;
+  --g-lightb-from: #E8F6EE; --g-lightb-to: #DDF1E6;
+  --g-cta-from: #1E8A62; --g-cta-to: #34B27D;
+}
+html[data-green='2'] {
+  --g-band-from: #2E9E6B; --g-band-via: #3DB87F; --g-band-to: #52CC92;
+  --g-lighta-from: #F6FDF9; --g-lighta-to: #EAF8F0;
+  --g-lightb-from: #EAF8F0; --g-lightb-to: #DFF4E9;
+  --g-cta-from: #2E9E6B; --g-cta-to: #52CC92;
+}
+html[data-green='3'] {
+  --g-band-from: #4E7A5A; --g-band-via: #5E8F6B; --g-band-to: #6FA47C;
+  --g-lighta-from: #F6FAF5; --g-lighta-to: #EAF2E8;
+  --g-lightb-from: #EAF2E8; --g-lightb-to: #E0EBDD;
+  --g-cta-from: #527E5E; --g-cta-to: #6FA47C;
+}
+html[data-green='4'] {
+  --g-band-from: #0F766E; --g-band-via: #14998C; --g-band-to: #1FB9A6;
+  --g-lighta-from: #F3FBFA; --g-lighta-to: #E2F5F2;
+  --g-lightb-from: #E2F5F2; --g-lightb-to: #D5F0EB;
+  --g-cta-from: #0F766E; --g-cta-to: #1FB9A6;
+}
+html[data-green='5'] {
+  --g-band-from: #1C5E3C; --g-band-via: #27754C; --g-band-to: #348C5D;
+  --g-lighta-from: #F4FBF6; --g-lighta-to: #E7F3EA;
+  --g-lightb-from: #E7F3EA; --g-lightb-to: #DCEEE2;
+  --g-cta-from: #27754C; --g-cta-to: #3F9E6B;
+}
+.g-band { background-image: linear-gradient(to bottom right, var(--g-band-from), var(--g-band-via), var(--g-band-to)); }
+.g-light-a { background-image: linear-gradient(to bottom, var(--g-lighta-from), var(--g-lighta-to)); }
+.g-light-b { background-image: linear-gradient(to bottom, var(--g-lightb-from), var(--g-lightb-to)); }
+.g-cta { background-image: linear-gradient(to right, var(--g-cta-from), var(--g-cta-to)); }
+.g-footer { background-image: linear-gradient(to bottom, var(--g-band-from), var(--g-band-via)); }

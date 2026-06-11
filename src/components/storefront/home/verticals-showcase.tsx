@@ -26,7 +26,7 @@ export function VerticalsShowcase() {
   if (list.length === 0) return null;
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#0D3B2E] via-[#13503E] to-[#1B6B50]">
+    <section className="relative overflow-hidden g-band">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_70%_20%,rgba(227,206,151,0.10),transparent_70%)]" />
       <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:py-24">
         <div className="mb-8 text-center lg:mb-12">
@@ -55,7 +55,7 @@ export function VerticalsShowcase() {
                     loading="lazy"
                     className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0D3B2E]/85 via-[#13503E]/30 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
                     <h3 className="font-cormorant text-[1.6rem] font-medium leading-tight text-white">{t.name}</h3>
                     <p className="mt-1 max-w-xs text-[13px] leading-snug text-white/75">{meta.tagline}</p>

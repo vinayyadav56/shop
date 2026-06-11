@@ -21,7 +21,7 @@ export function WhyPlants() {
   };
 
   return (
-    <section className="bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC]">
+    <section className="g-light-a">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-8 lg:grid-cols-[0.85fr_1.4fr] lg:items-center lg:gap-12 lg:py-24">
         {/* left — editorial copy */}
         <div>
@@ -37,7 +37,7 @@ export function WhyPlants() {
           </p>
           <Link
             href="/plants/search"
-            className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#175840] to-[#2E8B63] px-6 py-3 text-[11.5px] font-semibold uppercase tracking-[0.12em] text-white transition hover:opacity-90 sm:w-auto"
+            className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-md g-cta px-6 py-3 text-[11.5px] font-semibold uppercase tracking-[0.12em] text-white transition hover:opacity-90 sm:w-auto"
           >
             Explore Benefits <Icon.arrow className="h-4 w-4" />
           </Link>

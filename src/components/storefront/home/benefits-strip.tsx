@@ -12,7 +12,7 @@ const ITEMS: { icon: keyof typeof Icon; title: string; sub: string }[] = [
 
 export function BenefitsStrip() {
   return (
-    <section className="bg-gradient-to-b from-[#E6F4EC] to-[#DCF0E5] py-10">
+    <section className="g-light-b py-10">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <div className="grid grid-cols-1 gap-4 rounded-2xl border border-forest-900/10 bg-white/60 backdrop-blur px-5 py-6 shadow-[0_18px_40px_-28px_rgba(22,48,26,0.35)] sm:grid-cols-3 sm:px-8 sm:py-7 lg:grid-cols-5">
           {ITEMS.map((it) => {

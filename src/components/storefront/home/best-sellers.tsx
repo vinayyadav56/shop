@@ -34,7 +34,7 @@ export function VerticalTabs({
               onClick={() => onChange(t.slug)}
               className={`shrink-0 rounded-full px-5 py-2 text-[11.5px] font-bold uppercase tracking-[0.12em] transition ${
                 on
-                  ? 'bg-gradient-to-r from-[#175840] to-[#2E8B63] text-white shadow-sm'
+                  ? 'g-cta text-white shadow-sm'
                   : 'text-forest-800/75 hover:text-forest-900'
               }`}
             >
@@ -71,7 +71,7 @@ export function BestSellers({
   const loading = isHomeTab ? Boolean(isLoading) && list.length === 0 : tabLoading;
 
   return (
-    <section className="bg-gradient-to-b from-[#E6F4EC] to-[#DCF0E5]">
+    <section className="g-light-b">
       <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:py-20">
         <CenterHeading>Best Sellers</CenterHeading>
         <VerticalTabs active={activeSlug} onChange={setPicked} />
@@ -126,7 +126,7 @@ export function BestSellers({
         <div className="mt-8 flex justify-center">
           <Link
             href={`/${activeSlug}/search`}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#175840] to-[#2E8B63] px-7 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-white shadow-[0_18px_40px_-28px_rgba(23,88,64,0.45)] transition hover:brightness-110 sm:w-auto"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-md g-cta px-7 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-white shadow-[0_18px_40px_-28px_rgba(23,88,64,0.45)] transition hover:brightness-110 sm:w-auto"
           >
             View All <Icon.arrow className="h-4 w-4" />
           </Link>
