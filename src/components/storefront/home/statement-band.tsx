@@ -11,7 +11,7 @@ const STATS = [
 /** Full-bleed dark brand-statement moment with quiet animated stats. */
 export function StatementBand() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#081209] via-[#0E2415] to-[#143420]">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#0D3B2E] via-[#13503E] to-[#1B6B50]">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_70%_20%,rgba(227,206,151,0.10),transparent_70%)]" />
 
       <div className="relative mx-auto max-w-5xl px-5 py-16 text-center sm:px-8 lg:py-24">

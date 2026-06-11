@@ -3,14 +3,20 @@ import React from 'react';
 import Image from 'next/image';
 import { Icon } from '../icons';
 
-const SOCIAL = ['/plants-1.jpg', '/plants-2.jpg', '/plants-3.jpg', '/foliage-corner.png', '/editorial-botanical.png'];
+const SOCIAL = [
+  'https://images.unsplash.com/photo-1545241047-6083a3684587?w=500&q=72&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1521334884684-d80222895322?w=500&q=72&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=500&q=72&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1470058869958-2a77ade41c02?w=500&q=72&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1573246123716-6b1782bfc499?w=500&q=72&auto=format&fit=crop',
+];
 
 export function NewsletterSocial() {
   const [email, setEmail] = React.useState('');
   const [done, setDone] = React.useState(false);
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#081209] via-[#0E2415] to-[#143420]">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#0D3B2E] via-[#13503E] to-[#1B6B50]">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_70%_20%,rgba(227,206,151,0.10),transparent_70%)]" />
       <div className="relative mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-14">
         {/* newsletter */}

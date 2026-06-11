@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'next-i18next';
 import { couponAtom } from '@/store/checkout';
 import { useAtom } from 'jotai';
-import classNames from 'classnames';
 import { useVerifyCoupon } from '@/framework/settings';
 import { useCart } from '@/store/quick-cart/cart.context';
 
@@ -76,6 +75,7 @@ const Coupon = ({ theme, subtotal }: { theme?: 'dark'; subtotal: number }) => {
         placeholder={t('text-enter-coupon')}
         variant="outline"
         className="flex-1 mb-4 sm:mb-0 ltr:sm:mr-4 rtl:sm:ml-4"
+        inputClassName="border-forest-900/15 focus:border-[#1B6B50]"
         dimension="small"
         error={t(formError?.code!)}
       />
@@ -83,9 +83,7 @@ const Coupon = ({ theme, subtotal }: { theme?: 'dark'; subtotal: number }) => {
         loading={loading}
         disabled={loading}
         size="small"
-        className={classNames('w-full sm:w-40 lg:w-auto', {
-          'bg-gray-800 transition-colors hover:bg-gray-900': theme === 'dark',
-        })}
+        className="w-full sm:w-40 lg:w-auto"
       >
         {t('text-apply')}
       </Button>

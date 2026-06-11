@@ -5,6 +5,10 @@ import Image from 'next/image';
 import type { Category } from '@/types';
 import { Icon } from '../icons';
 import { CenterHeading, useTrackScroll } from './section-heading';
+import { VerticalTabs } from './best-sellers';
+import { useTypes } from '@/framework/type';
+import { useCategories } from '@/framework/category';
+import { TYPES_PER_PAGE } from '@/framework/client/variables';
 
 function CategoryTile({ category }: { category: Category }) {
   const img =
@@ -66,19 +70,33 @@ export function ShopByCategory({
   isLoading?: boolean;
 }) {
   const { ref, left, right } = useTrackScroll();
-  const list = (categories ?? []).slice(0, 12);
+  const { types } = useTypes({ limit: TYPES_PER_PAGE });
+  const homeSlug =
+    (types ?? []).find((t) => t?.settings?.isHome)?.slug ?? (types ?? [])[0]?.slug ?? 'plants';
+  const [picked, setPicked] = React.useState<string | null>(null);
+  const activeSlug = picked ?? homeSlug;
+  const isHomeTab = activeSlug === homeSlug;
+
+  // SSR prop covers the home vertical; other tabs fetch via the same hook.
+  const { categories: tabCategories, isLoading: tabLoading } = useCategories({
+    type: activeSlug,
+    limit: 12,
+  });
+  const list = ((isHomeTab && (categories?.length ?? 0) > 0 ? categories : tabCategories) ?? []).slice(0, 12);
+  const loading = isHomeTab ? Boolean(isLoading) && list.length === 0 : tabLoading;
 
   return (
-    <section className="bg-gradient-to-b from-[#F8FBF5] to-[#EDF4E8]">
-      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:py-24">
+    <section className="bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC]">
+      <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:py-20">
         <CenterHeading>Shop by Category</CenterHeading>
+        <VerticalTabs active={activeSlug} onChange={setPicked} />
 
-        <div className="relative mt-8">
+        <div className="relative mt-7">
           <div
             ref={ref}
             className="flex min-w-0 snap-x gap-3.5 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-4"
           >
-            {isLoading && list.length === 0
+            {loading
               ? Array.from({ length: 7 }).map((_, i) => (
                   <div
                     key={i}
@@ -89,6 +107,11 @@ export function ShopByCategory({
                   </div>
                 ))
               : list.map((c) => <CategoryTile key={c.id} category={c} />)}
+            {!loading && list.length === 0 && (
+              <p className="w-full py-8 text-center text-[13px] text-stone-500">
+                Categories coming soon for this collection.
+              </p>
+            )}
           </div>
 
           <ArrowButton dir="left" onClick={left} />

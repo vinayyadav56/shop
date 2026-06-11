@@ -26,13 +26,13 @@ export default function TermsPage() {
   return (
     <>
       <Seo title="Terms" url="terms" />
-      <section className="mx-auto w-full max-w-1920 bg-light pb-8 lg:pb-10 xl:pb-14">
+      <section className="mx-auto w-full max-w-1920 bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC] pb-8 lg:pb-10 xl:pb-14">
         <PageBanner
           title={t('text-terms-condition')}
           breadcrumbTitle={t('text-home')}
         />
         {/* End of page header */}
-        <div className="mx-auto w-full max-w-screen-lg px-4 py-10">
+        <div className="mx-auto w-full max-w-screen-lg px-5 py-10">
           {!isLoading && !termsAndConditions.length ? (
             <div className="min-h-full p-5 md:p-8 lg:p-12 2xl:p-16">
               <NotFound text="text-no-faq" className="h-96" />

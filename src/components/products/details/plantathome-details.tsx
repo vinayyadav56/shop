@@ -16,6 +16,8 @@ import { getVariations } from '@/lib/get-variations';
 import { isVariationSelected } from '@/lib/is-variation-selected';
 import { useAttributes } from './attributes.context';
 import { useModalAction } from '@/components/ui/modal/modal.context';
+import { useAskAiEnabled } from '@/framework/ask-ai';
+import { useUser } from '@/framework/user';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { generateCartItem } from '@/store/quick-cart/generate-cart-item';
 import { cartAnimation } from '@/lib/cart-animation';
@@ -94,7 +96,10 @@ type Props = { product: Product; isModal?: boolean };
 
 const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }) => {
   const router = useRouter();
-  const { closeModal } = useModalAction();
+  const { closeModal, openModal } = useModalAction();
+  const { isAuthorized } = useUser();
+  const { data: askAiSettings } = useAskAiEnabled();
+  const askAiEnabled = Boolean(askAiSettings?.data?.enabled);
   const { attributes, setAttributes } = useAttributes();
 
   const {
@@ -228,6 +233,25 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
         <span className="text-[14px] font-medium text-stone-600">
           {ratingVal.toFixed(1)} ({reviewCount} Reviews)
         </span>
+        {askAiEnabled && (
+          <button
+            type="button"
+            onClick={() => {
+              if (!isAuthorized) {
+                openModal('LOGIN_VIEW');
+                return;
+              }
+              openModal('ASK_AI', { product });
+            }}
+            aria-label={`Ask AI about ${name}`}
+            className="ml-1 inline-flex items-center gap-1.5 rounded-md border border-[#B58E39]/45 bg-[#B58E39]/10 px-3 py-1.5 text-[11.5px] font-semibold text-[#8A6A25] transition hover:bg-[#B58E39]/20"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M12 2l1.9 5.6L19.5 9.5 13.9 11.4 12 17l-1.9-5.6L4.5 9.5l5.6-1.9L12 2z" />
+            </svg>
+            Ask AI
+          </button>
+        )}
       </div>
 
       {/* price — kept high so it's always visible */}

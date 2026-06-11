@@ -22,10 +22,10 @@ export const ContactPage = () => {
   return (
     <>
       <Seo title={'Contact'} url={'contact'} />
-      <div className="w-full bg-gray-100">
+      <div className="w-full bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC]">
         <div className="mx-auto flex w-full max-w-7xl flex-col px-5 py-10 pb-20 md:flex-row md:pb-10 xl:py-14 xl:px-8 xl:pb-14 2xl:px-14">
           {/* sidebar */}
-          <div className="order-2 w-full shrink-0 rounded-lg bg-light p-5 md:order-1 md:w-72 lg:w-96">
+          <div className="order-2 w-full shrink-0 rounded-xl border border-forest-900/10 bg-white p-5 md:order-1 md:w-72 lg:w-96">
             <div className="mb-8 flex w-full items-center justify-center overflow-hidden">
               <Image
                 src={contactIllustration}
@@ -87,7 +87,7 @@ export const ContactPage = () => {
                     href={settings?.contactDetails?.website ?? Routes?.home}
                     target="_blank"
                     // rel="noreferrer"
-                    className="text-sm font-semibold text-accent hover:text-accent-hover focus:text-blue-500 focus:outline-none"
+                    className="text-sm font-semibold text-[#175840] hover:text-[#1B6B50] focus:text-[#1B6B50] focus:outline-none"
                   >
                     {t('text-visit-site')}
                   </Link>
@@ -128,8 +128,8 @@ export const ContactPage = () => {
           </div>
 
           {/* Contact form */}
-          <div className="order-1 mb-8 w-full rounded-lg bg-light p-5 md:order-2 md:mb-0 md:p-8 ltr:md:ml-7 rtl:md:mr-7 ltr:lg:ml-9 rtl:lg:mr-9">
-            <h1 className="mb-7 font-body text-xl font-bold text-heading md:text-2xl">
+          <div className="order-1 mb-8 w-full rounded-xl border border-forest-900/10 bg-white p-5 md:order-2 md:mb-0 md:p-8 ltr:md:ml-7 rtl:md:mr-7 ltr:lg:ml-9 rtl:lg:mr-9">
+            <h1 className="mb-7 font-cormorant text-2xl font-medium text-forest-900 md:text-3xl">
               {t('text-questions-comments')}
             </h1>
             <SuperAdminContactForm />

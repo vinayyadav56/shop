@@ -23,12 +23,12 @@ export default function HelpPage() {
   return (
     <>
       <Seo title="Help" url="help" />
-      <section className="w-full min-h-screen pb-16 mx-auto max-w-1920 bg-light lg:pb-10 xl:pb-14">
+      <section className="w-full min-h-screen pb-16 mx-auto max-w-1920 bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC] lg:pb-10 xl:pb-14">
         <PageBanner
           title={t('text-faq-title')}
           breadcrumbTitle={t('text-home')}
         />
-        <div className="w-full max-w-screen-lg px-4 py-10 mx-auto">
+        <div className="w-full max-w-screen-lg px-5 py-10 mx-auto">
           {!isLoading && !faqs.length ? (
             <div className="min-h-full p-5 md:p-8 lg:p-12 2xl:p-16">
               <NotFound text="text-no-faq" className="h-96" />

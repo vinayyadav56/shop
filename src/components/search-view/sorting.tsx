@@ -99,11 +99,16 @@ const Sorting: React.FC<Props> = ({ variant = 'radio' }) => {
                         <span
                           className={`h-[18px] w-[18px] rounded-full bg-white ltr:mr-3 rtl:ml-3 ${
                             checked
-                              ? 'border-[5px] border-gray-800'
-                              : 'border border-gray-600'
+                              ? 'border-[5px] border-[#175840]'
+                              : 'border border-[#175840]'
                           }`}
                         />
-                        <RadioGroup.Label as="p" className="text-sm text-body">
+                        <RadioGroup.Label
+                          as="p"
+                          className={`text-sm ${
+                            checked ? 'font-medium text-forest-900' : 'text-body'
+                          }`}
+                        >
                           {plan.label}
                         </RadioGroup.Label>
                       </div>

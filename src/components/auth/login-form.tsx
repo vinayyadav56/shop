@@ -88,7 +88,7 @@ function LoginForm() {
       {/* //===============// */}
       <div className="relative flex flex-col items-center justify-center mt-8 mb-6 text-sm text-heading sm:mt-11 sm:mb-8">
         <hr className="w-full" />
-        <span className="absolute -top-2.5 bg-light px-2 ltr:left-2/4 ltr:-ml-4 rtl:right-2/4 rtl:-mr-4">
+        <span className="absolute -top-2.5 bg-white px-2 ltr:left-2/4 ltr:-ml-4 rtl:right-2/4 rtl:-mr-4">
           {t('text-or')}
         </span>
       </div>
@@ -131,7 +131,7 @@ function LoginForm() {
         {t('text-no-account')}{' '}
         <button
           onClick={() => openModal('REGISTER')}
-          className="font-semibold underline transition-colors duration-200 text-accent hover:text-accent-hover hover:no-underline focus:text-accent-hover focus:no-underline focus:outline-0 ltr:ml-1 rtl:mr-1"
+          className="font-semibold underline transition-colors duration-200 text-[#175840] hover:text-[#1B6B50] hover:no-underline focus:text-[#1B6B50] focus:no-underline focus:outline-0 ltr:ml-1 rtl:mr-1"
         >
           {t('text-register')}
         </button>
@@ -143,7 +143,7 @@ function LoginForm() {
 export default function LoginView() {
   const { t } = useTranslation('common');
   return (
-    <div className="flex h-full min-h-screen w-screen flex-col justify-center bg-light py-6 px-5 sm:p-8 md:h-auto md:min-h-0 md:max-w-[480px] md:rounded-xl">
+    <div className="flex h-full min-h-screen w-screen flex-col justify-center bg-white py-6 px-5 sm:p-8 md:h-auto md:min-h-0 md:max-w-[480px] md:rounded-xl">
       <div className="flex justify-center">
         <Logo />
       </div>

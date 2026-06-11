@@ -5,10 +5,10 @@ import Image from 'next/image';
 import { Icon } from '../icons';
 
 const CARDS = [
-  { img: '/plants-1.jpg', title: 'Purifies Indoor Air', sub: 'Removes toxins and improves air quality naturally.' },
-  { img: '/plants-2.jpg', title: 'Enhances Well-being', sub: 'Reduce stress and promote mental clarity.' },
-  { img: '/plants-3.jpg', title: 'Boosts Productivity', sub: 'Creates a refreshing environment to help you focus better.' },
-  { img: '/editorial-botanical.png', title: 'Supports Sustainability', sub: 'Make an eco-friendly choice for a greener tomorrow.' },
+  { img: 'https://images.unsplash.com/photo-1545241047-6083a3684587?w=900&q=78&auto=format&fit=crop', title: 'Purifies Indoor Air', sub: 'Removes toxins and improves air quality naturally.' },
+  { img: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=900&q=78&auto=format&fit=crop', title: 'Enhances Well-being', sub: 'Reduce stress and promote mental clarity.' },
+  { img: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=900&q=78&auto=format&fit=crop', title: 'Boosts Productivity', sub: 'Creates a refreshing environment to help you focus better.' },
+  { img: 'https://images.unsplash.com/photo-1470058869958-2a77ade41c02?w=900&q=78&auto=format&fit=crop', title: 'Supports Sustainability', sub: 'Make an eco-friendly choice for a greener tomorrow.' },
 ];
 
 export function WhyPlants() {
@@ -21,7 +21,7 @@ export function WhyPlants() {
   };
 
   return (
-    <section className="bg-gradient-to-b from-[#F8FBF5] to-[#EDF4E8]">
+    <section className="bg-gradient-to-b from-[#F4FBF7] to-[#E6F4EC]">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-8 lg:grid-cols-[0.85fr_1.4fr] lg:items-center lg:gap-12 lg:py-24">
         {/* left — editorial copy */}
         <div>
@@ -37,7 +37,7 @@ export function WhyPlants() {
           </p>
           <Link
             href="/plants/search"
-            className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-forest-800 to-forest-600 px-6 py-3 text-[11.5px] font-semibold uppercase tracking-[0.12em] text-white transition hover:opacity-90 sm:w-auto"
+            className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#175840] to-[#2E8B63] px-6 py-3 text-[11.5px] font-semibold uppercase tracking-[0.12em] text-white transition hover:opacity-90 sm:w-auto"
           >
             Explore Benefits <Icon.arrow className="h-4 w-4" />
           </Link>

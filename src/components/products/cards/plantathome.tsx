@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { useToggleWishlist, useInWishlist } from '@/framework/wishlist';
 import { useUser } from '@/framework/user';
+import { useAskAiEnabled } from '@/framework/ask-ai';
 import usePrice from '@/lib/use-price';
 import type { Product, Tag } from '@/types';
 
@@ -155,8 +156,20 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
   const isVariable = product.product_type?.toLowerCase() === 'variable';
   const image = product.image?.original ?? product.image?.thumbnail ?? '';
 
+  const { data: askAiSettings } = useAskAiEnabled();
+  const askAiEnabled = Boolean(askAiSettings?.data?.enabled);
+
   function handleQuickView() {
     openModal('PRODUCT_DETAILS', product.slug);
+  }
+  function handleAskAi(e: React.MouseEvent) {
+    e.stopPropagation();
+    e.preventDefault();
+    if (!isAuthorized) {
+      openModal('LOGIN_VIEW');
+      return;
+    }
+    openModal('ASK_AI', { product });
   }
   function handleWishlist(e: React.MouseEvent) {
     e.stopPropagation();
@@ -232,6 +245,21 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
         >
           <Heart active={inWishlist} />
         </button>
+
+        {/* Ask AI — per-plant chat (admin-toggled); overlay pill, bottom-left */}
+        {askAiEnabled && (
+          <button
+            type="button"
+            onClick={handleAskAi}
+            aria-label={`Ask AI about ${product.name}`}
+            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-[#0D3B2E]/85 px-2.5 py-1.5 text-[11px] font-semibold text-white shadow-sm backdrop-blur transition hover:scale-[1.03] hover:bg-[#0D3B2E]"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M12 2l1.9 5.6L19.5 9.5 13.9 11.4 12 17l-1.9-5.6L4.5 9.5l5.6-1.9L12 2z" />
+            </svg>
+            Ask AI
+          </button>
+        )}
 
       </div>
 
