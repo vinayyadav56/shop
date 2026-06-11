@@ -1,23 +1,75 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../icons';
-import { KenBurns, EXPO, WordReveal } from '../motion';
+import { EXPO, WordReveal } from '../motion';
 
-// Luxury hero, round 5 — subject-correct media:
-// • Backdrop: rain-glistened foliage macro film (Mixkit 1707, frame-verified) dimmed
-//   under the deep-emerald gradient = a living texture, not a competing scene.
-// • Right panel: gold-framed cinematic frame crossfading VERIFIED luxury
-//   plant-styled interiors (the brand subject) via KenBurns.
-// Villa stills remain the instant-paint/fallback layer beneath the film.
-const BACKDROP_VIDEO = 'https://assets.mixkit.co/videos/1707/1707-1080.mp4';
-const BACKDROP_STILLS = ['/hero-villa-interior.jpg', '/hero-villa-exterior.jpg'];
-const FRAME_SCENES = [
-  'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1100&q=78&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1100&q=78&auto=format&fit=crop',
-  '/hero-villa-interior.jpg',
+// Luxury hero, round 6 — a cinematic HOUSE-TOUR sequence through the glass-walled
+// greenhouse villa: approach the exterior → step into the living space → linger on
+// the glasshouse at dusk. Built from the user's villa renders + a verified UHD
+// glass-house photograph, with slow directional camera moves per scene (a free
+// hotlinkable real tour film of this exact subject does not exist — ~450 stock
+// clips were previewed; swap TOUR_SCENES for a licensed mp4 if one is provided).
+const TOUR_SCENES = [
+  '/hero-villa-exterior.jpg', // approach: glass villa in the forest
+  '/hero-villa-interior.jpg', // inside: jungle living room
+  '/hero-glasshouse-dusk.jpg', // dusk: glass walls glowing (2560px)
 ];
+
+// Per-scene choreography: alternating push-in / pull-back + lateral drift, slow
+// 2s crossfades — reads like a steadicam walkthrough rather than a slideshow.
+const MOVES = [
+  { scale: [1.18, 1.02], x: ['3%', '-2%'], y: ['1%', '-1%'] }, // dolly forward
+  { scale: [1.04, 1.2], x: ['-2%', '2%'], y: ['-1%', '1%'] }, // push toward the green
+  { scale: [1.16, 1.04], x: ['2%', '-2%'], y: ['1.5%', '-1%'] }, // settle on the glow
+];
+const SCENE_SECONDS = 8;
+
+function TourBurns({ images }: { images: string[] }) {
+  const [reduce, setReduce] = React.useState(false);
+  const [i, setI] = React.useState(0);
+  React.useEffect(() => {
+    setReduce(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }, []);
+  React.useEffect(() => {
+    if (reduce || images.length < 2) return;
+    const t = setInterval(() => setI((p) => (p + 1) % images.length), SCENE_SECONDS * 1000);
+    return () => clearInterval(t);
+  }, [images.length, reduce]);
+
+  if (reduce) {
+    return (
+      <div
+        className="absolute inset-0"
+        style={{ backgroundImage: `url(${images[0]})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+      />
+    );
+  }
+  const mv = MOVES[i % MOVES.length];
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      <AnimatePresence>
+        <motion.img
+          key={i}
+          src={images[i]}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover"
+          initial={{ opacity: 0, scale: mv.scale[0], x: mv.x[0], y: mv.y[0] }}
+          animate={{ opacity: 1, scale: mv.scale[1], x: mv.x[1], y: mv.y[1] }}
+          exit={{ opacity: 0 }}
+          transition={{
+            opacity: { duration: 2, ease: 'easeInOut' },
+            scale: { duration: SCENE_SECONDS + 2.5, ease: 'linear' },
+            x: { duration: SCENE_SECONDS + 2.5, ease: 'linear' },
+            y: { duration: SCENE_SECONDS + 2.5, ease: 'linear' },
+          }}
+        />
+      </AnimatePresence>
+    </div>
+  );
+}
 
 const FEATURES: { icon: keyof typeof Icon; title: string; sub: string }[] = [
   { icon: 'wind', title: 'Air Purifying', sub: 'Better air, better life' },
@@ -26,102 +78,60 @@ const FEATURES: { icon: keyof typeof Icon; title: string; sub: string }[] = [
 ];
 
 export function HeroPlant() {
-  const [videoOk, setVideoOk] = React.useState(true);
-  const [reduce, setReduce] = React.useState(false);
-  React.useEffect(() => {
-    setReduce(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  }, []);
-  const showVideo = videoOk && !reduce;
-
   return (
     <section className="relative flex w-full flex-col overflow-hidden bg-[#081209]">
-      {/* fallback stills under the film */}
-      <div className="absolute inset-0 opacity-50">
-        <KenBurns images={BACKDROP_STILLS} interval={9} />
-      </div>
+      {/* the tour */}
+      <TourBurns images={TOUR_SCENES} />
 
-      {showVideo && (
-        <video
-          src={BACKDROP_VIDEO}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          onError={() => setVideoOk(false)}
-          className="absolute inset-0 h-full w-full object-cover opacity-60"
-        />
-      )}
+      {/* light luxury grade — protect the type, let the architecture read */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#081209]/90 via-[#0E2415]/55 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#081209]/80 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(42%_55%_at_22%_42%,rgba(227,206,151,0.12),transparent_70%)]" />
 
-      {/* deep emerald luxury grade + vignette + gold glow */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#081209]/96 via-[#0E2415]/80 to-[#123018]/55" />
-      <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#081209]/85 to-transparent" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(42%_55%_at_24%_42%,rgba(227,206,151,0.12),transparent_70%)]" />
-
-      <div className="relative z-10 mx-auto flex min-h-[540px] w-full max-w-7xl flex-1 items-center gap-12 px-5 py-16 sm:min-h-[600px] sm:px-8 lg:min-h-[660px]">
-        {/* copy */}
-        <div className="max-w-xl flex-1">
-          <motion.span
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.7, ease: EXPO }}
-            className="mb-6 inline-flex w-fit items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.25em] text-goldlight"
-          >
-            <span className="h-px w-8 bg-goldlight/60" /> India’s Premium Plant Studio
-          </motion.span>
-
-          <h1 className="font-cormorant text-[2.6rem] font-medium leading-[1.02] tracking-tight text-white sm:text-[3.6rem] lg:text-[4.4rem]">
-            <WordReveal text="Bring Nature" delay={0.1} />
-            <span className="block text-goldlight">
-              <WordReveal text="Into Your Space" delay={0.35} />
-            </span>
-          </h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.7, ease: EXPO }}
-            className="mt-6 max-w-md text-[14px] leading-7 text-white/75 sm:text-[15.5px]"
-          >
-            Curated plants and planters to elevate your home, office and lifestyle.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.78, duration: 0.7, ease: EXPO }}
-            className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
-          >
-            <Link
-              href="/plants/search"
-              className="inline-flex items-center justify-center gap-2.5 rounded-md bg-goldlight px-8 py-4 text-[12px] font-bold uppercase tracking-[0.14em] text-forest-900 shadow-[0_18px_44px_-16px_rgba(227,206,151,0.55)] transition hover:bg-white"
-            >
-              Shop Now <Icon.arrow className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/garden-service"
-              className="inline-flex items-center justify-center gap-2.5 rounded-md border border-white/30 bg-white/10 px-8 py-4 text-[12px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-md transition hover:bg-white/20"
-            >
-              Free Consultation
-            </Link>
-          </motion.div>
-        </div>
-
-        {/* gold-framed cinematic panel — luxury plant interiors (desktop) */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.97, y: 18 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 0.55, duration: 0.9, ease: EXPO }}
-          className="relative hidden h-[360px] w-[440px] shrink-0 self-center lg:block xl:h-[400px] xl:w-[500px]"
+      <div className="relative z-10 mx-auto flex min-h-[540px] w-full max-w-7xl flex-1 flex-col justify-center px-5 py-16 sm:min-h-[600px] sm:px-8 lg:min-h-[660px]">
+        <motion.span
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.7, ease: EXPO }}
+          className="mb-6 inline-flex w-fit items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.25em] text-goldlight"
         >
-          <div className="absolute -inset-3 rounded-3xl bg-goldlight/10 blur-xl" />
-          <div className="relative h-full w-full overflow-hidden rounded-2xl shadow-[0_40px_90px_-30px_rgba(0,0,0,0.7)] ring-1 ring-goldlight/40">
-            <KenBurns images={FRAME_SCENES} interval={6} />
-            <div className="absolute inset-0 ring-1 ring-inset ring-white/10" />
-            <span className="absolute bottom-4 left-4 rounded-md bg-[#081209]/55 px-3 py-1.5 text-[10.5px] font-semibold uppercase tracking-[0.2em] text-goldlight backdrop-blur-sm">
-              Styled by PlantAtHome
-            </span>
-          </div>
+          <span className="h-px w-8 bg-goldlight/60" /> India’s Premium Plant Studio
+        </motion.span>
+
+        <h1 className="max-w-3xl font-cormorant text-[2.6rem] font-medium leading-[1.02] tracking-tight text-white sm:text-[3.6rem] lg:text-[4.6rem]">
+          <WordReveal text="Bring Nature" delay={0.1} />
+          <span className="block text-goldlight">
+            <WordReveal text="Into Your Space" delay={0.35} />
+          </span>
+        </h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.7, ease: EXPO }}
+          className="mt-6 max-w-md text-[14px] leading-7 text-white/80 sm:text-[15.5px]"
+        >
+          Curated plants and planters to elevate your home, office and lifestyle.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.78, duration: 0.7, ease: EXPO }}
+          className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
+        >
+          <Link
+            href="/plants/search"
+            className="inline-flex items-center justify-center gap-2.5 rounded-md bg-goldlight px-8 py-4 text-[12px] font-bold uppercase tracking-[0.14em] text-forest-900 shadow-[0_18px_44px_-16px_rgba(227,206,151,0.55)] transition hover:bg-white"
+          >
+            Shop Now <Icon.arrow className="h-4 w-4" />
+          </Link>
+          <Link
+            href="/garden-service"
+            className="inline-flex items-center justify-center gap-2.5 rounded-md border border-white/30 bg-white/10 px-8 py-4 text-[12px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-md transition hover:bg-white/20"
+          >
+            Free Consultation
+          </Link>
         </motion.div>
       </div>
 
