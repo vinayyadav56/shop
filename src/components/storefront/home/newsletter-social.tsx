@@ -17,12 +17,12 @@ export function NewsletterSocial() {
 
   return (
     <section className="relative overflow-hidden g-band">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_70%_20%,rgba(227,206,151,0.10),transparent_70%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_70%_20%,var(--g-band-glow),transparent_70%)]" />
       <div className="relative mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-14">
         {/* newsletter */}
         <div>
-          <h2 className="text-[12px] font-bold uppercase tracking-[0.22em] text-goldlight sm:text-[13px]">Stay Green, Stay Inspired</h2>
-          <p className="mt-3 max-w-md text-[14px] leading-7 text-white/60">
+          <h2 className="text-[12px] font-bold uppercase tracking-[0.22em] text-[color:var(--g-band-accent)] sm:text-[13px]">Stay Green, Stay Inspired</h2>
+          <p className="mt-3 max-w-md text-[14px] leading-7 text-[color:var(--g-band-ink-soft)]">
             Subscribe to get plant care tips, exclusive offers and more.
           </p>
           <form
@@ -39,22 +39,22 @@ export function NewsletterSocial() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               aria-label="Email address"
-              className="h-12 min-w-0 flex-1 rounded-lg border border-white/20 bg-white/10 px-4 text-[14px] text-white outline-none backdrop-blur placeholder:text-white/40 focus:border-goldlight/60"
+              className="h-12 min-w-0 flex-1 rounded-lg border border-[color:var(--g-band-hairline)] bg-white/60 px-4 text-[14px] text-[color:var(--g-band-ink)] outline-none backdrop-blur placeholder:opacity-50 focus:border-[color:var(--g-cta-from)]"
             />
             <button
               type="submit"
               aria-label="Subscribe"
-              className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-goldlight text-forest-900 transition hover:bg-white"
+              className="g-cta grid h-12 w-12 shrink-0 place-items-center rounded-lg text-white transition hover:brightness-110"
             >
               <Icon.arrow className="h-5 w-5" />
             </button>
           </form>
-          {done && <p className="mt-3 text-[12.5px] font-medium text-goldlight">Thanks — you’re on the list 🌿</p>}
+          {done && <p className="mt-3 text-[12.5px] font-medium text-[color:var(--g-band-accent)]">Thanks — you’re on the list 🌿</p>}
         </div>
 
         {/* follow us */}
         <div>
-          <h2 className="text-[12px] font-bold uppercase tracking-[0.22em] text-goldlight sm:text-[13px]">Follow Us @PlantAtHome</h2>
+          <h2 className="text-[12px] font-bold uppercase tracking-[0.22em] text-[color:var(--g-band-accent)] sm:text-[13px]">Follow Us @PlantAtHome</h2>
           <div className="mt-5 grid grid-cols-5 gap-2 sm:gap-3">
             {SOCIAL.map((src, i) => (
               <a
@@ -62,7 +62,7 @@ export function NewsletterSocial() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noreferrer"
-                className="group relative aspect-square overflow-hidden rounded-lg bg-white/10 ring-1 ring-white/15 transition hover:ring-goldlight/60"
+                className="group relative aspect-square overflow-hidden rounded-lg bg-white/40 ring-1 ring-[color:var(--g-band-hairline)] transition hover:ring-[color:var(--g-cta-from)]"
               >
                 <Image src={src} alt="PlantAtHome on Instagram" fill sizes="18vw" className="object-cover transition duration-500 group-hover:scale-110" />
               </a>

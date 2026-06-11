@@ -27,13 +27,13 @@ export function VerticalsShowcase() {
 
   return (
     <section className="relative overflow-hidden g-band">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_70%_20%,rgba(227,206,151,0.10),transparent_70%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_70%_20%,var(--g-band-glow),transparent_70%)]" />
       <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:py-24">
         <div className="mb-8 text-center lg:mb-12">
-          <p className="mb-3 flex items-center justify-center gap-2.5 text-[10.5px] font-bold uppercase tracking-[0.3em] text-goldlight">
-            <span className="h-px w-8 bg-goldlight/50" /> One Home, Three Worlds <span className="h-px w-8 bg-goldlight/50" />
+          <p className="mb-3 flex items-center justify-center gap-2.5 text-[10.5px] font-bold uppercase tracking-[0.3em] text-[color:var(--g-band-accent)]">
+            <span className="h-px w-8 bg-[color:var(--g-band-hairline)]" /> One Home, Three Worlds <span className="h-px w-8 bg-[color:var(--g-band-hairline)]" />
           </p>
-          <h2 className="mx-auto max-w-2xl font-cormorant text-[2.1rem] font-medium leading-[1.08] text-white sm:text-[2.8rem]">
+          <h2 className="mx-auto max-w-2xl font-cormorant text-[2.1rem] font-medium leading-[1.08] text-[color:var(--g-band-ink)] sm:text-[2.8rem]">
             Everything to grow your green life.
           </h2>
         </div>
@@ -46,7 +46,7 @@ export function VerticalsShowcase() {
                 <motion.div
                   whileHover={{ y: -6 }}
                   transition={{ duration: 0.3 }}
-                  className="group relative h-64 overflow-hidden rounded-2xl ring-1 ring-white/10 sm:h-72 lg:h-80"
+                  className="group relative h-64 overflow-hidden rounded-2xl ring-1 ring-black/5 sm:h-72 lg:h-80"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img

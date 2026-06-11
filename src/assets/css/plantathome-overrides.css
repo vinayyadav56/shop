@@ -3063,41 +3063,56 @@ textarea:focus {
   .pa-checkout-page { padding-bottom: 92px; }
 }
 
-/* ── Round 8: switchable green palettes (picked via html[data-green]) ──
-   Gradient surfaces across the storefront read these vars; ?green=1..5 or the
-   staging palette picker switches them live. Palette 1 is the default. */
+/* ── Switchable green palettes (html[data-green]) — round 9: LIGHT/gradient set.
+   Bands are light gradient washes with dark ink (palette 5 = medium w/ white ink).
+   ?green=1..5 or the staging picker switches live. */
 :root {
-  --g-band-from: #16704F; --g-band-via: #1E8A62; --g-band-to: #27A374;
-  --g-lighta-from: #F5FCF8; --g-lighta-to: #E8F6EE;
-  --g-lightb-from: #E8F6EE; --g-lightb-to: #DDF1E6;
-  --g-cta-from: #1E8A62; --g-cta-to: #34B27D;
-}
-html[data-green='2'] {
-  --g-band-from: #2E9E6B; --g-band-via: #3DB87F; --g-band-to: #52CC92;
-  --g-lighta-from: #F6FDF9; --g-lighta-to: #EAF8F0;
-  --g-lightb-from: #EAF8F0; --g-lightb-to: #DFF4E9;
+  --g-band-from: #E3F4EA; --g-band-via: #D6EFE0; --g-band-to: #C4E8D2;
+  --g-band-ink: #14532D; --g-band-ink-soft: #3D6B4F;
+  --g-band-accent: #8A6A25; --g-band-hairline: rgba(20,83,45,0.16);
+  --g-band-glow: rgba(255,255,255,0.5);
+  --g-lighta-from: #FBFEFC; --g-lighta-to: #F0FAF4;
+  --g-lightb-from: #F0FAF4; --g-lightb-to: #E5F5EC;
   --g-cta-from: #2E9E6B; --g-cta-to: #52CC92;
 }
+html[data-green='2'] {
+  --g-band-from: #D8F1E0; --g-band-via: #BFE8CF; --g-band-to: #A9DEC2;
+  --g-band-ink: #11402A; --g-band-ink-soft: #356449;
+  --g-band-accent: #8A6A25; --g-band-hairline: rgba(17,64,42,0.18);
+  --g-band-glow: rgba(255,255,255,0.45);
+  --g-lighta-from: #FAFEFB; --g-lighta-to: #ECF8F1;
+  --g-lightb-from: #ECF8F1; --g-lightb-to: #DFF2E7;
+  --g-cta-from: #279962; --g-cta-to: #46C089;
+}
 html[data-green='3'] {
-  --g-band-from: #4E7A5A; --g-band-via: #5E8F6B; --g-band-to: #6FA47C;
-  --g-lighta-from: #F6FAF5; --g-lighta-to: #EAF2E8;
-  --g-lightb-from: #EAF2E8; --g-lightb-to: #E0EBDD;
-  --g-cta-from: #527E5E; --g-cta-to: #6FA47C;
+  --g-band-from: #EFF9E3; --g-band-via: #DDF2C9; --g-band-to: #CBEBAD;
+  --g-band-ink: #2F5618; --g-band-ink-soft: #54773A;
+  --g-band-accent: #7A6420; --g-band-hairline: rgba(47,86,24,0.18);
+  --g-band-glow: rgba(255,255,255,0.5);
+  --g-lighta-from: #FCFEF8; --g-lighta-to: #F2FAE8;
+  --g-lightb-from: #F2FAE8; --g-lightb-to: #E8F5D9;
+  --g-cta-from: #5BA533; --g-cta-to: #7CC24E;
 }
 html[data-green='4'] {
-  --g-band-from: #0F766E; --g-band-via: #14998C; --g-band-to: #1FB9A6;
-  --g-lighta-from: #F3FBFA; --g-lighta-to: #E2F5F2;
-  --g-lightb-from: #E2F5F2; --g-lightb-to: #D5F0EB;
-  --g-cta-from: #0F766E; --g-cta-to: #1FB9A6;
+  --g-band-from: #E2F7F1; --g-band-via: #CDF1E7; --g-band-to: #B9EADD;
+  --g-band-ink: #0C4A3E; --g-band-ink-soft: #336F62;
+  --g-band-accent: #8A6A25; --g-band-hairline: rgba(12,74,62,0.18);
+  --g-band-glow: rgba(255,255,255,0.5);
+  --g-lighta-from: #FAFEFD; --g-lighta-to: #EDF9F5;
+  --g-lightb-from: #EDF9F5; --g-lightb-to: #E0F4EE;
+  --g-cta-from: #169B82; --g-cta-to: #2FC4A4;
 }
 html[data-green='5'] {
-  --g-band-from: #1C5E3C; --g-band-via: #27754C; --g-band-to: #348C5D;
-  --g-lighta-from: #F4FBF6; --g-lighta-to: #E7F3EA;
-  --g-lightb-from: #E7F3EA; --g-lightb-to: #DCEEE2;
-  --g-cta-from: #27754C; --g-cta-to: #3F9E6B;
+  --g-band-from: #8FD3AC; --g-band-via: #6CC393; --g-band-to: #4CAF7D;
+  --g-band-ink: #FFFFFF; --g-band-ink-soft: rgba(255,255,255,0.78);
+  --g-band-accent: #F3E7C8; --g-band-hairline: rgba(255,255,255,0.28);
+  --g-band-glow: rgba(243,231,200,0.18);
+  --g-lighta-from: #FAFEFB; --g-lighta-to: #EDF8F1;
+  --g-lightb-from: #EDF8F1; --g-lightb-to: #E0F2E8;
+  --g-cta-from: #1E8A62; --g-cta-to: #34B27D;
 }
 .g-band { background-image: linear-gradient(to bottom right, var(--g-band-from), var(--g-band-via), var(--g-band-to)); }
 .g-light-a { background-image: linear-gradient(to bottom, var(--g-lighta-from), var(--g-lighta-to)); }
 .g-light-b { background-image: linear-gradient(to bottom, var(--g-lightb-from), var(--g-lightb-to)); }
 .g-cta { background-image: linear-gradient(to right, var(--g-cta-from), var(--g-cta-to)); }
-.g-footer { background-image: linear-gradient(to bottom, var(--g-band-from), var(--g-band-via)); }
+.g-footer { background-image: linear-gradient(to bottom, var(--g-band-via), var(--g-band-to)); }

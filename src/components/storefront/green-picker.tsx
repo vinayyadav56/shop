@@ -4,11 +4,11 @@ import React from 'react';
 // Staging-only palette picker: 5 green options the user can flip live.
 // Deep links: ?green=1..5 ; choice persists in localStorage.
 const PALETTES = [
-  { n: '1', name: 'Fresh Emerald', dot: '#1E8A62' },
-  { n: '2', name: 'Mint Breeze', dot: '#3DB87F' },
-  { n: '3', name: 'Sage Calm', dot: '#5E8F6B' },
-  { n: '4', name: 'Tropical Teal', dot: '#14998C' },
-  { n: '5', name: 'Classic Forest', dot: '#27754C' },
+  { n: '1', name: 'Soft Mint Wash', dot: '#C4E8D2', num: '#14532D' },
+  { n: '2', name: 'Spring Gradient', dot: '#A9DEC2', num: '#11402A' },
+  { n: '3', name: 'Lime Fresh', dot: '#CBEBAD', num: '#2F5618' },
+  { n: '4', name: 'Aqua Breeze', dot: '#B9EADD', num: '#0C4A3E' },
+  { n: '5', name: 'Gradient Green', dot: '#4CAF7D', num: '#FFFFFF' },
 ];
 
 const IS_STAGING =
@@ -51,7 +51,7 @@ export default function GreenPicker() {
               }`}
               style={{ backgroundColor: p.dot }}
             >
-              <span className="text-[10.5px] font-bold text-white">{p.n}</span>
+              <span className="text-[10.5px] font-bold" style={{ color: p.num }}>{p.n}</span>
             </button>
           ))}
           <button

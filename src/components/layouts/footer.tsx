@@ -82,13 +82,13 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-gold/20 g-footer text-white">
+    <footer className="border-t border-[color:var(--g-band-hairline)] g-footer text-[color:var(--g-band-ink)]">
       <div className="mx-auto max-w-7xl px-5 pb-10 pt-14 sm:px-8 lg:pt-16">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-10 lg:grid-cols-[1.4fr_repeat(4,1fr)_1.2fr]">
           {/* brand */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1 lg:pr-6">
-            <WordmarkStacked light />
-            <p className="mt-4 max-w-xs text-[13px] leading-6 text-white/60">
+            <WordmarkStacked light={false} className="[&_*]:!text-[color:var(--g-band-ink)]" />
+            <p className="mt-4 max-w-xs text-[13px] leading-6 text-[color:var(--g-band-ink-soft)]">
               Bringing nature closer to you — curated plants and planters to elevate every home, office and
               lifestyle.
             </p>
@@ -100,7 +100,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={s.name}
-                  className="text-white/60 transition hover:text-goldlight"
+                  className="text-[color:var(--g-band-ink-soft)] transition hover:text-[color:var(--g-band-accent)]"
                 >
                   {s.icon}
                 </a>
@@ -111,11 +111,11 @@ const Footer = () => {
           {/* link columns */}
           {COLS.map((col) => (
             <div key={col.title}>
-              <h3 className="text-[12px] font-bold uppercase tracking-[0.16em] text-goldlight/80">{col.title}</h3>
+              <h3 className="text-[12px] font-bold uppercase tracking-[0.16em] text-[color:var(--g-band-accent)]">{col.title}</h3>
               <ul className="mt-4 space-y-2.5">
                 {col.links.map((l) => (
                   <li key={l.name}>
-                    <Link href={l.href} className="text-[13px] leading-7 text-white/65 transition hover:text-goldlight">
+                    <Link href={l.href} className="text-[13px] leading-7 text-[color:var(--g-band-ink-soft)] transition hover:text-[color:var(--g-band-accent)]">
                       {l.name}
                     </Link>
                   </li>
@@ -126,11 +126,11 @@ const Footer = () => {
 
           {/* contact */}
           <div>
-            <h3 className="text-[12px] font-bold uppercase tracking-[0.16em] text-goldlight/80">Contact</h3>
+            <h3 className="text-[12px] font-bold uppercase tracking-[0.16em] text-[color:var(--g-band-accent)]">Contact</h3>
             <ul className="mt-4 space-y-3">
               <li>
-                <a href={`mailto:${email}`} className="flex items-center gap-2 text-[13px] leading-7 text-white/65 transition hover:text-goldlight">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-sage-300" aria-hidden>
+                <a href={`mailto:${email}`} className="flex items-center gap-2 text-[13px] leading-7 text-[color:var(--g-band-ink-soft)] transition hover:text-[color:var(--g-band-accent)]">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-[color:var(--g-band-accent)]" aria-hidden>
                     <rect x="3" y="5" width="18" height="14" rx="2.5" />
                     <path d="m3.5 7 8.5 6 8.5-6" />
                   </svg>
@@ -138,8 +138,8 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href={`tel:${phone}`} className="flex items-center gap-2 text-[13px] leading-7 text-white/65 transition hover:text-goldlight">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-sage-300" aria-hidden>
+                <a href={`tel:${phone}`} className="flex items-center gap-2 text-[13px] leading-7 text-[color:var(--g-band-ink-soft)] transition hover:text-[color:var(--g-band-accent)]">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-[color:var(--g-band-accent)]" aria-hidden>
                     <path d="M5.5 3h3l1.7 4.3-2 1.6a13.5 13.5 0 0 0 6 6l1.6-2L20 14.6v3.1A2.3 2.3 0 0 1 17.7 20 15.8 15.8 0 0 1 4 6.3 2.3 2.3 0 0 1 5.5 3Z" />
                   </svg>
                   {phone}
@@ -149,11 +149,11 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 sm:flex-row">
-          <p className="text-[12px] text-white/50">© {year} PlantAtHome. All Rights Reserved.</p>
-          <div className="flex items-center gap-5 text-[12px] text-white/50">
-            <Link href="/terms" className="transition hover:text-goldlight">Terms</Link>
-            <Link href="/privacy" className="transition hover:text-goldlight">Privacy</Link>
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-[color:var(--g-band-hairline)] pt-6 sm:flex-row">
+          <p className="text-[12px] text-[color:var(--g-band-ink-soft)]">© {year} PlantAtHome. All Rights Reserved.</p>
+          <div className="flex items-center gap-5 text-[12px] text-[color:var(--g-band-ink-soft)]">
+            <Link href="/terms" className="transition hover:text-[color:var(--g-band-accent)]">Terms</Link>
+            <Link href="/privacy" className="transition hover:text-[color:var(--g-band-accent)]">Privacy</Link>
           </div>
         </div>
       </div>
