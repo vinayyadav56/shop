@@ -12,8 +12,9 @@ import { EXPO, WordReveal } from '../motion';
 // hotlinkable real tour film of this exact subject does not exist — ~450 stock
 // clips were previewed; swap TOUR_SCENES for a licensed mp4 if one is provided).
 const TOUR_SCENES = [
-  '/hero-villa-exterior.jpg', // approach: glass villa in the forest
+  '/hero-emerald.jpg', // open: emerald room, arched window, monstera (user's pick)
   '/hero-villa-interior.jpg', // inside: jungle living room
+  '/hero-villa-exterior.jpg', // approach: glass villa in the forest
   '/hero-glasshouse-dusk.jpg', // dusk: glass walls glowing (2560px)
 ];
 
@@ -23,6 +24,7 @@ const MOVES = [
   { scale: [1.18, 1.02], x: ['3%', '-2%'], y: ['1%', '-1%'] }, // dolly forward
   { scale: [1.04, 1.2], x: ['-2%', '2%'], y: ['-1%', '1%'] }, // push toward the green
   { scale: [1.16, 1.04], x: ['2%', '-2%'], y: ['1.5%', '-1%'] }, // settle on the glow
+  { scale: [1.2, 1.04], x: ['-2.5%', '2%'], y: ['1%', '-1.5%'] }, // drift past the window
 ];
 const SCENE_SECONDS = 8;
 
