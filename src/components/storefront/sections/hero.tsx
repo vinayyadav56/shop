@@ -51,7 +51,7 @@ export function Hero({
         <KenBurns images={heroScenes} interval={6} />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-t from-deep/85 via-deep/25 to-deep/40" />
-      <div className="absolute inset-0 bg-gradient-to-r from-deep/75 via-deep/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-deep/80 via-deep/35 to-deep/10" />
 
       <motion.div
         style={{ y: contentY, opacity: fade }}

@@ -16,11 +16,12 @@ const IS_STAGING =
 
 export default function GreenPicker() {
   const [active, setActive] = React.useState('1');
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     const fromUrl = new URLSearchParams(window.location.search).get('green');
     const saved = window.localStorage.getItem('green');
+    setOpen(window.innerWidth >= 1024);
     const n = fromUrl && PALETTES.some((p) => p.n === fromUrl) ? fromUrl : saved && PALETTES.some((p) => p.n === saved) ? saved : '1';
     apply(n);
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -131,6 +131,10 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
     amount: priceSource?.sale_price ? priceSource.sale_price : priceSource?.price ?? 0,
     baseAmount: priceSource?.price ?? 0,
   });
+  // Variable products have no own price until a variation is picked — show the
+  // range floor instead of ₹0.00.
+  const { price: minVarPrice } = usePrice({ amount: (product as any)?.min_price ?? 0 });
+  const showFromPrice = hasVariations && !isSelected;
 
   const previewImages = displayImage(selectedVariation?.image, gallery, image);
   const content = useSanitizeContent({ description });
@@ -256,8 +260,13 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
 
       {/* price — kept high so it's always visible */}
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        <span className="font-poppins text-[1.85rem] font-bold leading-none text-forest-700 sm:text-[2rem]">{price}</span>
-        {basePrice && <del className="text-[1.05rem] text-stone-400">{basePrice}</del>}
+        {showFromPrice && (
+          <span className="self-end pb-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-stone-400">From</span>
+        )}
+        <span className="font-poppins text-[1.85rem] font-bold leading-none text-forest-700 sm:text-[2rem]">
+          {showFromPrice ? minVarPrice : price}
+        </span>
+        {!showFromPrice && basePrice && <del className="text-[1.05rem] text-stone-400">{basePrice}</del>}
         {discount && (
           <span className="rounded-full bg-forest-600/12 px-3 py-1.5 text-[13px] font-semibold text-forest-700">
             {discount} OFF

@@ -87,6 +87,7 @@ export function HeroPlant() {
 
       {/* light luxury grade — protect the type, let the architecture read */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#081209]/90 via-[#0E2415]/55 to-transparent" />
+      <div className="absolute inset-0 bg-[#0C1F13]/35 sm:hidden" />
       <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#081209]/80 to-transparent" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(42%_55%_at_22%_42%,rgba(227,206,151,0.12),transparent_70%)]" />
 
