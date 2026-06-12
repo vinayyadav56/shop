@@ -41,7 +41,7 @@ export function HeroEmerald() {
             Curated Greens. Conscious Living.
           </motion.p>
 
-          <h1 className="font-cormorant text-[2.5rem] font-medium leading-[1.05] text-[#F0EAD8] sm:text-[3.3rem] lg:text-[3.8rem]">
+          <h1 className="font-cormorant text-[2.15rem] font-medium leading-[1.05] text-[#F0EAD8] sm:text-[3.3rem] lg:text-[3.8rem]">
             <WordReveal text="Bring Nature In." delay={0.1} />
             <span className="block italic text-[#C9A24B]">
               <WordReveal text="Live Extraordinary." delay={0.4} />
