@@ -131,10 +131,21 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
     amount: priceSource?.sale_price ? priceSource.sale_price : priceSource?.price ?? 0,
     baseAmount: priceSource?.price ?? 0,
   });
-  // Variable products have no own price until a variation is picked — show the
-  // range floor instead of ₹0.00.
-  const { price: minVarPrice } = usePrice({ amount: (product as any)?.min_price ?? 0 });
-  const showFromPrice = hasVariations && !isSelected;
+  // Variable products have no own price until a variation is picked (and the
+  // default pick can miss the variation lookup) — show the range floor instead
+  // of ₹0.00 whenever the resolved price is empty.
+  const resolvedAmount = Number(priceSource?.sale_price ? priceSource.sale_price : priceSource?.price) || 0;
+  const fallbackMin =
+    Number((product as any)?.min_price) ||
+    Math.min(
+      ...((product?.variation_options as any[]) ?? [])
+        .map((o: any) => Number(o?.sale_price ? o.sale_price : o?.price) || Infinity),
+      Infinity,
+    );
+  const { price: minVarPrice } = usePrice({
+    amount: Number.isFinite(fallbackMin) ? fallbackMin : 0,
+  });
+  const showFromPrice = hasVariations && resolvedAmount <= 0;
 
   const previewImages = displayImage(selectedVariation?.image, gallery, image);
   const content = useSanitizeContent({ description });
