@@ -9,7 +9,6 @@ import { SearchIcon } from '@/components/icons/search-icon';
 import { displayMobileHeaderSearchAtom } from '@/store/display-mobile-header-search-atom';
 import dynamic from 'next/dynamic';
 
-const GreenPicker = dynamic(() => import('@/components/storefront/green-picker'), { ssr: false });
 
 const MobileNavigation = dynamic(() => import('./mobile-navigation'), {
   ssr: false,
@@ -35,7 +34,6 @@ export default function HomeLayout({
 
       <Footer />
 
-      <GreenPicker />
 
       <MobileNavigation>
         <motion.button

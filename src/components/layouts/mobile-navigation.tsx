@@ -33,11 +33,11 @@ export default function MobileNavigation({
   }
 
   return (
-    <nav className="visible fixed bottom-0 z-10 flex h-14 w-full justify-around border-t border-forest-900/10 bg-white/90 py-1.5 px-2 backdrop-blur-xl ltr:left-0 rtl:right-0 lg:hidden">
+    <nav className="visible fixed bottom-0 z-10 flex h-14 w-full justify-around border-t border-[#C9A24B]/20 bg-[#12281A]/95 py-1.5 px-2 backdrop-blur-xl ltr:left-0 rtl:right-0 lg:hidden">
       <motion.button
         whileTap={{ scale: 0.88 }}
         onClick={() => handleSidebar('MAIN_MENU_VIEW')}
-        className="flex h-full items-center justify-center p-2 text-forest-800 focus:text-[#1B6B50] focus:outline-0"
+        className="flex h-full items-center justify-center p-2 text-[#F0EAD8] focus:text-[#C9A24B] focus:outline-0"
       >
         <span className="sr-only">{t('text-burger-menu')}</span>
         <NavbarIcon className={`${isRTL && 'rotate-180 transform'}`} />
@@ -48,7 +48,7 @@ export default function MobileNavigation({
       <motion.button
         whileTap={{ scale: 0.88 }}
         onClick={() => router.push('/')}
-        className="flex h-full items-center justify-center p-2 text-forest-800 focus:text-[#1B6B50] focus:outline-0"
+        className="flex h-full items-center justify-center p-2 text-[#F0EAD8] focus:text-[#C9A24B] focus:outline-0"
       >
         <span className="sr-only">{t('text-home')}</span>
         <HomeIcon />
@@ -57,12 +57,12 @@ export default function MobileNavigation({
       <motion.button
         whileTap={{ scale: 0.88 }}
         onClick={() => handleSidebar('cart')}
-        className="product-cart relative flex h-full items-center justify-center p-2 text-forest-800 focus:text-[#1B6B50] focus:outline-0"
+        className="product-cart relative flex h-full items-center justify-center p-2 text-[#F0EAD8] focus:text-[#C9A24B] focus:outline-0"
       >
         <span className="sr-only">{t('text-cart')}</span>
         <ShoppingBagIcon />
         {totalUniqueItems > 0 && (
-          <span className="absolute top-0 mt-0.5 rounded-full bg-[#0D3B2E] py-1 px-1.5 text-[11px] font-semibold leading-none text-white ltr:right-0 ltr:-mr-0.5 rtl:left-0 rtl:-ml-0.5">
+          <span className="absolute top-0 mt-0.5 rounded-full bg-[#C9A24B] py-1 px-1.5 text-[11px] font-semibold leading-none text-[#12281A] ltr:right-0 ltr:-mr-0.5 rtl:left-0 rtl:-ml-0.5">
             {totalUniqueItems}
           </span>
         )}
@@ -72,7 +72,7 @@ export default function MobileNavigation({
         <motion.button
           whileTap={{ scale: 0.88 }}
           onClick={() => handleSidebar('AUTH_MENU_VIEW')}
-          className="flex h-full items-center justify-center p-2 text-forest-800 focus:text-[#1B6B50] focus:outline-0"
+          className="flex h-full items-center justify-center p-2 text-[#F0EAD8] focus:text-[#C9A24B] focus:outline-0"
         >
           <span className="sr-only">{t('text-user')}</span>
           <UserIcon />
@@ -81,7 +81,7 @@ export default function MobileNavigation({
         <motion.button
           whileTap={{ scale: 0.88 }}
           onClick={handleJoin}
-          className="flex h-full items-center justify-center p-2 text-forest-800 focus:text-[#1B6B50] focus:outline-0"
+          className="flex h-full items-center justify-center p-2 text-[#F0EAD8] focus:text-[#C9A24B] focus:outline-0"
         >
           <span className="sr-only">{t('text-user')}</span>
           <UserIcon />
