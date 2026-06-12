@@ -1,8 +1,8 @@
 {
   "name": "PlantAtHome",
   "short_name": "PlantAtHome",
-  "theme_color": "#12281A",
-  "background_color": "#F2EFE5",
+  "theme_color": "#0D3B2E",
+  "background_color": "#F4FBF7",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",

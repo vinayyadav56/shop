@@ -66,26 +66,25 @@ export function LogoMark({
 /** Stacked serif wordmark — the mockup's "THE PLANT / COMPANY" style, with the
  *  PlantAtHome brand name. Small leaf sits under the second line. */
 export function WordmarkStacked({
-  light = true,
+  light = false,
   className = '',
 }: {
   light?: boolean;
   className?: string;
 }) {
-  const fg = light ? 'text-[#F0EAD8]' : 'text-[#12281A]';
+  const fg = light ? 'text-white' : 'text-forest-900';
+  const leaf = light ? 'text-sage-300' : 'text-forest-600';
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <svg viewBox="0 0 24 24" fill="none" stroke="#C9A24B" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 shrink-0" aria-hidden>
-        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
-        <path d="M2 21c0-3 1.85-5.36 5.08-6" />
-      </svg>
-      <span className="inline-flex flex-col leading-none">
-        <span className={`font-cormorant text-[19px] font-semibold uppercase tracking-[0.16em] ${fg}`}>
-          Plantahome
-        </span>
-        <span className="mt-1 text-[7.5px] font-semibold uppercase tracking-[0.42em] text-[#C9A24B]">
-          Rooted in Nature
-        </span>
+    <span className={`inline-flex flex-col leading-none ${className}`}>
+      <span className={`font-cormorant text-[19px] font-bold uppercase tracking-[0.18em] ${fg}`}>
+        Plant
+      </span>
+      <span className={`mt-0.5 flex items-center gap-1.5 font-cormorant text-[19px] font-bold uppercase tracking-[0.18em] ${fg}`}>
+        At Home
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={`h-3.5 w-3.5 ${leaf}`} aria-hidden>
+          <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+          <path d="M2 21c0-3 1.85-5.36 5.08-6" />
+        </svg>
       </span>
     </span>
   );

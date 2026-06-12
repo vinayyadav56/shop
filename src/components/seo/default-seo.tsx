@@ -42,7 +42,7 @@ const DefaultSeo = () => {
         },
         {
           name: 'theme-color',
-          content: '#12281A',
+          content: '#0D3B2E',
         },
       ]}
       additionalLinkTags={[

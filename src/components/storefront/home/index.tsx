@@ -1,21 +1,21 @@
 'use client';
 import React from 'react';
 import type { Category, Product } from '@/types';
-import { HeroEmerald } from '../home2/hero-emerald';
-import { CategoryCards } from '../home2/category-cards';
-import { BestSellers2 } from '../home2/best-sellers2';
-import { StatsBand } from '../home2/stats-band';
-import { Collections } from '../home2/collections';
-import { FarmboxBanner } from '../home2/farmbox-banner';
-import { HowEffortless } from '../home2/how-effortless';
-import { Testimonials2 } from '../home2/testimonials2';
-import { NewsletterStrip } from '../home2/newsletter-strip';
+import { HeroPlant } from './hero-plant';
+import { VerticalsShowcase } from './verticals-showcase';
+import { ShopByCategory } from './shop-by-category';
+import { BenefitsStrip } from './benefits-strip';
+import { WhyPlants } from './why-plants';
+import { BestSellers } from './best-sellers';
+import { StatementBand } from './statement-band';
+import { PromoBanners } from './promo-banners';
+import { TrustRow } from './trust-row';
+import { NewsletterSocial } from './newsletter-social';
 
 /**
- * PLANTAHOME homepage — the user's dark-emerald + gold mockup, wired to live data.
- * Section order mirrors the mockup exactly: hero (+features) → category cards →
- * best sellers → stats band → collections → farmbox → how-it-works → testimonials
- * → newsletter strip. (Footer is global chrome.)
+ * "THE PLANT COMPANY"-style homepage — the mockup the user provided, wired to live
+ * data. Rendered only for the home type (see plantathome.tsx). The cinematic
+ * 3-vertical / video layout is preserved for the per-vertical pages.
  */
 export function PlantCompanyHome({
   categories,
@@ -30,15 +30,16 @@ export function PlantCompanyHome({
 }) {
   return (
     <>
-      <HeroEmerald />
-      <CategoryCards />
-      <BestSellers2 products={products} isLoading={productsLoading} />
-      <StatsBand />
-      <Collections />
-      <FarmboxBanner />
-      <HowEffortless />
-      <Testimonials2 />
-      <NewsletterStrip />
+      <HeroPlant />
+      <VerticalsShowcase />
+      <ShopByCategory categories={categories} isLoading={catLoading} />
+      <BenefitsStrip />
+      <WhyPlants />
+      <BestSellers products={products} isLoading={productsLoading} />
+      <StatementBand />
+      <PromoBanners />
+      <TrustRow />
+      <NewsletterSocial />
     </>
   );
 }

@@ -6,6 +6,7 @@ import NoticeHighlightedBar from '@/components/store-notice/notice-highlightedBa
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 
+const GreenPicker = dynamic(() => import('@/components/storefront/green-picker'), { ssr: false });
 
 const MobileNavigation = dynamic(() => import('./mobile-navigation'), {
   ssr: false,
@@ -25,6 +26,7 @@ export default function SiteLayout({ children }: React.PropsWithChildren<{}>) {
       )}
       {children}
       <Footer />
+      <GreenPicker />
       <MobileNavigation />
     </div>
   );
