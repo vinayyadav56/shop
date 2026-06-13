@@ -4,6 +4,7 @@ import isEmpty from 'lodash/isEmpty';
 import { useCreateOrder } from '@/framework/order';
 import ValidationError from '@/components/ui/validation-error';
 import { formatOrderedProduct } from '@/lib/format-ordered-product';
+import { getStoredLatLng } from '@/lib/customer-location';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { checkoutAtom, discountAtom, walletAtom } from '@/store/checkout';
 import {
@@ -110,6 +111,23 @@ export const PlaceOrderAction: React.FC<{
     }
     const finalNote = [note, locationLine].filter(Boolean).join('\n');
 
+    // P3 matching — persist the customer's coordinates on the order so the admin
+    // vendor/delivery-partner matching has precise distances. Prefer the location
+    // shared at checkout, then the delivery address's map pin, then the stored one.
+    const dvLoc =
+      delivery_verification &&
+      Number.isFinite(Number((delivery_verification as any).lat)) &&
+      Number.isFinite(Number((delivery_verification as any).lng))
+        ? { lat: Number((delivery_verification as any).lat), lng: Number((delivery_verification as any).lng) }
+        : null;
+    const addrLoc = (shipping_address as any)?.address?.location;
+    const customerLatLng =
+      dvLoc ||
+      (addrLoc && Number(addrLoc.lat) && Number(addrLoc.lng)
+        ? { lat: Number(addrLoc.lat), lng: Number(addrLoc.lng) }
+        : null) ||
+      getStoredLatLng();
+
     const isFullWalletPayment =
       use_wallet_points && payable_amount == 0 ? true : false;
     const gateWay = isFullWalletPayment
@@ -139,6 +157,7 @@ export const PlaceOrderAction: React.FC<{
       },
       shipping_address: {
         ...(shipping_address?.address && shipping_address.address),
+        ...(customerLatLng && { location: customerLatLng }),
       },
     };
     delete input.billing_address.__typename;
