@@ -64,7 +64,14 @@ export const PlaceOrderAction: React.FC<{
     (item) => !verified_response?.unavailable_products?.includes(item.id),
   );
 
-  const subtotal = calculateTotal(available_items);
+  // Prefer the server-authoritative amount from /checkout/verify (margin-over-cost
+  // pricing for vendor-cost-sheet products). Falls back to the client cart total
+  // for products without a cost sheet — identical value, so nothing changes there.
+  const clientSubtotal = calculateTotal(available_items);
+  const subtotal =
+    verified_response?.amount != null && Number(verified_response.amount) > 0
+      ? Number(verified_response.amount)
+      : clientSubtotal;
   const { settings } = useSettings();
   const freeShippingAmount = settings?.freeShippingAmount;
   const freeShipping = settings?.freeShipping;
