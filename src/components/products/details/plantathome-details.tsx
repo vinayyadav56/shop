@@ -9,6 +9,7 @@ import isEqual from 'lodash/isEqual';
 import { Routes } from '@/config/routes';
 import type { Product } from '@/types';
 import usePrice from '@/lib/use-price';
+import VendorAvailabilityNote from '@/components/products/details/vendor-availability-note';
 import Truncate from '@/components/ui/truncate';
 import { useSanitizeContent } from '@/lib/sanitize-content';
 import { displayImage } from '@/lib/display-product-preview-images';
@@ -313,6 +314,12 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
                   </div>
                 );
               })}
+
+            {/* vendor availability ("we'll confirm within 6h" when cost = 0) */}
+            <VendorAvailabilityNote
+              productId={id}
+              variationOptionId={isSelected ? selectedVariation?.id : null}
+            />
 
             {/* quantity + add to cart */}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-stretch">
