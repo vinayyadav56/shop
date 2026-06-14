@@ -11,6 +11,7 @@
     "dev:gql": "yarn codegen && next dev -p 3001",
     "build:gql": "yarn codegen && next build",
     "start": "next start -p 3003",
+    "i18n:gen": "node scripts/translate-locales.mjs --src public/locales/en --out public/locales",
     "lint": "next lint",
     "postbuild:rest": "next-sitemap",
     "prepare": "husky install"

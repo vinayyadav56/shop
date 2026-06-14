@@ -15,7 +15,20 @@ export interface DiagnosisResult {
   vet_consultation_needed?: boolean;
 }
 
+export type ImageQuality = 'ok' | 'blurry' | 'dark' | 'partial' | 'no_plant';
+
+export interface PlantIdentification {
+  common_name: string;
+  scientific_name: string;
+  confidence: number;
+}
+
 export interface DiagnosisResponse {
+  // Trust gate: when is_plant is false the UI must show `rejection_reason`, NOT a diagnosis.
+  is_plant?: boolean;
+  image_quality?: ImageQuality;
+  rejection_reason?: string;
+  identification?: PlantIdentification;
   plant_name: string;
   diagnosis: DiagnosisResult[];
   overall_health_score: number;
@@ -29,6 +42,8 @@ export interface DiagnoseInput {
   symptoms?: string;
   plant_name?: string;
   session_id?: string;
+  /** ISO 639 code so the diagnosis text comes back in the shopper's language. */
+  language?: string;
 }
 
 /** Storefront feature flag — is Plant Doctor switched on in admin? */

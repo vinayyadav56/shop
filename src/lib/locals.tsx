@@ -1,19 +1,8 @@
 import { useRouter } from 'next/router';
-import { SAFlag } from '@/components/icons/flags/SAFlag';
-import { CNFlag } from '@/components/icons/flags/CNFlag';
-import { USFlag } from '@/components/icons/flags/USFlag';
-import { DEFlag } from '@/components/icons/flags/DEFlag';
-import { ILFlag } from '@/components/icons/flags/ILFlag';
-import { ESFlag } from '@/components/icons/flags/ESFlag';
 
-import { SAFlagRound } from '@/components/icons/flags/SAFlagRound';
-import { CNFlagRound } from '@/components/icons/flags/CNFlagRound';
-import { DEFlagRound } from '@/components/icons/flags/DEFlagRound';
-import { ESFlagRound } from '@/components/icons/flags/ESFlagRound';
-import { USFlagRound } from '@/components/icons/flags/USFlagRound';
-import { ILFlagRound } from '@/components/icons/flags/ILFlagRound';
+// PlantAtHome: English + the 22 scheduled Indian languages. RTL for Urdu, Kashmiri, Sindhi.
+const localeRTLList = ['ur', 'ks', 'sd'];
 
-const localeRTLList = ['ar', 'he'];
 export function useIsRTL() {
   const { locale } = useRouter();
   if (locale && localeRTLList.includes(locale)) {
@@ -22,47 +11,45 @@ export function useIsRTL() {
   return { isRTL: false, alignLeft: 'left', alignRight: 'right' };
 }
 
-export let languageMenu =[
-  {
-    id: "ar",
-    name: "عربى",
-    value: "ar",
-    icon: <SAFlag width="20px" height="15px" />,
-    iconMobile: <SAFlagRound />
-  },
-  {
-    id: "zh",
-    name: "中国人",
-    value: "zh",
-    icon: <CNFlag width="20px" height="15px" />,
-    iconMobile: <CNFlagRound />
-  },
-  {
-    id: "en",
-    name: "English",
-    value: "en",
-    icon: <USFlag width="20px" height="15px" />,
-    iconMobile: <USFlagRound />
-  },
-  {
-    id: "de",
-    name: "Deutsch",
-    value: "de",
-    icon: <DEFlag width="20px" height="15px" />,
-    iconMobile: <DEFlagRound />
-  },
-  {
-    id: "he",
-    name: "rעברית",
-    value: "he",
-    icon: <ILFlag width="20px" height="15px" />,
-    iconMobile: <ILFlagRound />
-  },
-  {
-    id: "es",
-    name: "Español",
-    value: "es",
-    icon: <ESFlag width="20px" height="15px" />,
-    iconMobile: <ESFlagRound />
-  },
-]
+// id/value = ISO 639 code, name = native script name, short = 1–2 char badge shown in the switcher.
+const LANGS: { id: string; name: string; short: string }[] = [
+  { id: 'en', name: 'English', short: 'EN' },
+  { id: 'hi', name: 'हिन्दी', short: 'हि' },
+  { id: 'bn', name: 'বাংলা', short: 'বা' },
+  { id: 'ta', name: 'தமிழ்', short: 'த' },
+  { id: 'te', name: 'తెలుగు', short: 'తె' },
+  { id: 'mr', name: 'मराठी', short: 'म' },
+  { id: 'gu', name: 'ગુજરાતી', short: 'ગુ' },
+  { id: 'kn', name: 'ಕನ್ನಡ', short: 'ಕ' },
+  { id: 'ml', name: 'മലയാളം', short: 'മ' },
+  { id: 'pa', name: 'ਪੰਜਾਬੀ', short: 'ਪੰ' },
+  { id: 'or', name: 'ଓଡ଼ିଆ', short: 'ଓ' },
+  { id: 'as', name: 'অসমীয়া', short: 'অ' },
+  { id: 'ur', name: 'اردو', short: 'اُ' },
+  { id: 'sa', name: 'संस्कृतम्', short: 'सं' },
+  { id: 'ne', name: 'नेपाली', short: 'ने' },
+  { id: 'kok', name: 'कोंकणी', short: 'को' },
+  { id: 'mai', name: 'मैथिली', short: 'मै' },
+  { id: 'doi', name: 'डोगरी', short: 'डो' },
+  { id: 'ks', name: 'کٲشُر', short: 'كٲ' },
+  { id: 'sd', name: 'سنڌي', short: 'سن' },
+  { id: 'sat', name: 'ᱥᱟᱱᱛᱟᱲᱤ', short: 'ᱥᱟ' },
+  { id: 'mni', name: 'ꯃꯩꯇꯩꯂꯣꯟ', short: 'ꯃ' },
+  { id: 'brx', name: 'बड़ो', short: 'ब' },
+];
+
+function LangBadge({ short }: { short: string }) {
+  return (
+    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-[11px] font-semibold text-gray-700">
+      {short}
+    </span>
+  );
+}
+
+export let languageMenu = LANGS.map((l) => ({
+  id: l.id,
+  name: l.name,
+  value: l.id,
+  icon: <LangBadge short={l.short} />,
+  iconMobile: <LangBadge short={l.short} />,
+}));

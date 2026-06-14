@@ -15,9 +15,10 @@ export default function LanguageSwitcher() {
     locales?.includes(element?.id)
   );
 
-  const currentSelectedItem = locale
-    ? filterItem?.find((o) => o?.value === locale)!
-    : filterItem[2];
+  const currentSelectedItem =
+    (locale ? filterItem?.find((o) => o?.value === locale) : undefined) ??
+    filterItem?.find((o) => o?.value === 'en') ??
+    filterItem?.[0];
   const [selectedItem, setSelectedItem] = useState(currentSelectedItem);
 
   function handleItemClick(values: any) {

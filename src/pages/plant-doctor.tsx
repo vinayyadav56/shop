@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { getLayout as getSiteLayout } from '@/components/layouts/layout';
 import Seo from '@/components/seo/seo';
 import {
@@ -79,7 +80,17 @@ function DiagnosisView({ result, onReset }: { result: DiagnosisResponse; onReset
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-[11px] uppercase tracking-[0.16em] text-stone-400">Diagnosis for</p>
-            <h2 className="font-serif text-2xl text-forest-900">{result.plant_name || 'Your plant'}</h2>
+            <h2 className="font-serif text-2xl text-forest-900">
+              {result.identification?.common_name || result.plant_name || 'Your plant'}
+            </h2>
+            {(result.identification?.scientific_name || (result.identification?.confidence ?? 0) > 0) && (
+              <p className="mt-1 text-sm italic text-stone-500">
+                {result.identification?.scientific_name}
+                {typeof result.identification?.confidence === 'number' && result.identification.confidence > 0
+                  ? ` · ${Math.round(result.identification.confidence * 100)}% match`
+                  : ''}
+              </p>
+            )}
           </div>
           <HealthGauge score={result.overall_health_score} />
         </div>
@@ -161,6 +172,26 @@ function DiagnosisView({ result, onReset }: { result: DiagnosisResponse; onReset
   );
 }
 
+/** Shown when the AI / botanical gate decides the image is not a plant — never a fake diagnosis. */
+function RejectionView({ result, onReset }: { result: DiagnosisResponse; onReset: () => void }) {
+  return (
+    <div className="mx-auto max-w-xl rounded-2xl border border-kraft-200 bg-white p-8 text-center shadow-sm">
+      <span className="text-4xl">🌱</span>
+      <h2 className="mt-4 font-serif text-2xl text-forest-900">We couldn’t find a plant in that photo</h2>
+      <p className="mt-3 leading-relaxed text-stone-600">
+        {result.rejection_reason ||
+          'This doesn’t look like a plant. Please upload a clear, well-lit photo of the plant or the affected leaf.'}
+      </p>
+      <button
+        onClick={onReset}
+        className="mt-6 rounded-full bg-forest-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-forest-800"
+      >
+        Try another photo
+      </button>
+    </div>
+  );
+}
+
 function Col({ title, items, accent }: { title: string; items?: string[]; accent?: boolean }) {
   if (!items || items.length === 0) return null;
   return (
@@ -179,6 +210,7 @@ function Col({ title, items, accent }: { title: string; items?: string[]; accent
 }
 
 export default function PlantDoctorPage() {
+  const { locale } = useRouter();
   const { data: flag } = usePlantDoctorEnabled();
   const enabled = flag?.data?.enabled ?? true;
   const { mutate, isLoading } = useDiagnose();
@@ -215,6 +247,7 @@ export default function PlantDoctorPage() {
         image_base64: imageB64 ?? undefined,
         symptoms: symptoms.trim() || undefined,
         plant_name: plantName.trim() || undefined,
+        language: locale || 'en',
       },
       {
         onSuccess: (res) => setResult(res.data),
@@ -271,7 +304,11 @@ export default function PlantDoctorPage() {
             <p className="mt-2 text-stone-500">We’re putting the finishing touches on it. Check back shortly.</p>
           </div>
         ) : result ? (
-          <DiagnosisView result={result} onReset={reset} />
+          result.is_plant === false ? (
+            <RejectionView result={result} onReset={reset} />
+          ) : (
+            <DiagnosisView result={result} onReset={reset} />
+          )
         ) : (
           <div className="grid gap-8 lg:grid-cols-2">
             {/* uploader */}
