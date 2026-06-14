@@ -6,9 +6,12 @@ import classNames from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 
+import { useQuery } from 'react-query';
 import { Routes } from '@/config/routes';
 import type { Product } from '@/types';
 import usePrice from '@/lib/use-price';
+import { HttpClient } from '@/framework/client/http-client';
+import { getStoredLatLng } from '@/lib/customer-location';
 import VendorAvailabilityNote from '@/components/products/details/vendor-availability-note';
 import Truncate from '@/components/ui/truncate';
 import { useSanitizeContent } from '@/lib/sanitize-content';
@@ -101,6 +104,25 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   });
   const { price: minPrice } = usePrice({ amount: product?.min_price ?? 0 });
   const { price: maxPrice } = usePrice({ amount: product?.max_price ?? 0 });
+
+  // Location-derived selling price (margin over the nearest vendor's hidden cost).
+  // Only overrides the displayed price when this product actually has a vendor
+  // cost sheet — otherwise the catalog price above is shown unchanged.
+  const loc = getStoredLatLng();
+  const { data: vendorPriceData } = useQuery(
+    ['location-price', id, isSelected ? selectedVariation?.id : null, loc?.lat, loc?.lng],
+    () =>
+      HttpClient.get<any>('location-price', {
+        product_id: id,
+        ...(isSelected && selectedVariation?.id ? { variation_option_id: selectedVariation.id } : {}),
+        ...(loc ? { lat: loc.lat, lng: loc.lng } : {}),
+      }),
+    { enabled: !!id, retry: 0, staleTime: 60_000 },
+  );
+  const { price: vendorPrice } = usePrice({ amount: Number(vendorPriceData?.price ?? 0) });
+  const useVendorPrice = Boolean(vendorPriceData?.has_vendor_cost && vendorPriceData?.available);
+  const displayPrice = useVendorPrice ? vendorPrice : price;
+  const displayBasePrice = useVendorPrice ? null : basePrice;
 
   const previewImages = displayImage(selectedVariation?.image, gallery, image);
   const content = useSanitizeContent({ description });
@@ -240,9 +262,9 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
                 <span className="text-2xl font-bold text-forest-900">{minPrice} – {maxPrice}</span>
               ) : (
                 <>
-                  <span className="text-2xl font-bold text-forest-900">{price}</span>
-                  {basePrice && <del className="text-lg text-stone-400">{basePrice}</del>}
-                  {discount && <span className="text-lg font-semibold text-clay-600">{discount} Discount</span>}
+                  <span className="text-2xl font-bold text-forest-900">{displayPrice}</span>
+                  {displayBasePrice && <del className="text-lg text-stone-400">{displayBasePrice}</del>}
+                  {!useVendorPrice && discount && <span className="text-lg font-semibold text-clay-600">{discount} Discount</span>}
                 </>
               )}
             </div>
