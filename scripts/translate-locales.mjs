@@ -42,7 +42,8 @@ const OUT = arg('out', 'public/locales');
 const FORCE = !!arg('force', false);
 const MODEL = arg('model', 'claude-sonnet-4-6');
 const CONCURRENCY = Number(arg('concurrency', 4));
-const CHUNK = Number(arg('chunk', 80)); // keys per Claude call (keeps output within token limits)
+const CHUNK = Number(arg('chunk', 25)); // keys/call — small so the structured-output grammar stays under the size limit
+const FAILURES = [];
 const LANGS = String(arg('langs', Object.keys(LANG_NAMES).filter((l) => l !== 'en').join(',')))
   .split(',').map((s) => s.trim()).filter(Boolean);
 const FILES = arg('files')
@@ -164,10 +165,17 @@ async function translateFile(fileBase, lang) {
   const entries = Object.entries(flat);
   const chunks = chunkEntries(entries, CHUNK);
   const merged = {};
-  for (let c = 0; c < chunks.length; c++) {
-    const translated = await translateChunk(chunks[c], langName);
-    Object.assign(merged, translated);
-    process.stdout.write('  ' + lang + '/' + fileBase + ': chunk ' + (c + 1) + '/' + chunks.length + '\r');
+  try {
+    for (let c = 0; c < chunks.length; c++) {
+      const translated = await translateChunk(chunks[c], langName);
+      Object.assign(merged, translated);
+      process.stdout.write('  ' + lang + '/' + fileBase + ': chunk ' + (c + 1) + '/' + chunks.length + '\r');
+    }
+  } catch (e) {
+    // Resilient: log + record the failure, skip this file, keep the whole run going.
+    console.log('  FAILED ' + lang + '/' + fileBase + '.json: ' + e.message + '        ');
+    FAILURES.push(lang + '/' + fileBase);
+    return;
   }
   mkdirSync(outDir, { recursive: true });
   writeFileSync(outPath, JSON.stringify(unflatten(merged), null, 2) + '\n');
@@ -179,6 +187,9 @@ async function translateFile(fileBase, lang) {
   for (const lang of LANGS) {
     console.log('\n[' + lang + '] ' + (LANG_NAMES[lang] || lang));
     await mapLimit(FILES, CONCURRENCY, (f) => translateFile(f, lang));
+  }
+  if (FAILURES.length) {
+    console.log('\n' + FAILURES.length + ' file(s) FAILED (re-run to retry): ' + FAILURES.join(', '));
   }
   console.log('\nDone. Review machine translations with native speakers before production.');
 })();
