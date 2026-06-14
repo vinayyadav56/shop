@@ -17,6 +17,7 @@ import { OrderStatus, PaymentStatus, RefundStatus } from '@/types';
 import { HomeIconNew } from '@/components/icons/home-icon-new';
 import OrderViewHeader from './order-view-header';
 import OrderStatusProgressBox from '@/components/orders/order-status-progress-box';
+import CourierTrackingMap from '@/components/orders/courier-tracking-map';
 
 function OrderView({ order, language, settings, loadingStatus }: any) {
   const { t } = useTranslation('common');
@@ -109,6 +110,11 @@ function OrderView({ order, language, settings, loadingStatus }: any) {
               />
             </div>
             {/* end of order Status */}
+
+            {/* Live courier tracking (shows only while out for delivery) */}
+            <div className="mb-8">
+              <CourierTrackingMap tracking={order?.tracking_number} />
+            </div>
 
             <div className="flex flex-col lg:flex-row">
               <div className="mb-12 w-full lg:mb-0 lg:w-1/2 ltr:lg:pr-3 rtl:lg:pl-3">
