@@ -37,11 +37,11 @@ export function ProductGrid({
         <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:mb-10 sm:flex-row sm:items-end">
           <div>
             <FadeUp>
-              <p className="mb-2.5 font-display text-xs font-medium uppercase tracking-[0.28em] text-forest-700">
+              <p className="mb-2.5 text-xs font-bold uppercase tracking-[0.25em] text-gold">
                 {eyebrow}
               </p>
             </FadeUp>
-            <h2 className="max-w-xl font-serif text-4xl font-semibold leading-tight text-forest-900 sm:text-5xl">
+            <h2 className="max-w-xl font-cormorant text-4xl font-bold not-italic leading-tight text-forest-900 sm:text-5xl">
               <WordReveal text={title} />
             </h2>
           </div>
@@ -49,7 +49,7 @@ export function ProductGrid({
             <FadeUp delay={0.1}>
               <Link
                 href={viewAllTo}
-                className="group inline-flex shrink-0 items-center gap-2 rounded-full border border-forest-700 px-[22px] py-3 text-[15px] font-semibold text-forest-800 transition hover:bg-sage-100"
+                className="group inline-flex min-h-[44px] shrink-0 items-center justify-center gap-2 rounded-md border border-forest-700 px-6 py-3 text-xs font-bold uppercase tracking-[0.12em] text-forest-800 transition hover:bg-sage-100"
               >
                 {viewAllLabel ?? 'View all'}
                 <Icon.arrow className="h-4 w-4 transition group-hover:translate-x-1" />
@@ -58,7 +58,7 @@ export function ProductGrid({
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3.5 sm:gap-5 lg:grid-cols-4">
           {isLoading
             ? Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="aspect-[4/5] animate-pulse rounded-lg bg-sage-200" />
@@ -76,7 +76,7 @@ export function ProductGrid({
               type="button"
               onClick={onLoadMore}
               disabled={isLoadingMore}
-              className="inline-flex items-center gap-2 rounded-full bg-forest-700 px-7 py-3 text-[15px] font-semibold text-white transition hover:bg-forest-800 disabled:opacity-60"
+              className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-forest-800 px-7 py-3 text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-forest-900 disabled:opacity-60 sm:w-auto"
             >
               {isLoadingMore ? 'Loading…' : 'Load more'}
             </button>

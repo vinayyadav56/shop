@@ -83,7 +83,7 @@ function RegisterForm() {
 
       <div className="relative mt-8 mb-6 flex flex-col items-center justify-center text-sm text-heading sm:mt-11 sm:mb-8">
         <hr className="w-full" />
-        <span className="absolute -top-2.5 bg-light px-2 ltr:left-2/4 ltr:-ml-4 rtl:right-2/4 rtl:-mr-4">
+        <span className="absolute -top-2.5 bg-white px-2 ltr:left-2/4 ltr:-ml-4 rtl:right-2/4 rtl:-mr-4">
           {t('text-or')}
         </span>
       </div>
@@ -113,7 +113,7 @@ function RegisterForm() {
         {t('text-already-account')}{' '}
         <button
           onClick={() => openModal('LOGIN_VIEW')}
-          className="font-semibold text-accent underline transition-colors duration-200 hover:text-accent-hover hover:no-underline focus:text-accent-hover focus:no-underline focus:outline-0 ltr:ml-1 rtl:mr-1"
+          className="font-semibold text-[#175840] underline transition-colors duration-200 hover:text-[#1B6B50] hover:no-underline focus:text-[#1B6B50] focus:no-underline focus:outline-0 ltr:ml-1 rtl:mr-1"
         >
           {t('text-login')}
         </button>
@@ -131,7 +131,7 @@ export default function RegisterView() {
   }
 
   return (
-    <div className="flex h-full min-h-screen w-screen flex-col justify-center bg-light py-6 px-5 sm:p-8 md:h-auto md:min-h-0 md:max-w-[480px] md:rounded-xl">
+    <div className="flex h-full min-h-screen w-screen flex-col justify-center bg-white py-6 px-5 sm:p-8 md:h-auto md:min-h-0 md:max-w-[480px] md:rounded-xl">
       <div className="flex justify-center">
         <Logo />
       </div>
@@ -139,14 +139,14 @@ export default function RegisterView() {
         {t('registration-helper')}
         <span
           onClick={() => handleNavigate('terms')}
-          className="mx-1 cursor-pointer text-accent underline hover:no-underline"
+          className="mx-1 cursor-pointer text-[#175840] underline hover:no-underline"
         >
           {t('text-terms')}
         </span>
         &
         <span
           onClick={() => handleNavigate('privacy')}
-          className="cursor-pointer text-accent underline hover:no-underline ltr:ml-1 rtl:mr-1"
+          className="cursor-pointer text-[#175840] underline hover:no-underline ltr:ml-1 rtl:mr-1"
         >
           {t('text-policy')}
         </span>

@@ -1143,6 +1143,14 @@ img.product-image {
   padding: 0 !important;
 }
 
+/* PDP hero image — organic curve only on desktop; full-width rectangle on mobile. */
+@media (min-width: 1024px) {
+  .pdp-curve {
+    clip-path: url(#pdp-img-curve);
+    -webkit-clip-path: url(#pdp-img-curve);
+  }
+}
+
 /* Product image shine */
 .product-image::after {
   content: '';
@@ -1841,11 +1849,11 @@ select:focus {
   flex-shrink: 0;
 }
 .pa-cart-header-title {
-  font-family: var(--font-heading) !important;
-  font-size: 17px;
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: 22px;
   font-weight: 700;
   color: #fff;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.005em;
   margin: 0;
 }
 .pa-cart-header-count {
@@ -2750,12 +2758,12 @@ textarea:focus {
   margin: 0 0 8px;
 }
 .pa-checkout-page-title {
-  font-family: var(--font-heading) !important;
-  font-size: clamp(26px, 3.4vw, 36px);
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: clamp(30px, 3.8vw, 42px);
   font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: #1A1A1A;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #16301A;
   margin: 0 0 8px;
 }
 .pa-checkout-page-sub {
@@ -3054,3 +3062,57 @@ textarea:focus {
 @media (max-width: 1023px) {
   .pa-checkout-page { padding-bottom: 92px; }
 }
+
+/* ── Switchable green palettes (html[data-green]) — round 9: LIGHT/gradient set.
+   Bands are light gradient washes with dark ink (palette 5 = medium w/ white ink).
+   ?green=1..5 or the staging picker switches live. */
+:root {
+  --g-band-from: #E3F4EA; --g-band-via: #D6EFE0; --g-band-to: #C4E8D2;
+  --g-band-ink: #14532D; --g-band-ink-soft: #3D6B4F;
+  --g-band-accent: #8A6A25; --g-band-hairline: rgba(20,83,45,0.16);
+  --g-band-glow: rgba(255,255,255,0.5);
+  --g-lighta-from: #FBFEFC; --g-lighta-to: #F0FAF4;
+  --g-lightb-from: #F0FAF4; --g-lightb-to: #E5F5EC;
+  --g-cta-from: #2E9E6B; --g-cta-to: #52CC92;
+}
+html[data-green='2'] {
+  --g-band-from: #D8F1E0; --g-band-via: #BFE8CF; --g-band-to: #A9DEC2;
+  --g-band-ink: #11402A; --g-band-ink-soft: #356449;
+  --g-band-accent: #8A6A25; --g-band-hairline: rgba(17,64,42,0.18);
+  --g-band-glow: rgba(255,255,255,0.45);
+  --g-lighta-from: #FAFEFB; --g-lighta-to: #ECF8F1;
+  --g-lightb-from: #ECF8F1; --g-lightb-to: #DFF2E7;
+  --g-cta-from: #279962; --g-cta-to: #46C089;
+}
+html[data-green='3'] {
+  --g-band-from: #EFF9E3; --g-band-via: #DDF2C9; --g-band-to: #CBEBAD;
+  --g-band-ink: #2F5618; --g-band-ink-soft: #54773A;
+  --g-band-accent: #7A6420; --g-band-hairline: rgba(47,86,24,0.18);
+  --g-band-glow: rgba(255,255,255,0.5);
+  --g-lighta-from: #FCFEF8; --g-lighta-to: #F2FAE8;
+  --g-lightb-from: #F2FAE8; --g-lightb-to: #E8F5D9;
+  --g-cta-from: #5BA533; --g-cta-to: #7CC24E;
+}
+html[data-green='4'] {
+  --g-band-from: #E2F7F1; --g-band-via: #CDF1E7; --g-band-to: #B9EADD;
+  --g-band-ink: #0C4A3E; --g-band-ink-soft: #336F62;
+  --g-band-accent: #8A6A25; --g-band-hairline: rgba(12,74,62,0.18);
+  --g-band-glow: rgba(255,255,255,0.5);
+  --g-lighta-from: #FAFEFD; --g-lighta-to: #EDF9F5;
+  --g-lightb-from: #EDF9F5; --g-lightb-to: #E0F4EE;
+  --g-cta-from: #169B82; --g-cta-to: #2FC4A4;
+}
+html[data-green='5'] {
+  --g-band-from: #8FD3AC; --g-band-via: #6CC393; --g-band-to: #4CAF7D;
+  --g-band-ink: #FFFFFF; --g-band-ink-soft: rgba(255,255,255,0.78);
+  --g-band-accent: #F3E7C8; --g-band-hairline: rgba(255,255,255,0.28);
+  --g-band-glow: rgba(243,231,200,0.18);
+  --g-lighta-from: #FAFEFB; --g-lighta-to: #EDF8F1;
+  --g-lightb-from: #EDF8F1; --g-lightb-to: #E0F2E8;
+  --g-cta-from: #1E8A62; --g-cta-to: #34B27D;
+}
+.g-band { background-image: linear-gradient(to bottom right, var(--g-band-from), var(--g-band-via), var(--g-band-to)); }
+.g-light-a { background-image: linear-gradient(to bottom, var(--g-lighta-from), var(--g-lighta-to)); }
+.g-light-b { background-image: linear-gradient(to bottom, var(--g-lightb-from), var(--g-lightb-to)); }
+.g-cta { background-image: linear-gradient(to right, var(--g-cta-from), var(--g-cta-to)); }
+.g-footer { background-image: linear-gradient(to bottom, var(--g-band-via), var(--g-band-to)); }

@@ -1,5 +1,8 @@
 import Header from './header';
+import Footer from './footer';
 import dynamic from 'next/dynamic';
+
+const GreenPicker = dynamic(() => import('@/components/storefront/green-picker'), { ssr: false });
 
 const MobileNavigation = dynamic(
   () => import('@/components/layouts/mobile-navigation'),
@@ -15,6 +18,8 @@ export default function GeneralLayout({
     <div className="flex min-h-screen flex-col bg-gray-100 transition-colors duration-150">
       <Header layout={layout} />
       {children}
+      <Footer />
+      <GreenPicker />
       <MobileNavigation />
     </div>
   );

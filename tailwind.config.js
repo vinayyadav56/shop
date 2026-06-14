@@ -41,6 +41,9 @@ module.exports = {
         serif: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         // Editorial serif for premium display headings (product title, section titles).
         cormorant: ['"Cormorant Garamond"', 'Georgia', 'Cambria', 'serif'],
+        // Product-page fonts: Poppins (geometric headings) + Caveat (script subtitle).
+        poppins: ['"Poppins"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        caveat: ['"Caveat"', 'ui-serif', 'cursive'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       fontSize: {

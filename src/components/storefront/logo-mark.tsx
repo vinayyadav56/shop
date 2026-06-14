@@ -63,6 +63,33 @@ export function LogoMark({
   );
 }
 
+/** Stacked serif wordmark — the mockup's "THE PLANT / COMPANY" style, with the
+ *  PlantAtHome brand name. Small leaf sits under the second line. */
+export function WordmarkStacked({
+  light = false,
+  className = '',
+}: {
+  light?: boolean;
+  className?: string;
+}) {
+  const fg = light ? 'text-white' : 'text-forest-900';
+  const leaf = light ? 'text-sage-300' : 'text-forest-600';
+  return (
+    <span className={`inline-flex flex-col leading-none ${className}`}>
+      <span className={`font-cormorant text-[19px] font-bold uppercase tracking-[0.18em] ${fg}`}>
+        Plant
+      </span>
+      <span className={`mt-0.5 flex items-center gap-1.5 font-cormorant text-[19px] font-bold uppercase tracking-[0.18em] ${fg}`}>
+        At Home
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={`h-3.5 w-3.5 ${leaf}`} aria-hidden>
+          <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+          <path d="M2 21c0-3 1.85-5.36 5.08-6" />
+        </svg>
+      </span>
+    </span>
+  );
+}
+
 export function BrandLogo({
   light = false,
   className = '',
@@ -70,9 +97,8 @@ export function BrandLogo({
   light?: boolean;
   className?: string;
 }) {
-  // Admin-managed logos (Tools → Logo & Branding). The transparent-over-hero
-  // header uses the light variant; the solid header uses the dark variant (or the
-  // main logo). Falls back to the built-in PlantAtHome mark when unset.
+  // Admin-managed logos (Tools → Logo & Branding) take precedence. Falls back to
+  // the stacked serif wordmark (mockup style) when no logo is uploaded.
   const { settings }: any = useSettings();
   const uploaded = light
     ? settings?.headerLogoLight?.original
@@ -91,21 +117,5 @@ export function BrandLogo({
     );
   }
 
-  const fg = light ? 'text-white' : 'text-forest';
-  return (
-    <div className={`flex items-center gap-2.5 ${className}`}>
-      <span
-        className={`grid h-9 w-9 place-items-center rounded-xl ${
-          light ? 'bg-white/15 backdrop-blur' : 'bg-forest'
-        }`}
-      >
-        <LogoMark className="h-5 w-5" stroke="#fff" />
-      </span>
-      <span
-        className={`font-heading text-[15px] font-extrabold uppercase tracking-[0.18em] ${fg}`}
-      >
-        PlantAtHome
-      </span>
-    </div>
-  );
+  return <WordmarkStacked light={light} className={className} />;
 }

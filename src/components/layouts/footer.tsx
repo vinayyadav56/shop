@@ -1,236 +1,163 @@
-import { useTranslation } from 'next-i18next';
-import { siteSettings } from '@/config/site';
-import Link from '@/components/ui/link';
-import Logo from '@/components/ui/logo';
-import SubscriptionWidget from '@/components/settings/subscribe-to-newsletter';
+import Link from 'next/link';
 import { useSettings } from '@/framework/settings';
-import { useRouter } from 'next/router';
-import { StripeIcon } from '@/components/icons/payment-gateways/stripe';
-import { PayPalIcon } from '@/components/icons/payment-gateways/paypal';
-import { MollieIcon } from '@/components/icons/payment-gateways/mollie';
-import { RazorPayIcon } from '@/components/icons/payment-gateways/razorpay';
-import { SSLComerz } from '@/components/icons/payment-gateways/sslcomerz';
-import { PayStack } from '@/components/icons/payment-gateways/paystack';
-import { IyzicoIcon } from '@/components/icons/payment-gateways/iyzico';
-import { XenditIcon } from '@/components/icons/payment-gateways/xendit';
-import { BkashIcon } from '@/components/icons/payment-gateways/bkash';
-import { PaymongoIcon } from '@/components/icons/payment-gateways/paymongo';
-import { FlutterwaveIcon } from '@/components/icons/payment-gateways/flutterwave';
-import { isEmpty } from 'lodash';
-import { SVGLoaderIcon } from '@/components/icons/svg-loader';
-import { Routes } from '@/config/routes';
-import { getIcon } from '@/lib/get-icon';
-import * as socialIcons from '@/components/icons/social';
+import { WordmarkStacked } from '@/components/storefront/logo-mark';
 
-export const icon: any = {
-  stripe: <StripeIcon />,
-  paypal: <PayPalIcon />,
-  razorpay: <RazorPayIcon />,
-  mollie: <MollieIcon />,
-  sslcommerz: <SSLComerz />,
-  paystack: <PayStack />,
-  iyzico: <IyzicoIcon />,
-  xendit: <XenditIcon />,
-  bkash: <BkashIcon />,
-  paymongo: <PaymongoIcon />,
-  flutterwave: <FlutterwaveIcon />,
-};
+const COLS: { title: string; links: { name: string; href: string }[] }[] = [
+  {
+    title: 'Shop',
+    links: [
+      { name: 'All Plants', href: '/plants/search' },
+      { name: 'Indoor Plants', href: '/plants/search' },
+      { name: 'Planters', href: '/tools' },
+      { name: 'Plant Care', href: '/plant-doctor' },
+    ],
+  },
+  {
+    title: 'Explore',
+    links: [
+      { name: 'Gifting', href: '/corporate-gifting' },
+      { name: 'Corporate', href: '/corporate-gifting' },
+      { name: 'Garden Service', href: '/garden-service' },
+      { name: 'Plant Doctor', href: '/plant-doctor' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { name: 'Our Story', href: '/contact' },
+      { name: 'Blog', href: '/garden-service' },
+      { name: 'Careers', href: '/contact' },
+      { name: 'Contact Us', href: '/contact' },
+    ],
+  },
+  {
+    title: 'Help',
+    links: [
+      { name: 'Shipping & Delivery', href: '/terms' },
+      { name: 'Returns & Refunds', href: '/terms' },
+      { name: 'Plant Care Guide', href: '/plant-doctor' },
+      { name: 'Track Order', href: '/track-order' },
+    ],
+  },
+];
+
+const SOCIALS: { name: string; href: string; icon: JSX.Element }[] = [
+  {
+    name: 'Instagram',
+    href: 'https://instagram.com',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden>
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Facebook',
+    href: 'https://facebook.com',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden>
+        <path d="M14.5 21v-7h2.6l.4-3h-3V9.1c0-.9.3-1.5 1.6-1.5h1.5V4.9c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8V11H9v3h2.7v7" />
+      </svg>
+    ),
+  },
+  {
+    name: 'YouTube',
+    href: 'https://youtube.com',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden>
+        <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
+        <path d="M10.2 9.5l5 2.5-5 2.5Z" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+];
 
 const Footer = () => {
-  const { t } = useTranslation('common');
-  const { locale } = useRouter();
-  const { settings, isLoading: settingsLoading } = useSettings();
-  const paymentGateway = settings?.paymentGateway,
-    siteTitle = settings?.siteTitle,
-    siteLink = settings?.siteLink,
-    copyrightText = settings?.copyrightText,
-    externalText = settings?.externalText,
-    externalLink = settings?.externalLink,
-    contactDetails = settings?.contactDetails;
-
-  const date = new Date();
+  const { settings }: any = useSettings();
+  const contact = settings?.contactDetails ?? {};
+  const email = contact?.emailAddress || settings?.contactEmail || 'hello@plantathome.in';
+  const phone = contact?.contact || settings?.contactPhone || '+91 98765 43210';
+  const year = new Date().getFullYear();
 
   return (
-    <div className="flex w-full flex-col border-t border-gray-800 border-t-border-100 bg-white px-5 md:px-10 lg:border-b-8 lg:px-[50px] xl:px-16">
-      {/* Top */}
-      <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 pt-16 md:grid-cols-3 lg:pt-24 lg:pb-16 xl:grid-cols-[repeat(auto-fill,minmax(220px,1fr))] xl:gap-8 2xl:grid-cols-5">
-        <div className="flex flex-col">
-          <div className="mb-[2px] flex h-16 items-start">
-            <Logo />
-          </div>
-
-          {settingsLoading ? (
-            <SVGLoaderIcon className="text-2xl" />
-          ) : (
-            <>
-              {contactDetails?.location?.formattedAddress ? (
-                <Link
-                  href={`https://www.google.com/maps/place/${contactDetails?.location?.formattedAddress}`}
-                  className="text-sm not-italic mb-7 text-heading"
+    <footer className="border-t border-[color:var(--g-band-hairline)] g-footer text-[color:var(--g-band-ink)]">
+      <div className="mx-auto max-w-7xl px-5 pb-10 pt-14 sm:px-8 lg:pt-16">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-10 lg:grid-cols-[1.4fr_repeat(4,1fr)_1.2fr]">
+          {/* brand */}
+          <div className="col-span-2 md:col-span-3 lg:col-span-1 lg:pr-6">
+            <WordmarkStacked light={false} className="[&_*]:!text-[color:var(--g-band-ink)]" />
+            <p className="mt-4 max-w-xs text-[13px] leading-6 text-[color:var(--g-band-ink-soft)]">
+              Bringing nature closer to you — curated plants and planters to elevate every home, office and
+              lifestyle.
+            </p>
+            <div className="mt-5 flex items-center gap-4">
+              {SOCIALS.map((s) => (
+                <a
+                  key={s.name}
+                  href={s.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={s.name}
+                  className="text-[color:var(--g-band-ink-soft)] transition hover:text-[color:var(--g-band-accent)]"
                 >
-                  {contactDetails?.location?.formattedAddress}
-                </Link>
-              ) : (
-                ''
-              )}
-              {(contactDetails?.emailAddress || (settings as any)?.contactEmail) ? (
-                <Link
-                  className="mb-1 text-sm text-heading"
-                  href={`mailto:${contactDetails?.emailAddress || (settings as any)?.contactEmail}`}
-                >
-                  {contactDetails?.emailAddress || (settings as any)?.contactEmail}
-                </Link>
-              ) : (
-                ''
-              )}
-              {(contactDetails?.contact || (settings as any)?.contactPhone) ? (
-                <Link
-                  className="text-sm text-heading"
-                  href={`tel:${contactDetails?.contact || (settings as any)?.contactPhone}`}
-                >
-                  {contactDetails?.contact || (settings as any)?.contactPhone}
-                </Link>
-              ) : (
-                ''
-              )}
-            </>
-          )}
-
-          <div>
-            {settingsLoading ? (
-              <SVGLoaderIcon className="text-xl" />
-            ) : (
-              <div className="flex items-center gap-4 mt-4">
-                {contactDetails?.socials?.map(
-                  //@ts-ignore
-                  (social: { url: string; icon: string }, index: number) => {
-                    return social?.url ? (
-                      <Link
-                        href={social?.url}
-                        key={index}
-                        target="_blank"
-                        className="text-accent hover:text-accent-hover"
-                      >
-                        {getIcon({
-                          iconList: socialIcons,
-                          iconName: social?.icon,
-                          className: 'w-[20px] h-[20px]',
-                        })}
-                      </Link>
-                    ) : (
-                      ''
-                    );
-                  },
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {siteSettings?.footer?.menus?.map((menu, idx) => (
-          <div className="flex flex-col" key={`${menu.title}-${idx}`}>
-            <h3 className="mt-3 mb-4 font-semibold text-heading lg:mb-7">
-              {t(menu.title)}
-            </h3>
-
-            <ul className="space-y-3">
-              {menu.links.map((link, index) => (
-                <li key={`${link.href}-${index}`}>
-                  <Link
-                    href={link.href}
-                    className="text-sm transition-colors text-heading hover:text-orange-500"
-                  >
-                    {t(link.name)}
-                  </Link>
-                </li>
+                  {s.icon}
+                </a>
               ))}
+            </div>
+          </div>
+
+          {/* link columns */}
+          {COLS.map((col) => (
+            <div key={col.title}>
+              <h3 className="text-[12px] font-bold uppercase tracking-[0.16em] text-[color:var(--g-band-accent)]">{col.title}</h3>
+              <ul className="mt-4 space-y-2.5">
+                {col.links.map((l) => (
+                  <li key={l.name}>
+                    <Link href={l.href} className="text-[13px] leading-7 text-[color:var(--g-band-ink-soft)] transition hover:text-[color:var(--g-band-accent)]">
+                      {l.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          {/* contact */}
+          <div>
+            <h3 className="text-[12px] font-bold uppercase tracking-[0.16em] text-[color:var(--g-band-accent)]">Contact</h3>
+            <ul className="mt-4 space-y-3">
+              <li>
+                <a href={`mailto:${email}`} className="flex items-center gap-2 text-[13px] leading-7 text-[color:var(--g-band-ink-soft)] transition hover:text-[color:var(--g-band-accent)]">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-[color:var(--g-band-accent)]" aria-hidden>
+                    <rect x="3" y="5" width="18" height="14" rx="2.5" />
+                    <path d="m3.5 7 8.5 6 8.5-6" />
+                  </svg>
+                  {email}
+                </a>
+              </li>
+              <li>
+                <a href={`tel:${phone}`} className="flex items-center gap-2 text-[13px] leading-7 text-[color:var(--g-band-ink-soft)] transition hover:text-[color:var(--g-band-accent)]">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-[color:var(--g-band-accent)]" aria-hidden>
+                    <path d="M5.5 3h3l1.7 4.3-2 1.6a13.5 13.5 0 0 0 6 6l1.6-2L20 14.6v3.1A2.3 2.3 0 0 1 17.7 20 15.8 15.8 0 0 1 4 6.3 2.3 2.3 0 0 1 5.5 3Z" />
+                  </svg>
+                  {phone}
+                </a>
+              </li>
             </ul>
           </div>
-        ))}
-
-        <div className="col-span-full md:col-span-2 lg:col-auto">
-          <SubscriptionWidget
-            title="text-subscribe-now"
-            description="text-subscribe-details"
-          />
         </div>
-      </div>
 
-      {/* Bottom */}
-      <div className="flex flex-col items-center w-full gap-2 pt-8 pb-20 mt-8 border-t border-gray-200 lg:mt-0 lg:flex-row lg:justify-between lg:border-t-0 lg:pb-12">
-        {/* <span className="order-2 text-sm text-heading lg:order-1">
-          &copy; {t('text-copyright')} {new Date().getFullYear()}{' '}
-          <Link
-            className="font-bold transition-colors text-heading hover:text-accent"
-            href={siteSettings.footer.copyright.href}
-          >
-            {siteSettings.footer.copyright.name}.
-          </Link>{' '}
-          {t('text-rights-reserved')}
-        </span> */}
-        {settingsLoading ? (
-          <SVGLoaderIcon className="text-xl" />
-        ) : (
-          <span className="order-2 text-sm shrink-0 text-heading lg:order-1">
-            ©{date.getFullYear()}{' '}
-            <Link
-              className="font-medium text-heading"
-              href={siteLink ?? Routes?.home}
-            >
-              {siteTitle}
-            </Link>
-            . {copyrightText}{' '}
-            {externalText ? (
-              <Link
-                className="font-medium text-heading"
-                href={externalLink ?? Routes?.home}
-              >
-                {externalText}
-              </Link>
-            ) : (
-              ''
-            )}
-          </span>
-        )}
-
-        {/* {siteSettings.footer.payment_methods && (
-          <div className="flex items-center order-1 mb-5 space-x-5 rtl:space-x-reverse lg:order-2 lg:mb-0">
-            {siteSettings.footer.payment_methods.map((method, idx) => (
-              <Link
-                className="relative flex items-center w-auto h-5 overflow-hidden"
-                key={`${method.url}-${idx}`}
-                href={method.url}
-              >
-                <img src={method.img} className="max-w-full max-h-full" />
-              </Link>
-            ))}
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-[color:var(--g-band-hairline)] pt-6 sm:flex-row">
+          <p className="text-[12px] text-[color:var(--g-band-ink-soft)]">© {year} PlantAtHome. All Rights Reserved.</p>
+          <div className="flex items-center gap-5 text-[12px] text-[color:var(--g-band-ink-soft)]">
+            <Link href="/terms" className="transition hover:text-[color:var(--g-band-accent)]">Terms</Link>
+            <Link href="/privacy" className="transition hover:text-[color:var(--g-band-accent)]">Privacy</Link>
           </div>
-        )} */}
-        <div className="flex flex-wrap items-center justify-center order-1 gap-4 mb-5 lg:order-2 lg:mb-0 lg:justify-end lg:gap-x-5 lg:gap-y-3">
-          {settingsLoading ? (
-            <SVGLoaderIcon className="text-xl" />
-          ) : !isEmpty(paymentGateway) && settings?.useEnableGateway ? (
-            paymentGateway?.map(
-              //@ts-ignore
-              (method: { name: string; title: string }, index: number) => {
-                return icon[method?.name] ? (
-                  <div
-                    className="relative flex items-center w-auto h-5 overflow-hidden text-5xl"
-                    key={index}
-                  >
-                    {icon[method?.name]}
-                  </div>
-                ) : (
-                  ''
-                );
-              },
-            )
-          ) : (
-            ''
-          )}
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

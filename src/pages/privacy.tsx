@@ -17,9 +17,9 @@ export default function PrivacyPage() {
   return (
     <>
       <Seo title="Privacy" url="privacy" />
-      <section className="mx-auto w-full max-w-1920 bg-light px-4 py-8 lg:py-10 lg:px-8 xl:py-14 xl:px-16 2xl:px-20">
+      <section className="mx-auto w-full max-w-1920 g-light-a px-5 py-8 lg:py-10 lg:px-8 xl:py-14 xl:px-16 2xl:px-20">
         <header className="mb-10 sm:mt-2 lg:mb-14 xl:mt-4">
-          <h1 className="mb-4 text-xl font-bold text-heading sm:mb-5 sm:text-3xl md:text-2xl 2xl:mb-7 2xl:text-4xl">
+          <h1 className="mb-4 font-cormorant text-2xl font-medium text-forest-900 sm:mb-5 sm:text-4xl md:text-3xl 2xl:mb-7 2xl:text-5xl">
             {t(title)}
           </h1>
           <p className="px-0.5 text-sm text-body-dark md:text-base 2xl:text-lg">
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
                 name={makeTitleToDOMId(item.title)}
                 className="mb-10"
               >
-                <h2 className="mb-4 text-lg font-bold text-heading md:text-xl lg:text-2xl">
+                <h2 className="mb-4 font-cormorant text-xl font-medium text-forest-900 md:text-2xl lg:text-3xl">
                   {t(item.title)}
                 </h2>
                 <div

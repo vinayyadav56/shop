@@ -54,3 +54,10 @@ package.graphql.json
 
 .graphql-let.general.yml
 .graphql-let.windows.yml
+
+# next-pwa build artifacts
+public/sw.js
+public/sw.js.map
+public/workbox-*.js
+public/workbox-*.js.map
+public/worker-*.js

@@ -34,12 +34,12 @@ const VerifyEmail = () => {
     useResendVerificationEmail();
 
   return (
-    <section className="relative flex min-h-screen w-full items-center justify-center bg-[#F4F6F7] py-5 px-4 md:py-8">
+    <section className="relative flex min-h-screen w-full items-center justify-center g-light-a py-5 px-5 md:py-8">
       <div className="max-w-[36rem]">
         <Card className="text-center !shadow-900 md:px-[4.375rem] md:py-[2.875rem]">
           <Logo />
 
-          <h2 className="mb-5 mt-2 text-2xl font-semibold">
+          <h2 className="mb-5 mt-2 font-cormorant text-3xl font-medium text-forest-900">
             {t('common:email-not-verified')}
           </h2>
 
@@ -52,7 +52,7 @@ const VerifyEmail = () => {
               onClick={() => verifyEmail()}
               disabled={isVerifying || !!isLogoutLoader}
               loading={isVerifying}
-              className="!h-13 w-full hover:bg-accent-hover"
+              className="!h-13 w-full"
             >
               {t('resend-verification-button-text')}
             </Button>

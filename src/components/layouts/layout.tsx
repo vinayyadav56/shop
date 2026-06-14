@@ -1,10 +1,12 @@
 import useLayout from '@/lib/hooks/use-layout';
 import Header from './header';
 import HeaderMinimal from './header-minimal';
-import Footer from '../icons/check-icon';
+import Footer from './footer';
 import NoticeHighlightedBar from '@/components/store-notice/notice-highlightedBar';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+
+const GreenPicker = dynamic(() => import('@/components/storefront/green-picker'), { ssr: false });
 
 const MobileNavigation = dynamic(() => import('./mobile-navigation'), {
   ssr: false,
@@ -23,7 +25,8 @@ export default function SiteLayout({ children }: React.PropsWithChildren<{}>) {
         <Header layout={layout} />
       )}
       {children}
-      {['compact'].includes(layout) && <Footer />}
+      <Footer />
+      <GreenPicker />
       <MobileNavigation />
     </div>
   );

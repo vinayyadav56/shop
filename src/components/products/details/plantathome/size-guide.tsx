@@ -1,0 +1,88 @@
+import React from 'react';
+import type { Product } from '@/types';
+
+const Person = ({ className = '' }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 40 110" fill="currentColor" aria-hidden preserveAspectRatio="xMidYMax meet">
+    <circle cx="20" cy="12" r="9" />
+    <path d="M20 23c-7 0-12 5-12 13v28a4 4 0 0 0 8 0V52h1v54a4 4 0 0 0 8 0V52h1v12a4 4 0 0 0 8 0V36c0-8-5-13-12-13z" />
+  </svg>
+);
+
+type SizeRow = {
+  name: string;
+  inch: string;
+  cm: string;
+  scale: number; // plant height vs the constant human silhouette (0..1)
+  best: string[];
+  highlight?: boolean;
+};
+
+const SIZES: SizeRow[] = [
+  { name: 'Small', inch: '12-18 inches', cm: '30-45 cm', scale: 0.42, best: ['Study Table', 'Office Desk', 'Kitchen Counter'] },
+  { name: 'Medium', inch: '24-30 inches', cm: '60-75 cm', scale: 0.58, best: ['Bedroom Corner', 'Living Room Shelf', 'Balcony'] },
+  { name: 'Large', inch: '36-48 inches', cm: '90-120 cm', scale: 0.8, best: ['Living Room', 'Office Lobby', 'Hotel Spaces'], highlight: true },
+  { name: 'XL Statement', inch: '60+ inches', cm: '150+ cm', scale: 1, best: ['Luxury Homes', 'Villa Entrance', 'Statement Decor'] },
+];
+
+export default function SizeGuide({ product }: { product: Product }) {
+  const plant = (product as any)?.image?.original || (product as any)?.image?.thumbnail || '/brand/mark-house.png';
+
+  return (
+    <div>
+      <h3 className="font-poppins text-[1.25rem] font-bold italic text-forest-600 sm:text-[1.5rem]">
+        Choose the perfect size for your space
+      </h3>
+
+      <div className="mt-5 flex snap-x gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mt-6 sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-4">
+        {SIZES.map((s) => (
+          <div
+            key={s.name}
+            className={`flex w-[78%] shrink-0 snap-start flex-col rounded-2xl border bg-white p-4 sm:w-auto sm:p-5 ${
+              s.highlight ? 'border-forest-600 shadow-[0_14px_34px_-20px_rgba(46,94,42,0.45)]' : 'border-kraft-200'
+            }`}
+          >
+            {/* size + dimensions */}
+            <div>
+              <h4 className="font-poppins text-[16px] font-bold text-forest-900 sm:text-[17px]">{s.name}</h4>
+              <p className="mt-1.5 text-[13px] font-semibold text-stone-700">{s.inch}</p>
+              <p className="text-[12px] text-stone-400">{s.cm}</p>
+            </div>
+
+            {/* scale illustration — flow layout, plant vs constant human + amber height line */}
+            <div className="my-4 flex h-[110px] items-end justify-center gap-2 sm:gap-2.5">
+              {/* amber measure line */}
+              <div className="relative flex w-2.5 items-end self-end" style={{ height: `${s.scale * 100}%` }}>
+                <div className="mx-auto h-full w-px bg-[#E6A23C]" />
+                <span className="absolute left-1/2 top-0 h-px w-2.5 -translate-x-1/2 bg-[#E6A23C]" />
+                <span className="absolute bottom-0 left-1/2 h-px w-2.5 -translate-x-1/2 bg-[#E6A23C]" />
+              </div>
+              {/* plant (scaled) */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={plant}
+                alt={`${s.name} plant`}
+                className="w-auto max-w-[58px] self-end object-contain"
+                style={{ height: `${s.scale * 100}%` }}
+              />
+              {/* human silhouette (constant) */}
+              <Person className="h-full w-auto self-end text-stone-300" />
+            </div>
+
+            {/* best for */}
+            <div className="mt-auto">
+              <p className="text-[12px] font-semibold text-forest-900">Best for:</p>
+              <ul className="mt-1.5 space-y-1 text-[11.5px] text-stone-500">
+                {s.best.map((b) => (
+                  <li key={b} className="flex items-center gap-1.5">
+                    <span className="h-1 w-1 shrink-0 rounded-full bg-forest-500" />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

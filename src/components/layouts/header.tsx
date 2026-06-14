@@ -1,63 +1,53 @@
 import React from 'react';
-import { motion, AnimatePresence, useScroll } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAtom } from 'jotai';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { BrandLogo } from '@/components/storefront/logo-mark';
-import { VerticalSwitcher } from '@/components/storefront/vertical-switcher';
 import { Icon } from '@/components/storefront/icons';
 import { EXPO } from '@/components/storefront/motion';
 import { SearchIcon } from '@/components/icons/search-icon';
-import { useTypes } from '@/framework/type';
-import { TYPES_PER_PAGE } from '@/framework/client/variables';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { drawerAtom } from '@/store/drawer-atom';
 import { authorizationAtom } from '@/store/authorization-atom';
 import { displayMobileHeaderSearchAtom } from '@/store/display-mobile-header-search-atom';
 import { useModalAction } from '@/components/ui/modal/modal.context';
-import { useIsHomePage } from '@/lib/use-is-homepage';
 
 const Search = dynamic(() => import('@/components/ui/search/search'));
 
+// 7-item nav from the mockup, mapped to the closest real routes (some are
+// pragmatic placeholders until dedicated landing pages exist).
+const NAV = [
+  { label: 'Shop', href: '/plants/search' },
+  { label: 'Plants', href: '/plants' },
+  { label: 'Planters', href: '/tools' },
+  { label: 'Care', href: '/plant-doctor' },
+  { label: 'Accessories', href: '/tools' },
+  { label: 'Gifting', href: '/corporate-gifting' },
+  { label: 'Corporate', href: '/corporate-gifting' },
+];
+
 /**
- * PlantAtHome brand header — a faithful port of the prototype Nav.
- * Transparent over the hero (home/vertical pages) → solid cream on scroll;
- * solid + sticky on every other page. Logo · vertical switcher · Categories ·
- * search · profile · cart, with a full-screen mobile overlay. Wired to the REAL
- * cart drawer, login modal and search.
+ * PlantAtHome brand header — clean white bar with a top announcement strip,
+ * centred nav, inline search, profile + cart. Transparent over the home hero,
+ * solid white everywhere else. Wired to the real cart drawer, login + search.
  */
 const Header = ({ layout }: { layout?: string }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const isHomePage = useIsHomePage();
-  const { scrollY } = useScroll();
   const { totalUniqueItems } = useCart();
   const [, setDrawer] = useAtom(drawerAtom);
   const [isAuthorize] = useAtom(authorizationAtom);
   const { openModal } = useModalAction();
 
-  const [scrolled, setScrolled] = React.useState(false);
   const [searchOpen, setSearchOpen] = useAtom(displayMobileHeaderSearchAtom);
   const [menuOpen, setMenuOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    const unsub = scrollY.on('change', (v) => setScrolled(v > 40));
-    return () => unsub();
-  }, [scrollY]);
-
-  // transparent only while at the top of a hero page; solid everywhere else
-  const solid = scrolled || !isHomePage || searchOpen;
-  const position = isHomePage ? 'fixed' : 'sticky';
-
-  const { types } = useTypes({ limit: TYPES_PER_PAGE });
-  const typeList = types ?? [];
-  const homeSlug =
-    typeList.find((t) => t?.settings?.isHome)?.slug ?? typeList[0]?.slug ?? 'plants';
-  const currentSlug =
-    (router.query.pages as string[] | undefined)?.[0] ?? homeSlug;
-  const categoriesHref = `/${currentSlug}/search`;
+  // Mockup: solid white header on every page — the hero sits BELOW it, never behind.
+  const solid = true;
+  const position = 'sticky';
 
   const openCart = () => setDrawer({ display: true, view: 'cart' });
   const onProfile = () => {
@@ -66,7 +56,7 @@ const Header = ({ layout }: { layout?: string }) => {
   };
 
   const iconBtn = `grid h-10 w-10 place-items-center rounded-full transition ${
-    solid ? 'hover:bg-forest/8' : 'hover:bg-white/10'
+    solid ? 'text-forest-900 hover:bg-forest/8' : 'text-white hover:bg-white/10'
   }`;
 
   return (
@@ -78,86 +68,79 @@ const Header = ({ layout }: { layout?: string }) => {
         transition={{ duration: 0.7, ease: EXPO }}
         className={`${position} inset-x-0 top-0 z-50 w-full transition-all duration-300 ${
           solid
-            ? 'bg-cream-50/90 shadow-[0_4px_24px_rgba(34,48,26,0.10)] backdrop-blur-xl'
-            : 'bg-gradient-to-b from-deep/85 via-deep/55 to-transparent'
+            ? 'bg-white/95 shadow-[0_4px_24px_rgba(34,48,26,0.08)] backdrop-blur-xl'
+            : 'bg-gradient-to-b from-deep/85 via-deep/45 to-transparent'
         }`}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
-          <Link href="/" aria-label="PlantAtHome home">
+        {/* announcement bar — always dark green, sits above the (transparent/solid) main bar */}
+        <div className="bg-forest-900 text-white">
+          <div className="mx-auto flex max-w-7xl items-center justify-center gap-3 px-5 py-1.5 text-[11px] font-medium tracking-wide sm:gap-5 sm:px-8">
+            <span className="flex items-center gap-1.5">
+              <Icon.truckFast className="h-3.5 w-3.5" /> Free Delivery on Orders Above ₹999
+            </span>
+            <span className="hidden h-3 w-px bg-white/25 sm:block" />
+            <span className="hidden items-center gap-1.5 sm:flex">
+              <Icon.lock className="h-3.5 w-3.5" /> Secure Payments
+            </span>
+            <span className="hidden h-3 w-px bg-white/25 sm:block" />
+            <span className="hidden items-center gap-1.5 sm:flex">
+              <Icon.shield className="h-3.5 w-3.5" /> Easy Returns
+            </span>
+          </div>
+        </div>
+
+        {/* main bar */}
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
+          <Link href="/" aria-label="PlantAtHome home" className="shrink-0">
             <BrandLogo light={!solid} />
           </Link>
 
-          {/* vertical switcher — the single control for the 3 verticals */}
-          <div className="hidden md:block">
-            <VerticalSwitcher light={!solid} />
-          </div>
-
-          <div
-            className={`flex items-center gap-1.5 ${
-              solid ? 'text-forest' : 'text-white'
+          {/* centred nav */}
+          <nav
+            className={`hidden items-center gap-4 lg:flex xl:gap-7 ${
+              solid ? 'text-forest-900' : 'text-white'
             }`}
           >
-            <Link
-              href="/plant-doctor"
-              className={`hidden rounded-full px-3 py-2 text-sm font-medium lg:block ${
-                solid ? 'hover:text-leaf' : 'hover:text-white/80'
-              }`}
-            >
-              🩺 Plant Doctor
-            </Link>
+            {NAV.map((n) => (
+              <Link
+                key={n.label}
+                href={n.href}
+                className={`text-[13px] font-medium transition xl:text-[14px] ${
+                  solid ? 'hover:text-forest-600' : 'hover:text-white/80'
+                }`}
+              >
+                {n.label}
+              </Link>
+            ))}
+          </nav>
 
-            <Link
-              href="/corporate-gifting"
-              className={`hidden rounded-full px-3 py-2 text-sm font-medium lg:block ${
-                solid ? 'hover:text-leaf' : 'hover:text-white/80'
-              }`}
+          {/* right cluster */}
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="hidden w-[180px] items-center gap-2 rounded-full border border-kraft-300 bg-white px-4 py-2.5 text-[13px] text-stone-400 transition hover:border-forest-500 xl:flex xl:w-[210px]"
             >
-              Gifting
-            </Link>
-
-            <Link
-              href={categoriesHref}
-              className={`hidden rounded-full px-3 py-2 text-sm font-medium lg:block ${
-                solid ? 'hover:text-leaf' : 'hover:text-white/80'
-              }`}
-            >
-              Categories
-            </Link>
-
-            <Link
-              href="/garden-service"
-              className="mr-1 hidden items-center gap-1.5 rounded-full bg-leaf px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-leaf/90 lg:inline-flex"
-            >
-              🌿 Garden Service
-            </Link>
+              <SearchIcon className="h-4 w-4" /> Search plants, planters…
+            </button>
 
             <button
               type="button"
               onClick={() => setSearchOpen((s) => !s)}
-              className={iconBtn}
+              className={`${iconBtn} xl:hidden`}
               aria-label={t('text-search') ?? 'Search'}
             >
               <SearchIcon className="h-[18px] w-[18px]" />
             </button>
 
-            <button
-              type="button"
-              onClick={onProfile}
-              className={iconBtn}
-              aria-label={isAuthorize ? 'My account' : 'Login'}
-            >
+            <button type="button" onClick={onProfile} className={iconBtn} aria-label={isAuthorize ? 'My account' : 'Login'}>
               <Icon.user className="h-5 w-5" />
             </button>
 
-            <button
-              type="button"
-              onClick={openCart}
-              className={`relative ${iconBtn}`}
-              aria-label="Cart"
-            >
+            <button type="button" onClick={openCart} className={`relative ${iconBtn}`} aria-label="Cart">
               <Icon.bag className="h-5 w-5" />
               {totalUniqueItems > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-leaf px-1 text-[10px] font-bold text-white">
+                <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-forest-700 px-1 text-[10px] font-bold text-white">
                   {totalUniqueItems}
                 </span>
               )}
@@ -166,8 +149,8 @@ const Header = ({ layout }: { layout?: string }) => {
             <button
               type="button"
               onClick={() => setMenuOpen(true)}
-              className={`grid h-10 w-10 place-items-center rounded-full md:hidden ${
-                solid ? 'bg-forest text-white' : 'bg-white/15 text-white backdrop-blur'
+              className={`grid h-10 w-10 place-items-center rounded-full lg:hidden ${
+                solid ? 'bg-forest-700 text-white' : 'bg-white/15 text-white backdrop-blur'
               }`}
               aria-label="Menu"
             >
@@ -184,7 +167,7 @@ const Header = ({ layout }: { layout?: string }) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25, ease: EXPO }}
-              className="border-t border-forest/10 bg-cream/95 backdrop-blur-xl"
+              className="border-t border-kraft-200 bg-white/95 backdrop-blur-xl"
             >
               <div className="mx-auto flex max-w-3xl items-center gap-3 px-5 py-4 sm:px-8">
                 <div className="flex-1">
@@ -193,7 +176,7 @@ const Header = ({ layout }: { layout?: string }) => {
                 <button
                   type="button"
                   onClick={() => setSearchOpen(false)}
-                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-forest hover:bg-forest/8"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-forest-900 hover:bg-forest/8"
                   aria-label="Close search"
                 >
                   <Icon.x className="h-5 w-5" />
@@ -204,7 +187,7 @@ const Header = ({ layout }: { layout?: string }) => {
         </AnimatePresence>
       </motion.header>
 
-      {/* full-screen mobile overlay (prototype) */}
+      {/* full-screen mobile overlay */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -220,44 +203,26 @@ const Header = ({ layout }: { layout?: string }) => {
               </button>
             </div>
 
-            <div className="mb-6 flex rounded-full bg-white/10 p-1">
-              {typeList.map((tp) => (
-                <Link
-                  key={tp.slug}
-                  href={tp.slug === homeSlug ? '/' : `/${tp.slug}`}
-                  onClick={() => setMenuOpen(false)}
-                  className={`flex-1 whitespace-nowrap rounded-full py-2 text-center text-sm font-semibold ${
-                    currentSlug === tp.slug ? 'bg-leaf text-white' : 'text-white/80'
-                  }`}
-                >
-                  {tp.name}
-                </Link>
-              ))}
-            </div>
-
             {[
-              { label: '🩺 Plant Doctor', onClick: () => router.push('/plant-doctor') },
-              { label: '🌿 Garden Service', onClick: () => router.push('/garden-service') },
-              { label: '🎁 Corporate Gifting', onClick: () => router.push('/corporate-gifting') },
-              { label: 'Categories', onClick: () => router.push(categoriesHref) },
-              {
-                label: 'Search',
-                onClick: () => setSearchOpen(true),
-              },
-              { label: 'Cart', onClick: openCart },
-              { label: isAuthorize ? 'My account' : 'Login', onClick: onProfile },
+              ...NAV,
+              { label: 'Search', href: '#search' },
+              { label: 'Cart', href: '#cart' },
+              { label: isAuthorize ? 'My account' : 'Login', href: '#account' },
             ].map((l, i) => (
               <motion.button
                 key={l.label}
                 type="button"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.07, ease: EXPO }}
+                transition={{ delay: i * 0.06, ease: EXPO }}
                 onClick={() => {
                   setMenuOpen(false);
-                  l.onClick();
+                  if (l.href === '#search') setSearchOpen(true);
+                  else if (l.href === '#cart') openCart();
+                  else if (l.href === '#account') onProfile();
+                  else router.push(l.href);
                 }}
-                className="block border-b border-white/10 py-5 text-left font-heading text-2xl font-bold"
+                className="block border-b border-white/10 py-5 text-left font-poppins text-2xl font-bold"
               >
                 {l.label}
               </motion.button>

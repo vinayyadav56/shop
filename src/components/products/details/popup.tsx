@@ -24,13 +24,13 @@ const Popup: React.FC<ProductPopupProps> = ({ productSlug }) => {
 
   if (isLoading || !product)
     return (
-      <div className="relative flex items-center justify-center h-96 w-96 bg-light">
+      <div className="relative flex items-center justify-center h-96 w-96 bg-white">
         <Spinner text={t('common:text-loading')} />
       </div>
     );
   return (
     <AttributesProvider>
-      <article className="relative z-[51] w-full max-w-6xl bg-light md:rounded-xl xl:min-w-[1152px]">
+      <article className="relative z-[51] w-full max-w-6xl bg-white md:rounded-xl xl:min-w-[1152px]">
         {/* Sticky bar */}
         <ShortDetails product={productItem} isSticky={showStickyShortDetails} />
         {/* End of sticky bar */}

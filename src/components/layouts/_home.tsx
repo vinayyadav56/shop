@@ -9,6 +9,8 @@ import { SearchIcon } from '@/components/icons/search-icon';
 import { displayMobileHeaderSearchAtom } from '@/store/display-mobile-header-search-atom';
 import dynamic from 'next/dynamic';
 
+const GreenPicker = dynamic(() => import('@/components/storefront/green-picker'), { ssr: false });
+
 const MobileNavigation = dynamic(() => import('./mobile-navigation'), {
   ssr: false,
 });
@@ -31,29 +33,9 @@ export default function HomeLayout({
 
       <main className="min-h-screen flex-1">{children}</main>
 
-      {/* Newsletter */}
-      <section className="pa-nl-section">
-        <div className="pa-nl-inner">
-          <div className="pa-nl-tag">Stay in the loop</div>
-          <h2 className="pa-nl-h2">Join the PlantAtHome community</h2>
-          <p className="pa-nl-sub">
-            Get plant care tips, seasonal offers, and early access to new arrivals — straight to your inbox. No spam, ever.
-          </p>
-          <form className="pa-nl-form" onSubmit={(e) => e.preventDefault()}>
-            <input
-              type="email"
-              placeholder="Your email address"
-              className="pa-nl-input"
-              aria-label="Email address"
-            />
-            <button type="submit" className="pa-nl-btn">
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </section>
-
       <Footer />
+
+      <GreenPicker />
 
       <MobileNavigation>
         <motion.button

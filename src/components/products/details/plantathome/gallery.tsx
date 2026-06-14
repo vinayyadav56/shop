@@ -1,140 +1,101 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { useModalAction } from '@/components/ui/modal/modal.context';
-import { useInWishlist, useToggleWishlist } from '@/framework/wishlist';
-import { useUser } from '@/framework/user';
 
 type GalleryImage = { original?: string; thumbnail?: string; id?: string | number };
 
-const Heart = ({ active }: { active: boolean }) => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill={active ? '#C26B45' : 'none'} stroke={active ? '#C26B45' : '#2E5E2A'} strokeWidth="1.7">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-  </svg>
-);
-
-const Arrow = ({ dir }: { dir: 'left' | 'right' }) => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    {dir === 'left' ? <path d="M19 12H5M12 19l-7-7 7-7" /> : <path d="M5 12h14M12 5l7 7-7 7" />}
-  </svg>
-);
-
 type Props = {
   gallery: GalleryImage[];
-  productId: number;
   productName: string;
-  badge?: string | null;
 };
 
-const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productId, productName, badge }) => {
+// Gentle, shallow multi-lobe curve near the right edge only (objectBoundingBox 0..1)
+// — decorative, never cuts into the centred plant.
+const CURVE =
+  'M0,0 L1,0 C0.93,0.10 0.97,0.18 0.93,0.27 C0.89,0.36 0.97,0.46 0.92,0.55 C0.88,0.66 0.96,0.82 1,1 L0,1 Z';
+
+const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName }) => {
   const images = (gallery?.length ? gallery : [{ original: '', thumbnail: '' }]) as GalleryImage[];
   const [active, setActive] = useState(0);
-  const [imgErr, setImgErr] = useState<Record<number, boolean>>({});
-
-  const { openModal } = useModalAction();
-  const { isAuthorized } = useUser();
-  const pid = String(productId);
-  const { toggleWishlist } = useToggleWishlist(pid);
-  const { inWishlist } = useInWishlist({ product_id: pid, enabled: isAuthorized });
-
-  const go = (dir: number) =>
-    setActive((i) => (i + dir + images.length) % images.length);
-
-  const onHeart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!isAuthorized) return openModal('LOGIN_VIEW');
-    toggleWishlist({ product_id: pid });
-  };
+  const [err, setErr] = useState<Record<number, boolean>>({});
 
   const mainSrc = images[active]?.original || images[active]?.thumbnail || '';
+  const thumbs = images.slice(0, 4);
 
   return (
-    <div className="flex gap-3 sm:gap-4">
-      {/* vertical thumbnails */}
-      {images.length > 1 && (
-        <div className="flex w-[68px] shrink-0 flex-col gap-3 sm:w-[88px] lg:w-[104px]">
-          {images.slice(0, 4).map((img, i) => {
-            const src = img.thumbnail || img.original || '';
-            return (
-              <button
-                key={img.id ?? i}
-                type="button"
-                onClick={() => setActive(i)}
-                aria-label={`View image ${i + 1}`}
-                className={`relative aspect-square w-full overflow-hidden rounded-2xl bg-[#EBE2CF] transition ${
-                  active === i ? 'ring-2 ring-forest-600 ring-offset-1 ring-offset-cream-100' : 'hover:opacity-90'
-                }`}
-              >
-                {src ? (
-                  <Image src={src} alt={`${productName} ${i + 1}`} fill sizes="104px" className="object-cover" />
-                ) : (
-                  <span className="grid h-full w-full place-items-center text-forest-700/40">🌿</span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      )}
+    <div className="relative h-[300px] w-full sm:h-[380px] lg:h-auto lg:min-h-[620px]">
+      {/* responsive clip-path def (used only at lg via .pdp-curve) */}
+      <svg width="0" height="0" className="absolute" aria-hidden>
+        <defs>
+          <clipPath id="pdp-img-curve" clipPathUnits="objectBoundingBox">
+            <path d={CURVE} />
+          </clipPath>
+        </defs>
+      </svg>
 
-      {/* main image card */}
-      <div className="relative flex-1">
-        <div className="relative aspect-square w-full overflow-hidden rounded-[1.75rem] bg-white shadow-[0_18px_50px_-24px_rgba(34,48,26,0.25)]">
-          {mainSrc && !imgErr[active] ? (
-            <Image
-              src={mainSrc}
-              alt={productName}
-              fill
-              priority
-              sizes="(max-width:1024px) 90vw, 560px"
-              onError={() => setImgErr((e) => ({ ...e, [active]: true }))}
-              className="object-cover"
-            />
-          ) : (
-            <span className="absolute inset-0 grid place-items-center text-forest-800/40">
-              <span className="font-cormorant text-2xl italic">{productName}</span>
-            </span>
-          )}
+      {/* back echo layer — desktop only, same curve shifted right → a 2nd visible curve */}
+      <div
+        aria-hidden
+        className="pdp-curve absolute inset-0 hidden translate-x-[18px] bg-gradient-to-br from-sage-200 to-sage-100 lg:block"
+      />
 
-          {/* badge top-left */}
-          {badge && (
-            <span className="absolute left-5 top-5 z-10 rounded-full bg-[#F3E7CF] px-4 py-1.5 text-[13px] font-medium text-forest-900 shadow-sm">
-              {badge}
-            </span>
-          )}
+      {/* front image — full-width rectangle on mobile, curved on desktop */}
+      <div className="pdp-curve absolute inset-0 bg-gradient-to-br from-[#E9F0E2] via-[#F1F3E8] to-[#F6F2E6]">
+        {mainSrc && !err[active] ? (
+          <Image
+            src={mainSrc}
+            alt={productName}
+            fill
+            priority
+            sizes="(max-width:1024px) 100vw, 55vw"
+            onError={() => setErr((e) => ({ ...e, [active]: true }))}
+            className="object-cover object-center lg:object-[34%_50%]"
+          />
+        ) : (
+          <span className="absolute inset-0 grid place-items-center px-6 text-center font-poppins text-2xl font-semibold text-forest-800/40">
+            {productName}
+          </span>
+        )}
+      </div>
 
-          {/* wishlist top-right */}
-          <button
-            type="button"
-            onClick={onHeart}
-            aria-label={inWishlist ? 'Remove from wishlist' : 'Save to wishlist'}
-            className="absolute right-5 top-5 z-10 grid h-11 w-11 place-items-center rounded-full bg-[#F3E7CF] text-forest-900 shadow-sm transition hover:scale-105"
-          >
-            <Heart active={inWishlist} />
-          </button>
+      {/* vertical thumbnail strip — outer (left) side */}
+      <div className="absolute left-3 top-5 z-10 flex flex-col gap-2 sm:left-6 sm:top-10 sm:gap-3">
+        {thumbs.map((img, i) => {
+          const src = img.thumbnail || img.original || '';
+          return (
+            <button
+              key={img.id ?? i}
+              type="button"
+              onClick={() => setActive(i)}
+              aria-label={`View image ${i + 1}`}
+              className={`relative h-11 w-11 overflow-hidden rounded-2xl bg-white shadow-[0_8px_20px_-8px_rgba(34,48,26,0.4)] transition sm:h-[68px] sm:w-[68px] ${
+                active === i
+                  ? 'ring-2 ring-forest-600 ring-offset-2 ring-offset-[#F4F1E6]'
+                  : 'opacity-90 hover:opacity-100'
+              }`}
+            >
+              {src ? (
+                <Image src={src} alt="" fill sizes="68px" className="object-cover" />
+              ) : (
+                <span className="grid h-full w-full place-items-center text-forest-700/30">🌿</span>
+              )}
+            </button>
+          );
+        })}
 
-          {/* prev / next */}
-          {images.length > 1 && (
-            <>
-              <button
-                type="button"
-                onClick={() => go(-1)}
-                aria-label="Previous image"
-                className="absolute bottom-[14%] left-5 z-10 grid h-12 w-12 place-items-center rounded-full border border-kraft-300 bg-white text-forest-900 shadow-sm transition hover:bg-cream-100"
-              >
-                <Arrow dir="left" />
-              </button>
-              <button
-                type="button"
-                onClick={() => go(1)}
-                aria-label="Next image"
-                className="absolute bottom-[14%] right-5 z-10 grid h-12 w-12 place-items-center rounded-full bg-forest-700 text-white shadow-[0_10px_24px_-8px_rgba(34,48,26,0.6)] transition hover:bg-forest-800"
-              >
-                <Arrow dir="right" />
-              </button>
-            </>
-          )}
-        </div>
+        <button
+          type="button"
+          aria-label="360 degree view"
+          className="grid h-11 w-11 place-items-center rounded-2xl bg-forest-900 text-white shadow-[0_8px_20px_-8px_rgba(34,48,26,0.5)] transition hover:bg-forest-800 sm:h-[68px] sm:w-[68px]"
+        >
+          <span className="flex flex-col items-center gap-0.5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 12a9 9 0 1 0 3-6.7" />
+              <path d="M3 4v4h4" />
+            </svg>
+            <span className="text-[7px] font-semibold leading-none sm:text-[7.5px]">360° View</span>
+          </span>
+        </button>
       </div>
     </div>
   );
