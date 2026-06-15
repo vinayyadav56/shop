@@ -69,14 +69,8 @@ function WishlistItem({ product }: { product: Product }) {
             {product?.name}
           </Link>
 
-          {/* <p className="mt-3 space-y-2 space-x-3.5 sm:space-y-0 rtl:sm:space-x-reverse"> */}
+          {/* Vendor/seller name intentionally not shown — PlantAtHome-only branding. */}
           <p className="mt-1.5 flex flex-col items-start space-y-3">
-            <Link
-              href={Routes.shop(product?.shop?.slug)}
-              className="inline-block w-auto text-sm font-semibold text-body-dark transition-colors hover:text-accent"
-            >
-              {product?.shop?.name}
-            </Link>
             <Rating rating={product?.ratings} variant="xs" boxed />
           </p>
         </div>

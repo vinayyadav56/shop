@@ -285,20 +285,8 @@ const Details: React.FC<Props> = ({
             />
           )}
 
-          {shop?.name && (
-            <div className="mt-2 flex items-center">
-              <span className="py-1 text-sm font-semibold capitalize text-heading ltr:mr-6 rtl:ml-6">
-                {t('common:text-sellers')}
-              </span>
-
-              <button
-                onClick={() => navigate(Routes.shop(shop?.slug))}
-                className="text-sm tracking-wider text-accent underline transition hover:text-accent-hover hover:no-underline"
-              >
-                {shop?.name}
-              </button>
-            </div>
-          )}
+          {/* Seller identity is intentionally NOT shown — customers order from
+              PlantAtHome only; vendor/fulfiller names are never exposed. */}
         </div>
       </div>
 

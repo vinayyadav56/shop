@@ -36,6 +36,36 @@ export function setStoredLatLng(lat: number, lng: number): CustomerLatLng {
   return v;
 }
 
+const CITY_KEY = 'pah_customer_city';
+
+/** The customer's selected city — drives city-first availability ("Available in your city"). */
+export function getStoredCity(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const c = window.localStorage.getItem(CITY_KEY);
+    return c && c.trim() ? c : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Silently set the customer's city. Used to auto-select the city on login (e.g. from
+ * the user's saved address) without any prompt, and by a manual city selector.
+ */
+export function setStoredCity(city: string): void {
+  try {
+    if (city && city.trim()) {
+      window.localStorage.setItem(CITY_KEY, city.trim());
+    } else {
+      window.localStorage.removeItem(CITY_KEY);
+    }
+    window.dispatchEvent(new Event('pah-location-changed'));
+  } catch {
+    // ignore
+  }
+}
+
 /** Prompt the browser for the current position and persist it. */
 export function captureLocation(): Promise<CustomerLatLng> {
   return new Promise((resolve, reject) => {
