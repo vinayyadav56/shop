@@ -1,22 +1,37 @@
 import { getEnv } from '@/config/get-env';
 import NextAuth from 'next-auth';
-import FacebookProvider from 'next-auth/providers/facebook';
 import GoogleProvider from 'next-auth/providers/google';
+import LinkedInProvider from 'next-auth/providers/linkedin';
+
+// LinkedIn ("Sign In with LinkedIn using OpenID Connect"). Optional — only registered
+// when its credentials are present, so deploys without LinkedIn don't break auth.
+const providers: any[] = [
+  GoogleProvider({
+    clientId: getEnv('GOOGLE_CLIENT_ID'),
+    clientSecret: getEnv('GOOGLE_CLIENT_SECRET'),
+  }),
+];
+if (process.env.LINKEDIN_CLIENT_ID && process.env.LINKEDIN_CLIENT_SECRET) {
+  providers.push(
+    LinkedInProvider({
+      clientId: process.env.LINKEDIN_CLIENT_ID,
+      clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
+      client: { token_endpoint_auth_method: 'client_secret_post' },
+      issuer: 'https://www.linkedin.com/oauth',
+      wellKnown: 'https://www.linkedin.com/oauth/.well-known/openid-configuration',
+      authorization: { params: { scope: 'openid profile email' } },
+      profile(profile: any) {
+        return { id: profile.sub, name: profile.name, email: profile.email, image: profile.picture };
+      },
+    }),
+  );
+}
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
   // https://next-auth.js.org/configuration/providers
-  providers: [
-    // FacebookProvider({
-    //   clientId: getEnv('FACEBOOK_CLIENT_ID'),
-    //   clientSecret: getEnv('FACEBOOK_CLIENT_SECRET'),
-    // }),
-    GoogleProvider({
-      clientId: getEnv('GOOGLE_CLIENT_ID'),
-      clientSecret: getEnv('GOOGLE_CLIENT_SECRET'),
-    }),
-  ],
+  providers,
 
   // The secret should be set to a reasonably long random string.
   // It is used to sign cookies and to sign and encrypt JSON Web Tokens, unless

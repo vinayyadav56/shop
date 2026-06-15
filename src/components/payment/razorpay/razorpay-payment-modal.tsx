@@ -37,7 +37,9 @@ const RazorpayPaymentModal: React.FC<Props> = ({
       await loadRazorpayScript();
     }
     const options: RazorpayOptions = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      // Prefer the server's public key (from /settings) so the client key always matches
+      // the gateway the order was created with; fall back to the build-time env var.
+      key: (settings as any)?.razorpayKeyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       amount: paymentIntentInfo?.amount!,
       currency: paymentIntentInfo?.currency!,
       name: customer_name!,
