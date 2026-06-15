@@ -22,6 +22,7 @@ const ToastContainer = dynamic(
 );
 import Maintenance from '@/components/maintenance/layout';
 import { NotificationProvider } from '@/context/notify-content';
+import CitySync from '@/components/layouts/city-sync';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -52,6 +53,7 @@ function CustomApp({
                 <CartProvider>
                   <>
                     <DefaultSeo />
+                    <CitySync />
                     {isStandalone ? (
                       getLayout(<Component {...pageProps} />)
                     ) : (
