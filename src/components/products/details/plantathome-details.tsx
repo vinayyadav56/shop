@@ -11,7 +11,7 @@ import { Routes } from '@/config/routes';
 import type { Product } from '@/types';
 import usePrice from '@/lib/use-price';
 import { HttpClient } from '@/framework/client/http-client';
-import { getStoredLatLng } from '@/lib/customer-location';
+import { getStoredLatLng, getStoredCity } from '@/lib/customer-location';
 import VendorAvailabilityNote from '@/components/products/details/vendor-availability-note';
 import Truncate from '@/components/ui/truncate';
 import { useSanitizeContent } from '@/lib/sanitize-content';
@@ -109,16 +109,22 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   // Only overrides the displayed price when this product actually has a vendor
   // cost sheet — otherwise the catalog price above is shown unchanged.
   const loc = getStoredLatLng();
+  const customerCity = getStoredCity();
   const { data: vendorPriceData } = useQuery(
-    ['location-price', id, isSelected ? selectedVariation?.id : null, loc?.lat, loc?.lng],
+    ['location-price', id, isSelected ? selectedVariation?.id : null, loc?.lat, loc?.lng, customerCity],
     () =>
       HttpClient.get<any>('location-price', {
         product_id: id,
         ...(isSelected && selectedVariation?.id ? { variation_option_id: selectedVariation.id } : {}),
         ...(loc ? { lat: loc.lat, lng: loc.lng } : {}),
+        ...(customerCity ? { city: customerCity } : {}),
       }),
     { enabled: !!id, retry: 0, staleTime: 60_000 },
   );
+  const fulfillment = vendorPriceData?.fulfillment as
+    | { fulfillment_mode?: 'local' | 'courier'; eta_days?: number }
+    | null
+    | undefined;
   const { price: vendorPrice } = usePrice({ amount: Number(vendorPriceData?.price ?? 0) });
   const useVendorPrice = Boolean(vendorPriceData?.has_vendor_cost && vendorPriceData?.available);
   const displayPrice = useVendorPrice ? vendorPrice : price;
@@ -342,6 +348,26 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
               productId={id}
               variationOptionId={isSelected ? selectedVariation?.id : null}
             />
+
+            {/* Delivery timing — local same-city vs courier (never names the vendor) */}
+            {fulfillment?.eta_days != null && customerCity && (
+              <div className="mt-4 flex items-center gap-2 text-sm text-forest-900">
+                <span aria-hidden>🚚</span>
+                <span>
+                  {fulfillment.fulfillment_mode === 'local' ? (
+                    <>
+                      <span className="font-semibold">Local delivery</span> to {customerCity} in{' '}
+                      ~{fulfillment.eta_days} day{fulfillment.eta_days === 1 ? '' : 's'}.
+                    </>
+                  ) : (
+                    <>
+                      Ships to {customerCity} by <span className="font-semibold">courier</span> in{' '}
+                      ~{fulfillment.eta_days} day{fulfillment.eta_days === 1 ? '' : 's'}.
+                    </>
+                  )}
+                </span>
+              </div>
+            )}
 
             {/* quantity + add to cart */}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-stretch">
