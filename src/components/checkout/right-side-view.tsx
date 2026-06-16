@@ -8,6 +8,9 @@ const UnverifiedItemList = dynamic(
 const VerifiedItemList = dynamic(
   () => import('@/components/checkout/item/verified-item-list')
 );
+const DeliveryEstimate = dynamic(
+  () => import('@/components/checkout/delivery-estimate')
+);
 
 export const RightSideView = ({
   hideTitle = false,
@@ -15,10 +18,17 @@ export const RightSideView = ({
   hideTitle?: boolean;
 }) => {
   const [verifiedResponse] = useAtom(verifiedResponseAtom);
-  if (isEmpty(verifiedResponse)) {
-    return <UnverifiedItemList hideTitle={hideTitle} />;
-  }
-  return <VerifiedItemList />;
+  return (
+    <>
+      {isEmpty(verifiedResponse) ? (
+        <UnverifiedItemList hideTitle={hideTitle} />
+      ) : (
+        <VerifiedItemList />
+      )}
+      {/* Per-item expected delivery (appears once vendors serve the customer's city) */}
+      <DeliveryEstimate />
+    </>
+  );
 };
 
 export default RightSideView;
