@@ -60,7 +60,6 @@ const Details: React.FC<Props> = ({
     gallery,
     type,
     quantity,
-    shop,
     slug,
     ratings,
     video,
