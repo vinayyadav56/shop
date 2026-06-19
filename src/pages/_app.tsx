@@ -23,6 +23,7 @@ const ToastContainer = dynamic(
 import Maintenance from '@/components/maintenance/layout';
 import { NotificationProvider } from '@/context/notify-content';
 import CitySync from '@/components/layouts/city-sync';
+import TrackingBridge from '@/lib/analytics/tracking-bridge';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -52,6 +53,7 @@ function CustomApp({
               <ModalProvider>
                 <CartProvider>
                   <>
+                    <TrackingBridge />
                     <DefaultSeo />
                     <CitySync />
                     {isStandalone ? (

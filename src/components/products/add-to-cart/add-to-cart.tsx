@@ -1,6 +1,7 @@
 import { cartAnimation } from '@/lib/cart-animation';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { generateCartItem } from '@/store/quick-cart/generate-cart-item';
+import { track } from '@/lib/analytics/track';
 import Link from 'next/link';
 import { PlusIconNew } from '@/components/icons/plus-icon';
 import { MinusIconNew } from '@/components/icons/minus-icon';
@@ -71,6 +72,11 @@ export const AddToCart = ({
       updateCartLanguage(item?.language);
     }
     addItemToCart(item, 1);
+    track('add_to_cart', {
+      label: item?.name,
+      value: Number(item?.price) || undefined,
+      meta: { id: item?.id },
+    });
     if (!isInCart(item.id)) {
       cartAnimation(e);
     }
