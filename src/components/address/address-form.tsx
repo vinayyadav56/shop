@@ -12,6 +12,7 @@ import { AddressType } from '@/framework/utils/constants';
 import { GoogleMapLocation } from '@/types';
 import { useUpdateUser } from '@/framework/user';
 import GooglePlacesAutocomplete from '@/components/form/google-places-autocomplete';
+import StateCitySelect from '@/components/location/state-city-select';
 import { useSettings } from '@/framework/settings';
 
 type FormValues = {
@@ -64,7 +65,7 @@ export const AddressForm: React.FC<any> = ({
       }}
       resetValues={defaultValues}
     >
-      {({ register, control, getValues, setValue, formState: { errors } }) => {
+      {({ register, control, getValues, setValue, watch, formState: { errors } }) => {
         return (
           <>
             <div>
@@ -142,19 +143,25 @@ export const AddressForm: React.FC<any> = ({
               variant="outline"
             />
 
-            <Input
-              label={t('text-city')}
-              {...register('address.city')}
-              error={t(errors.address?.city?.message!)}
-              variant="outline"
+            {/* Standardised State (dropdown) + City (autocomplete). Hidden
+                registered inputs keep RHF + validation; Google Places autofill
+                still writes address.city/state, reflected by the selector.
+                City accepts ANY value so an un-seeded city never blocks checkout. */}
+            <input type="hidden" {...register('address.city')} />
+            <input type="hidden" {...register('address.state')} />
+            <StateCitySelect
+              state={watch('address.state')}
+              city={watch('address.city')}
+              onChange={({ state, city }) => {
+                setValue('address.state', state, { shouldValidate: true });
+                setValue('address.city', city, { shouldValidate: true });
+              }}
             />
-
-            <Input
-              label={t('text-state')}
-              {...register('address.state')}
-              error={t(errors.address?.state?.message!)}
-              variant="outline"
-            />
+            {errors.address?.city || errors.address?.state ? (
+              <p className="-mt-2 text-xs text-red-500">
+                {t(errors.address?.state?.message! || errors.address?.city?.message!)}
+              </p>
+            ) : null}
 
             <Input
               label={t('text-zip')}

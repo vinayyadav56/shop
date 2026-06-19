@@ -66,4 +66,6 @@ export const API_ENDPOINTS = {
   READ_ALL_NOTIFY_LOG: 'notify-log-read-all',
   READ_NOTIFY_LOG: 'notify-log-seen',
   SHOP_MAINTENANCE_EVENT: 'shop-maintenance-event',
+  LOCATIONS_STATES: '/locations/states',
+  LOCATIONS_CITIES: '/locations/cities',
 };
