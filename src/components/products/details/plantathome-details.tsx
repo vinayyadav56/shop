@@ -130,6 +130,22 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   const displayPrice = useVendorPrice ? vendorPrice : price;
   const displayBasePrice = useVendorPrice ? null : basePrice;
 
+  // Operations Control Center — is this product's vertical available in the
+  // customer's city? Only checked when a city is known; fail open otherwise.
+  const { data: svcAvail } = useQuery<any>(
+    ['svc-availability', type?.slug, customerCity],
+    () =>
+      HttpClient.get<any>('service-availability/check', {
+        vertical: type?.slug,
+        ...(customerCity ? { city: customerCity } : {}),
+      }),
+    { enabled: !!type?.slug && !!customerCity, retry: 0, staleTime: 60_000 },
+  );
+  const verticalBlocked = svcAvail?.available === false;
+  const verticalMessage: string | null =
+    svcAvail?.message ||
+    (verticalBlocked ? `Currently unavailable in ${customerCity}.` : null);
+
   const previewImages = displayImage(selectedVariation?.image, gallery, image);
   const content = useSanitizeContent({ description });
   const badge = getBadge(product);
@@ -397,18 +413,31 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
               <button
                 type="button"
                 onClick={handleAdd}
-                disabled={!inStock || needsSelection}
+                disabled={!inStock || needsSelection || verticalBlocked}
                 className={classNames(
                   'flex flex-1 items-center justify-center gap-2.5 rounded-full px-7 py-3.5 text-base font-semibold text-white transition',
-                  !inStock || needsSelection
+                  !inStock || needsSelection || verticalBlocked
                     ? 'cursor-not-allowed bg-stone-300'
                     : 'bg-forest-700 shadow-[0_14px_30px_-12px_rgba(46,94,42,0.65)] hover:bg-forest-800',
                 )}
               >
                 <Bag className="h-5 w-5" />
-                {!inStock ? 'Out of Stock' : needsSelection ? 'Select Options' : 'Add to Cart'}
+                {verticalBlocked
+                  ? 'Unavailable in your city'
+                  : !inStock
+                  ? 'Out of Stock'
+                  : needsSelection
+                  ? 'Select Options'
+                  : 'Add to Cart'}
               </button>
             </div>
+
+            {/* Operations Control Center — vertical paused/unavailable in city. */}
+            {verticalBlocked ? (
+              <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                {verticalMessage}
+              </div>
+            ) : null}
 
             {/* Ask AI */}
             {askAiEnabled && (
