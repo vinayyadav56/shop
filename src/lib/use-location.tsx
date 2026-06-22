@@ -3,10 +3,9 @@ import { useJsApiLoader } from '@react-google-maps/api';
 import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { atom } from 'jotai';
+import { GMAPS_LOADER_OPTIONS } from '@/lib/gmaps-loader';
 
 export const locationAtom = atom<GoogleMapLocation | null>(null);
-
-const libraries: any = ['places'];
 
 interface Component {
   long_name: string;
@@ -71,11 +70,10 @@ interface UseLocationProps {
 export default function useLocation({ onChange, onChangeCurrentLocation, setInputValue }: UseLocationProps) {
   const { t } = useTranslation();
   const [autocomplete, setAutocomplete] = useState<any>(null);
-  const { isLoaded, loadError } = useJsApiLoader({
-    id: 'google_map_autocomplete',
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY!,
-    libraries,
-  });
+  // Shared loader config — must match the courier-tracking-map loader, else
+  // @react-google-maps/api throws "Loader must not be called again with
+  // different options" and crashes any page that mounts both (e.g. order page).
+  const { isLoaded, loadError } = useJsApiLoader(GMAPS_LOADER_OPTIONS);
 
   const onLoad = useCallback((autocompleteInstance: any) => {
     setAutocomplete(autocompleteInstance);

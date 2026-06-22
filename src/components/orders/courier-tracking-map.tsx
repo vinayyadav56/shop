@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { GoogleMap, MarkerF, DirectionsRenderer, useJsApiLoader } from '@react-google-maps/api';
 import { HttpClient } from '@/framework/client/http-client';
+import { GMAPS_LOADER_OPTIONS } from '@/lib/gmaps-loader';
 
 const KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
 
@@ -28,7 +29,9 @@ export default function CourierTrackingMap({ tracking }: { tracking?: string }) 
     () => HttpClient.get(`orders/${tracking}/courier-location`),
     { enabled: !!tracking, refetchInterval: 10_000, retry: 0 },
   );
-  const { isLoaded } = useJsApiLoader({ id: 'pah-courier-map', googleMapsApiKey: KEY ?? '' });
+  // Shared loader config — must match the Places autocomplete loader, else
+  // @react-google-maps/api throws and crashes the order page.
+  const { isLoaded } = useJsApiLoader(GMAPS_LOADER_OPTIONS);
   const [directions, setDirections] = useState<any>(null);
   const [eta, setEta] = useState<{ distance: string; duration: string } | null>(null);
 
