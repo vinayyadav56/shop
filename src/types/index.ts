@@ -150,6 +150,9 @@ export interface TypeQueryOptions extends QueryOptions {
   language: string;
   name: string;
   orderBy: any;
+  // Operations Control Center — when set, the API hides verticals disabled in
+  // this city so the storefront nav reflects per-city availability immediately.
+  city: string;
 }
 
 export interface ShopQueryOptions extends QueryOptions {

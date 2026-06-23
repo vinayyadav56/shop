@@ -3,13 +3,27 @@ import { useQuery } from 'react-query';
 import client from './client';
 import { API_ENDPOINTS } from './client/api-endpoints';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { getStoredCity } from '@/lib/customer-location';
 
 export function useTypes(options?: Partial<TypeQueryOptions>) {
   const { locale } = useRouter();
 
+  // Pass the shopper's selected city so the Operations Control Center can hide a
+  // vertical disabled *in that city* from the nav immediately (a global disable
+  // is hidden even without a city). Refetch when the stored city changes.
+  const [city, setCity] = useState<string | null>(null);
+  useEffect(() => {
+    setCity(getStoredCity());
+    const onChange = () => setCity(getStoredCity());
+    window.addEventListener('pah-location-changed', onChange);
+    return () => window.removeEventListener('pah-location-changed', onChange);
+  }, []);
+
   let formattedOptions = {
     ...options,
-    language: locale
+    ...(city ? { city } : {}),
+    language: locale,
   }
 
   const { data, isLoading, error } = useQuery<Type[], Error>(
