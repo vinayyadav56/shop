@@ -24,6 +24,15 @@ export function useLookupStates() {
   );
 }
 
+/** All master cities (for the delivery city switcher). Public, cached, fail-safe. */
+export function useAllCities() {
+  return useQuery<LookupCity[], Error>(
+    ['all-cities'],
+    () => HttpClient.get<LookupCity[]>(API_ENDPOINTS.LOCATIONS_CITIES),
+    { staleTime: 1000 * 60 * 10, retry: 0 },
+  );
+}
+
 /** Master cities (optionally filtered by state) for the City autocomplete. Fail-safe. */
 export function useLookupCities(stateId?: number | string | null) {
   return useQuery<LookupCity[], Error>(

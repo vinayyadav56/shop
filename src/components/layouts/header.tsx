@@ -14,6 +14,7 @@ import { drawerAtom } from '@/store/drawer-atom';
 import { authorizationAtom } from '@/store/authorization-atom';
 import { displayMobileHeaderSearchAtom } from '@/store/display-mobile-header-search-atom';
 import { useModalAction } from '@/components/ui/modal/modal.context';
+import CitySwitcher from '@/components/location/city-switcher';
 
 const Search = dynamic(() => import('@/components/ui/search/search'));
 
@@ -74,18 +75,21 @@ const Header = ({ layout }: { layout?: string }) => {
       >
         {/* announcement bar — always dark green, sits above the (transparent/solid) main bar */}
         <div className="bg-forest-900 text-white">
-          <div className="mx-auto flex max-w-7xl items-center justify-center gap-3 px-5 py-1.5 text-[11px] font-medium tracking-wide sm:gap-5 sm:px-8">
-            <span className="flex items-center gap-1.5">
-              <Icon.truckFast className="h-3.5 w-3.5" /> Free Delivery on Orders Above ₹999
-            </span>
-            <span className="hidden h-3 w-px bg-white/25 sm:block" />
-            <span className="hidden items-center gap-1.5 sm:flex">
-              <Icon.lock className="h-3.5 w-3.5" /> Secure Payments
-            </span>
-            <span className="hidden h-3 w-px bg-white/25 sm:block" />
-            <span className="hidden items-center gap-1.5 sm:flex">
-              <Icon.shield className="h-3.5 w-3.5" /> Easy Returns
-            </span>
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-1.5 text-[11px] font-medium tracking-wide sm:gap-5 sm:px-8">
+            <CitySwitcher tone="light" />
+            <div className="flex items-center gap-3 sm:gap-5">
+              <span className="flex items-center gap-1.5">
+                <Icon.truckFast className="h-3.5 w-3.5" /> Free Delivery on Orders Above ₹999
+              </span>
+              <span className="hidden h-3 w-px bg-white/25 sm:block" />
+              <span className="hidden items-center gap-1.5 sm:flex">
+                <Icon.lock className="h-3.5 w-3.5" /> Secure Payments
+              </span>
+              <span className="hidden h-3 w-px bg-white/25 sm:block" />
+              <span className="hidden items-center gap-1.5 sm:flex">
+                <Icon.shield className="h-3.5 w-3.5" /> Easy Returns
+              </span>
+            </div>
           </div>
         </div>
 

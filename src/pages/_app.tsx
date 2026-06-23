@@ -23,6 +23,7 @@ const ToastContainer = dynamic(
 import Maintenance from '@/components/maintenance/layout';
 import { NotificationProvider } from '@/context/notify-content';
 import CitySync from '@/components/layouts/city-sync';
+import LocationGate from '@/components/location/location-gate';
 import TrackingBridge from '@/lib/analytics/tracking-bridge';
 
 type AppPropsWithLayout = AppProps & {
@@ -56,6 +57,7 @@ function CustomApp({
                     <TrackingBridge />
                     <DefaultSeo />
                     <CitySync />
+                    <LocationGate />
                     {isStandalone ? (
                       getLayout(<Component {...pageProps} />)
                     ) : (
