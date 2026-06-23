@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAtom } from 'jotai';
 import { useTranslation } from 'next-i18next';
 import { billingAddressAtom, shippingAddressAtom } from '@/store/checkout';
 import dynamic from 'next/dynamic';
@@ -59,6 +60,17 @@ export default function CheckoutPage() {
   const { id, address, profile } = me ?? {};
   const [step, setStep] = useState(0);
 
+  // "Shipping same as billing" (default on): mirror the chosen billing address
+  // into the shipping atom and hide the separate shipping picker.
+  const [billingAddress] = useAtom(billingAddressAtom);
+  const [, setShippingAddress] = useAtom(shippingAddressAtom);
+  const [sameAsBilling, setSameAsBilling] = useState(true);
+  useEffect(() => {
+    if (sameAsBilling && billingAddress) {
+      setShippingAddress(billingAddress as any);
+    }
+  }, [sameAsBilling, billingAddress, setShippingAddress]);
+
   // One panel per wizard step (reuses the existing grid components + flow).
   const panels: WizardPanel[] = [
     {
@@ -89,19 +101,31 @@ export default function CheckoutPage() {
             atom={billingAddressAtom}
             type={AddressType.Billing}
           />
-          <AddressGrid
-            userId={me?.id!}
-            className="pa-checkout-step"
-            label={t('text-shipping-address')}
-            count={3}
-            //@ts-ignore
-            addresses={address?.filter(
-              (item) => item?.type === AddressType.Shipping
-            )}
-            //@ts-ignore
-            atom={shippingAddressAtom}
-            type={AddressType.Shipping}
-          />
+          <label className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-border-200 bg-gray-50 px-4 py-3 text-sm font-medium text-heading">
+            <input
+              type="checkbox"
+              checked={sameAsBilling}
+              onChange={(e) => setSameAsBilling(e.target.checked)}
+              className="h-4 w-4 rounded border-border-base text-accent focus:ring-accent"
+            />
+            {t('Shipping address same as billing address')}
+          </label>
+
+          {!sameAsBilling && (
+            <AddressGrid
+              userId={me?.id!}
+              className="pa-checkout-step"
+              label={t('text-shipping-address')}
+              count={3}
+              //@ts-ignore
+              addresses={address?.filter(
+                (item) => item?.type === AddressType.Shipping
+              )}
+              //@ts-ignore
+              atom={shippingAddressAtom}
+              type={AddressType.Shipping}
+            />
+          )}
           <PincodeServiceability />
         </div>
       ),

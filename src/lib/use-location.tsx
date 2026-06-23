@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { atom } from 'jotai';
 import { GMAPS_LOADER_OPTIONS } from '@/lib/gmaps-loader';
+import { extractCorrectCity } from '@/lib/extract-address';
 
 export const locationAtom = atom<GoogleMapLocation | null>(null);
 
@@ -57,6 +58,13 @@ function getLocation(placeOrResult: any) {
         null;
     }
   }
+
+  // Robust city: resolve via strict priority (locality → postal_town → district
+  // → state) checking ALL types on each component, so a village / sublocality
+  // never lands in the City field. Overrides the loop's first-type guess.
+  const correctCity = extractCorrectCity(placeOrResult?.address_components ?? []);
+  if (correctCity) location.city = correctCity;
+
   // Return the location object
   return location;
 }
