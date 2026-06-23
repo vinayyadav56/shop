@@ -51,6 +51,31 @@ const Header = ({ layout }: { layout?: string }) => {
   const position = 'sticky';
 
   const openCart = () => setDrawer({ display: true, view: 'cart' });
+
+  // Premium add-to-cart feedback: the fly-to-cart animation (lib/cart-animation)
+  // dispatches `pah-cart-bump` when the product image lands (pulse the badge) and
+  // `pah-open-cart` to reveal the mini-cart. Decoupled via window events so any
+  // add-to-cart button anywhere triggers it without prop-drilling.
+  const cartBtnRef = React.useRef<HTMLButtonElement>(null);
+  React.useEffect(() => {
+    const onBump = () =>
+      cartBtnRef.current?.animate(
+        [
+          { transform: 'scale(1)' },
+          { transform: 'scale(1.35)' },
+          { transform: 'scale(1)' },
+        ],
+        { duration: 420, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' },
+      );
+    const onOpen = () => setDrawer({ display: true, view: 'cart' });
+    window.addEventListener('pah-cart-bump', onBump);
+    window.addEventListener('pah-open-cart', onOpen);
+    return () => {
+      window.removeEventListener('pah-cart-bump', onBump);
+      window.removeEventListener('pah-open-cart', onOpen);
+    };
+  }, [setDrawer]);
+
   const onProfile = () => {
     if (isAuthorize) router.push('/profile');
     else openModal('LOGIN_VIEW');
@@ -141,7 +166,7 @@ const Header = ({ layout }: { layout?: string }) => {
               <Icon.user className="h-5 w-5" />
             </button>
 
-            <button type="button" onClick={openCart} className={`relative ${iconBtn}`} aria-label="Cart">
+            <button ref={cartBtnRef} data-cart-target type="button" onClick={openCart} className={`relative ${iconBtn}`} aria-label="Cart">
               <Icon.bag className="h-5 w-5" />
               {totalUniqueItems > 0 && (
                 <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-forest-700 px-1 text-[10px] font-bold text-white">

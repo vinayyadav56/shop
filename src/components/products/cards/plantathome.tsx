@@ -183,6 +183,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
 
   return (
     <motion.article
+      data-product-card
       whileHover={{ y: -4 }}
       transition={{ duration: 0.25 }}
       className={`group flex h-full flex-col overflow-hidden rounded-xl border border-forest-900/10 bg-white/80 backdrop-blur-[2px] transition-all duration-300 hover:border-[#B58E39]/40 hover:shadow-[0_18px_40px_-28px_rgba(22,48,26,0.35)] ${className}`}

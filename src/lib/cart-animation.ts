@@ -1,39 +1,107 @@
+/**
+ * Premium "fly to cart" interaction.
+ *
+ * Clones the product image and arcs it into the header cart icon with the Web
+ * Animations API (smooth ease-out + a slight upward curve + shrink + fade), then
+ * pulses the cart badge and reveals the mini-cart. Replaces the old version that
+ * depended on `.product-card`/`.product-cart`/`.product-image` classes which the
+ * PlantAtHome components don't use — so the animation silently no-op'd and the
+ * count just snapped (the "abrupt" feel). This one finds its source + target
+ * robustly and degrades gracefully (a count pulse) when no image is available.
+ */
+function findSourceImage(target: HTMLElement | null): HTMLImageElement | null {
+  if (!target) return null;
+  const container =
+    target.closest<HTMLElement>(
+      '[data-product-card], .product-card, article, [class*="group"]',
+    ) || target.parentElement;
+  const local = container?.querySelector<HTMLImageElement>('img');
+  if (local) return local;
+  // PDP fallback: the main gallery / detail image.
+  return (
+    document.querySelector<HTMLImageElement>('[data-product-gallery] img') ||
+    document.querySelector<HTMLImageElement>('main img')
+  );
+}
+
 export const cartAnimation = (event: any) => {
-  const getClosest = function (elem: any, selector: any) {
-    for (; elem && elem !== document; elem = elem.parentNode) {
-      if (elem.matches(selector)) return elem;
+  if (typeof window === 'undefined') return;
+  try {
+    const target: HTMLElement | null =
+      (event?.currentTarget as HTMLElement) ||
+      (event?.target as HTMLElement) ||
+      null;
+
+    const cart =
+      document.querySelector<HTMLElement>('[data-cart-target]') ||
+      (document.getElementsByClassName('product-cart')[0] as HTMLElement);
+
+    // Always pulse the cart, even if we can't build a flight (graceful fallback).
+    const pulse = () =>
+      window.dispatchEvent(new CustomEvent('pah-cart-bump'));
+
+    const img = findSourceImage(target);
+    const prefersReduced = window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)',
+    )?.matches;
+
+    if (!img || !cart || prefersReduced || typeof img.animate !== 'function') {
+      pulse();
+      window.dispatchEvent(new CustomEvent('pah-open-cart'));
+      return;
     }
-    return null;
-  };
 
-  // start animation block
-  let imgToDrag = getClosest(event.target, '.product-card');
+    const from = img.getBoundingClientRect();
+    const to = cart.getBoundingClientRect();
+    const fromX = from.left;
+    const fromY = from.top;
+    const toX = to.left + to.width / 2 - from.width / 2;
+    const toY = to.top + to.height / 2 - from.height / 2;
+    const midX = (fromX + toX) / 2;
+    const midY = Math.min(fromY, toY) - 80; // arc up before diving in
 
-  if (!imgToDrag) return;
+    const clone = img.cloneNode(true) as HTMLElement;
+    Object.assign(clone.style, {
+      position: 'fixed',
+      left: `${fromX}px`,
+      top: `${fromY}px`,
+      width: `${from.width}px`,
+      height: `${from.height}px`,
+      margin: '0',
+      borderRadius: '16px',
+      objectFit: 'cover',
+      zIndex: '99999',
+      pointerEvents: 'none',
+      boxShadow: '0 24px 48px -18px rgba(22,48,26,0.45)',
+      willChange: 'transform, opacity',
+    } as CSSStyleDeclaration);
+    document.body.appendChild(clone);
 
-  let viewCart = document.getElementsByClassName('product-cart')[0];
-  let imgToDragImage = imgToDrag.querySelector('.product-image');
+    const anim = clone.animate(
+      [
+        { transform: 'translate(0,0) scale(1)', opacity: 1, offset: 0 },
+        {
+          transform: `translate(${midX - fromX}px, ${midY - fromY}px) scale(0.6)`,
+          opacity: 0.9,
+          offset: 0.55,
+        },
+        {
+          transform: `translate(${toX - fromX}px, ${toY - fromY}px) scale(0.18)`,
+          opacity: 0.2,
+          offset: 1,
+        },
+      ],
+      { duration: 750, easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)', fill: 'forwards' },
+    );
 
-  let disLeft = imgToDrag.getBoundingClientRect().left;
-  let disTop = imgToDrag.getBoundingClientRect().top;
-  let cartLeft = viewCart.getBoundingClientRect().left;
-  let cartTop = viewCart.getBoundingClientRect().top;
-  let image = imgToDragImage.cloneNode(true);
-  image.style =
-    'z-index: 11111; width: 100px;opacity:1; position:fixed; top:' +
-    disTop +
-    'px;left:' +
-    disLeft +
-    'px;transition: left 1s, top 1s, width 1s, opacity 1s cubic-bezier(1, 1, 1, 1);border-radius: 50px; overflow: hidden; box-shadow: 0 21px 36px rgba(0,0,0,0.1)';
-  var reChange = document.body.appendChild(image);
-  setTimeout(function () {
-    image.style.left = cartLeft + 'px';
-    image.style.top = cartTop + 'px';
-    image.style.width = '40px';
-    image.style.opacity = '0';
-  }, 200);
-  setTimeout(function () {
-    reChange.parentNode.removeChild(reChange);
-  }, 1000);
-  // End Animation Block
+    anim.onfinish = () => {
+      clone.remove();
+      pulse();
+      window.dispatchEvent(new CustomEvent('pah-open-cart'));
+    };
+    // Safety net if onfinish never fires.
+    setTimeout(() => clone.isConnected && clone.remove(), 1100);
+  } catch {
+    window.dispatchEvent(new CustomEvent('pah-cart-bump'));
+  }
 };
