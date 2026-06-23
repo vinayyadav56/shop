@@ -17,6 +17,12 @@ import { useLogout, useUser } from '@/framework/user';
 import { PaymentGateway } from '@/types';
 import { useSettings } from '@/framework/settings';
 import { usePincodeServiceability } from '@/lib/use-pincode-serviceability';
+import {
+  deliveryModeAtom,
+  isNonServiceableAtom,
+  detectedCityAtom,
+  serviceableCityAtom,
+} from '@/store/serviceability';
 import Cookies from 'js-cookie';
 import { REVIEW_POPUP_MODAL_KEY } from '@/lib/constants';
 
@@ -51,10 +57,19 @@ export const PlaceOrderAction: React.FC<{
   const [discount] = useAtom(discountAtom);
   const [use_wallet_points] = useAtom(walletAtom);
 
-  // Hard-block ordering to a non-serviceable pincode (admin allow-list).
+  // Serviceability / courier mode (set by the location gate). When the shopper
+  // chose "Continue Anyway" from a non-serviceable area we ALLOW the order and
+  // flag it as courier; otherwise a non-serviceable pincode is still hard-blocked.
+  const [deliveryMode] = useAtom(deliveryModeAtom);
+  const [isNonServiceable] = useAtom(isNonServiceableAtom);
+  const [detectedCity] = useAtom(detectedCityAtom);
+  const [serviceableCity] = useAtom(serviceableCityAtom);
+  const courierMode = deliveryMode === 'courier' || isNonServiceable;
+  const [confirmCourier, setConfirmCourier] = useState(false);
+
   const shippingZip = (shipping_address as any)?.address?.zip as string | undefined;
   const { result: pincodeResult } = usePincodeServiceability(shippingZip);
-  const pincodeBlocked = pincodeResult?.serviceable === false;
+  const pincodeBlocked = pincodeResult?.serviceable === false && !courierMode;
 
   useEffect(() => {
     setErrorMessage(null);
@@ -84,22 +99,7 @@ export const PlaceOrderAction: React.FC<{
     },
     Number(discount),
   );
-  const handlePlaceOrder = () => {
-    if (!customer_contact) {
-      setErrorMessage('Contact Number Is Required');
-      return;
-    }
-    if (pincodeBlocked) {
-      setErrorMessage(
-        `We don't deliver to ${pincodeResult?.pincode ?? shippingZip} yet. Please use a serviceable delivery address.`,
-      );
-      return;
-    }
-    if (!use_wallet_points && !payment_gateway) {
-      setErrorMessage('Gateway Is Required');
-      return;
-    }
-
+  const submitOrder = () => {
     // Fold the optional shared-location check into the order note so it's
     // persisted + visible to admins without an API change.
     let locationLine = '';
@@ -166,12 +166,39 @@ export const PlaceOrderAction: React.FC<{
         ...(shipping_address?.address && shipping_address.address),
         ...(customerLatLng && { location: customerLatLng }),
       },
+      // Operations / courier-area order flags (persisted on the order).
+      is_non_serviceable_order: courierMode,
+      ...(detectedCity ? { detected_city: detectedCity } : {}),
+      ...(serviceableCity ? { serviceable_city: serviceableCity } : {}),
     };
     delete input.billing_address.__typename;
     delete input.shipping_address.__typename;
     //@ts-ignore
     createOrder(input);
     Cookies.remove(REVIEW_POPUP_MODAL_KEY);
+  };
+
+  const handlePlaceOrder = () => {
+    if (!customer_contact) {
+      setErrorMessage('Contact Number Is Required');
+      return;
+    }
+    if (pincodeBlocked) {
+      setErrorMessage(
+        `We don't deliver to ${pincodeResult?.pincode ?? shippingZip} yet. Please use a serviceable delivery address.`,
+      );
+      return;
+    }
+    if (!use_wallet_points && !payment_gateway) {
+      setErrorMessage('Gateway Is Required');
+      return;
+    }
+    // Non-serviceable (courier) order → confirm before placing.
+    if (courierMode && !confirmCourier) {
+      setConfirmCourier(true);
+      return;
+    }
+    submitOrder();
   };
   const isDigitalCheckout = available_items.find((item) =>
     Boolean(item.is_digital),
@@ -196,6 +223,14 @@ export const PlaceOrderAction: React.FC<{
   );
   return (
     <>
+      {courierMode && (
+        <div className="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-[13px] leading-relaxed text-amber-800">
+          <span className="font-semibold">Courier delivery selected.</span> Your
+          location is outside our standard service area
+          {detectedCity ? ` (${detectedCity})` : ''}. Delivery may take longer and
+          additional courier charges may apply.
+        </div>
+      )}
       <button
         className="pa-place-order-btn"
         onClick={handlePlaceOrder}
@@ -227,6 +262,41 @@ export const PlaceOrderAction: React.FC<{
       {!isAllRequiredFieldSelected && (
         <div className="mt-3">
           <ValidationError message={t('text-place-order-helper-text')} />
+        </div>
+      )}
+
+      {confirmCourier && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+            <h3 className="text-lg font-semibold text-forest-900">
+              Order from a non-serviceable area?
+            </h3>
+            <p className="mt-2 text-sm text-stone-600">
+              You’re ordering from outside our standard service area
+              {detectedCity ? ` (${detectedCity})` : ''}. Delivery will be processed
+              through a courier partner — it may take longer and incur additional
+              charges. Do you wish to continue?
+            </p>
+            <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setConfirmCourier(false)}
+                className="rounded-lg border border-border-200 px-4 py-2.5 text-sm font-medium text-heading hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setConfirmCourier(false);
+                  submitOrder();
+                }}
+                className="rounded-lg bg-forest-800 px-4 py-2.5 text-sm font-semibold text-white hover:brightness-110"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </>
