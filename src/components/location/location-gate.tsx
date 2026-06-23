@@ -5,6 +5,7 @@ import { useSetAtom } from 'jotai';
 import { getStoredCity, setStoredCity } from '@/lib/customer-location';
 import { getCityFromIP } from '@/lib/geocode';
 import { usePincodeServiceability } from '@/lib/use-pincode-serviceability';
+import { track } from '@/lib/analytics/track';
 import {
   deliveryModeAtom,
   isNonServiceableAtom,
@@ -51,7 +52,11 @@ export default function LocationGate() {
 
     const stored = getStoredCity();
     getCityFromIP().then((addr) => {
-      if (!addr?.city) return;
+      if (!addr?.city) {
+        track('location_denied', { meta: { source: 'ip' } });
+        return;
+      }
+      track('location_detected', { label: addr.city, meta: { source: 'ip' } });
       setDetected({ city: addr.city, pincode: addr.pincode?.replace(/\D/g, '') });
       setDetectedCityAtom(addr.city);
       if (!stored) {
@@ -77,6 +82,7 @@ export default function LocationGate() {
   }, [checked, result]);
 
   function continueViaCourier() {
+    track('courier_mode_selected', { label: detected?.city });
     setDeliveryMode('courier');
     setIsNonServiceable(true);
     setPopup(null);
@@ -86,6 +92,7 @@ export default function LocationGate() {
     setPickerOpen(true);
   }
   function pickCity(name: string) {
+    track('city_changed', { label: name });
     setStoredCity(name);
     setDeliveryMode('standard');
     setIsNonServiceable(false);

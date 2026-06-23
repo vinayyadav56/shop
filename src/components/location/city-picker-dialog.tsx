@@ -3,6 +3,7 @@ import { Fragment, useMemo, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useAllCities } from '@/framework/location';
 import { getBrowserCoords, reverseGeocode } from '@/lib/geocode';
+import { track } from '@/lib/analytics/track';
 
 interface Props {
   open: boolean;
@@ -36,11 +37,13 @@ export default function CityPickerDialog({ open, onClose, onPick }: Props) {
       if (coords) {
         const addr = await reverseGeocode(coords.lat, coords.lng);
         if (addr?.city) {
+          track('location_detected', { label: addr.city, meta: { source: 'gps' } });
           onPick(addr.city);
           onClose();
           return;
         }
       }
+      track('location_denied', { meta: { source: 'gps' } });
     } finally {
       setDetecting(false);
     }

@@ -17,6 +17,7 @@ import { useLogout, useUser } from '@/framework/user';
 import { PaymentGateway } from '@/types';
 import { useSettings } from '@/framework/settings';
 import { usePincodeServiceability } from '@/lib/use-pincode-serviceability';
+import { track } from '@/lib/analytics/track';
 import {
   deliveryModeAtom,
   isNonServiceableAtom,
@@ -173,6 +174,9 @@ export const PlaceOrderAction: React.FC<{
     };
     delete input.billing_address.__typename;
     delete input.shipping_address.__typename;
+    track(courierMode ? 'non_serviceable_order' : 'serviceable_order', {
+      label: serviceableCity ?? detectedCity ?? undefined,
+    });
     //@ts-ignore
     createOrder(input);
     Cookies.remove(REVIEW_POPUP_MODAL_KEY);
