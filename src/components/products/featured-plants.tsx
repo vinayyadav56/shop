@@ -20,7 +20,12 @@ const breakpoints = {
 
 /** "Featured Plants" carousel on a soft gradient panel (reference Featured section). */
 export default function FeaturedPlants() {
-  const { products, isLoading } = useBestSellingProducts({ limit: 12 });
+  // Scope to the Plants vertical so Tools / FarmBox / Pots don't leak into a
+  // section titled "Featured Plants" (best-selling is cross-vertical by default).
+  const { products, isLoading } = useBestSellingProducts({
+    limit: 12,
+    type_slug: 'plants',
+  });
 
   if (!isLoading && !products?.length) return null;
 
