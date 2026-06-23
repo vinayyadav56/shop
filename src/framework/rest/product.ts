@@ -22,11 +22,18 @@ import { useTranslation } from 'next-i18next';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import { useCustomerCity } from '@/lib/use-customer-city';
 
 export function useProducts(options?: Partial<ProductQueryOptions>) {
   const { locale } = useRouter();
+  // City-first storefront: scope every product query to the shopper's selected
+  // city so the listing matches the API's city availability. Reactive — re-fetches
+  // when the city changes (the query key includes it). An explicit city in
+  // `options` still wins.
+  const { city } = useCustomerCity();
 
   const formattedOptions = {
+    ...(city ? { city } : {}),
     ...formatProductsArgs(options),
     language: locale,
   };
@@ -71,8 +78,10 @@ export const usePopularProducts = (
   options?: Partial<PopularProductQueryOptions>,
 ) => {
   const { locale } = useRouter();
+  const { city } = useCustomerCity();
 
   const formattedOptions = {
+    ...(city ? { city } : {}),
     ...options,
     language: locale,
   };
@@ -94,8 +103,10 @@ export const useBestSellingProducts = (
   options?: Partial<BestSellingProductQueryOptions>,
 ) => {
   const { locale } = useRouter();
+  const { city } = useCustomerCity();
 
   const formattedOptions = {
+    ...(city ? { city } : {}),
     ...options,
     language: locale,
   };
