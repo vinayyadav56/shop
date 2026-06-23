@@ -46,8 +46,23 @@ const Header = ({ layout }: { layout?: string }) => {
   const [searchOpen, setSearchOpen] = useAtom(displayMobileHeaderSearchAtom);
   const [menuOpen, setMenuOpen] = React.useState(false);
 
-  // Mockup: solid white header on every page — the hero sits BELOW it, never behind.
-  const solid = true;
+  // Transparent over the homepage hero, then a smooth transition to the solid
+  // white bar after a small scroll. Every other page (no hero behind the nav) is
+  // solid from the top. The homepage hero is pulled up behind the sticky header
+  // (negative margin) so the transparent state reveals the cinematic hero.
+  const isHome = router?.pathname === '/';
+  const [scrolled, setScrolled] = React.useState(false);
+  React.useEffect(() => {
+    if (!isHome) {
+      setScrolled(false);
+      return;
+    }
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [isHome]);
+  const solid = !isHome || scrolled;
   const position = 'sticky';
 
   const openCart = () => setDrawer({ display: true, view: 'cart' });
