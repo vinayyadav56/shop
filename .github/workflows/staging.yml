@@ -99,6 +99,9 @@ jobs:
   deploy:
     name: Deploy → Vercel (Staging Shop)
     runs-on: ubuntu-latest
+    # Fail fast instead of zombie-ing: the Vercel-side build occasionally hangs;
+    # a hung run used to sit "in_progress" for hours and block later deploys.
+    timeout-minutes: 25
     needs: [security, test]
     if: github.event_name == 'push' || inputs.confirm == 'deploy'
 
@@ -116,6 +119,7 @@ jobs:
         run: |
           npx vercel --token "$VERCEL_TOKEN" \
             --yes --prod \
+            --build-env "NODE_OPTIONS=--max-old-space-size=4096" \
             --build-env "NEXT_PUBLIC_RAZORPAY_KEY_ID=$STAGING_RAZORPAY_KEY_ID" \
             --build-env "APPLICATION_MODE=staging" \
             --build-env "FRAMEWORK_PROVIDER=rest" \
