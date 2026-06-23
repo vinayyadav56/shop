@@ -50,7 +50,9 @@ const Header = ({ layout }: { layout?: string }) => {
   // white bar after a small scroll. Every other page (no hero behind the nav) is
   // solid from the top. The homepage hero is pulled up behind the sticky header
   // (negative margin) so the transparent state reveals the cinematic hero.
-  const isHome = router?.pathname === '/';
+  // The homepage is served by the optional-catch-all route, so router.pathname is
+  // '/[[...pages]]' — use asPath (the real URL) to detect it.
+  const isHome = (router?.asPath?.split(/[?#]/)[0] || '/') === '/';
   const [scrolled, setScrolled] = React.useState(false);
   React.useEffect(() => {
     if (!isHome) {

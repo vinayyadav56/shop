@@ -81,7 +81,7 @@ const FEATURES: { icon: keyof typeof Icon; title: string; sub: string }[] = [
 
 export function HeroPlant() {
   return (
-    <section className="relative -mt-[88px] flex w-full flex-col overflow-hidden bg-[#081209]">
+    <section className="relative -mt-[115px] flex w-full flex-col overflow-hidden bg-[#081209]">
       {/* the tour */}
       <TourBurns images={TOUR_SCENES} />
 
