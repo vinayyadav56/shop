@@ -115,6 +115,35 @@ jobs:
         with:
           node-version: '20'
 
+      # Cancelling a hung GH run kills the local `vercel` CLI but NOT the
+      # Vercel-side build it started — those keep "Building…" and, on a
+      # one-build-at-a-time plan, block every new deploy in the queue. Cancel
+      # any stale BUILDING/QUEUED deployments first so this deploy gets a slot.
+      # Best-effort: never fail the deploy on this.
+      - name: Cancel stale Vercel builds (unblock the queue)
+        continue-on-error: true
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_SHOP_PROJECT_ID }}
+        run: |
+          set +e
+          TEAM=""
+          [ -n "$VERCEL_ORG_ID" ] && TEAM="&teamId=$VERCEL_ORG_ID"
+          LIST=$(curl -s "https://api.vercel.com/v6/deployments?projectId=$VERCEL_PROJECT_ID&limit=40$TEAM" \
+            -H "Authorization: Bearer $VERCEL_TOKEN")
+          IDS=$(echo "$LIST" | jq -r '.deployments[]? | select((.state // .readyState) as $s | $s=="BUILDING" or $s=="QUEUED" or $s=="INITIALIZING") | .uid')
+          if [ -z "$IDS" ]; then
+            echo "No stale building deployments."
+          else
+            for id in $IDS; do
+              echo "Cancelling stale Vercel build: $id"
+              curl -s -X PATCH "https://api.vercel.com/v12/deployments/$id/cancel?${VERCEL_ORG_ID:+teamId=$VERCEL_ORG_ID}" \
+                -H "Authorization: Bearer $VERCEL_TOKEN" -o /dev/null -w "  -> HTTP %{http_code}\n"
+            done
+            sleep 5
+          fi
+
       - name: Deploy to Vercel
         run: |
           npx vercel --token "$VERCEL_TOKEN" \
