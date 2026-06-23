@@ -1,9 +1,10 @@
 'use client';
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useAllCities } from '@/framework/location';
 import { getBrowserCoords, reverseGeocode } from '@/lib/geocode';
 import { track } from '@/lib/analytics/track';
+import { getRecentCities, pushRecentCity } from '@/lib/recent-cities';
 
 interface Props {
   open: boolean;
@@ -20,6 +21,12 @@ export default function CityPickerDialog({ open, onClose, onPick }: Props) {
   const { data: cities } = useAllCities();
   const [q, setQ] = useState('');
   const [detecting, setDetecting] = useState(false);
+  const [recent, setRecent] = useState<string[]>([]);
+
+  // Read recents from localStorage each time the dialog opens (SSR-safe).
+  useEffect(() => {
+    if (open) setRecent(getRecentCities());
+  }, [open]);
 
   const list = useMemo(() => {
     const all = cities ?? [];
@@ -30,6 +37,26 @@ export default function CityPickerDialog({ open, onClose, onPick }: Props) {
     return filtered.slice(0, 60);
   }, [cities, q]);
 
+  // Recent chips: only cities that are still serviceable (present in the list).
+  const recentChips = useMemo(() => {
+    const names = new Set((cities ?? []).map((c) => c.name?.toLowerCase()));
+    return recent.filter((r) => names.has(r.toLowerCase())).slice(0, 5);
+  }, [recent, cities]);
+
+  // Popular chips: the highest-priority serviceable cities (API returns them in
+  // display_order). Skipped while the user is actively searching.
+  const popularChips = useMemo(
+    () => (cities ?? []).slice(0, 8).map((c) => c.name).filter(Boolean),
+    [cities],
+  );
+
+  // Single place every selection flows through, so recents stay accurate.
+  function choose(name: string) {
+    pushRecentCity(name);
+    onPick(name);
+    onClose();
+  }
+
   async function detect() {
     setDetecting(true);
     try {
@@ -38,8 +65,7 @@ export default function CityPickerDialog({ open, onClose, onPick }: Props) {
         const addr = await reverseGeocode(coords.lat, coords.lng);
         if (addr?.city) {
           track('location_detected', { label: addr.city, meta: { source: 'gps' } });
-          onPick(addr.city);
-          onClose();
+          choose(addr.city);
           return;
         }
       }
@@ -100,15 +126,52 @@ export default function CityPickerDialog({ open, onClose, onPick }: Props) {
                 {detecting ? 'Detecting…' : 'Detect my location'}
               </button>
 
+              {!q.trim() && recentChips.length ? (
+                <div className="mt-4">
+                  <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-stone-400">
+                    Recent
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {recentChips.map((name) => (
+                      <button
+                        key={`recent-${name}`}
+                        type="button"
+                        onClick={() => choose(name)}
+                        className="rounded-full border border-accent/30 bg-accent/5 px-3 py-1 text-sm font-medium text-accent hover:bg-accent/10"
+                      >
+                        {name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              {!q.trim() && popularChips.length ? (
+                <div className="mt-3">
+                  <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-stone-400">
+                    Popular cities
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {popularChips.map((name) => (
+                      <button
+                        key={`popular-${name}`}
+                        type="button"
+                        onClick={() => choose(name)}
+                        className="rounded-full border border-gray-200 px-3 py-1 text-sm font-medium text-heading hover:border-accent hover:text-accent"
+                      >
+                        {name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
               <ul className="mt-3 max-h-72 divide-y divide-gray-100 overflow-auto rounded-lg border border-gray-100">
                 {list.map((c) => (
                   <li key={c.id}>
                     <button
                       type="button"
-                      onClick={() => {
-                        onPick(c.name);
-                        onClose();
-                      }}
+                      onClick={() => choose(c.name)}
                       className="flex w-full items-center justify-between px-3.5 py-2.5 text-left text-sm hover:bg-gray-50"
                     >
                       <span className="font-medium text-heading">{c.name}</span>

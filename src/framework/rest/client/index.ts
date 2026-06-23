@@ -342,9 +342,11 @@ class Client {
         with: 'refund',
         ...params,
       }),
-    get: (tracking_number: string) =>
+    get: (tracking_number: string, token?: string) =>
       HttpClient.get<Order>(`${API_ENDPOINTS.ORDERS}/${tracking_number}`, {
         with: 'refund;reviews',
+        // Guest orders require their per-order token; harmless for owned orders.
+        ...(token ? { token } : {}),
       }),
     create: (input: CreateOrderInput) =>
       HttpClient.post<Order>(API_ENDPOINTS.ORDERS, input),

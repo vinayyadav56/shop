@@ -1,4 +1,5 @@
 import { useTranslation } from 'next-i18next';
+import { useEffect, useRef } from 'react';
 import cn from 'classnames';
 import Button from '@/components/ui/button';
 import ProductLoader from '@/components/ui/loaders/product-loader';
@@ -39,6 +40,24 @@ export function Grid({
   column = 'auto',
 }: Props) {
   const { t } = useTranslation('common');
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  // Flipkart/Amazon-style infinite scroll: auto-fetch the next page when the
+  // sentinel nears the viewport (~one screen early, ≈80% scroll). The visible
+  // "Load more" button stays as a keyboard/no-IntersectionObserver fallback.
+  useEffect(() => {
+    if (!hasMore || isLoadingMore || typeof loadMore !== 'function') return;
+    const el = loadMoreRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) loadMore();
+      },
+      { rootMargin: '600px 0px' },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, isLoadingMore, loadMore]);
 
   if (error) return <ErrorMessage message={error.message} />;
 
@@ -72,7 +91,10 @@ export function Grid({
             ))}
       </div>
       {hasMore && (
-        <div className="flex justify-center mt-8 mb-4 sm:mb-6 lg:mb-2 lg:mt-12">
+        <div
+          ref={loadMoreRef}
+          className="flex justify-center mt-8 mb-4 sm:mb-6 lg:mb-2 lg:mt-12"
+        >
           <Button
             loading={isLoadingMore}
             onClick={loadMore}

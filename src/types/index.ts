@@ -512,6 +512,8 @@ export interface PaymentIntent {
 export interface Order {
   id: number | string;
   tracking_number: string;
+  // Per-order secret returned only on creation; used to view a guest order.
+  tracking_token?: string | null;
   customer_id: number | string;
   customer_name: string;
   customer_contact: string;

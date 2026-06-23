@@ -226,7 +226,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
 
   return (
     <article className="bg-cream-100">
-      <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-5 sm:px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-7xl px-4 pb-36 pt-5 sm:px-6 lg:px-10 lg:pb-12">
         {/* breadcrumb */}
         {!isModal && (
           <>
@@ -392,7 +392,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
                   type="button"
                   aria-label="Decrease quantity"
                   onClick={() => setQty((q) => Math.max(1, q - 1))}
-                  className="grid h-9 w-9 place-items-center rounded-full text-forest-900 transition hover:bg-cream-100 disabled:opacity-40"
+                  className="grid h-10 w-10 place-items-center rounded-full text-forest-900 transition hover:bg-cream-100 disabled:opacity-40"
                   disabled={qty <= 1}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M5 12h14" /></svg>
@@ -404,7 +404,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
                   type="button"
                   aria-label="Increase quantity"
                   onClick={() => setQty((q) => (availableQty ? Math.min(availableQty, q + 1) : q + 1))}
-                  className="grid h-9 w-9 place-items-center rounded-full text-forest-900 transition hover:bg-cream-100"
+                  className="grid h-10 w-10 place-items-center rounded-full text-forest-900 transition hover:bg-cream-100"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
                 </button>
@@ -461,6 +461,42 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
             <PlantAtHomeAccordion items={accordionItems} />
           </div>
         )}
+      </div>
+
+      {/* Sticky mobile Add-to-Cart bar (Flipkart/Amazon-style). Sits just above the
+          app's bottom navigation (h-14) and is hidden on lg+ where the inline CTA
+          is always visible. Reuses the same handler + disabled states as the inline
+          button so behaviour can't drift. */}
+      <div className="fixed inset-x-0 bottom-14 z-20 flex items-center gap-3 border-t border-kraft-300/70 bg-white/95 px-4 py-3 shadow-[0_-8px_24px_-16px_rgba(0,0,0,0.45)] backdrop-blur lg:hidden">
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[11px] uppercase tracking-wide text-stone-400">
+            {product?.name}
+          </p>
+          <p className="text-lg font-semibold leading-tight text-forest-900">
+            {displayPrice}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={handleAdd}
+          disabled={!inStock || needsSelection || verticalBlocked}
+          aria-label="Add to cart"
+          className={classNames(
+            'flex min-h-[44px] items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition',
+            !inStock || needsSelection || verticalBlocked
+              ? 'cursor-not-allowed bg-stone-300'
+              : 'bg-forest-700 hover:bg-forest-800',
+          )}
+        >
+          <Bag className="h-4 w-4" />
+          {verticalBlocked
+            ? 'Unavailable'
+            : !inStock
+            ? 'Out of Stock'
+            : needsSelection
+            ? 'Select Options'
+            : 'Add to Cart'}
+        </button>
       </div>
     </article>
   );

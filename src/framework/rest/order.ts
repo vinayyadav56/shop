@@ -27,6 +27,8 @@ import { useRouter } from 'next/router';
 import { Routes } from '@/config/routes';
 import { mapPaginatorData } from '@/framework/utils/data-mappers';
 import { isArray, isObject, isEmpty } from 'lodash';
+import { useMemo } from 'react';
+import { resolveOrderToken, saveOrderToken } from '@/lib/order-token';
 
 export function useOrders(options?: Partial<OrderQueryOptions>) {
   const { locale } = useRouter();
@@ -74,12 +76,19 @@ export function useOrders(options?: Partial<OrderQueryOptions>) {
 }
 
 export function useOrder({ tracking_number }: { tracking_number: string }) {
+  const { query } = useRouter();
+  // Guest orders are gated by a per-order token; pull it from the URL (emailed /
+  // post-checkout link) or from what we stored at checkout. Owned orders ignore it.
+  const token = useMemo(
+    () => resolveOrderToken(tracking_number, query?.token as string | undefined),
+    [tracking_number, query?.token]
+  );
   const { data, isLoading, error, isFetching, refetch } = useQuery<
     Order,
     Error
   >(
-    [API_ENDPOINTS.ORDERS, tracking_number],
-    () => client.orders.get(tracking_number),
+    [API_ENDPOINTS.ORDERS, tracking_number, token],
+    () => client.orders.get(tracking_number, token),
     { refetchOnWindowFocus: false }
   );
 
@@ -226,8 +235,20 @@ export function useCreateOrder() {
   const { locale } = router;
   const { t } = useTranslation();
   const { mutate: createOrder, isLoading } = useMutation(client.orders.create, {
-    onSuccess: ({ tracking_number, payment_gateway, payment_intent }) => {
+    onSuccess: ({
+      tracking_number,
+      payment_gateway,
+      payment_intent,
+      tracking_token,
+    }) => {
       if (tracking_number) {
+        // Persist the per-order token so a guest can view their confirmation,
+        // payment and thank-you pages after this redirect (and on reload).
+        if (tracking_token) saveOrderToken(tracking_number, tracking_token);
+        const tokenQuery = tracking_token
+          ? `?token=${encodeURIComponent(tracking_token)}`
+          : '';
+
         if (
           [
             PaymentGateway.COD,
@@ -235,7 +256,7 @@ export function useCreateOrder() {
             PaymentGateway.FULL_WALLET_PAYMENT,
           ].includes(payment_gateway as PaymentGateway)
         ) {
-          return router.push(Routes.order(tracking_number));
+          return router.push(`${Routes.order(tracking_number)}${tokenQuery}`);
         }
 
         if (payment_intent?.payment_intent_info?.is_redirect) {
@@ -243,7 +264,9 @@ export function useCreateOrder() {
             payment_intent?.payment_intent_info?.redirect_url as string
           );
         } else {
-          return router.push(`${Routes.order(tracking_number)}/payment`);
+          return router.push(
+            `${Routes.order(tracking_number)}/payment${tokenQuery}`
+          );
         }
       }
     },
