@@ -146,8 +146,11 @@ jobs:
 
       - name: Deploy to Vercel
         run: |
+          # --force rebuilds ignoring a (possibly corrupted) Vercel build cache;
+          # --debug surfaces whether the build is queued vs actually running when
+          # it otherwise sits silently at "Building…".
           npx vercel --token "$VERCEL_TOKEN" \
-            --yes --prod \
+            --yes --prod --force --debug \
             --build-env "NODE_OPTIONS=--max-old-space-size=4096" \
             --build-env "NEXT_PUBLIC_RAZORPAY_KEY_ID=$STAGING_RAZORPAY_KEY_ID" \
             --build-env "APPLICATION_MODE=staging" \
