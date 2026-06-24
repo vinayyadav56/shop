@@ -45,12 +45,12 @@ const variantClasses = {
     'order-5 sm:order-4 w-full sm:w-24 h-10 bg-accent text-light rounded-full',
   pillVertical:
     'flex-col-reverse items-center w-8 h-24 bg-gray-100 text-heading rounded-full',
-  big: 'w-full h-14 rounded text-light bg-accent inline-flex justify-between',
+  big: 'w-full h-14 rounded text-light bg-ds-accent inline-flex justify-between',
   text: 'w-7 h-18 sm:w-20 sm:h-7 md:h-9 md:w-24 bg-accent flex-col-reverse sm:flex-row text-light rounded',
   bordered:
     'h-14 rounded text-heading bg-transparent inline-flex justify-between shrink-0',
   plantathome:
-    'w-full h-10 rounded-md text-white bg-forest-800 inline-flex justify-between',
+    'w-full h-10 rounded-md text-white bg-ds-accent inline-flex justify-between',
   florine: '',
 };
 

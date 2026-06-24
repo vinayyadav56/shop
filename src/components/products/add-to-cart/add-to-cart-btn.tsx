@@ -75,7 +75,7 @@ const AddToCartBtn: React.FC<Props> = ({ variant, onClick, disabled }) => {
           onClick={onClick}
           disabled={disabled}
           className={cn(
-            'flex w-full items-center justify-center rounded bg-accent py-4 px-5 text-sm font-light text-light transition-colors duration-300 hover:bg-accent-hover focus:bg-accent-hover focus:outline-0 lg:text-base',
+            'flex w-full items-center justify-center rounded bg-ds-accent py-4 px-5 text-sm font-light text-light transition duration-300 hover:brightness-110 focus:outline-0 lg:text-base',
             {
               'cursor-not-allowed border border-border-400 !bg-gray-300 !text-body hover:!bg-gray-300':
                 disabled,
@@ -91,7 +91,7 @@ const AddToCartBtn: React.FC<Props> = ({ variant, onClick, disabled }) => {
           onClick={onClick}
           disabled={disabled}
           className={cn(
-            'flex h-10 w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-forest-800 to-forest-600 px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition duration-200 hover:brightness-110 focus:outline-0',
+            'flex h-10 w-full items-center justify-center gap-2 rounded-md bg-ds-accent px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition duration-200 hover:brightness-110 focus:outline-0',
             {
               'cursor-not-allowed !bg-stone-300 !text-stone-500 hover:!bg-stone-300':
                 disabled,

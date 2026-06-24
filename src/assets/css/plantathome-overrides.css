@@ -2331,7 +2331,7 @@ select:focus {
   width: 100%;
   height: 54px;
   border-radius: 14px;
-  background: #2E5E3A;
+  background: var(--ds-accent);
   color: #fff;
   font-size: 15px;
   font-weight: 700;
@@ -2343,7 +2343,7 @@ select:focus {
   letter-spacing: 0.01em;
   gap: 8px;
 }
-.pa-place-order-btn:hover { background: #244B2E; box-shadow: 0 4px 14px rgba(46,94,58,0.30); }
+.pa-place-order-btn:hover { background: var(--ds-accent-ink); box-shadow: 0 4px 14px rgba(46,94,58,0.30); }
 .pa-place-order-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* Coupon row */
