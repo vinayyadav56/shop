@@ -171,7 +171,7 @@ const Header = ({ layout }: { layout?: string }) => {
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="hidden w-[180px] items-center gap-2 rounded-full border border-kraft-300 bg-white px-4 py-2.5 text-[13px] text-stone-400 transition hover:border-forest-500 xl:flex xl:w-[210px]"
+              className="hidden w-[290px] items-center gap-2 rounded-full border border-kraft-300 bg-white px-4 py-2.5 text-[13px] text-stone-400 transition hover:border-forest-500 xl:flex xl:w-[290px]"
             >
               <SearchIcon className="h-4 w-4" /> Search plants, planters…
             </button>
