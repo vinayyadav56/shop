@@ -10,6 +10,7 @@ import { WhyPlants } from './why-plants';
 import { BestSellers } from './best-sellers';
 import { StatementBand } from './statement-band';
 import { PromoBanners } from './promo-banners';
+import { GiftingBand } from './gifting-band';
 import { TrustRow } from './trust-row';
 import { NewsletterSocial } from './newsletter-social';
 
@@ -40,6 +41,7 @@ export function PlantCompanyHome({
       <WhyPlants />
       <StatementBand />
       <PromoBanners />
+      <GiftingBand />
       <TrustRow />
       <NewsletterSocial />
     </>
