@@ -21,13 +21,13 @@ const Search = dynamic(() => import('@/components/ui/search/search'));
 // 7-item nav from the mockup, mapped to the closest real routes (some are
 // pragmatic placeholders until dedicated landing pages exist).
 const NAV = [
-  { label: 'Shop', href: '/plants/search' },
   { label: 'Plants', href: '/plants' },
-  { label: 'Planters', href: '/tools' },
-  { label: 'Care', href: '/plant-doctor' },
-  { label: 'Accessories', href: '/tools' },
+  { label: 'Pots & Planters', href: '/tools' },
+  { label: 'Garden Tools', href: '/tools' },
+  { label: 'FarmBox', href: '/farmbox' },
+  { label: 'Plant Care', href: '/plant-doctor' },
   { label: 'Gifting', href: '/corporate-gifting' },
-  { label: 'Corporate', href: '/corporate-gifting' },
+  { label: 'Offers', href: '/offers' },
 ];
 
 /**
