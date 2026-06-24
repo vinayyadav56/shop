@@ -7,11 +7,11 @@ import Link from 'next/link';
  * horizontal scroll on mobile and a centered row on desktop.
  */
 const CATEGORIES: { title: string; href: string; img: string }[] = [
-  { title: 'Air Purifying', href: '/c/air-purifying', img: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=200&q=70&auto=format&fit=crop' },
-  { title: 'Pet Friendly', href: '/c/pet-friendly', img: 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200&q=70&auto=format&fit=crop' },
-  { title: 'Low Light', href: '/c/indoor', img: 'https://images.unsplash.com/photo-1545241047-6083a3684587?w=200&q=70&auto=format&fit=crop' },
+  { title: 'Air Purifying Plants', href: '/c/air-purifying', img: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=200&q=70&auto=format&fit=crop' },
+  { title: 'Pet Friendly Plants', href: '/c/pet-friendly', img: 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200&q=70&auto=format&fit=crop' },
+  { title: 'Low Light Plants', href: '/c/indoor', img: 'https://images.unsplash.com/photo-1545241047-6083a3684587?w=200&q=70&auto=format&fit=crop' },
   { title: 'Office Plants', href: '/c/indoor', img: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=200&q=70&auto=format&fit=crop' },
-  { title: 'Outdoor', href: '/c/outdoor', img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&q=70&auto=format&fit=crop' },
+  { title: 'Outdoor Plants', href: '/c/outdoor', img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&q=70&auto=format&fit=crop' },
 ];
 
 function Circle({ title, href, img }: { title: string; href: string; img: string }) {

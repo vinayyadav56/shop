@@ -308,7 +308,7 @@ export function HeroPlant() {
       <div className="absolute inset-0 bg-[#0C1F13]/45 lg:hidden" />
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#081209]/85 to-transparent" />
 
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-center px-5 pb-16 pt-[150px] sm:px-8">
+      <div className="relative z-10 mx-auto flex min-h-[520px] w-full max-w-7xl items-center px-5 pb-12 pt-[140px] sm:px-8 lg:min-h-screen lg:pb-16 lg:pt-[150px]">
         <div className="max-w-2xl">
           <motion.span
             initial={{ opacity: 0, y: 14 }}
@@ -325,12 +325,12 @@ export function HeroPlant() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EXPO }}
-              className="font-heading text-[2.7rem] font-extrabold leading-[1.02] tracking-tight text-white sm:text-[4rem] lg:text-[4.6rem]"
+              className="max-w-[66%] font-heading text-[2.05rem] font-extrabold leading-[1.06] tracking-tight text-white sm:max-w-none sm:text-[4rem] lg:text-[4.6rem]"
             >
               {headline}
             </motion.h1>
           ) : (
-            <h1 className="font-heading text-[2.7rem] font-extrabold leading-[1.02] tracking-tight text-white sm:text-[4rem] lg:text-[4.6rem]">
+            <h1 className="max-w-[66%] font-heading text-[2.05rem] font-extrabold leading-[1.06] tracking-tight text-white sm:max-w-none sm:text-[4rem] lg:text-[4.6rem]">
               <WordReveal text="Bring Nature Home." delay={0.1} />
               <span className="block text-ds-accent-bright">
                 <WordReveal text="Live Better." delay={0.32} />
@@ -343,7 +343,7 @@ export function HeroPlant() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: headline ? 0.12 : 0.58, duration: 0.7, ease: EXPO }}
-            className="mt-6 max-w-lg text-[15px] leading-7 text-white/85 sm:text-[17px]"
+            className="mt-6 hidden max-w-lg text-[15px] leading-7 text-white/85 sm:block sm:text-[17px]"
           >
             {subheadline ??
               'Premium plants, planters, seeds, fertilizers & everything you need for a thriving green space.'}
@@ -369,22 +369,24 @@ export function HeroPlant() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.72, duration: 0.7, ease: EXPO }}
-            className="mt-7 flex flex-wrap items-center gap-2.5"
+            className="mt-6 inline-flex w-fit max-w-full items-center overflow-hidden rounded-full bg-white/95 shadow-[0_10px_24px_-14px_rgba(0,0,0,0.55)] backdrop-blur"
           >
-            {CHIPS.map((c) => {
+            {CHIPS.map((c, i) => {
               const Ico = Icon[c.icon];
               return (
-                <span
-                  key={c.label}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3.5 py-1.5 text-[12px] font-semibold text-forest-900 shadow-[0_8px_20px_-12px_rgba(0,0,0,0.5)] backdrop-blur"
-                >
-                  <Ico className="h-3.5 w-3.5 text-ds-accent" /> {c.label}
-                </span>
+                <React.Fragment key={c.label}>
+                  {i > 0 && <span className="h-5 w-px shrink-0 bg-forest-900/10" />}
+                  <span className="inline-flex shrink-0 items-center gap-1.5 px-3 py-2 text-[11.5px] font-semibold text-forest-900 sm:px-3.5">
+                    <Ico className="h-3.5 w-3.5 text-ds-accent" /> {c.label}
+                  </span>
+                </React.Fragment>
               );
             })}
           </motion.div>
 
-          <PincodeChecker />
+          <div className="hidden lg:block">
+            <PincodeChecker />
+          </div>
         </div>
       </div>
 
