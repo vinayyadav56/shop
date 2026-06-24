@@ -29,10 +29,10 @@ export function StatementBand() {
         <div className="mx-auto mt-10 flex max-w-3xl flex-col gap-6 sm:flex-row sm:items-stretch sm:justify-center sm:gap-0 sm:divide-x sm:divide-[color:var(--g-band-hairline)]">
           {STATS.map((s) => (
             <div key={s.label} className="flex-1 px-6">
-              <div className="font-cormorant text-[2.2rem] font-medium leading-none text-[color:var(--g-band-accent)] sm:text-[2.6rem]">
+              <div className="font-cormorant text-[2.6rem] font-semibold leading-none tracking-tight text-[color:var(--g-band-ink)] sm:text-[3.25rem]">
                 <Counter value={s.value} decimals={s.decimals ?? 0} suffix={s.suffix} />
               </div>
-              <div className="mt-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[color:var(--g-band-ink-soft)]">
+              <div className="mt-2.5 text-[10.5px] font-bold uppercase tracking-[0.24em] text-[color:var(--g-band-ink-soft)]">
                 {s.label}
               </div>
             </div>

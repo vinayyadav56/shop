@@ -98,8 +98,12 @@ const Header = ({ layout }: { layout?: string }) => {
     else openModal('LOGIN_VIEW');
   };
 
+  // When the search overlay is open we drop a dark scrim behind the bar so the
+  // (white) nav items stay readable — the requested "black transparent overlay".
+  // useLight = white text/icons (transparent-over-hero OR search-open).
+  const useLight = !solid || searchOpen;
   const iconBtn = `grid h-10 w-10 place-items-center rounded-full transition ${
-    solid ? 'text-forest-900 hover:bg-forest/8' : 'text-white hover:bg-white/10'
+    useLight ? 'text-white hover:bg-white/10' : 'text-forest-900 hover:bg-forest/8'
   }`;
 
   return (
@@ -110,7 +114,9 @@ const Header = ({ layout }: { layout?: string }) => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: EXPO }}
         className={`${position} inset-x-0 top-0 z-50 w-full transition-all duration-300 ${
-          solid
+          searchOpen
+            ? 'bg-forest-900/95 shadow-[0_8px_28px_rgba(22,48,26,0.28)] backdrop-blur-xl'
+            : solid
             ? 'bg-white/95 shadow-[0_4px_24px_rgba(34,48,26,0.08)] backdrop-blur-xl'
             : 'bg-gradient-to-b from-deep/85 via-deep/45 to-transparent'
         }`}
@@ -138,13 +144,13 @@ const Header = ({ layout }: { layout?: string }) => {
         {/* main bar */}
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
           <Link href="/" aria-label="PlantAtHome home" className="shrink-0">
-            <BrandLogo light={!solid} />
+            <BrandLogo light={useLight} />
           </Link>
 
           {/* centred nav */}
           <nav
             className={`hidden items-center gap-4 lg:flex xl:gap-7 ${
-              solid ? 'text-forest-900' : 'text-white'
+              useLight ? 'text-white' : 'text-forest-900'
             }`}
           >
             {NAV.map((n) => (
@@ -152,7 +158,7 @@ const Header = ({ layout }: { layout?: string }) => {
                 key={n.label}
                 href={n.href}
                 className={`text-[13px] font-medium transition xl:text-[14px] ${
-                  solid ? 'hover:text-forest-600' : 'hover:text-white/80'
+                  useLight ? 'hover:text-white/80' : 'hover:text-forest-600'
                 }`}
               >
                 {n.label}
@@ -213,9 +219,9 @@ const Header = ({ layout }: { layout?: string }) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25, ease: EXPO }}
-              className="border-t border-kraft-200 bg-white/95 backdrop-blur-xl"
+              className="border-t border-white/10 bg-white/95 backdrop-blur-xl"
             >
-              <div className="mx-auto flex max-w-3xl items-center gap-3 px-5 py-4 sm:px-8">
+              <div className="mx-auto flex max-w-5xl items-center gap-3 px-5 py-4 sm:px-8">
                 <div className="flex-1">
                   <Search label={t('text-search') ?? 'Search'} variant="minimal" />
                 </div>

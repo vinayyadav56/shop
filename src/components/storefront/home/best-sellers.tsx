@@ -34,7 +34,7 @@ export function VerticalTabs({
               onClick={() => onChange(t.slug)}
               className={`shrink-0 rounded-full px-5 py-2 text-[11.5px] font-bold uppercase tracking-[0.12em] transition ${
                 on
-                  ? 'g-cta text-white shadow-sm'
+                  ? 'bg-forest-700 text-white shadow-sm'
                   : 'text-forest-800/75 hover:text-forest-900'
               }`}
             >

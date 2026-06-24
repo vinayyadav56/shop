@@ -7,8 +7,9 @@ export function PromoBanners() {
   return (
     <section className="g-light-a">
       <div className="container mx-auto grid max-w-7xl gap-5 px-5 py-6 sm:px-8 lg:grid-cols-2">
-        {/* left — dark green with photo */}
-        <div className="grid min-h-[260px] grid-cols-1 overflow-hidden rounded-3xl g-band sm:grid-cols-[1.1fr_0.9fr]">
+        {/* left — dark green with photo (forced dark for white-text contrast; the
+            palette's g-band is a light band that washed the heading out) */}
+        <div className="grid min-h-[260px] grid-cols-1 overflow-hidden rounded-3xl bg-gradient-to-br from-[#16301A] via-[#1E4023] to-[#13503E] sm:grid-cols-[1.1fr_0.9fr]">
           <div className="relative flex flex-col items-start justify-center p-6 sm:p-10">
             <div
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_70%_20%,rgba(227,206,151,0.10),transparent_70%)]"
