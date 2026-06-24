@@ -49,6 +49,8 @@ module.exports = {
         poppins: ['"Poppins"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         caveat: ['"Caveat"', 'ui-serif', 'cursive'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        // ── Revamp (v2) storefront: modern geometric sans, fixed (not theme-switched) ──
+        jakarta: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
       fontSize: {
         '10px': '0.625rem',
@@ -74,6 +76,29 @@ module.exports = {
         'ds-accent': 'var(--ds-accent)',
         'ds-accent-soft': 'var(--ds-accent-soft)',
         'ds-accent-ink': 'var(--ds-accent-ink)',
+        // ── Revamp (v2) palette — fixed, modern plant-D2C + commerce ──
+        brand: {
+          DEFAULT: '#0B5B3B', // deep emerald (brand ink, headers)
+          50: '#EAF5EF',
+          100: '#D6ECE0',
+          200: '#AFD9C4',
+          600: '#0E6A45',
+          700: '#0B5B3B',
+          800: '#0A4A30',
+          900: '#073521',
+        },
+        cta: {
+          DEFAULT: '#18B368', // vivid CTA green
+          600: '#139A5A',
+          700: '#0F824C',
+        },
+        offer: {
+          DEFAULT: '#F25C3B', // commerce coral (deals/badges)
+          600: '#E0441F',
+          100: '#FCE7E0',
+        },
+        canvas: '#FCFBF8', // warm app background
+        line2: '#ECEAE3', // hairline borders (v2)
         // ── Approved neutral tokens (premium luxury palette) ──
         'pa-bg': 'var(--pa-bg)',
         'pa-card': 'var(--pa-card)',

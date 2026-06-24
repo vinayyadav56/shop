@@ -38,6 +38,11 @@ export default class CustomDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
             rel="stylesheet"
           />
+          {/* Plus Jakarta Sans — modern geometric sans for the revamped storefront (headings + UI) */}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+          />
           {/* Manrope — Design System default BODY font (Luxury Signature pairing) */}
           <link
             href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
