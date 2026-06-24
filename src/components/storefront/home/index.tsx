@@ -2,9 +2,10 @@
 import React from 'react';
 import type { Category, Product } from '@/types';
 import { HeroPlant } from './hero-plant';
+import { CategoryRow } from './category-row';
+import { SpringSaleBand } from './spring-sale-band';
 import { VerticalsShowcase } from './verticals-showcase';
 import { ShopByCategory } from './shop-by-category';
-import { BenefitsStrip } from './benefits-strip';
 import { WhyPlants } from './why-plants';
 import { BestSellers } from './best-sellers';
 import { StatementBand } from './statement-band';
@@ -31,11 +32,12 @@ export function PlantCompanyHome({
   return (
     <>
       <HeroPlant />
-      <VerticalsShowcase />
+      <CategoryRow />
+      <SpringSaleBand />
       <ShopByCategory categories={categories} isLoading={catLoading} />
-      <BenefitsStrip />
-      <WhyPlants />
       <BestSellers products={products} isLoading={productsLoading} />
+      <VerticalsShowcase />
+      <WhyPlants />
       <StatementBand />
       <PromoBanners />
       <TrustRow />
