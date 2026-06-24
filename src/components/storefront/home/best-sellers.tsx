@@ -4,7 +4,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import type { Product } from '@/types';
 import { Icon } from '../icons';
-import { CenterHeading, useTrackScroll } from './section-heading';
+import { SectionHead, useTrackScroll } from './section-heading';
 import { useTypes } from '@/framework/type';
 import { useProducts } from '@/framework/product';
 import { TYPES_PER_PAGE } from '@/framework/client/variables';
@@ -73,7 +73,12 @@ export function BestSellers({
   return (
     <section className="g-light-b">
       <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:py-20">
-        <CenterHeading>Best Sellers</CenterHeading>
+        <SectionHead
+          label="Bestsellers"
+          title="Our Most Loved Plants"
+          viewAllHref="/plants/search"
+          viewAllText="View All Plants"
+        />
         <VerticalTabs active={activeSlug} onChange={setPicked} />
 
         <div className="relative mt-7">

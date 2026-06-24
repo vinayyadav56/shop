@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Category } from '@/types';
 import { Icon } from '../icons';
-import { CenterHeading, useTrackScroll } from './section-heading';
+import { SectionHead, useTrackScroll } from './section-heading';
 import { VerticalTabs } from './best-sellers';
 import { useTypes } from '@/framework/type';
 import { useCategories } from '@/framework/category';
@@ -88,7 +88,12 @@ export function ShopByCategory({
   return (
     <section className="g-light-a">
       <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:py-20">
-        <CenterHeading>Shop by Category</CenterHeading>
+        <SectionHead
+          label="Curated for You"
+          title="Shop Our Best Collections"
+          viewAllHref="/plants/search"
+          viewAllText="View All Collections"
+        />
         <VerticalTabs active={activeSlug} onChange={setPicked} />
 
         <div className="relative mt-7">
