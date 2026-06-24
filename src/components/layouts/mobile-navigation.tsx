@@ -45,8 +45,8 @@ export default function MobileNavigation(_props: React.PropsWithChildren<{}>) {
     {
       key: 'categories',
       label: 'Categories',
-      active: isActive((p) => p.startsWith('/c/')),
-      onClick: () => setDrawerView({ display: true, view: 'MAIN_MENU_VIEW' }),
+      active: isActive((p) => p.startsWith('/categories') || p.startsWith('/c/')),
+      onClick: () => router.push('/categories'),
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={ICON}><rect x="3" y="3" width="7.5" height="7.5" rx="2" /><rect x="13.5" y="3" width="7.5" height="7.5" rx="2" /><rect x="3" y="13.5" width="7.5" height="7.5" rx="2" /><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2" /></svg>
       ),
