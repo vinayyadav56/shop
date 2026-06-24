@@ -5,7 +5,7 @@ import { HeroPlant } from './hero-plant';
 import { CategoryRow } from './category-row';
 import { SpringSaleBand } from './spring-sale-band';
 import { VerticalsShowcase } from './verticals-showcase';
-import { ShopByCategory } from './shop-by-category';
+import { Collections } from './collections';
 import { WhyPlants } from './why-plants';
 import { BestSellers } from './best-sellers';
 import { StatementBand } from './statement-band';
@@ -35,7 +35,7 @@ export function PlantCompanyHome({
       <HeroPlant />
       <CategoryRow />
       <SpringSaleBand />
-      <ShopByCategory categories={categories} isLoading={catLoading} />
+      <Collections />
       <BestSellers products={products} isLoading={productsLoading} />
       <VerticalsShowcase />
       <WhyPlants />
