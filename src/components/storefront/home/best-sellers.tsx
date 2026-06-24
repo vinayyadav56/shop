@@ -11,30 +11,38 @@ import { TYPES_PER_PAGE } from '@/framework/client/variables';
 
 const ProductCard = dynamic(() => import('@/components/products/cards/card'));
 
-/** Category filter chips (design reference): All Plants · Indoor · Outdoor · Low Light. */
-const FILTER_CHIPS: { label: string; href: string; active?: boolean }[] = [
-  { label: 'All Plants', href: '/plants', active: true },
-  { label: 'Indoor', href: '/c/indoor' },
-  { label: 'Outdoor', href: '/c/outdoor' },
-  { label: 'Low Light', href: '/c/indoor' },
-];
-
-export function VerticalTabs() {
+/** Vertical tab pills — lets the home sell all three worlds, not just plants. */
+export function VerticalTabs({
+  active,
+  onChange,
+}: {
+  active: string;
+  onChange: (slug: string) => void;
+}) {
+  const { types } = useTypes({ limit: TYPES_PER_PAGE });
+  const list = (types ?? []).slice(0, 3);
+  if (list.length < 2) return null;
   return (
-    <div className="mt-5 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      {FILTER_CHIPS.map((c) => (
-        <Link
-          key={c.label}
-          href={c.href}
-          className={`shrink-0 rounded-full px-5 py-2 text-[12.5px] font-semibold transition ${
-            c.active
-              ? 'bg-ds-accent-ink text-white'
-              : 'border border-forest-900/10 bg-white text-forest-800 hover:border-ds-accent hover:text-forest-900'
-          }`}
-        >
-          {c.label}
-        </Link>
-      ))}
+    <div className="mt-5 flex justify-center">
+      <div className="flex max-w-full gap-1.5 overflow-x-auto rounded-full border border-forest-900/10 bg-white/75 p-1.5 backdrop-blur-[2px] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {list.map((t) => {
+          const on = t.slug === active;
+          return (
+            <button
+              key={t.slug}
+              type="button"
+              onClick={() => onChange(t.slug)}
+              className={`shrink-0 rounded-full px-5 py-2 text-[11.5px] font-bold uppercase tracking-[0.12em] transition ${
+                on
+                  ? 'bg-forest-700 text-white shadow-sm'
+                  : 'text-forest-800/75 hover:text-forest-900'
+              }`}
+            >
+              {t.name}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -71,7 +79,7 @@ export function BestSellers({
           viewAllHref="/plants/search"
           viewAllText="View All Plants"
         />
-        <VerticalTabs />
+        <VerticalTabs active={activeSlug} onChange={setPicked} />
 
         <div className="relative mt-7">
           <button

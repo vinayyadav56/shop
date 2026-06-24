@@ -1,51 +1,115 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 /**
- * Circular category shortcuts (design reference): round photo + label, in a
- * horizontal scroll on mobile and a centered row on desktop.
+ * Premium category quick-links that overlap the hero foot (mockup row of 5).
+ * Each card carries a photo with a graceful gradient+icon fallback so a missing
+ * image never breaks the row.
  */
-const CATEGORIES: { title: string; href: string; img: string }[] = [
-  { title: 'Air Purifying Plants', href: '/c/air-purifying', img: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=200&q=70&auto=format&fit=crop' },
-  { title: 'Pet Friendly Plants', href: '/c/pet-friendly', img: 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200&q=70&auto=format&fit=crop' },
-  { title: 'Low Light Plants', href: '/c/indoor', img: 'https://images.unsplash.com/photo-1545241047-6083a3684587?w=200&q=70&auto=format&fit=crop' },
-  { title: 'Office Plants', href: '/c/indoor', img: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=200&q=70&auto=format&fit=crop' },
-  { title: 'Outdoor Plants', href: '/c/outdoor', img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&q=70&auto=format&fit=crop' },
+const CATEGORIES: {
+  title: string;
+  desc: string;
+  href: string;
+  img: string;
+  icon: JSX.Element;
+}[] = [
+  {
+    title: 'Indoor Plants',
+    desc: 'Purify air & brighten your space',
+    href: '/c/indoor',
+    img: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=200&q=70&auto=format&fit=crop',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" /><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" /></svg>
+    ),
+  },
+  {
+    title: 'Pots & Planters',
+    desc: 'Stylish pots for every plant & space',
+    href: '/tools',
+    img: 'https://images.unsplash.com/photo-1459156212016-c812468e2115?w=200&q=70&auto=format&fit=crop',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M5 9h14l-1.5 10.5a2 2 0 0 1-2 1.5H8.5a2 2 0 0 1-2-1.5L5 9Z" /><path d="M4 9h16" /><path d="M9 6c0-1.5 1.5-3 3-3s3 1.5 3 3" /></svg>
+    ),
+  },
+  {
+    title: 'Seeds',
+    desc: 'High quality seeds for your home garden',
+    href: '/farmbox',
+    img: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=200&q=70&auto=format&fit=crop',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M12 22V12" /><path d="M12 12c0-3.3 2.7-6 6-6 0 3.3-2.7 6-6 6Z" /><path d="M12 14c0-2.8-2.2-5-5-5 0 2.8 2.2 5 5 5Z" /></svg>
+    ),
+  },
+  {
+    title: 'Fertilizers',
+    desc: 'Nourish your plants for a greener tomorrow',
+    href: '/plants/search',
+    img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&q=70&auto=format&fit=crop',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M12 22a7 7 0 0 0 7-7c0-4-7-12-7-12S5 11 5 15a7 7 0 0 0 7 7Z" /></svg>
+    ),
+  },
+  {
+    title: 'Garden Tools',
+    desc: 'Handy tools for happy gardening',
+    href: '/tools',
+    img: 'https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?w=200&q=70&auto=format&fit=crop',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6 6 2 2 6-6a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2 2.6-2.6Z" /></svg>
+    ),
+  },
 ];
 
-function Circle({ title, href, img }: { title: string; href: string; img: string }) {
+function Thumb({ img, icon }: { img: string; icon: JSX.Element }) {
   const [err, setErr] = React.useState(false);
   return (
-    <Link href={href} className="group flex w-[78px] shrink-0 flex-col items-center gap-2 sm:w-auto">
-      <span className="relative grid h-[68px] w-[68px] place-items-center overflow-hidden rounded-full bg-ds-accent-soft ring-1 ring-forest-900/[0.06] transition group-hover:ring-2 group-hover:ring-ds-accent/40 sm:h-20 sm:w-20">
-        {!err ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={img} alt="" loading="lazy" onError={() => setErr(true)} className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-110" />
-        ) : (
-          <svg viewBox="0 0 24 24" fill="none" stroke="var(--ds-accent)" strokeWidth="1.6" className="h-6 w-6"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" /></svg>
-        )}
-      </span>
-      <span className="text-center text-[11.5px] font-medium leading-tight text-forest-900">{title}</span>
-    </Link>
+    <div className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-gradient-to-br from-[var(--ds-accent-soft)] to-[#D2E5CC] text-[var(--ds-accent)]">
+      {!err ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={img}
+          alt=""
+          loading="lazy"
+          onError={() => setErr(true)}
+          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-110"
+        />
+      ) : (
+        icon
+      )}
+    </div>
   );
 }
 
 export function CategoryRow() {
   return (
-    <section className="relative z-20 bg-[color:var(--pa-bg)] pt-6 sm:pt-8">
-      <div className="mx-auto max-w-7xl px-4 sm:px-8">
-        <div className="flex items-start gap-4 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:justify-center sm:gap-8 lg:gap-12 [&::-webkit-scrollbar]:hidden">
-          {CATEGORIES.map((c) => (
-            <Circle key={c.title} {...c} />
+    <section className="relative z-20 -mt-14 sm:-mt-20">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
+          {CATEGORIES.map((c, i) => (
+            <motion.div
+              key={c.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.45, delay: (i % 5) * 0.06, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Link
+                href={c.href}
+                className="group flex h-full items-center justify-between gap-3 rounded-2xl bg-white p-4 shadow-[0_24px_60px_-34px_rgba(13,59,36,0.5)] ring-1 ring-forest-900/[0.06] transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_64px_-30px_rgba(13,59,36,0.55)]"
+              >
+                <div className="min-w-0">
+                  <h3 className="text-[14px] font-semibold leading-tight text-forest-900">{c.title}</h3>
+                  <p className="mt-1 text-[11.5px] leading-snug text-stone-500">{c.desc}</p>
+                  <span className="mt-2 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[var(--ds-accent)] transition group-hover:gap-1.5">
+                    Shop Now <span aria-hidden>→</span>
+                  </span>
+                </div>
+                <Thumb img={c.img} icon={c.icon} />
+              </Link>
+            </motion.div>
           ))}
-          {/* View All */}
-          <Link href="/plants" className="group flex w-[78px] shrink-0 flex-col items-center gap-2 sm:w-auto">
-            <span className="grid h-[68px] w-[68px] place-items-center rounded-full border border-dashed border-forest-900/20 bg-white transition group-hover:border-ds-accent sm:h-20 sm:w-20">
-              <svg viewBox="0 0 24 24" fill="none" stroke="var(--ds-accent)" strokeWidth="1.8" strokeLinecap="round" className="h-6 w-6"><rect x="3" y="3" width="7" height="7" rx="1.6" /><rect x="14" y="3" width="7" height="7" rx="1.6" /><rect x="3" y="14" width="7" height="7" rx="1.6" /><rect x="14" y="14" width="7" height="7" rx="1.6" /></svg>
-            </span>
-            <span className="text-center text-[11.5px] font-medium leading-tight text-forest-900">View All</span>
-          </Link>
         </div>
       </div>
     </section>

@@ -12,15 +12,15 @@
     */
 
     /*
-    * primary color — Design System Fresh Green accent #1F6B3D (default; the admin
+    * primary color — Design System Forest accent #4E8B31 (default; the admin
     * Design System control overrides --color-accent per the chosen scheme).
     */
-    --color-accent: 31, 107, 61;
+    --color-accent: 78, 139, 49;
 
     /*
-    * Hover state color — Fresh Green ink #0D3B24
+    * Hover state color — Forest ink #2E5E2A
     */
-    --color-accent-hover: 13, 59, 36;
+    --color-accent-hover: 46, 94, 42;
 
     /*
     * shade — #a7f3d0

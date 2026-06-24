@@ -74,8 +74,6 @@ module.exports = {
         'ds-accent': 'var(--ds-accent)',
         'ds-accent-soft': 'var(--ds-accent-soft)',
         'ds-accent-ink': 'var(--ds-accent-ink)',
-        'ds-accent-bright': 'var(--ds-accent-bright)',
-        'ds-gold': 'var(--ds-gold)',
         // ── Approved neutral tokens (premium luxury palette) ──
         'pa-bg': 'var(--pa-bg)',
         'pa-card': 'var(--pa-card)',
@@ -121,7 +119,7 @@ module.exports = {
         // back-compat aliases (older storefront usage)
         leaf: '#4E8244',
         deep: '#16301A',
-        gold: '#D4A44B',
+        gold: '#B58E39',
         goldlight: '#E3CE97',
         mint: '#E7EEE2',
         mintsoft: '#F4F1EA',

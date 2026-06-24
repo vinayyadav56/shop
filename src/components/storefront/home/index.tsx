@@ -2,7 +2,6 @@
 import React from 'react';
 import type { Category, Product } from '@/types';
 import { HeroPlant } from './hero-plant';
-import { HeroSearch } from './hero-search';
 import { CategoryRow } from './category-row';
 import { SpringSaleBand } from './spring-sale-band';
 import { Collections } from './collections';
@@ -30,15 +29,14 @@ export function PlantCompanyHome({
   return (
     <>
       {/* Section order matches the approved design reference:
-          Hero → Search → Categories → Special Offer → Collections → Bestsellers → Trust → Gifting */}
+          Hero → Category → Spring Sale → Collections → Bestsellers → Gifting → Trust */}
       <HeroPlant />
-      <HeroSearch />
       <CategoryRow />
       <SpringSaleBand />
       <Collections />
       <BestSellers products={products} isLoading={productsLoading} />
-      <TrustRow />
       <GiftingBand />
+      <TrustRow />
       <NewsletterSocial />
     </>
   );

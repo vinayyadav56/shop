@@ -190,36 +190,12 @@ const Header = ({ layout }: { layout?: string }) => {
         </div>
 
         {/* main bar */}
-        <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3.5 sm:px-8 sm:py-3">
-          {/* LEFT — hamburger on mobile, logo on desktop */}
-          <div className="flex flex-1 items-center lg:flex-none">
-            <button
-              type="button"
-              onClick={() => setMenuOpen(true)}
-              className={`-ml-1.5 grid h-10 w-10 place-items-center rounded-full lg:hidden ${useLight ? 'text-white' : 'text-forest-900'}`}
-              aria-label="Menu"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="h-[26px] w-[26px]"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
-            </button>
-            <Link href="/" aria-label="PlantAtHome home" className="hidden shrink-0 lg:block">
-              <BrandLogo light={useLight} />
-            </Link>
-          </div>
-
-          {/* CENTER — "PLANT ⌖ A HOME" wordmark, centered on mobile */}
-          <Link
-            href="/"
-            aria-label="PlantAtHome home"
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:hidden"
-          >
-            <span className={`inline-flex items-center whitespace-nowrap text-[16px] font-semibold uppercase tracking-[0.2em] ${useLight ? 'text-white' : 'text-forest-900'}`}>
-              Plant
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="mx-1 -mt-3 h-3.5 w-3.5 text-ds-accent-bright"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" /><path d="M2 21c0-3 1.85-5.36 5.08-6" /></svg>
-              A&nbsp;Home
-            </span>
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
+          <Link href="/" aria-label="PlantAtHome home" className="shrink-0">
+            <BrandLogo light={useLight} />
           </Link>
 
-          {/* centred nav (desktop) */}
+          {/* centred nav */}
           <nav
             className={`hidden items-center gap-4 lg:flex xl:gap-7 ${
               useLight ? 'text-white' : 'text-forest-900'
@@ -275,7 +251,7 @@ const Header = ({ layout }: { layout?: string }) => {
             }`;
             const actionLabel = 'text-[10.5px] font-medium leading-none';
             return (
-              <div className="flex flex-1 items-center justify-end gap-3 sm:gap-4 lg:flex-none">
+              <div className="flex items-center gap-2.5 sm:gap-4">
                 {/* compact search */}
                 <button
                   type="button"
@@ -299,21 +275,36 @@ const Header = ({ layout }: { layout?: string }) => {
                   <span className={actionLabel}>Wishlist</span>
                 </Link>
 
-                {/* Cart — trolley icon w/ count badge (mobile + desktop) */}
+                {/* Cart */}
                 <button ref={cartBtnRef} data-cart-target type="button" onClick={openCart} className={`${actionCol} relative`} aria-label="Cart">
                   <span className="relative">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[23px] w-[23px] lg:h-[19px] lg:w-[19px]"><circle cx="9" cy="21" r="1.4" /><circle cx="19" cy="21" r="1.4" /><path d="M2.5 3h2.2l2.2 12.2a1.6 1.6 0 0 0 1.6 1.3h8.7a1.6 1.6 0 0 0 1.6-1.3L21.5 7H6" /></svg>
-                    <span className="absolute -right-2.5 -top-2 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ds-accent-bright px-1 text-[10px] font-bold text-white lg:h-4 lg:min-w-4 lg:-top-1.5 lg:text-[9px]">
+                    <Icon.bag className="h-[19px] w-[19px]" />
+                    <span className="absolute -right-2 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-ds-accent px-1 text-[9px] font-bold text-white">
                       {totalUniqueItems}
                     </span>
                   </span>
                   <span className={`${actionLabel} hidden lg:block`}>Cart</span>
                 </button>
 
-                {/* Login / Account (desktop) */}
+                {/* Login / Account */}
                 <button type="button" onClick={onProfile} className={`${actionCol} hidden lg:flex`} aria-label={isAuthorize ? 'My account' : 'Login'}>
                   <Icon.user className="h-[19px] w-[19px]" />
                   <span className={actionLabel}>{isAuthorize ? 'Account' : 'Login'}</span>
+                </button>
+
+                {/* mobile: search + menu */}
+                <button type="button" onClick={() => setSearchOpen(true)} className={`${iconBtn} lg:hidden`} aria-label={t('text-search') ?? 'Search'}>
+                  <SearchIcon className="h-[18px] w-[18px]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen(true)}
+                  className={`grid h-10 w-10 place-items-center rounded-full lg:hidden ${
+                    solid ? 'bg-forest-700 text-white' : 'bg-white/15 text-white backdrop-blur'
+                  }`}
+                  aria-label="Menu"
+                >
+                  <Icon.menu className="h-5 w-5" />
                 </button>
               </div>
             );
