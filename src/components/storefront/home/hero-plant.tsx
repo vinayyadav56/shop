@@ -131,10 +131,44 @@ function PincodeChecker() {
   );
 }
 
+/** Subtle drifting leaf particles for hero atmosphere (low-opacity, slow, non-interactive). */
+function LeafParticles() {
+  const leaves = [
+    { left: '14%', top: '24%', size: 26, delay: 0, dur: 15 },
+    { left: '80%', top: '18%', size: 20, delay: 2.5, dur: 19 },
+    { left: '58%', top: '68%', size: 22, delay: 5, dur: 17 },
+    { left: '34%', top: '78%', size: 16, delay: 1.5, dur: 21 },
+  ];
+  return (
+    <div className="pointer-events-none absolute inset-0 z-[2] overflow-hidden">
+      {leaves.map((l, i) => (
+        <motion.svg
+          key={i}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="rgba(168,230,176,0.5)"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ left: l.left, top: l.top, width: l.size, height: l.size }}
+          className="absolute"
+          initial={{ opacity: 0 }}
+          animate={{ y: [0, -20, 8, 0], x: [0, 12, -8, 0], rotate: [0, 18, -12, 0], opacity: [0, 0.55, 0.5, 0] }}
+          transition={{ duration: l.dur, delay: l.delay, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+          <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+        </motion.svg>
+      ))}
+    </div>
+  );
+}
+
 export function HeroPlant() {
   return (
     <section className="relative -mt-[115px] flex w-full overflow-hidden bg-[#081209]">
       <TourBurns images={TOUR_SCENES} />
+      <LeafParticles />
 
       {/* premium green grade — protect the type on the left, reveal the room on the right */}
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,34,20,0.94)_0%,rgba(8,34,20,0.76)_45%,rgba(8,34,20,0.30)_100%)]" />

@@ -20,8 +20,21 @@ const Search = dynamic(() => import('@/components/ui/search/search'));
 
 // 7-item nav from the mockup, mapped to the closest real routes (some are
 // pragmatic placeholders until dedicated landing pages exist).
-const NAV = [
-  { label: 'Plants', href: '/plants' },
+const NAV: { label: string; href: string; menu?: { label: string; href: string }[] }[] = [
+  {
+    label: 'Plants',
+    href: '/plants',
+    menu: [
+      { label: 'Indoor Plants', href: '/c/indoor' },
+      { label: 'Outdoor Plants', href: '/c/outdoor' },
+      { label: 'Flowering Plants', href: '/c/flowering' },
+      { label: 'Air-purifying', href: '/c/air-purifying' },
+      { label: 'Succulents & Cacti', href: '/c/succulents-cacti' },
+      { label: 'Pet-friendly', href: '/c/pet-friendly' },
+      { label: 'Herbs', href: '/c/herbs' },
+      { label: 'Climbers & Vines', href: '/c/climbers-vines' },
+    ],
+  },
   { label: 'Pots & Planters', href: '/tools' },
   { label: 'Garden Tools', href: '/tools' },
   { label: 'FarmBox', href: '/farmbox' },
@@ -153,17 +166,47 @@ const Header = ({ layout }: { layout?: string }) => {
               useLight ? 'text-white' : 'text-forest-900'
             }`}
           >
-            {NAV.map((n) => (
-              <Link
-                key={n.label}
-                href={n.href}
-                className={`text-[13px] font-medium transition xl:text-[14px] ${
-                  useLight ? 'hover:text-white/80' : 'hover:text-forest-600'
-                }`}
-              >
-                {n.label}
-              </Link>
-            ))}
+            {NAV.map((n) =>
+              n.menu ? (
+                <div key={n.label} className="group relative">
+                  <Link
+                    href={n.href}
+                    className={`inline-flex items-center gap-1 text-[13px] font-medium transition xl:text-[14px] ${
+                      useLight ? 'hover:text-white/80' : 'hover:text-forest-600'
+                    }`}
+                  >
+                    {n.label}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 opacity-70 transition-transform duration-200 group-hover:rotate-180">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </Link>
+                  {/* hover dropdown — white panel, readable over the transparent or solid bar */}
+                  <div className="invisible absolute left-1/2 top-full z-50 w-60 -translate-x-1/2 translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                    <div className="grid grid-cols-1 gap-0.5 rounded-2xl border border-forest-900/10 bg-white p-2 shadow-[0_28px_64px_-26px_rgba(13,59,36,0.45)]">
+                      {n.menu.map((m) => (
+                        <Link
+                          key={m.label}
+                          href={m.href}
+                          className="rounded-lg px-3.5 py-2 text-[13px] font-medium text-forest-900 transition hover:bg-[#EAF4E6] hover:text-[#4E8B31]"
+                        >
+                          {m.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={n.label}
+                  href={n.href}
+                  className={`text-[13px] font-medium transition xl:text-[14px] ${
+                    useLight ? 'hover:text-white/80' : 'hover:text-forest-600'
+                  }`}
+                >
+                  {n.label}
+                </Link>
+              ),
+            )}
           </nav>
 
           {/* right cluster */}
