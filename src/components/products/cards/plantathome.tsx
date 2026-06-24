@@ -264,7 +264,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
 
       </div>
 
-      {/* body */}
+      {/* body — reference layout: name, rating, then price + compact cart button */}
       <div className="flex flex-1 flex-col p-4">
         <button
           type="button"
@@ -274,43 +274,46 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
           {product.name}
         </button>
 
-        <div className="mt-1.5 flex items-end gap-1.5">
-          {isVariable && (
-            <span className="self-end pb-0.5 text-[10.5px] uppercase tracking-[0.14em] text-stone-400">from</span>
-          )}
-          <span className="text-[16px] font-bold leading-none text-forest-900 sm:text-[17px]">
-            {isVariable ? minPrice : price}
-          </span>
-          {!isVariable && basePrice && (
-            <del className="text-[11.5px] text-stone-400">{basePrice}</del>
-          )}
-          {product.unit && (
-            <span className="text-[10.5px] text-stone-400">/ {product.unit}</span>
-          )}
-        </div>
-
         <StarRow rating={ratingVal} count={reviewCount} />
 
-        {/* Add to Cart → becomes a quantity counter on click */}
-        <div className="mt-auto pt-3" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="mt-auto flex items-end justify-between gap-2 pt-3"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex min-w-0 items-end gap-1.5">
+            {isVariable && (
+              <span className="self-end pb-0.5 text-[10.5px] uppercase tracking-[0.14em] text-stone-400">from</span>
+            )}
+            <span className="text-[17px] font-bold leading-none text-forest-900 sm:text-[18px]">
+              {isVariable ? minPrice : price}
+            </span>
+            {!isVariable && basePrice && (
+              <del className="text-[11.5px] text-stone-400">{basePrice}</del>
+            )}
+          </div>
+
           {!inStock ? (
             <button
               type="button"
               onClick={handleQuickView}
-              className="inline-flex h-10 w-full items-center justify-center rounded-md border border-forest-800/40 px-5 text-[10.5px] font-bold uppercase tracking-[0.12em] text-forest-800 transition hover:bg-forest-800 hover:text-white sm:text-[11px]"
+              aria-label="Notify me"
+              title="Notify me"
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-forest-800/40 text-forest-800 transition hover:bg-forest-800 hover:text-white"
             >
-              Notify me
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.7 21a2 2 0 0 1-3.4 0" /></svg>
             </button>
           ) : isVariable ? (
             <button
               type="button"
               onClick={handleQuickView}
-              className="inline-flex h-10 w-full items-center justify-center rounded-md bg-gradient-to-r from-forest-800 to-forest-600 px-5 text-[10.5px] font-bold uppercase tracking-[0.12em] text-white transition hover:brightness-110 sm:text-[11px]"
+              aria-label="Select options"
+              title="Select options"
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ds-accent text-white shadow-[0_8px_20px_-8px_rgba(46,94,42,0.7)] transition hover:brightness-110"
             >
-              Select Options
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" /></svg>
             </button>
           ) : (
-            <AddToCart variant="plantathome" counterVariant="plantathome" data={product} />
+            <AddToCart variant="icon" counterVariant="oganesson" data={product} />
           )}
         </div>
       </div>
