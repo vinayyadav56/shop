@@ -18,8 +18,8 @@ import CitySwitcher from '@/components/location/city-switcher';
 
 const Search = dynamic(() => import('@/components/ui/search/search'));
 
-// Nav matches the design reference: Plants, Pots & Planters, Seeds, Fertilizers,
-// Garden Tools (each with a category dropdown), then Plant Care + Offers.
+// 7-item nav from the mockup, mapped to the closest real routes (some are
+// pragmatic placeholders until dedicated landing pages exist).
 const NAV: { label: string; href: string; menu?: { label: string; href: string }[] }[] = [
   {
     label: 'Plants',
@@ -35,51 +35,11 @@ const NAV: { label: string; href: string; menu?: { label: string; href: string }
       { label: 'Climbers & Vines', href: '/c/climbers-vines' },
     ],
   },
-  {
-    label: 'Pots & Planters',
-    href: '/tools',
-    menu: [
-      { label: 'Ceramic Pots', href: '/c/ceramic-pots' },
-      { label: 'Plastic Planters', href: '/c/plastic-planters' },
-      { label: 'Hanging Planters', href: '/c/hanging-planters' },
-      { label: 'Self-Watering Pots', href: '/c/self-watering' },
-      { label: 'Pot Stands', href: '/c/pot-stands' },
-    ],
-  },
-  {
-    label: 'Seeds',
-    href: '/c/seeds',
-    menu: [
-      { label: 'Flower Seeds', href: '/c/flower-seeds' },
-      { label: 'Vegetable Seeds', href: '/c/vegetable-seeds' },
-      { label: 'Herb Seeds', href: '/c/herb-seeds' },
-      { label: 'Microgreens', href: '/c/microgreens' },
-      { label: 'Seed Kits', href: '/c/seed-kits' },
-    ],
-  },
-  {
-    label: 'Fertilizers',
-    href: '/c/fertilizers',
-    menu: [
-      { label: 'Organic Fertilizers', href: '/c/organic-fertilizers' },
-      { label: 'Liquid Fertilizers', href: '/c/liquid-fertilizers' },
-      { label: 'Compost & Manure', href: '/c/compost' },
-      { label: 'Plant Food', href: '/c/plant-food' },
-      { label: 'Soil & Potting Mix', href: '/c/soil-mix' },
-    ],
-  },
-  {
-    label: 'Garden Tools',
-    href: '/tools',
-    menu: [
-      { label: 'Hand Tools', href: '/c/hand-tools' },
-      { label: 'Watering Cans', href: '/c/watering' },
-      { label: 'Pruning & Cutting', href: '/c/pruning' },
-      { label: 'Gloves & Aprons', href: '/c/gloves' },
-      { label: 'Tool Sets', href: '/c/tool-sets' },
-    ],
-  },
+  { label: 'Pots & Planters', href: '/tools' },
+  { label: 'Garden Tools', href: '/tools' },
+  { label: 'FarmBox', href: '/farmbox' },
   { label: 'Plant Care', href: '/plant-doctor' },
+  { label: 'Gifting', href: '/corporate-gifting' },
   { label: 'Offers', href: '/offers' },
 ];
 
@@ -174,18 +134,23 @@ const Header = ({ layout }: { layout?: string }) => {
             : 'bg-gradient-to-b from-deep/85 via-deep/45 to-transparent'
         }`}
       >
-        {/* announcement bar — centered shipping message (per reference); the city
-            switcher stays on the left for the city-first delivery UX. */}
+        {/* announcement bar — always dark green, sits above the (transparent/solid) main bar */}
         <div className="bg-forest-900 text-white">
-          <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2 text-[11px] font-medium tracking-wide sm:px-8">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-1.5 text-[11px] font-medium tracking-wide sm:gap-5 sm:px-8">
             <CitySwitcher tone="light" />
-            <span className="pointer-events-none absolute left-1/2 hidden -translate-x-1/2 items-center gap-2.5 whitespace-nowrap sm:flex">
-              <Icon.leaf className="h-3.5 w-3.5 text-sage-300" />
-              FREE SHIPPING on orders above ₹499
-              <span className="h-3 w-px bg-white/30" />
-              Extra 5% OFF on prepaid orders
-            </span>
-            <span aria-hidden className="hidden w-20 sm:block" />
+            <div className="flex items-center gap-3 sm:gap-5">
+              <span className="flex items-center gap-1.5">
+                <Icon.truckFast className="h-3.5 w-3.5" /> Free Delivery on Orders Above ₹999
+              </span>
+              <span className="hidden h-3 w-px bg-white/25 sm:block" />
+              <span className="hidden items-center gap-1.5 sm:flex">
+                <Icon.lock className="h-3.5 w-3.5" /> Secure Payments
+              </span>
+              <span className="hidden h-3 w-px bg-white/25 sm:block" />
+              <span className="hidden items-center gap-1.5 sm:flex">
+                <Icon.shield className="h-3.5 w-3.5" /> Easy Returns
+              </span>
+            </div>
           </div>
         </div>
 
@@ -244,71 +209,49 @@ const Header = ({ layout }: { layout?: string }) => {
             )}
           </nav>
 
-          {/* right cluster — Track Order · Wishlist · Cart · Login (per reference) */}
-          {(() => {
-            const actionCol = `group flex flex-col items-center gap-1 transition ${
-              useLight ? 'text-white hover:text-white/80' : 'text-forest-900 hover:text-forest-600'
-            }`;
-            const actionLabel = 'text-[10.5px] font-medium leading-none';
-            return (
-              <div className="flex items-center gap-2.5 sm:gap-4">
-                {/* compact search */}
-                <button
-                  type="button"
-                  onClick={() => setSearchOpen(true)}
-                  className={`${actionCol} hidden lg:flex`}
-                  aria-label={t('text-search') ?? 'Search'}
-                >
-                  <SearchIcon className="h-[19px] w-[19px]" />
-                  <span className={actionLabel}>Search</span>
-                </button>
+          {/* right cluster */}
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="hidden w-[290px] items-center gap-2 rounded-full border border-kraft-300 bg-white px-4 py-2.5 text-[13px] text-stone-400 transition hover:border-forest-500 xl:flex xl:w-[290px]"
+            >
+              <SearchIcon className="h-4 w-4" /> Search plants, planters…
+            </button>
 
-                {/* Track Order */}
-                <Link href="/track-order" className={`${actionCol} hidden lg:flex`}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[19px] w-[19px]"><path d="M5 17H3V6a1 1 0 0 1 1-1h11v12" /><path d="M15 9h4l3 3v5h-2" /><circle cx="7.5" cy="18" r="1.8" /><circle cx="17.5" cy="18" r="1.8" /></svg>
-                  <span className={actionLabel}>Track Order</span>
-                </Link>
+            <button
+              type="button"
+              onClick={() => setSearchOpen((s) => !s)}
+              className={`${iconBtn} xl:hidden`}
+              aria-label={t('text-search') ?? 'Search'}
+            >
+              <SearchIcon className="h-[18px] w-[18px]" />
+            </button>
 
-                {/* Wishlist */}
-                <Link href="/wishlists" className={`${actionCol} hidden lg:flex`}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[19px] w-[19px]"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z" /></svg>
-                  <span className={actionLabel}>Wishlist</span>
-                </Link>
+            <button type="button" onClick={onProfile} className={iconBtn} aria-label={isAuthorize ? 'My account' : 'Login'}>
+              <Icon.user className="h-5 w-5" />
+            </button>
 
-                {/* Cart */}
-                <button ref={cartBtnRef} data-cart-target type="button" onClick={openCart} className={`${actionCol} relative`} aria-label="Cart">
-                  <span className="relative">
-                    <Icon.bag className="h-[19px] w-[19px]" />
-                    <span className="absolute -right-2 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-ds-accent px-1 text-[9px] font-bold text-white">
-                      {totalUniqueItems}
-                    </span>
-                  </span>
-                  <span className={`${actionLabel} hidden lg:block`}>Cart</span>
-                </button>
+            <button ref={cartBtnRef} data-cart-target type="button" onClick={openCart} className={`relative ${iconBtn}`} aria-label="Cart">
+              <Icon.bag className="h-5 w-5" />
+              {totalUniqueItems > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-forest-700 px-1 text-[10px] font-bold text-white">
+                  {totalUniqueItems}
+                </span>
+              )}
+            </button>
 
-                {/* Login / Account */}
-                <button type="button" onClick={onProfile} className={`${actionCol} hidden lg:flex`} aria-label={isAuthorize ? 'My account' : 'Login'}>
-                  <Icon.user className="h-[19px] w-[19px]" />
-                  <span className={actionLabel}>{isAuthorize ? 'Account' : 'Login'}</span>
-                </button>
-
-                {/* mobile: search + menu */}
-                <button type="button" onClick={() => setSearchOpen(true)} className={`${iconBtn} lg:hidden`} aria-label={t('text-search') ?? 'Search'}>
-                  <SearchIcon className="h-[18px] w-[18px]" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMenuOpen(true)}
-                  className={`grid h-10 w-10 place-items-center rounded-full lg:hidden ${
-                    solid ? 'bg-forest-700 text-white' : 'bg-white/15 text-white backdrop-blur'
-                  }`}
-                  aria-label="Menu"
-                >
-                  <Icon.menu className="h-5 w-5" />
-                </button>
-              </div>
-            );
-          })()}
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              className={`grid h-10 w-10 place-items-center rounded-full lg:hidden ${
+                solid ? 'bg-forest-700 text-white' : 'bg-white/15 text-white backdrop-blur'
+              }`}
+              aria-label="Menu"
+            >
+              <Icon.menu className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
         {/* search overlay */}
