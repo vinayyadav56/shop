@@ -16,7 +16,7 @@ export default function SiteLayout({ children }: React.PropsWithChildren<{}>) {
   const { layout } = useLayout();
   const router = useRouter();
   return (
-    <div className="flex min-h-screen flex-col bg-gray-100 transition-colors duration-150">
+    <div className="flex min-h-screen flex-col transition-colors duration-150" style={{ background: 'var(--pa-bg)' }}>
       {router.query.slug && <NoticeHighlightedBar />}
 
       {['minimal', 'compact'].includes(layout) ? (
@@ -26,6 +26,8 @@ export default function SiteLayout({ children }: React.PropsWithChildren<{}>) {
       )}
       {children}
       <Footer />
+      {/* reserve space for the fixed mobile bottom nav (h-16) */}
+      <div aria-hidden className="h-16 lg:hidden" />
       <GreenPicker />
       <MobileNavigation />
     </div>

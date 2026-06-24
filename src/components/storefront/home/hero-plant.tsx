@@ -171,10 +171,10 @@ function TourBurns({
   );
 }
 
-const TRUST: { icon: keyof typeof Icon; title: string; sub: string }[] = [
-  { icon: 'sprout', title: 'Healthy Plants', sub: 'Carefully Handpicked' },
-  { icon: 'truck', title: 'Pan India Delivery', sub: 'Fast & Safe' },
-  { icon: 'shield', title: 'Safe Packaging', sub: 'Secure & Reliable' },
+const CHIPS: { icon: keyof typeof Icon; label: string }[] = [
+  { icon: 'leaf', label: 'Air Purifying' },
+  { icon: 'sprout', label: 'Easy Care' },
+  { icon: 'truck', label: 'Fast Delivery' },
 ];
 
 /** Functional delivery checker wired to the pincode serviceability allow-list. */
@@ -314,9 +314,9 @@ export function HeroPlant() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12, duration: 0.7, ease: EXPO }}
-            className="mb-7 inline-flex w-fit items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md"
+            className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md"
           >
-            <Icon.leaf className="h-3.5 w-3.5 text-[#A8E6B0]" /> India’s Most Loved Plant Store
+            <span className="h-2 w-2 rounded-full bg-ds-accent-bright shadow-[0_0_8px_var(--ds-accent-bright)]" /> Live Plants
           </motion.span>
 
           {headline ? (
@@ -325,14 +325,14 @@ export function HeroPlant() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EXPO }}
-              className="font-playfair text-[2.9rem] font-bold leading-[1.03] tracking-tight text-white sm:text-[4rem] lg:text-[4.7rem]"
+              className="font-heading text-[2.7rem] font-extrabold leading-[1.02] tracking-tight text-white sm:text-[4rem] lg:text-[4.6rem]"
             >
               {headline}
             </motion.h1>
           ) : (
-            <h1 className="font-playfair text-[2.9rem] font-bold leading-[1.03] tracking-tight text-white sm:text-[4rem] lg:text-[4.7rem]">
+            <h1 className="font-heading text-[2.7rem] font-extrabold leading-[1.02] tracking-tight text-white sm:text-[4rem] lg:text-[4.6rem]">
               <WordReveal text="Bring Nature Home." delay={0.1} />
-              <span className="block text-[#5FBF6A]">
+              <span className="block text-ds-accent-bright">
                 <WordReveal text="Live Better." delay={0.32} />
               </span>
             </h1>
@@ -369,18 +369,17 @@ export function HeroPlant() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.72, duration: 0.7, ease: EXPO }}
-            className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3"
+            className="mt-7 flex flex-wrap items-center gap-2.5"
           >
-            {TRUST.map((f) => {
-              const Ico = Icon[f.icon];
+            {CHIPS.map((c) => {
+              const Ico = Icon[c.icon];
               return (
-                <div key={f.title} className="flex items-center gap-2.5">
-                  <Ico className="h-5 w-5 shrink-0 text-[#A8E6B0]" />
-                  <span>
-                    <span className="block text-[13px] font-semibold leading-tight text-white">{f.title}</span>
-                    <span className="block text-[11px] leading-tight text-white/60">{f.sub}</span>
-                  </span>
-                </div>
+                <span
+                  key={c.label}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3.5 py-1.5 text-[12px] font-semibold text-forest-900 shadow-[0_8px_20px_-12px_rgba(0,0,0,0.5)] backdrop-blur"
+                >
+                  <Ico className="h-3.5 w-3.5 text-ds-accent" /> {c.label}
+                </span>
               );
             })}
           </motion.div>
@@ -389,20 +388,23 @@ export function HeroPlant() {
         </div>
       </div>
 
-      {/* floating glass offer card */}
+      {/* dark "Limited Time Offer" card — top-right on mobile, centred-right on desktop */}
       <motion.div
         initial={{ opacity: 0, scale: 0.92, y: 18 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.85, ease: EXPO }}
-        className="absolute right-8 top-1/2 z-10 hidden -translate-y-1/2 lg:block xl:right-20"
+        className="absolute right-3 top-[104px] z-10 w-[150px] sm:right-8 sm:top-1/2 sm:w-auto sm:-translate-y-1/2 lg:right-20"
       >
-        <div className="rounded-[28px] border border-white/20 bg-white/10 px-10 py-9 text-center shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)] backdrop-blur-2xl">
-          <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-white/15">
-            <Icon.leaf className="h-6 w-6 text-[#A8E6B0]" />
-          </div>
-          <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-white/80">Up To</p>
-          <p className="font-playfair text-[3.6rem] font-bold leading-[0.95] text-white">40% OFF</p>
-          <p className="mt-1.5 text-[13.5px] text-white/75">On Bestsellers</p>
+        <div className="rounded-[20px] border border-white/15 bg-[#0D3B24]/90 px-5 py-5 text-center shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:rounded-[28px] sm:px-10 sm:py-9">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70 sm:text-[12px]">Limited Time Offer</p>
+          <p className="font-heading text-[2rem] font-extrabold leading-none text-white sm:text-[3.6rem]">40% OFF</p>
+          <p className="mt-1 text-[11px] text-white/75 sm:text-[13.5px]">On Selected Plants</p>
+          <Link
+            href="/offers"
+            className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-ds-accent px-4 py-2 text-[12px] font-semibold text-white transition hover:brightness-110 sm:mt-5 sm:px-6 sm:py-2.5 sm:text-[13px]"
+          >
+            Shop Now <span aria-hidden>→</span>
+          </Link>
         </div>
       </motion.div>
     </section>

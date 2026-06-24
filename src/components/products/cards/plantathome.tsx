@@ -274,6 +274,16 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
           {product.name}
         </button>
 
+        {(() => {
+          const sub = getFeatures(product)
+            .slice(0, 2)
+            .map((f) => f.label)
+            .join(' • ');
+          return sub ? (
+            <p className="mt-0.5 truncate text-[11.5px] text-stone-500">{sub}</p>
+          ) : null;
+        })()}
+
         <StarRow rating={ratingVal} count={reviewCount} />
 
         <div

@@ -114,12 +114,21 @@ export const FONT_PAIRINGS: FontPairing[] = [
     body: `'Manrope', 'Inter', ${SANS}`,
     google: 'family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800',
     stars: 5,
+  },
+  {
+    id: 'manrope-inter',
+    name: 'Manrope + Inter',
+    heading: `'Manrope', ${SANS}`,
+    body: `'Inter', ${SANS}`,
+    google: 'family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700',
+    stars: 5,
     recommended: true,
   },
 ];
 
 export const COLOR_SCHEMES: ColorScheme[] = [
-  { id: 'forest', name: 'Forest (default)', accent: '#4E8B31', accentSoft: '#EAF4E6', accentInk: '#2E5E2A', accentRgb: '78, 139, 49', accentInkRgb: '46, 94, 42' },
+  { id: 'fresh-green', name: 'Fresh Green (default)', accent: '#1F6B3D', accentSoft: '#E8F5EE', accentInk: '#0D3B24', accentRgb: '31, 107, 61', accentInkRgb: '13, 59, 36' },
+  { id: 'forest', name: 'Forest', accent: '#4E8B31', accentSoft: '#EAF4E6', accentInk: '#2E5E2A', accentRgb: '78, 139, 49', accentInkRgb: '46, 94, 42' },
   { id: 'emerald', name: 'Emerald', accent: '#1B7A4B', accentSoft: '#E2F3EB', accentInk: '#125C38', accentRgb: '27, 122, 75', accentInkRgb: '18, 92, 56' },
   { id: 'pine', name: 'Deep Pine', accent: '#2E5E2A', accentSoft: '#E7EEE2', accentInk: '#1E4023', accentRgb: '46, 94, 42', accentInkRgb: '30, 64, 35' },
   { id: 'terracotta', name: 'Terracotta', accent: '#C26B45', accentSoft: '#F3E2D8', accentInk: '#A8542F', accentRgb: '194, 107, 69', accentInkRgb: '168, 84, 47' },
