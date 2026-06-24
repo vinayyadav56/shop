@@ -40,6 +40,11 @@ export default class CustomDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap"
             rel="stylesheet"
           />
+          {/* Playfair Display — luxury display serif for the hero + premium headings */}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500;1,600&display=swap"
+            rel="stylesheet"
+          />
           {/* Poppins (geometric headings) + Caveat (script subtitle) for the product page */}
           <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap"
