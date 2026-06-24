@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { SectionHead } from './section-heading';
 
 const COLLECTIONS: { title: string; desc: string; href: string; img: string }[] = [
@@ -78,8 +79,16 @@ export function Collections() {
           viewAllText="View All Collections"
         />
         <div className="mt-8 grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
-          {COLLECTIONS.map((c) => (
-            <CollectionCard key={c.title} c={c} />
+          {COLLECTIONS.map((c, i) => (
+            <motion.div
+              key={c.title}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.5, delay: (i % 5) * 0.07, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <CollectionCard c={c} />
+            </motion.div>
           ))}
         </div>
       </div>

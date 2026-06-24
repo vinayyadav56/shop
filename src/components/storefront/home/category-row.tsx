@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 /**
  * Premium category quick-links that overlap the hero foot (mockup row of 5).
@@ -86,21 +87,28 @@ export function CategoryRow() {
     <section className="relative z-20 -mt-14 sm:-mt-20">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
-          {CATEGORIES.map((c) => (
-            <Link
+          {CATEGORIES.map((c, i) => (
+            <motion.div
               key={c.title}
-              href={c.href}
-              className="group flex items-center justify-between gap-3 rounded-2xl bg-white p-4 shadow-[0_24px_60px_-34px_rgba(13,59,36,0.5)] ring-1 ring-forest-900/[0.06] transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_64px_-30px_rgba(13,59,36,0.55)]"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.45, delay: (i % 5) * 0.06, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div className="min-w-0">
-                <h3 className="text-[14px] font-semibold leading-tight text-forest-900">{c.title}</h3>
-                <p className="mt-1 text-[11.5px] leading-snug text-stone-500">{c.desc}</p>
-                <span className="mt-2 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#4E8B31] transition group-hover:gap-1.5">
-                  Shop Now <span aria-hidden>→</span>
-                </span>
-              </div>
-              <Thumb img={c.img} icon={c.icon} />
-            </Link>
+              <Link
+                href={c.href}
+                className="group flex h-full items-center justify-between gap-3 rounded-2xl bg-white p-4 shadow-[0_24px_60px_-34px_rgba(13,59,36,0.5)] ring-1 ring-forest-900/[0.06] transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_64px_-30px_rgba(13,59,36,0.55)]"
+              >
+                <div className="min-w-0">
+                  <h3 className="text-[14px] font-semibold leading-tight text-forest-900">{c.title}</h3>
+                  <p className="mt-1 text-[11.5px] leading-snug text-stone-500">{c.desc}</p>
+                  <span className="mt-2 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#4E8B31] transition group-hover:gap-1.5">
+                    Shop Now <span aria-hidden>→</span>
+                  </span>
+                </div>
+                <Thumb img={c.img} icon={c.icon} />
+              </Link>
+            </motion.div>
           ))}
         </div>
       </div>
