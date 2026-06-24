@@ -21,11 +21,13 @@ export type ColorScheme = {
   accent: string; // CTAs, links, eyebrows
   accentSoft: string; // tints / chips / icon badges
   accentInk: string; // accent text on light surfaces
+  accentRgb: string; // "r, g, b" — drives the shared --color-accent token
+  accentInkRgb: string; // "r, g, b" — accent-hover / 600 / 700 shades
 };
 
 export type DesignSystem = {
   fontTheme: { id: string; heading: string; body: string };
-  colorTheme: { id: string; accent: string; accentSoft: string; accentInk: string };
+  colorTheme: { id: string; accent: string; accentSoft: string; accentInk: string; accentRgb: string; accentInkRgb: string };
   density: 'comfortable' | 'compact';
 };
 
@@ -117,10 +119,10 @@ export const FONT_PAIRINGS: FontPairing[] = [
 ];
 
 export const COLOR_SCHEMES: ColorScheme[] = [
-  { id: 'forest', name: 'Forest (default)', accent: '#4E8B31', accentSoft: '#EAF4E6', accentInk: '#2E5E2A' },
-  { id: 'emerald', name: 'Emerald', accent: '#1B7A4B', accentSoft: '#E2F3EB', accentInk: '#125C38' },
-  { id: 'pine', name: 'Deep Pine', accent: '#2E5E2A', accentSoft: '#E7EEE2', accentInk: '#1E4023' },
-  { id: 'terracotta', name: 'Terracotta', accent: '#C26B45', accentSoft: '#F3E2D8', accentInk: '#A8542F' },
+  { id: 'forest', name: 'Forest (default)', accent: '#4E8B31', accentSoft: '#EAF4E6', accentInk: '#2E5E2A', accentRgb: '78, 139, 49', accentInkRgb: '46, 94, 42' },
+  { id: 'emerald', name: 'Emerald', accent: '#1B7A4B', accentSoft: '#E2F3EB', accentInk: '#125C38', accentRgb: '27, 122, 75', accentInkRgb: '18, 92, 56' },
+  { id: 'pine', name: 'Deep Pine', accent: '#2E5E2A', accentSoft: '#E7EEE2', accentInk: '#1E4023', accentRgb: '46, 94, 42', accentInkRgb: '30, 64, 35' },
+  { id: 'terracotta', name: 'Terracotta', accent: '#C26B45', accentSoft: '#F3E2D8', accentInk: '#A8542F', accentRgb: '194, 107, 69', accentInkRgb: '168, 84, 47' },
 ];
 
 export const DENSITIES = [
@@ -143,6 +145,8 @@ export const DEFAULT_DESIGN_SYSTEM: DesignSystem = {
     accent: DEFAULT_COLOR_SCHEME.accent,
     accentSoft: DEFAULT_COLOR_SCHEME.accentSoft,
     accentInk: DEFAULT_COLOR_SCHEME.accentInk,
+    accentRgb: DEFAULT_COLOR_SCHEME.accentRgb,
+    accentInkRgb: DEFAULT_COLOR_SCHEME.accentInkRgb,
   },
   density: 'comfortable',
 };
@@ -163,7 +167,7 @@ export function resolveDesignSystem(raw: any): DesignSystem {
   const density = raw?.density === 'compact' ? 'compact' : 'comfortable';
   return {
     fontTheme: { id: fp.id, heading: fp.heading, body: fp.body },
-    colorTheme: { id: cs.id, accent: cs.accent, accentSoft: cs.accentSoft, accentInk: cs.accentInk },
+    colorTheme: { id: cs.id, accent: cs.accent, accentSoft: cs.accentSoft, accentInk: cs.accentInk, accentRgb: cs.accentRgb, accentInkRgb: cs.accentInkRgb },
     density,
   };
 }
@@ -195,6 +199,13 @@ export function applyDesignSystem(raw: any, persist = true): DesignSystem {
   root.style.setProperty('--ds-accent', ds.colorTheme.accent);
   root.style.setProperty('--ds-accent-soft', ds.colorTheme.accentSoft);
   root.style.setProperty('--ds-accent-ink', ds.colorTheme.accentInk);
+  // Drive the shared RGB accent token so every existing bg-accent/text-accent/
+  // accent-* utility (both apps) follows the chosen scheme.
+  root.style.setProperty('--color-accent', ds.colorTheme.accentRgb);
+  root.style.setProperty('--color-accent-hover', ds.colorTheme.accentInkRgb);
+  root.style.setProperty('--color-accent-500', ds.colorTheme.accentRgb);
+  root.style.setProperty('--color-accent-600', ds.colorTheme.accentInkRgb);
+  root.style.setProperty('--color-accent-700', ds.colorTheme.accentInkRgb);
   root.setAttribute('data-density', ds.density);
   if (persist) {
     try {
@@ -208,6 +219,8 @@ export function applyDesignSystem(raw: any, persist = true): DesignSystem {
           accent: ds.colorTheme.accent,
           accentSoft: ds.colorTheme.accentSoft,
           accentInk: ds.colorTheme.accentInk,
+          accentRgb: ds.colorTheme.accentRgb,
+          accentInkRgb: ds.colorTheme.accentInkRgb,
           density: ds.density,
           google: googleFontsUrl(ds.fontTheme.id),
           fontId: ds.fontTheme.id,
@@ -227,4 +240,4 @@ export function applyDesignSystem(raw: any, persist = true): DesignSystem {
 export const DS_PREPAINT_SCRIPT =
   "(function(){try{var s=localStorage.getItem('" +
   DS_STORAGE_KEY +
-  "');if(!s)return;var d=JSON.parse(s);var r=document.documentElement;if(d.heading)r.style.setProperty('--font-heading',d.heading);if(d.body)r.style.setProperty('--font-body',d.body);if(d.accent)r.style.setProperty('--ds-accent',d.accent);if(d.accentSoft)r.style.setProperty('--ds-accent-soft',d.accentSoft);if(d.accentInk)r.style.setProperty('--ds-accent-ink',d.accentInk);if(d.density)r.setAttribute('data-density',d.density);if(d.google&&d.fontId){var id='ds-font-'+d.fontId;if(!document.getElementById(id)){var l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href=d.google;document.head.appendChild(l);}}}catch(e){}})();";
+  "');if(!s)return;var d=JSON.parse(s);var r=document.documentElement;if(d.heading)r.style.setProperty('--font-heading',d.heading);if(d.body)r.style.setProperty('--font-body',d.body);if(d.accent)r.style.setProperty('--ds-accent',d.accent);if(d.accentSoft)r.style.setProperty('--ds-accent-soft',d.accentSoft);if(d.accentInk)r.style.setProperty('--ds-accent-ink',d.accentInk);if(d.accentRgb){r.style.setProperty('--color-accent',d.accentRgb);r.style.setProperty('--color-accent-500',d.accentRgb);}if(d.accentInkRgb){r.style.setProperty('--color-accent-hover',d.accentInkRgb);r.style.setProperty('--color-accent-600',d.accentInkRgb);r.style.setProperty('--color-accent-700',d.accentInkRgb);}if(d.density)r.setAttribute('data-density',d.density);if(d.google&&d.fontId){var id='ds-font-'+d.fontId;if(!document.getElementById(id)){var l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href=d.google;document.head.appendChild(l);}}}catch(e){}})();";
