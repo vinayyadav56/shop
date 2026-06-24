@@ -193,7 +193,7 @@ function PincodeChecker() {
         }}
         className="flex items-center gap-1.5 rounded-2xl bg-white p-1.5 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.55)]"
       >
-        <span className="grid h-10 w-9 shrink-0 place-items-center text-[#4E8B31]">
+        <span className="grid h-10 w-9 shrink-0 place-items-center text-[var(--ds-accent)]">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
             <circle cx="12" cy="10" r="3" />
@@ -209,7 +209,7 @@ function PincodeChecker() {
         />
         <button
           type="submit"
-          className="shrink-0 rounded-xl bg-[#4E8B31] px-6 py-3 text-[13px] font-semibold text-white transition hover:bg-[#3f7327]"
+          className="shrink-0 rounded-xl bg-[var(--ds-accent)] px-6 py-3 text-[13px] font-semibold text-white transition hover:bg-[#3f7327]"
         >
           {isFetching ? 'Checking…' : 'Check Delivery'}
         </button>
@@ -358,7 +358,7 @@ export function HeroPlant() {
             >
               <Link
                 href={ctaLink}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#4E8B31] px-7 py-3.5 text-[14px] font-semibold text-white shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)] transition hover:bg-[#3f7327]"
+                className="inline-flex items-center gap-2 rounded-xl bg-[var(--ds-accent)] px-7 py-3.5 text-[14px] font-semibold text-white shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)] transition hover:bg-[#3f7327]"
               >
                 {ctaText} <span aria-hidden>→</span>
               </Link>

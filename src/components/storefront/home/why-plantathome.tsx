@@ -63,7 +63,7 @@ export function WhyPlantAtHome() {
               transition={{ duration: 0.5, delay: (i % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
               className="flex items-start gap-4 rounded-2xl border border-forest-900/[0.06] bg-white p-5 shadow-[0_20px_50px_-34px_rgba(13,59,36,0.4)] transition hover:-translate-y-1 hover:shadow-[0_26px_56px_-30px_rgba(13,59,36,0.45)]"
             >
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[#EAF4E6] text-[#4E8B31]">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[var(--ds-accent-soft)] text-[var(--ds-accent)]">
                 {r.icon}
               </span>
               <div>

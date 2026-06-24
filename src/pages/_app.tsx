@@ -25,6 +25,7 @@ import { NotificationProvider } from '@/context/notify-content';
 import CitySync from '@/components/layouts/city-sync';
 import LocationGate from '@/components/location/location-gate';
 import TrackingBridge from '@/lib/analytics/tracking-bridge';
+import DesignSystemApplier from '@/lib/design-system-applier';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -54,6 +55,7 @@ function CustomApp({
               <ModalProvider>
                 <CartProvider>
                   <>
+                    <DesignSystemApplier />
                     <TrackingBridge />
                     <DefaultSeo />
                     <CitySync />

@@ -38,7 +38,7 @@ export function TrustRow() {
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 gap-y-6 px-5 py-10 sm:px-8 lg:grid-cols-4">
         {ITEMS.map((it) => (
           <div key={it.title} className="flex items-center gap-3.5 px-2">
-            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#EAF4E6] text-[#4E8B31]">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[var(--ds-accent-soft)] text-[var(--ds-accent)]">
               {it.icon}
             </span>
             <div>

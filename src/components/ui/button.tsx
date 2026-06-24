@@ -11,12 +11,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
 }
 const classes = {
-  root: 'inline-flex items-center justify-center shrink-0 font-semibold leading-none rounded outline-none transition duration-300 ease-in-out focus:outline-0 focus:shadow focus:ring-1 focus:ring-[#1B6B50]',
+  root: 'inline-flex items-center justify-center shrink-0 font-semibold leading-none rounded outline-none transition duration-300 ease-in-out focus:outline-0 focus:shadow focus:ring-1 focus:ring-ds-accent',
+  // Solid accent button — follows the Design System accent color scheme.
   normal:
-    'g-cta hover:brightness-110 text-white border border-transparent',
+    'bg-ds-accent hover:brightness-110 text-white border border-transparent',
   custom: 'border border-transparent',
   outline:
-    'border border-border-400 bg-transparent text-body hover:text-light hover:bg-[#175840] hover:border-[#175840]',
+    'border border-border-400 bg-transparent text-body hover:text-light hover:bg-ds-accent-ink hover:border-ds-accent-ink',
   loading:
     'h-4 w-4 ltr:ml-2 rtl:mr-2 rounded-full border-2 border-transparent border-t-2 animate-spin',
   disabled:

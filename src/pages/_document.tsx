@@ -5,6 +5,7 @@ import Document, {
   NextScript,
   DocumentContext,
 } from 'next/document';
+import { DS_PREPAINT_SCRIPT } from '@/lib/design-system';
 
 export default class CustomDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -17,6 +18,8 @@ export default class CustomDocument extends Document {
       // <Html dir={dir}>
       <Html>
         <Head>
+          {/* Apply persisted Design System theme (font/color/density) before paint. */}
+          <script dangerouslySetInnerHTML={{ __html: DS_PREPAINT_SCRIPT }} />
           {/* Google Analytics */}
           <script async src="https://www.googletagmanager.com/gtag/js?id=G-KTCXX5B35N" />
           <script
@@ -33,6 +36,11 @@ export default class CustomDocument extends Document {
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+            rel="stylesheet"
+          />
+          {/* Manrope — Design System default BODY font (Luxury Signature pairing) */}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
             rel="stylesheet"
           />
           {/* Cormorant Garamond — editorial serif for premium product/display headings */}

@@ -33,7 +33,7 @@ export function SectionHead({
   return (
     <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#4E8B31]">
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--ds-accent)]">
           {label}
         </p>
         <h2 className="mt-1.5 flex items-center gap-2.5 font-playfair text-[1.9rem] font-bold leading-tight tracking-tight text-forest-900 sm:text-[2.4rem]">
@@ -44,7 +44,7 @@ export function SectionHead({
       {viewAllHref ? (
         <Link
           href={viewAllHref}
-          className="inline-flex shrink-0 items-center gap-1.5 text-[12.5px] font-semibold text-forest-700 transition hover:gap-2.5 hover:text-[#4E8B31]"
+          className="inline-flex shrink-0 items-center gap-1.5 text-[12.5px] font-semibold text-forest-700 transition hover:gap-2.5 hover:text-[var(--ds-accent)]"
         >
           {viewAllText ?? 'View All'} <Icon.arrow className="h-4 w-4" />
         </Link>

@@ -65,7 +65,7 @@ const CATEGORIES: {
 function Thumb({ img, icon }: { img: string; icon: JSX.Element }) {
   const [err, setErr] = React.useState(false);
   return (
-    <div className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-gradient-to-br from-[#EAF4E6] to-[#D2E5CC] text-[#4E8B31]">
+    <div className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-gradient-to-br from-[var(--ds-accent-soft)] to-[#D2E5CC] text-[var(--ds-accent)]">
       {!err ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -102,7 +102,7 @@ export function CategoryRow() {
                 <div className="min-w-0">
                   <h3 className="text-[14px] font-semibold leading-tight text-forest-900">{c.title}</h3>
                   <p className="mt-1 text-[11.5px] leading-snug text-stone-500">{c.desc}</p>
-                  <span className="mt-2 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#4E8B31] transition group-hover:gap-1.5">
+                  <span className="mt-2 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[var(--ds-accent)] transition group-hover:gap-1.5">
                     Shop Now <span aria-hidden>→</span>
                   </span>
                 </div>

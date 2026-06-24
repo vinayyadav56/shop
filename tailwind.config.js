@@ -32,18 +32,20 @@ module.exports = {
         '-1': '-1',
       },
       fontFamily: {
-        // Inter throughout (matches the reference site) — every alias resolves to
-        // Inter so existing font-serif/heading/display classes render in Inter.
-        body: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
-        heading: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        serif: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        // Editorial serif for premium display headings (product title, section titles).
-        cormorant: ['"Cormorant Garamond"', 'Georgia', 'Cambria', 'serif'],
-        // Luxury display serif for the hero + premium section headings.
-        playfair: ['"Playfair Display"', '"Cormorant Garamond"', 'Georgia', 'serif'],
-        // Product-page fonts: Poppins (geometric headings) + Caveat (script subtitle).
+        // Design-system fonts resolve from CSS variables so the admin "Design
+        // System" control can swap the whole site's typography at runtime.
+        // --font-body / --font-heading default to the Luxury Signature pairing
+        // (Manrope + Cormorant Garamond) in main.css; every body/heading alias
+        // follows the active theme.
+        body: ['var(--font-body)', 'Manrope', 'Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['var(--font-body)', 'Manrope', 'Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        heading: ['var(--font-heading)', '"Cormorant Garamond"', 'Georgia', 'serif'],
+        display: ['var(--font-heading)', '"Cormorant Garamond"', 'Georgia', 'serif'],
+        serif: ['var(--font-heading)', '"Cormorant Garamond"', 'Georgia', 'serif'],
+        // Editorial + luxury display aliases also follow the active heading font.
+        cormorant: ['var(--font-heading)', '"Cormorant Garamond"', 'Georgia', 'Cambria', 'serif'],
+        playfair: ['var(--font-heading)', '"Playfair Display"', '"Cormorant Garamond"', 'Georgia', 'serif'],
+        // Product-page accent fonts: Poppins (geometric) + Caveat (script) stay fixed.
         poppins: ['"Poppins"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         caveat: ['"Caveat"', 'ui-serif', 'cursive'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
@@ -56,8 +58,28 @@ module.exports = {
         h4: 'var(--h4)',
         h5: 'var(--h5)',
         h6: 'var(--h6)',
+        // ── Design-system responsive type scale (clamp-based; see main.css) ──
+        hero: ['var(--fs-hero)', { lineHeight: '1.04', letterSpacing: '-0.01em' }],
+        section: ['var(--fs-section)', { lineHeight: '1.1', letterSpacing: '-0.005em' }],
+        subhead: ['var(--fs-subhead)', { lineHeight: '1.2' }],
+        'card-title': ['var(--fs-card)', { lineHeight: '1.25' }],
+        'body-lg': ['var(--fs-body-lg)', { lineHeight: '1.6' }],
+        'body-base': ['var(--fs-body)', { lineHeight: '1.6' }],
+        'body-sm': ['var(--fs-sm)', { lineHeight: '1.5' }],
+        caption: ['var(--fs-caption)', { lineHeight: '1.4', letterSpacing: '0.01em' }],
       },
       colors: {
+        // ── Switchable accent (driven by the admin Design System color scheme) ──
+        // Defaults to the storefront green in main.css; the color picker swaps it.
+        'ds-accent': 'var(--ds-accent)',
+        'ds-accent-soft': 'var(--ds-accent-soft)',
+        'ds-accent-ink': 'var(--ds-accent-ink)',
+        // ── Approved neutral tokens (premium luxury palette) ──
+        'pa-bg': 'var(--pa-bg)',
+        'pa-card': 'var(--pa-card)',
+        'pa-text': 'var(--pa-text)',
+        'pa-text-2': 'var(--pa-text-2)',
+        'pa-border': 'var(--pa-border)',
         // ── Plant At Home Design System palette ──
         forest: {
           DEFAULT: '#2E5E2A', // primary brand green (buttons, mark)
