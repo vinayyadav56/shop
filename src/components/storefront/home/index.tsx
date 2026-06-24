@@ -6,7 +6,7 @@ import { CategoryRow } from './category-row';
 import { SpringSaleBand } from './spring-sale-band';
 import { VerticalsShowcase } from './verticals-showcase';
 import { Collections } from './collections';
-import { WhyPlants } from './why-plants';
+import { WhyPlantAtHome } from './why-plantathome';
 import { BestSellers } from './best-sellers';
 import { StatementBand } from './statement-band';
 import { PromoBanners } from './promo-banners';
@@ -38,7 +38,7 @@ export function PlantCompanyHome({
       <Collections />
       <BestSellers products={products} isLoading={productsLoading} />
       <VerticalsShowcase />
-      <WhyPlants />
+      <WhyPlantAtHome />
       <StatementBand />
       <PromoBanners />
       <GiftingBand />
