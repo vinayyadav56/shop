@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useBannerEnabled } from '@/lib/use-home-config';
 import { Icon } from '../icons';
 import { EXPO, WordReveal } from '../motion';
 import { usePincodeServiceability } from '@/lib/use-pincode-serviceability';
@@ -266,6 +267,7 @@ export function HeroPlant() {
   const { slides, configured } = useHeroSlides();
   const [reduce, setReduce] = React.useState(false);
   const [active, setActive] = React.useState(0);
+  const showHeroOffer = useBannerEnabled('heroOffer');
 
   React.useEffect(() => {
     setReduce(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -390,21 +392,23 @@ export function HeroPlant() {
       </div>
 
       {/* floating glass offer card */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.92, y: 18 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.85, ease: EXPO }}
-        className="absolute right-8 top-1/2 z-10 hidden -translate-y-1/2 lg:block xl:right-20"
-      >
-        <div className="rounded-[28px] border border-white/20 bg-white/10 px-10 py-9 text-center shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)] backdrop-blur-2xl">
-          <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-white/15">
-            <Icon.leaf className="h-6 w-6 text-[#A8E6B0]" />
+      {showHeroOffer && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92, y: 18 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.85, ease: EXPO }}
+          className="absolute right-8 top-1/2 z-10 hidden -translate-y-1/2 lg:block xl:right-20"
+        >
+          <div className="rounded-[28px] border border-white/20 bg-white/10 px-10 py-9 text-center shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)] backdrop-blur-2xl">
+            <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-white/15">
+              <Icon.leaf className="h-6 w-6 text-[#A8E6B0]" />
+            </div>
+            <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-white/80">Up To</p>
+            <p className="font-playfair text-[3.6rem] font-bold leading-[0.95] text-white">40% OFF</p>
+            <p className="mt-1.5 text-[13.5px] text-white/75">On Bestsellers</p>
           </div>
-          <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-white/80">Up To</p>
-          <p className="font-playfair text-[3.6rem] font-bold leading-[0.95] text-white">40% OFF</p>
-          <p className="mt-1.5 text-[13.5px] text-white/75">On Bestsellers</p>
-        </div>
-      </motion.div>
+        </motion.div>
+      )}
     </section>
   );
 }
