@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useBannerEnabled } from '@/lib/use-home-config';
 
 const PERKS: { title: string; sub: string; icon: JSX.Element }[] = [
   {
@@ -44,6 +45,7 @@ function GiftImage() {
 }
 
 export function GiftingBand() {
+  if (!useBannerEnabled('gifting')) return null;
   return (
     <section className="bg-transparent">
       <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:py-10">

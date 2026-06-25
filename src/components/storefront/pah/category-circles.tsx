@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useCategories } from '@/framework/category';
 import { CATEGORIES_PER_PAGE } from '@/framework/client/variables';
+import { useHomeConfig, applyCuration } from '@/lib/use-home-config';
 import { PLACEHOLDER } from './_img';
 import type { Category } from '@/types';
 
@@ -22,10 +23,11 @@ function Circle({ c }: { c: Category }) {
 
 export function CategoryCircles() {
   const { categories, isLoading } = useCategories({ limit: CATEGORIES_PER_PAGE, parent: 'null' });
-  const list = (categories ?? []).filter((c) => c?.slug).slice(0, 10);
+  const { homeCategories } = useHomeConfig();
+  const list = applyCuration((categories ?? []).filter((c) => c?.slug), homeCategories).slice(0, 12);
 
   return (
-    <div className="pah-scroll flex gap-[18px] overflow-x-auto px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="pah-scroll mb-6 flex gap-[18px] overflow-x-auto px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {isLoading && list.length === 0
         ? Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="flex w-16 shrink-0 flex-col items-center gap-2">

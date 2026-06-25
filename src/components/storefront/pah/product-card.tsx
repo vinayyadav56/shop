@@ -81,7 +81,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <Link
       href={`/products/${product?.slug}`}
-      className="group block overflow-hidden rounded-[18px] border border-kraft-200 bg-white shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition duration-200 hover:-translate-y-[3px] hover:shadow-[0_8px_24px_rgba(34,48,26,0.09)]"
+      className="group block w-[165px] shrink-0 overflow-hidden rounded-[18px] border border-kraft-200 bg-white shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition duration-200 hover:-translate-y-[3px] hover:shadow-[0_8px_24px_rgba(34,48,26,0.09)]"
     >
       <div className="relative h-[150px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -120,7 +120,7 @@ export function ProductCard({ product }: { product: Product }) {
             type="button"
             onClick={onAdd}
             aria-label={isVariable ? 'Select options' : 'Add to cart'}
-            className={cn('grid h-[30px] w-[30px] place-items-center rounded-full text-white transition active:scale-90', added ? 'bg-forest-900' : 'bg-forest-700 hover:bg-forest-800')}
+            className={cn('grid h-[30px] w-[30px] place-items-center rounded-full text-white transition active:scale-90', added ? 'bg-forest-800' : 'bg-forest-600 hover:bg-forest-700')}
           >
             {added ? (
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>

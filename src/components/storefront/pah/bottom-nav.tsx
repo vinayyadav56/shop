@@ -31,7 +31,7 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 z-30 w-full border-t border-kraft-200 bg-white/[0.96] px-2 pb-5 pt-[9px] shadow-[0_-4px_18px_rgba(34,48,26,0.06)] backdrop-blur-[10px] lg:hidden">
+    <nav className="fixed bottom-0 left-0 z-30 w-full rounded-t-[20px] border-t border-kraft-200 bg-white px-2 pb-[max(16px,env(safe-area-inset-bottom))] pt-[9px] shadow-[0_-6px_20px_rgba(34,48,26,0.08)] lg:hidden">
       <div className="mx-auto flex max-w-[440px] justify-around">
         {items.map((n) => (
           <motion.button

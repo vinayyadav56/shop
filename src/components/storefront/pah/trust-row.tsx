@@ -10,14 +10,14 @@ const TRUST = [
 
 export function TrustRow() {
   return (
-    <div className="px-5">
-      <div className="grid grid-cols-2 gap-x-3 gap-y-4 rounded-[18px] border border-kraft-200 bg-white p-[16px_14px] shadow-[0_2px_8px_rgba(34,48,26,0.07)]">
+    <div className="px-5 pt-[22px]">
+      <div className="grid grid-cols-4 gap-1.5 rounded-[14px] border border-kraft-200 bg-white p-[12px_8px] shadow-[0_2px_8px_rgba(34,48,26,0.07)]">
         {TRUST.map((t) => (
-          <div key={t.label} className="flex items-center gap-2.5">
-            <span className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-sage-100 text-forest-700">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{t.icon}</svg>
+          <div key={t.label} className="flex items-center gap-[5px]">
+            <span className="shrink-0 text-forest-600">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{t.icon}</svg>
             </span>
-            <span className="text-[11.5px] font-semibold leading-[1.25] text-forest-900">{t.label}</span>
+            <span className="text-[8.5px] font-semibold leading-[1.15] text-forest-900">{t.label}</span>
           </div>
         ))}
       </div>

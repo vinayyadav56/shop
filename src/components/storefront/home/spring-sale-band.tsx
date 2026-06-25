@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useBannerEnabled } from '@/lib/use-home-config';
 
 const PERKS: { title: string; icon: JSX.Element }[] = [
   {
@@ -30,6 +31,7 @@ const PERKS: { title: string; icon: JSX.Element }[] = [
 ];
 
 export function SpringSaleBand() {
+  if (!useBannerEnabled('specialOffer')) return null;
   return (
     <section className="bg-transparent">
       <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-12">
