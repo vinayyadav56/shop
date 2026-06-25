@@ -12,14 +12,15 @@
     */
 
     /*
-    * primary color — #059669 emerald
+    * primary color — Design System Forest accent #4E8B31 (default; the admin
+    * Design System control overrides --color-accent per the chosen scheme).
     */
-    --color-accent: 5, 150, 105;
+    --color-accent: 78, 139, 49;
 
     /*
-    * Hover state color — #047857 dark emerald
+    * Hover state color — Forest ink #2E5E2A
     */
-    --color-accent-hover: 4, 120, 87;
+    --color-accent-hover: 46, 94, 42;
 
     /*
     * shade — #a7f3d0

@@ -4,12 +4,8 @@ import type { Category, Product } from '@/types';
 import { HeroPlant } from './hero-plant';
 import { CategoryRow } from './category-row';
 import { SpringSaleBand } from './spring-sale-band';
-import { VerticalsShowcase } from './verticals-showcase';
 import { Collections } from './collections';
-import { WhyPlantAtHome } from './why-plantathome';
 import { BestSellers } from './best-sellers';
-import { StatementBand } from './statement-band';
-import { PromoBanners } from './promo-banners';
 import { GiftingBand } from './gifting-band';
 import { TrustRow } from './trust-row';
 import { NewsletterSocial } from './newsletter-social';
@@ -32,15 +28,13 @@ export function PlantCompanyHome({
 }) {
   return (
     <>
+      {/* Section order matches the approved design reference:
+          Hero → Category → Spring Sale → Collections → Bestsellers → Gifting → Trust */}
       <HeroPlant />
       <CategoryRow />
       <SpringSaleBand />
       <Collections />
       <BestSellers products={products} isLoading={productsLoading} />
-      <VerticalsShowcase />
-      <WhyPlantAtHome />
-      <StatementBand />
-      <PromoBanners />
       <GiftingBand />
       <TrustRow />
       <NewsletterSocial />

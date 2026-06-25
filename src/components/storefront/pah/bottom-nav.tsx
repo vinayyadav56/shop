@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
 import { authorizationAtom } from '@/store/authorization-atom';
+import { drawerAtom } from '@/store/drawer-atom';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 
 const ICONS: Record<string, React.ReactNode> = {
@@ -17,12 +18,13 @@ const ICONS: Record<string, React.ReactNode> = {
 export function BottomNav() {
   const router = useRouter();
   const [authorized] = useAtom(authorizationAtom);
+  const [, setDrawer] = useAtom(drawerAtom);
   const { openModal } = useModalAction();
   const path = (router.asPath || '/').split(/[?#]/)[0];
 
   const items = [
     { label: 'Home', active: path === '/', go: () => router.push('/') },
-    { label: 'Categories', active: path.startsWith('/categories') || path.startsWith('/c/'), go: () => router.push('/categories') },
+    { label: 'Categories', active: path.startsWith('/c/'), go: () => setDrawer({ display: true, view: 'MAIN_MENU_VIEW' }) },
     { label: 'Plants', active: path.startsWith('/plants') || path.startsWith('/products'), go: () => router.push('/plants') },
     { label: 'Wishlist', active: path.startsWith('/wishlist'), go: () => (authorized ? router.push('/wishlists') : openModal('LOGIN_VIEW')) },
     { label: 'Profile', active: path.startsWith('/profile') || path.startsWith('/orders'), go: () => (authorized ? router.push('/profile') : openModal('LOGIN_VIEW')) },

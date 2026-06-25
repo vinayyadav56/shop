@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useCategories } from '@/framework/category';
 import { CATEGORIES_PER_PAGE } from '@/framework/client/variables';
-import { PLACEHOLDER } from '@/components/storefront/v2/_img';
+import { PLACEHOLDER } from './_img';
 import type { Category } from '@/types';
 
 function Card({ c }: { c: Category }) {

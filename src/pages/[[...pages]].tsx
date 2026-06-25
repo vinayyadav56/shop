@@ -1,47 +1,70 @@
 import type { NextPageWithLayout } from '@/types';
 import type { InferGetStaticPropsType } from 'next';
+import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import { scroller } from 'react-scroll';
+import HomeLayout from '@/components/layouts/_home';
 import Seo from '@/components/seo/seo';
+import { useWindowSize } from '@/lib/use-window-size';
 import { getStaticPaths, getStaticProps } from '@/framework/home-pages.ssr';
 import { useType } from '@/framework/type';
 
 export { getStaticPaths, getStaticProps };
 
+const CartCounterButton = dynamic(
+  () => import('@/components/cart/cart-counter-button'),
+  { ssr: false },
+);
+const Classic = dynamic(() => import('@/components/layouts/classic'));
 const Standard = dynamic(() => import('@/components/layouts/standard'));
 const Modern = dynamic(() => import('@/components/layouts/modern'));
 const Minimal = dynamic(() => import('@/components/layouts/minimal'));
 const Compact = dynamic(() => import('@/components/layouts/compact'));
-const PahHome = dynamic(() => import('@/components/storefront/pah/home'));
+const PlantAtHome = dynamic(() => import('@/components/layouts/plantathome'));
 
-// Storefront home faithfully reproduces the Claude Design "PlantAtHome Mobile
-// Home". classic/plantathome/default all map to it (it carries its own header +
-// bottom nav, so the page uses a bare layout).
+// Single-brand shop: every PlantAtHome vertical (plants/tools/farmbox) renders
+// the premium immersive storefront. `classic` + `default` map to it so the
+// look is consistent regardless of the type's stored layoutType.
 const MAP_LAYOUT_TO_GROUP: Record<string, any> = {
-  classic: PahHome,
-  plantathome: PahHome,
+  classic: PlantAtHome,
+  plantathome: PlantAtHome,
   modern: Modern,
   standard: Standard,
   minimal: Minimal,
   compact: Compact,
-  default: PahHome,
+  default: PlantAtHome,
 };
-
 const Home: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = ({ variables, layout }) => {
+  const { query } = useRouter();
+  const { width } = useWindowSize();
   const { type } = useType(variables.types.type);
-  const Component = MAP_LAYOUT_TO_GROUP[layout] ?? PahHome;
+
+  useEffect(() => {
+    if (query.text || query.category) {
+      scroller.scrollTo('grid', {
+        smooth: true,
+        offset: -110,
+      });
+    }
+  }, [query.text, query.category]);
+
+  const Component = MAP_LAYOUT_TO_GROUP[layout];
   return (
     <>
       <Seo title={type?.name} url={type?.slug} images={type?.banners} />
       <Component variables={variables} />
+      {!['compact', 'minimal'].includes(layout) && width > 1023 && (
+        <CartCounterButton />
+      )}
     </>
   );
 };
 
-// Bare layout: the faithful home renders its own header (in hero) + bottom nav.
 Home.getLayout = function getLayout(page) {
-  return page;
+  return <HomeLayout layout={page.props.layout}>{page}</HomeLayout>;
 };
 
 export default Home;

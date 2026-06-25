@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
 import { cn } from '@/lib/cn';
-import { PLACEHOLDER } from '@/components/storefront/v2/_img';
+import { PLACEHOLDER } from './_img';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { generateCartItem } from '@/store/quick-cart/generate-cart-item';
 import { useToggleWishlist } from '@/framework/wishlist';

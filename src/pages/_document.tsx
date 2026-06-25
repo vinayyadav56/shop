@@ -38,16 +38,6 @@ export default class CustomDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
             rel="stylesheet"
           />
-          {/* Plus Jakarta Sans — modern geometric sans for the revamped storefront (headings + UI) */}
-          <link
-            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-            rel="stylesheet"
-          />
-          {/* PlantAtHome design-system fonts: Hanken Grotesk (body/headlines) + Jost (lockup/eyebrows) */}
-          <link
-            href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Jost:wght@300;400;500;600&display=swap"
-            rel="stylesheet"
-          />
           {/* Manrope — Design System default BODY font (Luxury Signature pairing) */}
           <link
             href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
@@ -66,6 +56,11 @@ export default class CustomDocument extends Document {
           {/* Poppins (geometric headings) + Caveat (script subtitle) for the product page */}
           <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap"
+            rel="stylesheet"
+          />
+          {/* Mobile home (Claude Design): Hanken Grotesk (headlines/body) + Jost (lockup/eyebrows) */}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Jost:wght@300;400;500;600&display=swap"
             rel="stylesheet"
           />
         </Head>

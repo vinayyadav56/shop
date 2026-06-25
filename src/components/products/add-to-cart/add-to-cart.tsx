@@ -29,6 +29,7 @@ interface Props {
     | 'big'
     | 'text'
     | 'plantathome'
+    | 'icon'
     | 'florine';
   counterVariant?:
     | 'helium'

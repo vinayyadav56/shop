@@ -7,6 +7,7 @@ import HeaderMinimal from './header-minimal';
 import Footer from '@/components/layouts/footer';
 import { SearchIcon } from '@/components/icons/search-icon';
 import { displayMobileHeaderSearchAtom } from '@/store/display-mobile-header-search-atom';
+import { useIsHomeExperience } from '@/lib/use-is-home-experience';
 import dynamic from 'next/dynamic';
 
 const GreenPicker = dynamic(() => import('@/components/storefront/green-picker'), { ssr: false });
@@ -21,32 +22,47 @@ export default function HomeLayout({
 }: React.PropsWithChildren<{ layout: string }>) {
   const { t } = useTranslation('common');
   const [, setDisplayMobileHeaderSearch] = useAtom(displayMobileHeaderSearchAtom);
+  // On the home experience the mobile (<lg) view is the Claude Design home, which
+  // carries its own header + bottom nav — so suppress the prod chrome there.
+  // Desktop (>=lg) is unchanged. Verticals / filtering keep the full prod chrome.
+  const pahMobile = useIsHomeExperience();
+
+  const headerEl = ['minimal', 'compact'].includes(layout) ? (
+    <HeaderMinimal layout={layout} />
+  ) : (
+    <Header layout={layout} />
+  );
 
   return (
     <div className="flex min-h-screen flex-col transition-colors duration-150" style={{ background: 'var(--pa-bg)' }}>
-      {/* Brand header is fixed + transparent over the hero (see header.tsx) */}
-      {['minimal', 'compact'].includes(layout) ? (
-        <HeaderMinimal layout={layout} />
-      ) : (
-        <Header layout={layout} />
-      )}
+      {/* Brand header is sticky/solid (see header.tsx); hidden on the mobile home. */}
+      {pahMobile ? <div className="hidden lg:block">{headerEl}</div> : headerEl}
 
       <main className="min-h-screen flex-1">{children}</main>
 
-      <Footer />
+      {pahMobile ? (
+        <div className="hidden lg:block">
+          <Footer />
+        </div>
+      ) : (
+        <Footer />
+      )}
 
       <GreenPicker />
 
-      <MobileNavigation>
-        <motion.button
-          whileTap={{ scale: 0.88 }}
-          onClick={() => setDisplayMobileHeaderSearch((prev) => !prev)}
-          className="flex h-full items-center justify-center p-2 focus:text-accent focus:outline-0"
-        >
-          <span className="sr-only">{t('text-search')}</span>
-          <SearchIcon width="17.05" height="18" />
-        </motion.button>
-      </MobileNavigation>
+      {/* PahHome renders its own bottom nav on the mobile home; suppress this one there. */}
+      {!pahMobile && (
+        <MobileNavigation>
+          <motion.button
+            whileTap={{ scale: 0.88 }}
+            onClick={() => setDisplayMobileHeaderSearch((prev) => !prev)}
+            className="flex h-full items-center justify-center p-2 focus:text-accent focus:outline-0"
+          >
+            <span className="sr-only">{t('text-search')}</span>
+            <SearchIcon width="17.05" height="18" />
+          </motion.button>
+        </MobileNavigation>
+      )}
     </div>
   );
 }
