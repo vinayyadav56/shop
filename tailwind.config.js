@@ -49,6 +49,10 @@ module.exports = {
         poppins: ['"Poppins"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         caveat: ['"Caveat"', 'ui-serif', 'cursive'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        // ── Mobile home (Claude Design) fonts, fixed (not theme-switched) ──
+        hanken: ['"Hanken Grotesk"', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        jost: ['"Jost"', '"Century Gothic"', 'Futura', 'ui-sans-serif', 'sans-serif'],
+        pahserif: ['"Cormorant Garamond"', '"Iowan Old Style"', 'Georgia', 'serif'],
       },
       fontSize: {
         '10px': '0.625rem',

@@ -58,6 +58,11 @@ export default class CustomDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap"
             rel="stylesheet"
           />
+          {/* Mobile home (Claude Design): Hanken Grotesk (headlines/body) + Jost (lockup/eyebrows) */}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Jost:wght@300;400;500;600&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <Main />
