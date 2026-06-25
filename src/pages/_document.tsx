@@ -43,6 +43,11 @@ export default class CustomDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
             rel="stylesheet"
           />
+          {/* PlantAtHome design-system fonts: Hanken Grotesk (body/headlines) + Jost (lockup/eyebrows) */}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Jost:wght@300;400;500;600&display=swap"
+            rel="stylesheet"
+          />
           {/* Manrope — Design System default BODY font (Luxury Signature pairing) */}
           <link
             href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"

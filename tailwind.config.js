@@ -51,6 +51,10 @@ module.exports = {
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
         // ── Revamp (v2) storefront: modern geometric sans, fixed (not theme-switched) ──
         jakarta: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        // ── PlantAtHome design-system fonts (Claude Design), fixed ──
+        hanken: ['"Hanken Grotesk"', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        jost: ['"Jost"', '"Century Gothic"', 'Futura', 'ui-sans-serif', 'sans-serif'],
+        pahserif: ['"Cormorant Garamond"', '"Iowan Old Style"', 'Georgia', 'serif'],
       },
       fontSize: {
         '10px': '0.625rem',
