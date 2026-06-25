@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Icon } from '../icons';
-import { useSubscription } from '@/framework/rest/settings';
+import { useSubscription } from '@/framework/settings';
 
 const SOCIAL = [
   'https://images.unsplash.com/photo-1545241047-6083a3684587?w=500&q=72&auto=format&fit=crop',
