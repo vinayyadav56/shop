@@ -66,6 +66,38 @@ export function setStoredCity(city: string): void {
   }
 }
 
+const PINCODE_KEY = 'pah_customer_pincode';
+
+/**
+ * The customer's pincode (when known — from a saved/selected address or IP detect). Drives
+ * the live courier serviceability + ETA at checkout (the API only fetches a courier rate
+ * when a pincode is supplied). Optional: city alone still works for vendor-rate estimates.
+ */
+export function getStoredPincode(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const p = (window.localStorage.getItem(PINCODE_KEY) || '').replace(/\D/g, '');
+    return p.length >= 4 ? p : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Set/clear the stored pincode. Pass a falsy value to clear (e.g. on a manual city switch). */
+export function setStoredPincode(pincode?: string | null): void {
+  try {
+    const p = (pincode || '').replace(/\D/g, '');
+    if (p.length >= 4) {
+      window.localStorage.setItem(PINCODE_KEY, p);
+    } else {
+      window.localStorage.removeItem(PINCODE_KEY);
+    }
+    window.dispatchEvent(new Event('pah-location-changed'));
+  } catch {
+    // ignore
+  }
+}
+
 /** Prompt the browser for the current position and persist it. */
 export function captureLocation(): Promise<CustomerLatLng> {
   return new Promise((resolve, reject) => {
