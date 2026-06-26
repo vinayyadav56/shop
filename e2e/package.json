@@ -1,0 +1,17 @@
+{
+  "name": "plantathome-storefront-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright POM e2e/QA suite for the PlantAtHome storefront. Isolated from the shop's yarn workspace (own deps) so it never touches the app build/lockfile. Runs against a deployed URL (BASE_URL).",
+  "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=chromium",
+    "test:mobile": "playwright test --project=mobile-chrome",
+    "report": "playwright show-report",
+    "install:browsers": "playwright install"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.49.1"
+  }
+}

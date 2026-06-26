@@ -7,11 +7,13 @@ import { extractAddress, type ExtractedAddress } from '@/lib/extract-address';
 
 /**
  * Coarse city/pincode from the visitor's IP — the gentle first-visit detection
- * that needs no permission prompt. Uses ipapi.co (https, free). Fail-safe.
+ * that needs no permission prompt. Goes through the SAME-ORIGIN /api/geo route
+ * (which resolves server-side) — a direct ipapi.co fetch is CORS-blocked from the
+ * browser and threw a console error on every visit. Fail-safe → null.
  */
 export async function getCityFromIP(): Promise<ExtractedAddress | null> {
   try {
-    const res = await fetch('https://ipapi.co/json/', {
+    const res = await fetch('/api/geo', {
       headers: { accept: 'application/json' },
     });
     if (!res.ok) return null;
