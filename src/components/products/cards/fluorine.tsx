@@ -161,7 +161,19 @@ const Fluorine: React.FC<FluorineProps> = ({
       )}
     >
       <div className="relative w-auto cursor-pointer md:h-[22.75rem]">
-        <div onClick={handleProductQuickView} className="h-full w-full">
+        <div
+          onClick={handleProductQuickView}
+          role="button"
+          tabIndex={0}
+          aria-label={product?.name ? `Quick view ${product.name}` : 'Quick view product'}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleProductQuickView();
+            }
+          }}
+          className="h-full w-full"
+        >
           <Image
             src={product?.image?.original ?? productPlaceholder}
             alt={product?.name}

@@ -2,7 +2,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useSetAtom } from 'jotai';
-import { getStoredCity, setStoredCity } from '@/lib/customer-location';
+import { getStoredCity, setStoredCity, setStoredPincode } from '@/lib/customer-location';
 import { getCityFromIP } from '@/lib/geocode';
 import { usePincodeServiceability } from '@/lib/use-pincode-serviceability';
 import { track } from '@/lib/analytics/track';
@@ -60,8 +60,9 @@ export default function LocationGate() {
       setDetected({ city: addr.city, pincode: addr.pincode?.replace(/\D/g, '') });
       setDetectedCityAtom(addr.city);
       if (!stored) {
-        // First visit — provisionally adopt the detected city.
+        // First visit — provisionally adopt the detected city + pincode (drives live courier ETA).
         setStoredCity(addr.city);
+        setStoredPincode(addr.pincode);
       } else if (stored.toLowerCase() !== addr.city.toLowerCase()) {
         setPopup('changed');
       }
@@ -94,6 +95,7 @@ export default function LocationGate() {
   function pickCity(name: string) {
     track('city_changed', { label: name });
     setStoredCity(name);
+    setStoredPincode(null); // manual city switch — clear any stale detected pincode
     setDeliveryMode('standard');
     setIsNonServiceable(false);
     setServiceableCity(name);

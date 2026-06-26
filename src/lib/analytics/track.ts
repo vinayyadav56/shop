@@ -58,8 +58,12 @@ function sessionId(): string {
 }
 
 function endpoint(): string | null {
-  const base = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
-  return base ? `${base.replace(/\/$/, '')}/track` : null;
+  // Post SAME-ORIGIN via the Next rewrite (/rest-api/:path* → <API>/api/:path*), NOT the
+  // absolute API URL. A cross-origin sendBeacon sends credentials, which the browser rejects
+  // when the API replies Access-Control-Allow-Origin:'*' — the CORS error thrown on every page.
+  // Same-origin → no preflight, no CORS, and it still proxies to /api/track. track() only ever
+  // runs client-side (it guards on `typeof window`), so a relative URL resolves correctly.
+  return '/rest-api/track';
 }
 
 function send(payload: any): void {

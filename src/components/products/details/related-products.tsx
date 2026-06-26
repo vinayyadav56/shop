@@ -25,14 +25,13 @@ const RelatedProducts = ({
           gridClassName
         )}
       >
-        {products?.map((item: any, idx: number) => {
-          if (currentProductId === item.id) {
-            return null;
-          }
-          return (
-            <ProductCard product={item} key={idx} cardType={item?.type?.slug} />
-          );
-        })}
+        {products
+          ?.filter((item: any) => currentProductId !== item.id)
+          .map((item: any) => (
+            // Stable key by product id — filtering the current product out FIRST (instead of
+            // returning null mid-map with index keys) so React can't mis-associate card state.
+            <ProductCard product={item} key={item.id} cardType={item?.type?.slug} />
+          ))}
       </div>
     </>
   );

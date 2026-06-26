@@ -2,6 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Icon } from '../icons';
+import { useSubscription } from '@/framework/settings';
 
 const SOCIAL = [
   'https://images.unsplash.com/photo-1545241047-6083a3684587?w=500&q=72&auto=format&fit=crop',
@@ -13,7 +14,9 @@ const SOCIAL = [
 
 export function NewsletterSocial() {
   const [email, setEmail] = React.useState('');
-  const [done, setDone] = React.useState(false);
+  // Wire the form to the REAL newsletter endpoint — previously it just flipped a local
+  // "you're on the list" flag and silently discarded the email (a trust/functional bug).
+  const { mutate: subscribe, isLoading, isSubscribed } = useSubscription();
 
   return (
     <section className="relative overflow-hidden g-band">
@@ -28,7 +31,7 @@ export function NewsletterSocial() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              if (email.trim()) setDone(true);
+              if (email.trim() && !isLoading) subscribe({ email: email.trim() });
             }}
             className="mt-5 flex max-w-md gap-2"
           >
@@ -44,12 +47,13 @@ export function NewsletterSocial() {
             <button
               type="submit"
               aria-label="Subscribe"
-              className="g-cta grid h-12 w-12 shrink-0 place-items-center rounded-lg text-white transition hover:brightness-110"
+              disabled={isLoading}
+              className="g-cta grid h-12 w-12 shrink-0 place-items-center rounded-lg text-white transition hover:brightness-110 disabled:opacity-60"
             >
               <Icon.arrow className="h-5 w-5" />
             </button>
           </form>
-          {done && <p className="mt-3 text-[12.5px] font-medium text-[color:var(--g-band-accent)]">Thanks — you’re on the list 🌿</p>}
+          {isSubscribed && <p className="mt-3 text-[12.5px] font-medium text-[color:var(--g-band-accent)]">Thanks — you’re on the list 🌿</p>}
         </div>
 
         {/* follow us */}

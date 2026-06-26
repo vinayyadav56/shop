@@ -1,7 +1,9 @@
 import { useQuery } from 'react-query';
+import { useAtom } from 'jotai';
 import { HttpClient } from '@/framework/client/http-client';
 import { useCart } from '@/store/quick-cart/cart.context';
-import { getStoredCity } from '@/lib/customer-location';
+import { checkoutAtom } from '@/store/checkout';
+import { getStoredCity, getStoredPincode } from '@/lib/customer-location';
 
 interface EstimateItem {
   product_id: number;
@@ -29,7 +31,12 @@ const fmt = (d: string) =>
  */
 export default function DeliveryEstimate() {
   const { items } = useCart();
+  const [checkout] = useAtom(checkoutAtom);
   const city = (getStoredCity() || '').trim();
+  // Authoritative pincode = the selected shipping address; fall back to the stored one. The API
+  // only fetches a LIVE courier rate/ETA when a pincode is supplied (city alone → vendor rates).
+  const addrZip = ((checkout as any)?.shipping_address?.address?.zip ?? '').toString().replace(/\D/g, '');
+  const pincode = addrZip.length >= 4 ? addrZip : getStoredPincode() ?? '';
 
   const lines = (items ?? []).map((i: any) => ({
     product_id: i?.productId ?? i?.id,
@@ -38,8 +45,18 @@ export default function DeliveryEstimate() {
   }));
 
   const { data } = useQuery<EstimateResult>(
-    ['checkout-estimate', city, lines.map((l) => `${l.product_id}:${l.variation_option_id ?? ''}:${l.quantity}`).join(',')],
-    () => HttpClient.post<EstimateResult>('checkout/estimate', { city, items: lines }),
+    [
+      'checkout-estimate',
+      city,
+      pincode,
+      lines.map((l) => `${l.product_id}:${l.variation_option_id ?? ''}:${l.quantity}`).join(','),
+    ],
+    () =>
+      HttpClient.post<EstimateResult>('checkout/estimate', {
+        city,
+        ...(pincode ? { pincode } : {}),
+        items: lines,
+      }),
     { enabled: !!city && lines.length > 0, retry: 0, staleTime: 60_000 },
   );
 
