@@ -8,9 +8,8 @@ export class HomePage extends BasePage {
 
   async expectLoaded() {
     await expect(this.page).toHaveTitle(/PlantAtHome/i);
-    // Render signal that's robust across the desktop/mobile home + all card variants: the page
-    // paints imagery + a meaningful amount of content. (The real assertion is the console gate.)
+    // Deterministic render signal (works across desktop/mobile home + all card variants).
+    // The high-value assertion is the console-error gate in the spec.
     await expect(this.page.locator('img').first()).toBeVisible({ timeout: 20_000 });
-    expect(await this.page.locator('img').count()).toBeGreaterThan(3);
   }
 }

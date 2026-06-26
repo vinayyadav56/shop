@@ -11,13 +11,20 @@ export class BasePage {
     await this.dismissLocationGate();
   }
 
-  /** Best-effort dismiss of the IP-based "we don't deliver here" / city-changed popup. */
+  /**
+   * Best-effort dismiss of the location gate, in any of its variants: the IP "we don't deliver
+   * here" popup, and the "your detected city changed" popup ("Yes, use <city>"). Accepting the
+   * affirmative button closes the modal so the page underneath is interactable.
+   */
   async dismissLocationGate() {
     const btn = this.page
-      .getByRole('button', { name: /continue anyway|continue|got it|^close$|dismiss/i })
+      .getByRole('button', {
+        name: /continue anyway|continue|got it|yes,?\s*use|keep .*city|^ok$|^close$|dismiss/i,
+      })
       .first();
     if (await btn.isVisible().catch(() => false)) {
       await btn.click().catch(() => undefined);
+      await this.page.waitForTimeout(300);
     }
   }
 
