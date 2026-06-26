@@ -29,7 +29,7 @@ export default function StyledSpaces() {
               <div key={s.label} className="group overflow-hidden rounded-2xl bg-white shadow-[0_10px_28px_-18px_rgba(34,48,26,0.25)]">
                 <div className="aspect-[4/3] overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={HD(s.id)} alt={s.label} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                  <img src={HD(s.id)} alt={s.label} loading="lazy" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
                 </div>
                 <div className="py-2.5 text-center text-[12px] font-medium text-forest-900">{s.label}</div>
               </div>

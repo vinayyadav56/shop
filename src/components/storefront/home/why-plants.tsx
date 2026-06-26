@@ -1,7 +1,7 @@
 'use client';
 import React, { useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import SafeImage from '@/components/ui/safe-image';
 import { Icon } from '../icons';
 
 const CARDS = [
@@ -55,7 +55,7 @@ export function WhyPlants() {
                 className="w-[72%] shrink-0 snap-start overflow-hidden rounded-xl border border-forest-900/10 bg-white/80 backdrop-blur-[2px] shadow-[0_18px_40px_-28px_rgba(22,48,26,0.35)] sm:w-[42%] lg:w-[24%]"
               >
                 <div className="relative aspect-[3/4] overflow-hidden rounded-t-xl">
-                  <Image src={c.img} alt={c.title} fill sizes="(max-width:1024px) 60vw, 20vw" className="object-cover" />
+                  <SafeImage src={c.img} alt={c.title} fill sizes="(max-width:1024px) 60vw, 20vw" className="object-cover" />
                 </div>
                 <div className="p-3.5">
                   <h3 className="text-[13px] font-bold text-forest-900">{c.title}</h3>
