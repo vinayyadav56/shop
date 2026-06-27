@@ -44,9 +44,17 @@ export default function HomeLayout({
 
       <main className="min-h-screen flex-1">{children}</main>
 
-      {/* Footer shows on every width — the Mobile Home reference ends with it too
-          (rendered below the phone app column, above the fixed bottom nav). */}
-      <Footer />
+      {/* Footer: the shared footer is the DESKTOP "Grow with us" Web Home footer.
+          On the phone home (<md) PahHome renders its own Mobile-Home-matched footer,
+          so suppress this one there (mirrors the header treatment) to avoid a
+          duplicate footer. Desktop home + all other pages keep it. */}
+      {pahMobile ? (
+        <div className="hidden md:block">
+          <Footer />
+        </div>
+      ) : (
+        <Footer />
+      )}
 
       <GreenPicker />
 
