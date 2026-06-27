@@ -273,10 +273,9 @@ button[data-variant="normal"]:hover:not(:disabled),
 .pa-add-btn:active { transform: scale(0.97); }
 .pa-add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* ── Canonical CTA buttons — UNIFORM across the whole storefront ─────────────
-   Use .pa-btn + a variant everywhere instead of ad-hoc bg-green-*/bg-forest-*
-   CTAs. One color, radius, padding, font. Filled buttons keep WHITE text on
-   hover (explicit product requirement). */
+/* Canonical CTA buttons — UNIFORM across the whole storefront.
+   Use .pa-btn + a variant everywhere instead of ad-hoc green/forest CTAs.
+   One color, radius, padding, font. Filled buttons keep WHITE text on hover. */
 .pa-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   font-family: var(--font-body); font-weight: 600; line-height: 1;
