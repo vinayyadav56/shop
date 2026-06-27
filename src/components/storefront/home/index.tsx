@@ -9,7 +9,6 @@ import { BestSellers } from './best-sellers';
 import { WhyPlants } from './why-plants';
 import { GiftingBand } from './gifting-band';
 import { TrustRow } from './trust-row';
-import { NewsletterSocial } from './newsletter-social';
 
 /**
  * "THE PLANT COMPANY"-style homepage — the mockup the user provided, wired to live
@@ -39,7 +38,6 @@ export function PlantCompanyHome({
       <WhyPlants />
       <GiftingBand />
       <TrustRow />
-      <NewsletterSocial />
     </>
   );
 }
