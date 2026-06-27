@@ -88,8 +88,16 @@ export function Grid({
           ? rangeMap(limit, (i) => (
               <ProductLoader key={i} uniqueKey={`product-${i}`} />
             ))
-          : products?.map((product) => (
-              <ProductCard product={product} key={product.id} />
+          : products?.map((product, index) => (
+              <ProductCard
+                product={product}
+                key={product.id}
+                // mark the first row's images as LCP candidates so next/image
+                // preloads them (clears the dev "detected as LCP" hint + helps
+                // Core Web Vitals); the desktop grid is up to 4-up, so cover the
+                // whole first row. Deeper images stay lazy.
+                priority={index < 4}
+              />
             ))}
       </div>
       {hasMore && (

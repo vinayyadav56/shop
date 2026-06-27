@@ -131,9 +131,13 @@ const StarRow = ({ rating, count }: { rating: number; count: number }) => {
 };
 
 /* ─── Reference-style listing card ─────────────────────────────── */
-type Props = { product: Product; className?: string };
+type Props = { product: Product; className?: string; priority?: boolean };
 
-const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
+const PlantAtHomeCard: React.FC<Props> = ({
+  product,
+  className = '',
+  priority = false,
+}) => {
   const [imgError, setImgError] = useState(false);
   const { openModal } = useModalAction();
   const { isAuthorized } = useUser();
@@ -202,6 +206,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
             alt={product.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={priority}
             onError={() => setImgError(true)}
             className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
           />

@@ -14,6 +14,8 @@ interface ProductCardProps {
   product: Product;
   className?: string;
   cardType?: any;
+  // preload this card's image (LCP candidates in the first grid row)
+  priority?: boolean;
 }
 const ProductCard: React.FC<ProductCardProps> = ({
   product,
