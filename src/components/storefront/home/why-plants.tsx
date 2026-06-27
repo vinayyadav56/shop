@@ -63,7 +63,7 @@ const BENEFITS: { title: string; body: string; img: string; icon: React.ReactNod
 export function WhyPlants() {
   return (
     <section className="bg-cream-50">
-      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-16 lg:py-20">
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
         {/* centred header */}
         <div className="mx-auto mb-10 max-w-[760px] text-center lg:mb-12">
           <span className="inline-flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.26em] text-forest-600">

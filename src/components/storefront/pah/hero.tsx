@@ -77,7 +77,7 @@ export function Hero() {
                 <div className="mb-[3px] text-[7px] font-semibold uppercase tracking-[0.1em] text-white/[0.82]">Limited Time Offer</div>
                 <div className="font-hanken text-[23px] font-extrabold leading-none text-white">40%<span className="text-[13px]"> OFF</span></div>
                 <div className="my-0.5 mb-2 text-[8px] text-white/[0.78]">On selected plants</div>
-                <button type="button" onClick={() => router.push('/plants/search')} className="flex w-full items-center justify-center gap-1 rounded-[9px] bg-forest-600 px-1 py-1.5 text-[10px] font-semibold text-white transition hover:bg-forest-700 active:scale-95">
+                <button type="button" onClick={() => router.push('/plants/search')} className="pa-btn pa-btn-primary pa-btn-sm w-full gap-1 rounded-[9px] px-1 py-1.5 text-[10px]">
                   Shop now
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
                 </button>

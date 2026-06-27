@@ -27,7 +27,7 @@ export function GiftingBand() {
       {/* top — copy + photo */}
       <div className="flex flex-col lg:min-h-[500px] lg:flex-row lg:items-stretch">
         {/* left copy */}
-        <div className="flex flex-col justify-center px-5 py-12 sm:px-8 lg:flex-[1_1_56%] lg:py-12 lg:pe-8 lg:ps-16">
+        <div className="flex flex-col justify-center px-5 py-12 sm:px-8 lg:flex-[1_1_56%] lg:py-16 lg:pe-8 lg:ps-12">
           <span className="inline-flex w-fit items-center gap-2.5 rounded-full border-[1.5px] border-sage-400 bg-white/45 px-[18px] py-[9px] text-[11px] font-medium uppercase tracking-[0.22em] text-forest-700">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5 text-forest-600"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg>
             Green Gifting for Corporate
@@ -53,7 +53,7 @@ export function GiftingBand() {
               </div>
             ))}
           </div>
-          <Link href="/corporate-gifting" className="mt-7 inline-flex w-fit items-center gap-3 rounded-[11px] bg-forest-800 px-[30px] py-[17px] text-[13px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-forest-900 active:scale-[0.98] sm:text-[14px]">
+          <Link href="/corporate-gifting" className="pa-btn pa-btn-primary pa-btn-lg mt-7 w-fit">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7S10 2.5 7 3.5 9 7 12 7Zm0 0s2-4.5 5-3.5S15 7 12 7Z" /></svg>
             Gift Green, Grow Together
           </Link>
@@ -65,7 +65,7 @@ export function GiftingBand() {
       </div>
 
       {/* dark assurance band */}
-      <div className="px-5 pb-6 pt-3.5 sm:px-8 lg:px-16">
+      <div className="px-5 pb-6 pt-3.5 sm:px-8 lg:px-12">
         <div className="flex flex-col items-stretch gap-5 rounded-[18px] bg-forest-800 px-6 py-5 sm:flex-row sm:gap-0 sm:px-[26px]">
           {ASSURE.map((g, i) => (
             <div key={g.title} className="relative flex flex-1 items-center gap-[18px] px-2 py-1 sm:px-[30px]">

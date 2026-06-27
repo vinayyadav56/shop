@@ -72,7 +72,7 @@ export function BestSellers({
 
   return (
     <section className="g-light-b">
-      <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:py-20">
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
         <SectionHead
           label="Bestsellers"
           title="Our Most Loved Plants"

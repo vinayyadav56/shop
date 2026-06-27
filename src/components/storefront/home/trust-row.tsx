@@ -35,7 +35,7 @@ const ITEMS: { title: string; sub: string; icon: JSX.Element }[] = [
 export function TrustRow() {
   return (
     <section className="border-t border-forest-900/10 bg-white">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-7 px-5 py-10 sm:px-8 lg:grid-cols-4 lg:gap-x-8">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-7 px-5 py-12 sm:px-8 lg:grid-cols-4 lg:gap-x-8 lg:px-12 lg:py-16">
         {ITEMS.map((it) => (
           <div key={it.title} className="flex items-center gap-3.5 px-2">
             <span className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-full bg-sage-100 text-forest-700">

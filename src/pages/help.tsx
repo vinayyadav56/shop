@@ -29,7 +29,13 @@ export default function HelpPage() {
           breadcrumbTitle={t('text-home')}
         />
         <div className="w-full max-w-screen-lg px-5 py-10 mx-auto">
-          {!isLoading && !faqs.length ? (
+          {isLoading && !faqs.length ? (
+            <div className="space-y-3">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="animate-pulse rounded bg-sage-100 h-14" />
+              ))}
+            </div>
+          ) : !faqs.length ? (
             <div className="min-h-full p-5 md:p-8 lg:p-12 2xl:p-16">
               <NotFound text="text-no-faq" className="h-96" />
             </div>

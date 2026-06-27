@@ -151,7 +151,9 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   const badge = getBadge(product);
 
   const availableQty = hasVariations && isSelected ? Number(selectedVariation?.quantity) : Number(quantity);
-  const inStock = availableQty > 0 && !(selectedVariation?.is_disable);
+  // City-inventory model: never out of stock — keep only the intentional
+  // variation "disable" toggle. Stock quantity does not gate orderability.
+  const inStock = !(selectedVariation?.is_disable);
   const needsSelection = hasVariations && !isSelected;
 
   /* cart */

@@ -6,7 +6,6 @@ import { getVariations } from '@/lib/get-variations';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
 import VariationPrice from './variation-price';
-import { useTranslation } from 'next-i18next';
 import { Routes } from '@/config/routes';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import VariationGroups from './variation-groups';
@@ -30,21 +29,12 @@ interface ShortDetailsProps {
 }
 const ShortDetails: React.FC<ShortDetailsProps> = ({ product, isSticky }) => {
   const router = useRouter();
-  const { t } = useTranslation('common');
 
   const { closeModal } = useModalAction();
   const { attributes } = useAttributes();
 
-  const {
-    name,
-    slug,
-    image,
-    unit,
-    quantity,
-    min_price,
-    max_price,
-    product_type,
-  } = product ?? {};
+  const { name, slug, image, unit, min_price, max_price, product_type } =
+    product ?? {};
 
   const navigate = (path: string) => {
     router.push(path);
@@ -167,18 +157,12 @@ const ShortDetails: React.FC<ShortDetailsProps> = ({ product, isSticky }) => {
             )}
 
             <div className={cn({ 'mt-4': hasVariations })}>
-              {quantity! > 0 ? (
-                <AddToCart
-                  data={product}
-                  variant="big"
-                  variation={selectedVariation}
-                  disabled={selectedVariation?.is_disable || !isSelected}
-                />
-              ) : (
-                <div className="rounded bg-red-500 px-3 py-2 text-sm text-light">
-                  {t('text-out-stock')}
-                </div>
-              )}
+              <AddToCart
+                data={product}
+                variant="big"
+                variation={selectedVariation}
+                disabled={selectedVariation?.is_disable || !isSelected}
+              />
             </div>
           </div>
         </div>

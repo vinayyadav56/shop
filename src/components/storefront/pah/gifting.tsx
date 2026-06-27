@@ -7,7 +7,7 @@ export function Gifting() {
   const router = useRouter();
   if (!useBannerEnabled('gifting')) return null;
   return (
-    <div className="px-5 pb-1.5 pt-[26px]">
+    <div className="mb-7 px-5">
       <div className="relative overflow-hidden rounded-[18px] bg-[radial-gradient(130%_90%_at_50%_-10%,#2a5535_0%,#16321e_42%,#0c1d12_100%)] shadow-[0_18px_40px_rgba(10,22,14,0.4)]">
         {/* botanical line art */}
         <svg className="absolute -right-[26px] -top-[30px] z-0 opacity-[0.10]" width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="#DCC07A" strokeWidth="0.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22V5" /><path d="M12 10c0-3.2 2.2-5.7 6.2-6.2C18 7.6 15.6 10 12 10Z" /><path d="M12 13c0-2.7-1.9-4.8-5.2-5.2C6.6 11.3 9 13 12 13Z" /><path d="M12 7.5c0-2 1.2-3.6 3.4-4" /></svg>
@@ -36,7 +36,7 @@ export function Gifting() {
           <p className="mx-0 mb-[18px] mt-3 max-w-[248px] font-hanken text-[12px] leading-[1.55] text-[#F5F2EA]/[0.74]">
             Hand-tied plants and gilded keepsakes, delivered with care to someone you love.
           </p>
-          <button type="button" onClick={() => router.push('/corporate-gifting')} className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(180deg,#DCC07A,#B8923E)] px-[22px] py-[11px] font-jost text-[11px] font-semibold uppercase tracking-[0.14em] text-forest-900 shadow-[0_8px_20px_rgba(184,146,62,0.35)] transition hover:shadow-[0_10px_26px_rgba(184,146,62,0.5)] active:scale-95">
+          <button type="button" onClick={() => router.push('/corporate-gifting')} className="pa-btn pa-btn-gold px-[22px] py-[11px] font-jost text-[11px] uppercase tracking-[0.14em]">
             Explore gift plants
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16301A" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
           </button>

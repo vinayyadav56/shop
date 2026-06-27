@@ -17,17 +17,16 @@ const ProfilePage = () => {
   return (
     <>
       <Seo noindex={true} nofollow={true} />
-      <div className="w-full overflow-hidden px-1 pb-1">
-        <div className="mb-8">
-          <ProfileForm user={me} />
-         <ProfileUpdateEmail user={me} />
-          <ProfileContact
-            userId={me.id}
-            profileId={me.profile?.id!}
-            contact={me.profile?.contact!}
-          />
-        </div>
-
+      {/* uniform card stack — each section renders its own Card; force a single
+          consistent gap (override the components' own bottom margins). */}
+      <div className="flex w-full flex-col gap-6 [&_>*]:!mb-0">
+        <ProfileForm user={me} />
+        <ProfileUpdateEmail user={me} />
+        <ProfileContact
+          userId={me.id}
+          profileId={me.profile?.id!}
+          contact={me.profile?.contact!}
+        />
         <Card className="w-full">
           <ProfileAddressGrid
             userId={me.id}

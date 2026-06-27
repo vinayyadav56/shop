@@ -20,7 +20,7 @@ export function BestSellers() {
   const list = (products ?? []).filter(Boolean).slice(0, 12);
 
   return (
-    <div>
+    <div className="mb-7">
       <div className="mb-1 px-5">
         <div className="mb-[5px] font-hanken text-[9.5px] font-bold uppercase tracking-[0.2em] text-forest-600">Best Sellers</div>
         <div className="flex items-center justify-between gap-3">

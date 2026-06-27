@@ -52,7 +52,7 @@ export function WhyPlants() {
       <div className="mx-5 mt-3 flex items-center gap-3 rounded-[13px] border border-sage-200 bg-white px-3.5 py-3 shadow-[0_2px_8px_rgba(20,40,24,0.05)]">
         <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-forest-800 text-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg></span>
         <p className="flex-1 text-[11.5px] leading-[1.35] text-forest-900">A simple step towards <strong className="font-bold">a healthier you</strong> & planet.</p>
-        <Link href="/plants/search" className="shrink-0 rounded-[9px] bg-forest-600 px-3.5 py-2 text-[11px] font-bold text-white transition active:scale-[0.96]">Shop</Link>
+        <Link href="/plants/search" className="pa-btn pa-btn-primary pa-btn-sm shrink-0 px-3.5 py-2 text-[11px] font-bold">Shop</Link>
       </div>
     </div>
   );

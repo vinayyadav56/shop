@@ -49,7 +49,7 @@ function LeadForm() {
         <div className="mb-3 text-4xl">🌿</div>
         <h3 className="text-xl font-bold text-gray-900">Request received!</h3>
         <p className="mt-2 text-gray-600">Our garden experts will call you within one business day to design your free plan.</p>
-        <a href={`tel:${PHONE}`} className="mt-5 inline-block rounded-full bg-green-600 px-6 py-3 font-semibold text-white">Or call us now</a>
+        <a href={`tel:${PHONE}`} className="pa-btn pa-btn-primary mt-5">Or call us now</a>
       </div>
     );
   }
@@ -85,7 +85,7 @@ function LeadForm() {
           className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-green-500 focus:outline-0" />
       </div>
       <button type="submit" disabled={isLoading}
-        className="mt-5 w-full rounded-full bg-green-600 px-6 py-4 text-base font-bold text-white transition hover:bg-green-700 disabled:opacity-60">
+        className="pa-btn pa-btn-primary pa-btn-lg mt-5 w-full">
         {isLoading ? 'Sending…' : 'Get my free garden plan →'}
       </button>
       <p className="mt-3 text-center text-xs text-gray-400">🔒 We never share your details. Trusted by 2,000+ plant parents.</p>
@@ -121,10 +121,10 @@ export default function GardenServicePage() {
               Balcony, terrace or backyard — we design, plant and maintain a beautiful green space tailored to you. Seeds, soil, tools and a gardener who visits, all in one package.
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-3">
-              <a href="#quote" className="rounded-full bg-green-500 px-7 py-4 text-base font-bold text-white shadow-lg transition hover:bg-green-400">
+              <a href="#quote" className="pa-btn pa-btn-primary pa-btn-lg">
                 Get my free garden plan
               </a>
-              <a href={`tel:${PHONE}`} className="rounded-full border border-white/40 bg-white/10 px-6 py-4 text-base font-semibold text-white backdrop-blur">
+              <a href={`tel:${PHONE}`} className="pa-btn pa-btn-outline pa-btn-lg border-white/40 bg-white/10 text-white backdrop-blur hover:border-white hover:bg-white/20">
                 📞 Call an expert
               </a>
             </div>
@@ -218,7 +218,7 @@ export default function GardenServicePage() {
                     <li key={j} className="flex gap-2"><span className="text-green-400">✓</span><span>{it.name}{it.qty && it.qty > 1 ? ` (${it.qty})` : ''}</span></li>
                   ))}
                 </ul>
-                <a href="#quote" className="mt-6 block rounded-full bg-green-500 py-3 text-center font-semibold text-white transition hover:bg-green-400">Get a custom quote</a>
+                <a href="#quote" className="pa-btn pa-btn-primary mt-6 w-full">Get a custom quote</a>
               </div>
             ))}
           </div>
@@ -263,7 +263,7 @@ export default function GardenServicePage() {
         <div className="mx-auto max-w-3xl px-5">
           <h2 className="text-3xl font-bold">Ready for a garden you’ll actually keep alive?</h2>
           <p className="mt-2 text-green-50/90">Get a free, no-obligation plan tailored to your space today.</p>
-          <a href="#quote" className="mt-6 inline-block rounded-full bg-white px-8 py-4 font-bold text-green-700 shadow-lg">Get my free garden plan →</a>
+          <a href="#quote" className="pa-btn pa-btn-outline pa-btn-lg mt-6 border-white bg-white text-green-700 shadow-lg hover:bg-green-700 hover:text-white">Get my free garden plan →</a>
         </div>
       </section>
     </div>

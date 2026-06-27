@@ -60,7 +60,7 @@ function PackageCard({ pkg }: { pkg: GardenPackage }) {
       {/* Pay CTA */}
       {pkg.payment_status !== 'paid' && pkg.status === 'awaiting_payment' && (
         <button onClick={() => pay(pkg.id)} disabled={paying}
-          className="mt-5 w-full rounded-full bg-green-600 py-3 font-semibold text-white transition hover:bg-green-700 disabled:opacity-60">
+          className="pa-btn pa-btn-primary mt-5 w-full">
           {paying ? 'Opening payment…' : `Pay ${fmtINR(pkg.price)} & activate`}
         </button>
       )}
@@ -116,7 +116,7 @@ export default function MyPackagesPage() {
           <div className="text-4xl">🌱</div>
           <h3 className="mt-3 text-lg font-bold text-gray-900">No packages yet</h3>
           <p className="mt-1 text-gray-500">Want a garden built and cared for at home? Get a free plan tailored to your space.</p>
-          <a href="/garden-service" className="mt-5 inline-block rounded-full bg-green-600 px-6 py-3 font-semibold text-white">Explore garden service →</a>
+          <a href="/garden-service" className="pa-btn pa-btn-primary mt-5">Explore garden service →</a>
         </div>
       ) : (
         <div className="space-y-6">

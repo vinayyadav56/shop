@@ -48,7 +48,7 @@ export function CorporateGifting() {
         ))}
       </div>
       {/* CTA */}
-      <Link href="/corporate-gifting" className="mt-5 flex w-full items-center justify-center gap-2.5 rounded-[12px] bg-forest-800 px-4 py-4 text-[12px] font-semibold uppercase tracking-[0.12em] text-white transition active:scale-[0.98]">
+      <Link href="/corporate-gifting" className="pa-btn pa-btn-primary mt-5 w-full gap-2.5 rounded-[12px] px-4 py-4 text-[12px] uppercase tracking-[0.12em]">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7S10 2.5 7 3.5 9 7 12 7Zm0 0s2-4.5 5-3.5S15 7 12 7Z" /></svg>
         Gift Green, Grow Together
       </Link>

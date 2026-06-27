@@ -120,6 +120,7 @@ export default function CategoryPage() {
           hasMore={hasMore}
           error={productsError}
           column="six"
+          categoryName={category?.name}
         />
       </section>
     </div>

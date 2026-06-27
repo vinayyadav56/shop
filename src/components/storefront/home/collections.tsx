@@ -71,7 +71,7 @@ function CollectionCard({ c }: { c: (typeof COLLECTIONS)[number] }) {
 export function Collections() {
   return (
     <section className="g-light-a">
-      <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:py-16">
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
         <SectionHead
           label="Curated for You"
           title="Shop Our Best Collections"

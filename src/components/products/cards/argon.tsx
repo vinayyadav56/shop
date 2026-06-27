@@ -25,15 +25,8 @@ type ArgonProps = {
 const Argon: React.FC<ArgonProps> = ({ product, className }) => {
   const { t } = useTranslation('common');
   const { query } = useRouter();
-  const {
-    name,
-    image,
-    quantity,
-    min_price,
-    max_price,
-    product_type,
-    is_external,
-  } = product ?? {};
+  const { name, image, min_price, max_price, product_type, is_external } =
+    product ?? {};
   const { price, basePrice, discount } = usePrice({
     amount: product.sale_price ? product.sale_price : product.price!,
     baseAmount: product.price,
@@ -87,32 +80,18 @@ const Argon: React.FC<ArgonProps> = ({ product, className }) => {
 
         <div className="absolute top-3 ltr:right-3 rtl:left-3 md:top-4 ltr:md:right-4 rtl:md:left-4">
           {product_type.toLowerCase() === 'variable' || is_external ? (
-            <>
-              {Number(quantity) > 0 && (
-                <button
-                  onClick={handleProductQuickView}
-                  className="flex h-7 w-7 items-center justify-center rounded border border-border-200 bg-light text-sm text-heading transition-colors hover:border-accent hover:bg-accent hover:text-light focus:border-accent focus:bg-accent focus:text-light focus:outline-0 md:h-9 md:w-9"
-                >
-                  {is_external ? (
-                    <ExternalIcon className="h-5 w-5 stroke-2" />
-                  ) : (
-                    <PlusIcon className="h-5 w-5 stroke-2" />
-                  )}
-                </button>
+            <button
+              onClick={handleProductQuickView}
+              className="flex h-7 w-7 items-center justify-center rounded border border-border-200 bg-light text-sm text-heading transition-colors hover:border-accent hover:bg-accent hover:text-light focus:border-accent focus:bg-accent focus:text-light focus:outline-0 md:h-9 md:w-9"
+            >
+              {is_external ? (
+                <ExternalIcon className="h-5 w-5 stroke-2" />
+              ) : (
+                <PlusIcon className="h-5 w-5 stroke-2" />
               )}
-            </>
+            </button>
           ) : (
-            <>
-              {Number(quantity) > 0 && (
-                <AddToCart variant="argon" data={product} />
-              )}
-            </>
-          )}
-
-          {Number(quantity) <= 0 && (
-            <div className="rounded bg-red-500 px-2 py-1 text-xs text-light">
-              {t('text-out-stock')}
-            </div>
+            <AddToCart variant="argon" data={product} />
           )}
         </div>
       </div>

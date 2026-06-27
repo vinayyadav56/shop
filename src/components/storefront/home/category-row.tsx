@@ -85,7 +85,7 @@ function Thumb({ img, icon }: { img: string; icon: JSX.Element }) {
 export function CategoryRow() {
   return (
     <section className="relative z-20 -mt-14 sm:-mt-20">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
         <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
           {CATEGORIES.map((c, i) => (
             <motion.div

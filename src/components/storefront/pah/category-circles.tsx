@@ -27,7 +27,7 @@ export function CategoryCircles() {
   const list = applyCuration((categories ?? []).filter((c) => c?.slug), homeCategories).slice(0, 12);
 
   return (
-    <div className="pah-scroll mb-6 flex gap-[18px] overflow-x-auto px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="pah-scroll mb-7 flex gap-[18px] overflow-x-auto px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {isLoading && list.length === 0
         ? Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="flex w-16 shrink-0 flex-col items-center gap-2">

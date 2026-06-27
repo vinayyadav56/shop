@@ -100,23 +100,10 @@ function WishlistItem({ product }: { product: Product }) {
           )}
 
           <div className="flex items-center space-x-6 rtl:space-x-reverse sm:justify-end">
-            {Number(product?.quantity) > 0 && (
-              <>
-                {product?.product_type.toLowerCase() === 'variable' ? (
-                  <AddToCartBtn
-                    variant="text"
-                    onClick={handleVariableProduct}
-                  />
-                ) : (
-                  <AddToCart variant="text" data={product} />
-                )}
-              </>
-            )}
-
-            {Number(product?.quantity) <= 0 && (
-              <span className="whitespace-nowrap text-sm font-semibold text-red-300 sm:mt-0">
-                {t('text-out-stock')}
-              </span>
+            {product?.product_type.toLowerCase() === 'variable' ? (
+              <AddToCartBtn variant="text" onClick={handleVariableProduct} />
+            ) : (
+              <AddToCart variant="text" data={product} />
             )}
             <span className="flex h-7 w-px border-r border-dashed border-gray-300" />
             <button

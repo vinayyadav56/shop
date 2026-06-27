@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import cn from 'classnames';
 import Button from '@/components/ui/button';
 import ProductLoader from '@/components/ui/loaders/product-loader';
-import NotFound from '@/components/ui/not-found';
+import { EmptyProducts } from '@/components/ui/empty-products';
 import rangeMap from '@/lib/range-map';
 import ProductCard from '@/components/products/cards/card';
 import ErrorMessage from '@/components/ui/error-message';
@@ -25,6 +25,7 @@ interface Props {
   isLoadingMore?: boolean;
   hasMore?: boolean;
   className?: string;
+  categoryName?: string;
 }
 
 export function Grid({
@@ -38,6 +39,7 @@ export function Grid({
   hasMore,
   limit = PRODUCTS_PER_PAGE,
   column = 'auto',
+  categoryName,
 }: Props) {
   const { t } = useTranslation('common');
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
@@ -64,7 +66,7 @@ export function Grid({
   if (!isLoading && !products?.length) {
     return (
       <div className="w-full min-h-full px-4 pt-6 pb-8 lg:p-8">
-        <NotFound text="text-not-found" className="w-7/12 mx-auto" />
+        <EmptyProducts categoryName={categoryName} />
       </div>
     );
   }

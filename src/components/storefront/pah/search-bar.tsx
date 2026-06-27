@@ -6,7 +6,7 @@ export function SearchBar() {
   const router = useRouter();
   const [q, setQ] = React.useState('');
   return (
-    <div className="relative z-[5] -mt-[25px] mb-[22px] px-5">
+    <div className="relative z-[5] -mt-[25px] mb-7 px-5">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -23,7 +23,7 @@ export function SearchBar() {
           aria-label="Search"
           className="min-w-0 flex-1 bg-transparent py-2 font-hanken text-[14px] text-forest-900 outline-none placeholder:text-stone-500"
         />
-        <button type="submit" className="rounded-[11px] bg-forest-600 px-[15px] py-[9px] font-hanken text-[14px] font-semibold text-white transition hover:bg-forest-700 active:scale-95">Search</button>
+        <button type="submit" className="pa-btn pa-btn-primary pa-btn-sm rounded-[11px] px-[15px] py-[9px] text-[14px]">Search</button>
       </form>
     </div>
   );

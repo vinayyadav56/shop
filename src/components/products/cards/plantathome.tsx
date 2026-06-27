@@ -152,7 +152,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
   const badge = getBadge(product.tags);
   const ratingVal = Number((product as any).ratings) || 0;
   const reviewCount = Number((product as any).total_reviews) || 0;
-  const inStock = Number(product.quantity) > 0;
+  const inStock = true; // city-inventory model: never out of stock (city availability gated elsewhere)
   const isVariable = product.product_type?.toLowerCase() === 'variable';
   const image = product.image?.original ?? product.image?.thumbnail ?? '';
 

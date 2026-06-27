@@ -20,7 +20,7 @@ type OganessonProps = {
 
 const Oganesson: React.FC<OganessonProps> = ({ product, className }) => {
   const { t } = useTranslation('common');
-  const { name, image, quantity } = product ?? {};
+  const { name, image } = product ?? {};
   const { price, basePrice, discount } = usePrice({
     amount: product.sale_price ? product.sale_price : product.price!,
     baseAmount: product.price,
@@ -45,13 +45,7 @@ const Oganesson: React.FC<OganessonProps> = ({ product, className }) => {
           </div>
         )}
         <div className="absolute bottom-4 ltr:right-4 rtl:left-4">
-          {Number(quantity) > 0 ? (
-            <AddToCart variant="oganesson" data={product} />
-          ) : (
-            <div className="rounded bg-red-500 px-2 py-1 text-xs text-light">
-              {t('text-out-stock')}
-            </div>
-          )}
+          <AddToCart variant="oganesson" data={product} />
         </div>
       </div>
       {/* End of product image */}
