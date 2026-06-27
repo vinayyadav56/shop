@@ -63,18 +63,18 @@ const BENEFITS: { title: string; body: string; img: string; icon: React.ReactNod
 export function WhyPlants() {
   return (
     <section className="bg-cream-50">
-      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-16 lg:pb-[60px] lg:pt-[66px]">
         {/* centred header */}
-        <div className="mx-auto mb-10 max-w-[760px] text-center lg:mb-12">
-          <span className="inline-flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.26em] text-forest-600">
+        <div className="mx-auto mb-[46px] max-w-[760px] text-center">
+          <span className="inline-flex items-center gap-2.5 font-jost text-[12px] font-medium uppercase tracking-[0.26em] text-forest-600">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[15px] w-[15px] text-forest-500"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg>
             Why We Need Plants
           </span>
           <div className="mx-auto mt-3.5 h-0.5 w-[54px] rounded-full bg-forest-500" />
-          <h2 className="font-heading mt-4 text-[2.4rem] font-bold not-italic leading-[1.02] tracking-[-0.012em] text-forest-900 sm:text-[3.25rem]">
+          <h2 className="font-pahserif mt-[18px] text-[40px] font-bold not-italic leading-[1.02] tracking-[-0.012em] text-forest-900 sm:text-[56px]">
             Small Plants, Big Impact
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-stone-500 sm:text-[17px]">
+          <p className="mx-auto mt-[18px] max-w-xl font-hanken text-[15px] leading-[1.55] text-stone-500 sm:text-[17px]">
             Plants do more than just beautify your space — they nourish your well-being and support a{' '}
             <strong className="font-bold text-forest-700">healthier planet.</strong>
           </p>
@@ -85,7 +85,7 @@ export function WhyPlants() {
           {BENEFITS.map((b) => (
             <div
               key={b.title}
-              className="group relative overflow-hidden rounded-[18px] border border-forest-900/10 bg-white shadow-[0_2px_12px_rgba(27,94,32,0.08)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_4px_24px_rgba(27,94,32,0.12)]"
+              className="group relative overflow-hidden rounded-[18px] border border-kraft-200 bg-white shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,48,26,0.09)]"
             >
               <div className="relative h-[140px] overflow-hidden bg-cream-100 sm:h-[160px] lg:h-[178px]">
                 <SafeImage src={b.img} alt={b.title} fill sizes="(max-width:768px) 50vw, (max-width:1024px) 33vw, 16vw" className="object-cover" />
@@ -95,27 +95,27 @@ export function WhyPlants() {
                 {b.icon}
               </div>
               <div className="px-[18px] pb-[26px] pt-[42px] text-center">
-                <h3 className="text-[15px] font-bold leading-[1.2] text-forest-900 sm:text-[16px]">{b.title}</h3>
-                <div className="mx-auto my-[13px] h-0.5 w-[26px] rounded-full bg-forest-500" />
-                <p className="text-[12px] leading-[1.62] text-stone-500 sm:text-[12.5px]">{b.body}</p>
+                <h3 className="text-[16px] font-bold leading-[1.2] text-forest-900">{b.title}</h3>
+                <div className="mx-auto mb-[14px] mt-[11px] h-0.5 w-[26px] rounded-full bg-forest-500" />
+                <p className="text-[12.5px] leading-[1.62] text-stone-500">{b.body}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* closing CTA band */}
-        <div className="mt-9 flex flex-col items-center gap-5 rounded-[18px] border border-sage-200 bg-sage-100 p-6 text-center sm:flex-row sm:gap-7 sm:px-8 sm:text-start">
+        <div className="mt-[38px] flex flex-col items-center gap-5 rounded-[18px] border border-sage-200 bg-sage-100 p-6 text-center sm:flex-row sm:gap-[28px] sm:px-8 sm:py-6 sm:text-start">
           <div className="flex h-[62px] w-[62px] shrink-0 items-center justify-center rounded-full bg-forest-800 text-white shadow-[0_8px_20px_rgba(20,40,24,0.22)]">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[25px] w-[25px]"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg>
           </div>
-          <div className="hidden w-px self-stretch bg-sage-300 sm:block" />
-          <p className="flex-1 text-[16px] leading-[1.45] text-forest-900 sm:text-[18px]">
+          <div className="hidden w-px self-stretch bg-sage-300 sm:my-[3px] sm:block" />
+          <p className="flex-1 font-hanken text-[16px] leading-[1.45] text-forest-900 sm:text-[18px]">
             Adding plants to your space is a simple step towards <strong className="font-bold">a healthier you</strong> and{' '}
             <strong className="font-bold">a healthier planet.</strong>
           </p>
           <Link
             href="/plants/search"
-            className="inline-flex shrink-0 items-center gap-2.5 rounded-xl bg-ds-accent px-6 py-3.5 text-[15px] font-bold text-white transition hover:opacity-90 active:scale-[0.97]"
+            className="inline-flex shrink-0 items-center gap-[9px] rounded-xl bg-ds-accent px-[26px] py-[14px] font-jost text-[15px] font-bold text-white transition hover:opacity-90 active:scale-[0.97]"
           >
             Bring Nature Home
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M5 12h13M13 6l6 6-6 6" /></svg>

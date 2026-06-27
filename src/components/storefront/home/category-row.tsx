@@ -65,7 +65,13 @@ const CATEGORIES: {
 function Thumb({ img, icon }: { img: string; icon: JSX.Element }) {
   const [err, setErr] = React.useState(false);
   return (
-    <div className="relative grid h-[84px] w-[84px] shrink-0 place-items-center overflow-hidden rounded-lg bg-gradient-to-br from-[var(--ds-accent-soft)] to-[#D2E5CC] text-[var(--ds-accent)]">
+    <div
+      className={`relative grid h-[84px] w-[84px] shrink-0 place-items-center overflow-hidden rounded-lg ${
+        err
+          ? 'bg-gradient-to-br from-[var(--ds-accent-soft)] to-[#D2E5CC] text-[var(--ds-accent)]'
+          : 'bg-transparent'
+      }`}
+    >
       {!err ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -73,7 +79,7 @@ function Thumb({ img, icon }: { img: string; icon: JSX.Element }) {
           alt=""
           loading="lazy"
           onError={() => setErr(true)}
-          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-110"
+          className="absolute inset-0 h-full w-full object-cover"
         />
       ) : (
         icon
@@ -84,9 +90,9 @@ function Thumb({ img, icon }: { img: string; icon: JSX.Element }) {
 
 export function CategoryRow() {
   return (
-    <section className="relative z-20 -mt-14 sm:-mt-20">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-        <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
+    <section className="relative z-[5] -mt-[56px]">
+      <div className="px-[64px]">
+        <div className="grid grid-flow-col auto-cols-fr gap-2">
           {CATEGORIES.map((c, i) => (
             <motion.div
               key={c.title}
@@ -97,13 +103,16 @@ export function CategoryRow() {
             >
               <Link
                 href={c.href}
-                className="group flex h-full items-center justify-between gap-3 rounded-[9px] bg-[#F3F2E8] p-3 shadow-[0_8px_22px_rgba(20,40,24,0.10)] ring-1 ring-forest-900/[0.05] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(20,40,24,0.15)]"
+                className="group flex h-full items-center gap-[11px] rounded-[9px] border border-[#E9E3D6] bg-[#F3F2E8] px-3 py-[11px] shadow-[0_8px_22px_rgba(20,40,24,0.10)] transition duration-300 hover:-translate-y-[3px] hover:shadow-[0_14px_30px_rgba(20,40,24,0.15)]"
               >
-                <div className="min-w-0">
-                  <h3 className="text-[14px] font-semibold leading-tight text-forest-900">{c.title}</h3>
-                  <p className="mt-1 text-[11.5px] leading-snug text-stone-500">{c.desc}</p>
-                  <span className="mt-2 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[var(--ds-accent)] transition group-hover:gap-1.5">
-                    Shop Now <span aria-hidden>→</span>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-hanken text-[14px] font-bold leading-[1.15] text-forest-900">{c.title}</h3>
+                  <p className="mb-2 mt-1 font-hanken text-[10.5px] leading-[1.35] text-stone-500">{c.desc}</p>
+                  <span className="inline-flex items-center gap-[5px] whitespace-nowrap font-hanken text-[11px] font-bold text-forest-700">
+                    Shop Now
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                      <path d="M5 12h13M13 6l6 6-6 6" />
+                    </svg>
                   </span>
                 </div>
                 <Thumb img={c.img} icon={c.icon} />

@@ -26,11 +26,11 @@ export function BestSellers() {
         <div className="flex items-center justify-between gap-3">
           <h2 className="flex items-center gap-1.5 font-hanken text-[18px] font-extrabold tracking-[-0.01em] text-forest-900">
             Our Most Loved Plants
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4E8244" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M11 20c-4 0-7-3-7-7 0-1 .2-2 .6-2.8C8 11 11 13 11 17Z" /><path d="M11 20c4 0 9-3 9-9 0-2-.5-4-1-5-3 .5-8 2.5-8 9Z" /></svg>
+            <i className="fa-solid fa-leaf text-[15px] text-forest-500" aria-hidden />
           </h2>
           <Link href="/plants/search" className="flex shrink-0 items-center gap-[3px] text-[12.5px] font-semibold text-forest-700">
             View all
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2E5E2A" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+            <i className="fa-solid fa-arrow-right text-[11px]" aria-hidden />
           </Link>
         </div>
       </div>

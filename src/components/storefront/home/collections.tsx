@@ -2,7 +2,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { SectionHead } from './section-heading';
 
 const COLLECTIONS: { title: string; desc: string; href: string; img: string }[] = [
   {
@@ -42,7 +41,7 @@ function CollectionCard({ c }: { c: (typeof COLLECTIONS)[number] }) {
   return (
     <Link
       href={c.href}
-      className="group relative block aspect-[4/5] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1E5A35] to-[#0A2E1B] shadow-[0_24px_60px_-34px_rgba(13,59,36,0.6)]"
+      className="group relative block h-[212px] cursor-pointer overflow-hidden rounded-[16px] bg-gradient-to-br from-[#1E5A35] to-[#0A2E1B] shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,48,26,0.09)]"
     >
       {!err ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -51,17 +50,30 @@ function CollectionCard({ c }: { c: (typeof COLLECTIONS)[number] }) {
           alt={c.title}
           loading="lazy"
           onError={() => setErr(true)}
-          className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]"
+          className="absolute inset-0 h-full w-full object-cover"
         />
       ) : null}
       <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(9,22,13,0.9)_4%,rgba(9,22,13,0.42)_44%,rgba(9,22,13,0.03)_74%)]" />
-      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-        <h3 className="font-playfair text-[1.25rem] font-bold leading-tight text-white sm:text-[1.4rem]">
+      <div className="absolute inset-x-0 bottom-0 p-[16px] text-white">
+        <div className="text-[15px] font-bold leading-[1.16] text-white">
           {c.title}
-        </h3>
-        <p className="mt-0.5 text-[12px] text-white/80">{c.desc}</p>
-        <span className="mt-2.5 inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-[#A8E6B0] opacity-0 transition group-hover:opacity-100">
-          Explore <span aria-hidden>→</span>
+        </div>
+        <div className="mt-[4px] text-[11px] leading-[1.35] text-white/[0.82]">{c.desc}</div>
+        <span className="mt-[11px] inline-flex items-center gap-[5px] text-[12px] font-bold text-[#8FD56F]">
+          Explore
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M5 12h13M13 6l6 6-6 6" />
+          </svg>
         </span>
       </div>
     </Link>
@@ -70,27 +82,49 @@ function CollectionCard({ c }: { c: (typeof COLLECTIONS)[number] }) {
 
 export function Collections() {
   return (
-    <section className="g-light-a">
-      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
-        <SectionHead
-          label="Curated for You"
-          title="Shop Our Best Collections"
-          viewAllHref="/plants/search"
-          viewAllText="View All Collections"
-        />
-        <div className="mt-8 grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
-          {COLLECTIONS.map((c, i) => (
-            <motion.div
-              key={c.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.5, delay: (i % 5) * 0.07, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <CollectionCard c={c} />
-            </motion.div>
-          ))}
+    <section className="g-light-a px-5 pb-[40px] pt-[40px] sm:px-8 lg:px-[64px] lg:pb-[52px] lg:pt-[48px]">
+      <div className="mb-[22px] flex items-end justify-between gap-4">
+        <div>
+          <div className="mb-[9px] font-jost text-[11px] font-medium uppercase tracking-[0.2em] text-forest-600">
+            Curated For You
+          </div>
+          <h2 className="m-0 flex items-center gap-[9px] font-pahserif text-[34px] font-semibold tracking-[-0.005em] text-forest-900 sm:text-[46px]">
+            Shop Our Best Collections
+            <i className="fa-solid fa-spa text-[23px] text-forest-500" aria-hidden />
+          </h2>
         </div>
+        <Link
+          href="/plants/search"
+          className="inline-flex shrink-0 items-center gap-[6px] whitespace-nowrap text-[14px] font-semibold text-forest-700"
+        >
+          View All Collections
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M5 12h13M13 6l6 6-6 6" />
+          </svg>
+        </Link>
+      </div>
+      <div className="grid grid-cols-2 gap-[16px] sm:grid-cols-3 lg:grid-cols-5">
+        {COLLECTIONS.map((c, i) => (
+          <motion.div
+            key={c.title}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.5, delay: (i % 5) * 0.07, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <CollectionCard c={c} />
+          </motion.div>
+        ))}
       </div>
     </section>
   );

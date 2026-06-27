@@ -7,7 +7,7 @@ export function Gifting() {
   const router = useRouter();
   if (!useBannerEnabled('gifting')) return null;
   return (
-    <div className="mb-7 px-5">
+    <div className="px-5 pb-[6px] pt-[26px]">
       <div className="relative overflow-hidden rounded-[18px] bg-[radial-gradient(130%_90%_at_50%_-10%,#2a5535_0%,#16321e_42%,#0c1d12_100%)] shadow-[0_18px_40px_rgba(10,22,14,0.4)]">
         {/* botanical line art */}
         <svg className="absolute -right-[26px] -top-[30px] z-0 opacity-[0.10]" width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="#DCC07A" strokeWidth="0.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22V5" /><path d="M12 10c0-3.2 2.2-5.7 6.2-6.2C18 7.6 15.6 10 12 10Z" /><path d="M12 13c0-2.7-1.9-4.8-5.2-5.2C6.6 11.3 9 13 12 13Z" /><path d="M12 7.5c0-2 1.2-3.6 3.4-4" /></svg>
@@ -27,7 +27,7 @@ export function Gifting() {
           <span className="font-jost text-[9.5px] font-medium uppercase tracking-[0.34em] text-[#DCC07A]">The Art of Gifting</span>
           <div className="my-[11px] mb-[13px] flex items-center gap-[9px]">
             <span className="h-px w-[34px] bg-[linear-gradient(90deg,rgba(220,192,122,0),#C9A24B)]" />
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DCC07A" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21v-8" /><path d="M12 13c0-3 2-5.2 5.4-5.6C17.2 11 14.8 13 12 13Z" /><path d="M12 15c0-2.4-1.7-4.3-4.6-4.7C7.2 13.2 9.3 15 12 15Z" /></svg>
+            <i className="fa-solid fa-seedling text-[14px] text-[#DCC07A]" aria-hidden />
             <span className="h-px w-[34px] bg-[linear-gradient(90deg,#C9A24B,rgba(220,192,122,0))]" />
           </div>
           <h3 className="m-0 font-pahserif text-[30px] font-medium leading-[1.06] tracking-[0.01em] text-[#FCFBF6]">
@@ -38,7 +38,7 @@ export function Gifting() {
           </p>
           <button type="button" onClick={() => router.push('/corporate-gifting')} className="pa-btn pa-btn-gold px-[22px] py-[11px] font-jost text-[11px] uppercase tracking-[0.14em]">
             Explore gift plants
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16301A" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+            <i className="fa-solid fa-arrow-right text-[12px]" aria-hidden />
           </button>
         </div>
       </div>

@@ -45,7 +45,7 @@ export default class CustomDocument extends Document {
           />
           {/* Cormorant Garamond — editorial serif for premium product/display headings */}
           <link
-            href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
             rel="stylesheet"
           />
           {/* Playfair Display — luxury display serif for the hero + premium headings */}
@@ -62,6 +62,11 @@ export default class CustomDocument extends Document {
           <link
             href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Jost:wght@300;400;500;600&display=swap"
             rel="stylesheet"
+          />
+          {/* Font Awesome 6.5.2 — icon system used by the Claude Design home (fa-solid …) */}
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
           />
         </Head>
         <body>

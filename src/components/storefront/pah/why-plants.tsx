@@ -23,36 +23,36 @@ function CardImg({ src, alt }: { src: string; alt: string }) {
 
 export function WhyPlants() {
   return (
-    <div className="mb-7">
+    <div className="px-5 pb-2 pt-[30px]">
       {/* header */}
-      <div className="px-5 text-center">
-        <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.26em] text-forest-600">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5 text-forest-500"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg>
+      <div className="mx-auto mb-5 max-w-[308px] text-center">
+        <span className="inline-flex items-center gap-[7px] font-jost text-[10px] font-medium uppercase tracking-[0.22em] text-forest-600">
+          <i className="fa-solid fa-seedling text-[12px] text-forest-500" aria-hidden />
           Why We Need Plants
         </span>
         <div className="mx-auto mt-2.5 h-0.5 w-[42px] rounded-full bg-forest-500" />
-        <h2 className="font-pahserif mt-2 text-[26px] font-bold leading-[1.05] tracking-[-0.01em] text-forest-900">Small Plants, Big Impact</h2>
-        <p className="mx-auto mt-2 max-w-[300px] text-[12px] leading-[1.5] text-stone-500">Plants nourish your well-being and support a <strong className="font-bold text-forest-700">healthier planet.</strong></p>
+        <h2 className="font-pahserif mt-3 text-[30px] font-bold leading-[1.04] tracking-[-0.01em] text-forest-900">Small Plants, Big Impact</h2>
+        <p className="mt-2.5 text-[12.5px] leading-[1.55] text-stone-500">Plants do more than beautify your space — they nourish your well-being and support a <strong className="font-bold text-forest-700">healthier planet.</strong></p>
       </div>
       {/* carousel */}
-      <div className="pah-scroll mt-4 flex gap-3 overflow-x-auto px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="pah-scroll -mx-5 flex gap-3 overflow-x-auto px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {BENEFITS.map((b) => (
-          <div key={b.title} className="relative w-[152px] shrink-0 overflow-hidden rounded-2xl border border-kraft-200 bg-white shadow-[0_2px_8px_rgba(34,48,26,0.06)]">
+          <div key={b.title} className="relative w-[152px] shrink-0 overflow-hidden rounded-2xl border border-kraft-200 bg-white shadow-[0_2px_8px_rgba(34,48,26,0.07)]">
             <div className="relative h-[96px] bg-cream-100"><CardImg src={b.img} alt={b.title} /></div>
             <div className="absolute left-1/2 top-[96px] grid h-[46px] w-[46px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-sage-200 bg-white text-forest-700 shadow-[0_5px_14px_rgba(20,40,24,0.14)]">{b.icon}</div>
             <div className="px-[11px] pb-4 pt-[29px] text-center">
               <h3 className="text-[13px] font-bold leading-[1.2] text-forest-900">{b.title}</h3>
-              <div className="mx-auto my-2 h-0.5 w-[22px] rounded-full bg-forest-500" />
+              <div className="mx-auto mb-[9px] mt-2 h-0.5 w-[22px] rounded-full bg-forest-500" />
               <p className="text-[10.5px] leading-[1.5] text-stone-500">{b.body}</p>
             </div>
           </div>
         ))}
       </div>
       {/* closing CTA strip */}
-      <div className="mx-5 mt-3 flex items-center gap-3 rounded-[13px] border border-sage-200 bg-white px-3.5 py-3 shadow-[0_2px_8px_rgba(20,40,24,0.05)]">
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-forest-800 text-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg></span>
-        <p className="flex-1 text-[11.5px] leading-[1.35] text-forest-900">A simple step towards <strong className="font-bold">a healthier you</strong> & planet.</p>
-        <Link href="/plants/search" className="pa-btn pa-btn-primary pa-btn-sm shrink-0 px-3.5 py-2 text-[11px] font-bold">Shop</Link>
+      <div className="mt-4 flex items-center gap-[11px] rounded-[13px] border border-kraft-200 bg-white py-2 pl-3 pr-2 shadow-[0_2px_8px_rgba(20,40,24,0.05)]">
+        <span className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-forest-800 text-white"><i className="fa-solid fa-seedling text-[15px]" aria-hidden /></span>
+        <p className="min-w-0 flex-1 text-[11.5px] leading-[1.32] text-forest-900">A simple step toward <strong className="font-bold">a healthier you</strong> &amp; <strong className="font-bold">planet.</strong></p>
+        <Link href="/plants/search" className="inline-flex shrink-0 items-center gap-[5px] rounded-[9px] bg-forest-600 px-[14px] py-[9px] font-hanken text-[11.5px] font-bold text-white">Shop<i className="fa-solid fa-arrow-right text-[11px]" aria-hidden /></Link>
       </div>
     </div>
   );
