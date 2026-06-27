@@ -37,7 +37,7 @@ export function Collections() {
           Shop Our Best Collections
           <i className="fa-solid fa-leaf text-[15px] text-forest-500" aria-hidden />
         </h2>
-        <Link href="/categories" className="flex shrink-0 items-center gap-[3px] text-[12.5px] font-semibold text-forest-700">
+        <Link href="/plants/search" className="flex shrink-0 items-center gap-[3px] text-[12.5px] font-semibold text-forest-700">
           View all
           <i className="fa-solid fa-arrow-right text-[11px]" aria-hidden />
         </Link>

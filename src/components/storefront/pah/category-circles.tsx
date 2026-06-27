@@ -36,7 +36,7 @@ export function CategoryCircles() {
             </div>
           ))
         : list.map((c) => <Circle key={c.id ?? c.slug} c={c} />)}
-      <Link href="/categories" className="flex w-16 shrink-0 flex-col items-center gap-2">
+      <Link href="/plants/search" className="flex w-16 shrink-0 flex-col items-center gap-2">
         <span className="grid h-16 w-16 place-items-center rounded-full border border-sage-200 bg-sage-100 text-forest-700 transition hover:bg-sage-200 active:scale-95">
           <i className="fa-solid fa-table-cells-large" aria-hidden style={{ fontSize: '22px' }} />
         </span>
