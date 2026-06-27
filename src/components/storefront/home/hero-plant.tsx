@@ -297,7 +297,7 @@ export function HeroPlant() {
       ? Math.max(0, Math.min(100, slide.overlayOpacity)) / 100
       : 1;
   const gradeStyle = {
-    background: `linear-gradient(90deg, rgba(8,34,20,${0.94 * k}) 0%, rgba(8,34,20,${0.76 * k}) 45%, rgba(8,34,20,${0.3 * k}) 100%)`,
+    background: `linear-gradient(96deg, rgba(8,20,12,${0.93 * k}) 0%, rgba(10,26,16,${0.82 * k}) 28%, rgba(10,26,16,${0.5 * k}) 55%, rgba(10,26,16,${0.16 * k}) 80%, rgba(10,26,16,${0.03 * k}) 100%)`,
   };
 
   return (
@@ -334,7 +334,7 @@ export function HeroPlant() {
           ) : (
             <h1 className="font-playfair text-[2.9rem] font-bold leading-[1.03] tracking-tight text-white sm:text-[4rem] lg:text-[4.7rem]">
               <WordReveal text="Bring Nature Home." delay={0.1} />
-              <span className="block text-[#5FBF6A]">
+              <span className="block text-[#7FC95E]">
                 <WordReveal text="Live Better." delay={0.32} />
               </span>
             </h1>

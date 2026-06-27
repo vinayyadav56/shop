@@ -2,6 +2,7 @@ import useLayout from '@/lib/hooks/use-layout';
 import Header from './header';
 import HeaderMinimal from './header-minimal';
 import Footer from './footer';
+import AnnouncementBar from '@/components/storefront/home/announcement-bar';
 import NoticeHighlightedBar from '@/components/store-notice/notice-highlightedBar';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
@@ -18,6 +19,8 @@ export default function SiteLayout({ children }: React.PropsWithChildren<{}>) {
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 transition-colors duration-150">
       {router.query.slug && <NoticeHighlightedBar />}
+
+      <AnnouncementBar />
 
       {['minimal', 'compact'].includes(layout) ? (
         <HeaderMinimal layout={layout} />

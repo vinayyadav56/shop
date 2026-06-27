@@ -7,6 +7,8 @@ import { SpecialOffer } from './special-offer';
 import { Collections } from './collections';
 import { BestSellers } from './best-sellers';
 import { TrustRow } from './trust-row';
+import { WhyPlants } from './why-plants';
+import { CorporateGifting } from './corporate-gifting';
 import { Gifting } from './gifting';
 import { BottomNav } from './bottom-nav';
 
@@ -27,6 +29,8 @@ export default function PahHome(_props: { variables?: any }) {
           <Collections />
           <BestSellers />
           <TrustRow />
+          <WhyPlants />
+          <CorporateGifting />
           <Gifting />
         </div>
       </div>

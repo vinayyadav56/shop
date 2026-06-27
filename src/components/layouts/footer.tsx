@@ -181,6 +181,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      {/* clears the fixed mobile bottom nav so the footer's last row isn't covered */}
+      <div className="h-[68px] md:hidden" aria-hidden />
     </footer>
   );
 };

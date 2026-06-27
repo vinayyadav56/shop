@@ -60,7 +60,7 @@ export function GiftingBand() {
         </div>
         {/* right photo */}
         <div className="relative h-64 min-h-[260px] w-full sm:h-80 lg:h-auto lg:flex-[1_1_44%]">
-          <SafeImage src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=1100&q=72&auto=format&fit=crop" alt="Corporate plant gifting" fill sizes="(max-width:1024px) 100vw, 44vw" className="object-cover" />
+          <SafeImage src="https://images.unsplash.com/photo-1463320726281-696a485928c7?w=1100&q=72&auto=format&fit=crop" alt="Corporate plant gifting" fill sizes="(max-width:1024px) 100vw, 44vw" className="object-cover" />
         </div>
       </div>
 

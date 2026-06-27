@@ -65,7 +65,7 @@ const CATEGORIES: {
 function Thumb({ img, icon }: { img: string; icon: JSX.Element }) {
   const [err, setErr] = React.useState(false);
   return (
-    <div className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-gradient-to-br from-[var(--ds-accent-soft)] to-[#D2E5CC] text-[var(--ds-accent)]">
+    <div className="relative grid h-[84px] w-[84px] shrink-0 place-items-center overflow-hidden rounded-lg bg-gradient-to-br from-[var(--ds-accent-soft)] to-[#D2E5CC] text-[var(--ds-accent)]">
       {!err ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -97,7 +97,7 @@ export function CategoryRow() {
             >
               <Link
                 href={c.href}
-                className="group flex h-full items-center justify-between gap-3 rounded-2xl bg-white p-4 shadow-[0_24px_60px_-34px_rgba(13,59,36,0.5)] ring-1 ring-forest-900/[0.06] transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_64px_-30px_rgba(13,59,36,0.55)]"
+                className="group flex h-full items-center justify-between gap-3 rounded-[9px] bg-[#F3F2E8] p-3 shadow-[0_8px_22px_rgba(20,40,24,0.10)] ring-1 ring-forest-900/[0.05] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(20,40,24,0.15)]"
               >
                 <div className="min-w-0">
                   <h3 className="text-[14px] font-semibold leading-tight text-forest-900">{c.title}</h3>

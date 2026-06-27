@@ -19,7 +19,7 @@ const COLLECTIONS: { title: string; desc: string; href: string; img: string }[] 
   },
   {
     title: 'Flowering Plants',
-    desc: 'Add colours to your life',
+    desc: 'Add colors to your life',
     href: '/c/flowering',
     img: 'https://images.unsplash.com/photo-1487070183336-b863922373d4?w=600&q=72&auto=format&fit=crop',
   },
@@ -54,7 +54,7 @@ function CollectionCard({ c }: { c: (typeof COLLECTIONS)[number] }) {
           className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]"
         />
       ) : null}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(9,22,13,0.9)_4%,rgba(9,22,13,0.42)_44%,rgba(9,22,13,0.03)_74%)]" />
       <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
         <h3 className="font-playfair text-[1.25rem] font-bold leading-tight text-white sm:text-[1.4rem]">
           {c.title}

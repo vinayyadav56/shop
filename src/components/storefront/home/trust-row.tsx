@@ -34,16 +34,16 @@ const ITEMS: { title: string; sub: string; icon: JSX.Element }[] = [
 
 export function TrustRow() {
   return (
-    <section className="border-t border-forest-900/10 bg-[#FAFBF8]">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 gap-y-6 px-5 py-10 sm:px-8 lg:grid-cols-4">
+    <section className="border-t border-forest-900/10 bg-white">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-7 px-5 py-10 sm:px-8 lg:grid-cols-4 lg:gap-x-8">
         {ITEMS.map((it) => (
           <div key={it.title} className="flex items-center gap-3.5 px-2">
-            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[var(--ds-accent-soft)] text-[var(--ds-accent)]">
+            <span className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-full bg-sage-100 text-forest-700">
               {it.icon}
             </span>
             <div>
-              <div className="text-[13px] font-bold text-forest-900">{it.title}</div>
-              <div className="text-[11.5px] leading-tight text-stone-500">{it.sub}</div>
+              <div className="text-[14px] font-bold text-forest-900 sm:text-[14.5px]">{it.title}</div>
+              <div className="text-[12px] leading-tight text-stone-500">{it.sub}</div>
             </div>
           </div>
         ))}
