@@ -6,6 +6,7 @@ import { CategoryRow } from './category-row';
 import { SpringSaleBand } from './spring-sale-band';
 import { Collections } from './collections';
 import { BestSellers } from './best-sellers';
+import { WhyPlants } from './why-plants';
 import { GiftingBand } from './gifting-band';
 import { TrustRow } from './trust-row';
 import { NewsletterSocial } from './newsletter-social';
@@ -29,12 +30,13 @@ export function PlantCompanyHome({
   return (
     <>
       {/* Section order matches the approved design reference:
-          Hero → Category → Spring Sale → Collections → Bestsellers → Gifting → Trust */}
+          Hero → Category → Spring Sale → Collections → Bestsellers → Why Plants → Gifting → Trust */}
       <HeroPlant />
       <CategoryRow />
       <SpringSaleBand />
       <Collections />
       <BestSellers products={products} isLoading={productsLoading} />
+      <WhyPlants />
       <GiftingBand />
       <TrustRow />
       <NewsletterSocial />
