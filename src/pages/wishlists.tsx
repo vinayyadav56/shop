@@ -18,7 +18,7 @@ const MyWishlistPage = () => {
       <Card className="w-full shadow-none sm:shadow">
         <WishlistProducts />
       </Card>
-      {width > 1023 && <CartCounterButton />}
+      {width > 767 && <CartCounterButton />}
     </>
   );
 };

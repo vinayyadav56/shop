@@ -18,7 +18,7 @@ export default function MobileCheckoutBar() {
   }
 
   return (
-    <div className="pa-mcbar lg:hidden">
+    <div className="pa-mcbar md:hidden">
       <div className="pa-mcbar-info">
         <span className="pa-mcbar-count">
           {totalUniqueItems} {totalUniqueItems === 1 ? 'item' : 'items'}

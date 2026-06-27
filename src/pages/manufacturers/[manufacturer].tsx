@@ -56,7 +56,7 @@ export default function Manufacturer({ manufacturer, variables }: any) {
         />
       </div>
 
-      {width > 1023 && <CartCounterButton />}
+      {width > 767 && <CartCounterButton />}
     </>
   );
 }

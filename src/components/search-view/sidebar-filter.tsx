@@ -56,7 +56,11 @@ const SidebarFilter: React.FC<{
   type?: string;
   showManufacturers?: boolean;
   className?: string;
-}> = ({ type, showManufacturers = true, className }) => {
+  // When rendered as an always-visible rail (e.g. the PLP from md+), switch to
+  // rail mode at `md` instead of `lg` so tablets don't show the drawer-only
+  // close arrow / "Show Products" button. Drawer usages keep the lg switch.
+  inRail?: boolean;
+}> = ({ type, showManufacturers = true, className, inRail = false }) => {
   const router = useRouter();
   const { isRTL } = useIsRTL();
   const { t } = useTranslation('common');
@@ -65,14 +69,15 @@ const SidebarFilter: React.FC<{
   return (
     <div
       className={classNames(
-        'flex h-full w-full flex-col rounded-xl border-forest-900/10 bg-white lg:h-auto lg:border',
+        'flex h-full w-full flex-col rounded-xl border-forest-900/10 bg-white',
+        inRail ? 'md:h-auto md:border' : 'lg:h-auto lg:border',
         className
       )}
     >
-      <div className="sticky top-0 z-10 flex items-center justify-between rounded-tl-xl rounded-tr-xl border-b border-forest-900/10 bg-white px-5 py-6 lg:static">
+      <div className={classNames('sticky top-0 z-10 flex items-center justify-between rounded-tl-xl rounded-tr-xl border-b border-forest-900/10 bg-white px-5 py-6', inRail ? 'md:static' : 'lg:static')}>
         <div className="flex items-center space-x-3 rtl:space-x-reverse lg:space-x-0">
           <button
-            className="text-body focus:outline-0 lg:hidden"
+            className={classNames('text-body focus:outline-0', inRail ? 'md:hidden' : 'lg:hidden')}
             onClick={() => closeSidebar({ display: false, view: '' })}
           >
             <ArrowNarrowLeft
@@ -121,7 +126,7 @@ const SidebarFilter: React.FC<{
           </FieldWrapper>
         )}
       </div>
-      <div className="sticky bottom-0 z-10 mt-auto border-t border-forest-900/10 bg-white p-5 lg:hidden">
+      <div className={classNames('sticky bottom-0 z-10 mt-auto border-t border-forest-900/10 bg-white p-5', inRail ? 'md:hidden' : 'lg:hidden')}>
         <Button
           className="w-full"
           onClick={() => closeSidebar({ display: false, view: '' })}

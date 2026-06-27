@@ -83,7 +83,7 @@ const ProductPage: NextPageWithLayout<
                 </div>
               )}
           </div>
-          {width > 1023 && <CartCounterButton />}
+          {width > 767 && <CartCounterButton />}
           <div className="sticky bottom-0 z-30 bg-white py-5 text-end backdrop-blur">
             <button
               className={cn(

@@ -26,7 +26,7 @@ const OrderListMobile: React.FC<OrdersWithLoaderProps> = ({
   const [selectedOrder, setSelectedOrder] = useSelectedOrder();
 
   return (
-    <div className="flex w-full flex-col lg:hidden">
+    <div className="flex w-full flex-col md:hidden">
       <div className="flex h-full w-full flex-col px-0 pb-5">
         <h3 className="pb-5 text-xl font-semibold text-heading">
           {t('profile-sidebar-orders')}

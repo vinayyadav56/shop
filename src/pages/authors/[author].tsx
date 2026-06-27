@@ -27,7 +27,7 @@ export default function Author({ author, variables }: any) {
           variables={variables}
         />
       </div>
-      {width > 1023 && <CartCounterButton />}
+      {width > 767 && <CartCounterButton />}
     </>
   );
 }

@@ -137,7 +137,7 @@ const ShopPage: NextPageWithLayout<
               )}
               variables={variables}
             />
-            {width > 1023 && <CartCounterButton />}
+            {width > 767 && <CartCounterButton />}
           </>
         ) : (
           <>

@@ -467,7 +467,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
           app's bottom navigation (h-14) and is hidden on lg+ where the inline CTA
           is always visible. Reuses the same handler + disabled states as the inline
           button so behaviour can't drift. */}
-      <div className="fixed inset-x-0 bottom-14 z-20 flex items-center gap-3 border-t border-kraft-300/70 bg-white/95 px-4 py-3 shadow-[0_-8px_24px_-16px_rgba(0,0,0,0.45)] backdrop-blur lg:hidden">
+      <div className="fixed inset-x-0 bottom-14 z-20 flex items-center gap-3 border-t border-kraft-300/70 bg-white/95 px-4 py-3 shadow-[0_-8px_24px_-16px_rgba(0,0,0,0.45)] backdrop-blur md:hidden">
         <div className="min-w-0 flex-1">
           <p className="truncate text-[11px] uppercase tracking-wide text-stone-400">
             {product?.name}

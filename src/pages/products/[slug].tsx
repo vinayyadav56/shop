@@ -116,7 +116,7 @@ const ProductPage: NextPageWithLayout<
             </>
           )}
         </div>
-        {width > 1023 && <CartCounterButton />}
+        {width > 767 && <CartCounterButton />}
       </AttributesProvider>
     </>
   );

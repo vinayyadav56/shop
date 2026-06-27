@@ -3084,7 +3084,7 @@ textarea:focus {
 .pa-pin--checking { background: #F4F5F1; color: #5B5F58; border-color: #ECEEEA; font-weight: 500; }
 .pa-pin--ok { background: #ECF6EE; color: #2E5E3A; border-color: #CFE6D6; }
 .pa-pin--no { background: #FCEFEF; color: #B42318; border-color: #F4C9C7; }
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   .pa-checkout-page { padding-bottom: 92px; }
 }
 
