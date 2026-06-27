@@ -51,7 +51,7 @@ export default function OrdersPage() {
   return (
     <>
       <Seo noindex={true} nofollow={true} />
-      <div className="hidden w-full overflow-hidden lg:flex">
+      <div className="hidden w-full overflow-hidden md:flex">
         <OrderList
           orders={ordersItem}
           isLoadingMore={isLoadingMore}

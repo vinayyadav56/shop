@@ -66,7 +66,7 @@ const FlashSalePage = () => {
         flashSale={flashSale as unknown as FlashSale}
         products={flashSale?.products as FlashSale['products']}
       />
-      {width > 1023 && <CartCounterButton />}
+      {width > 767 && <CartCounterButton />}
     </>
   );
 };

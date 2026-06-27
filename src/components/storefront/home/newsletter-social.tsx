@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import Image from 'next/image';
+import SafeImage from '@/components/ui/safe-image';
 import { Icon } from '../icons';
 import { useSubscription } from '@/framework/settings';
 
@@ -68,7 +68,7 @@ export function NewsletterSocial() {
                 rel="noreferrer"
                 className="group relative aspect-square overflow-hidden rounded-lg bg-white/40 ring-1 ring-[color:var(--g-band-hairline)] transition hover:ring-[color:var(--g-cta-from)]"
               >
-                <Image src={src} alt="PlantAtHome on Instagram" fill sizes="18vw" className="object-cover transition duration-500 group-hover:scale-110" />
+                <SafeImage src={src} alt="PlantAtHome on Instagram" fill sizes="18vw" className="object-cover transition duration-500 group-hover:scale-110" />
               </a>
             ))}
           </div>

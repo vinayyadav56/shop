@@ -41,7 +41,7 @@ const BannerWithSearch: React.FC<BannerProps> = ({ banners, layout }) => {
   const reverseBanners = useReverse({ items: banners as Banner[] });
   return (
     <div
-      className={cn('textClass relative hidden lg:block', {
+      className={cn('textClass relative hidden md:block', {
         '!block': layout === 'minimal',
       })}
     >

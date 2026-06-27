@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import SafeImage from '@/components/ui/safe-image';
 
 export function PromoBanners() {
   return (
@@ -28,7 +28,7 @@ export function PromoBanners() {
             </Link>
           </div>
           <div className="relative h-[200px] min-h-0 sm:h-full sm:min-h-[220px]">
-            <Image
+            <SafeImage
               src="https://images.unsplash.com/photo-1604762524889-3e2fcc145683?w=900&q=75&auto=format&fit=crop"
               alt="Potted plants styled on a sideboard"
               fill
@@ -58,7 +58,7 @@ export function PromoBanners() {
             </Link>
           </div>
           <div className="relative h-[200px] min-h-0 sm:h-full sm:min-h-[220px]">
-            <Image
+            <SafeImage
               src="https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=900&q=75&auto=format&fit=crop"
               alt="Hands holding a potted monstera plant"
               fill

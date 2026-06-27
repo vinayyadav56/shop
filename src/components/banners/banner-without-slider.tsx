@@ -12,7 +12,7 @@ interface BannerProps {
 const BannerWithoutSlider: React.FC<BannerProps> = ({ banners, layout }) => {
   return (
     <div
-      className={cn('relative hidden lg:block', {
+      className={cn('relative hidden md:block', {
         '!block': layout === 'minimal',
       })}
     >
@@ -53,7 +53,7 @@ const BannerWithoutSlider: React.FC<BannerProps> = ({ banners, layout }) => {
           <div className="w-full max-w-3xl">
             <SearchWithSuggestion
               label="search"
-              className="hidden lg:block"
+              className="hidden md:block"
               variant="with-shadow"
             />
           </div>

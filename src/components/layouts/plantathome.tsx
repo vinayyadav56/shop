@@ -20,8 +20,8 @@ const PlantCompanyHome = dynamic(
   () => import('@/components/storefront/home').then((m) => m.PlantCompanyHome),
 );
 
-// Mobile + tablet (<lg) home — faithful Claude Design "PlantAtHome Mobile Home".
-// Desktop (>=lg) keeps the production PlantCompanyHome below, unchanged.
+// Phone-only home (<md) — faithful Claude Design "PlantAtHome Mobile Home".
+// Tablet + desktop (>=md) get the production PlantCompanyHome below (adapted down on tablet).
 const PahHome = dynamic(() => import('@/components/storefront/pah/home'));
 
 // Heavy, below-the-fold sections — lazy-loaded so the hero + first product rows
@@ -97,15 +97,15 @@ export default function PlantAtHomeLayout({ variables }: HomePageProps) {
         tourSubtitle: meta.blurb,
       };
 
-  // HOME (not filtering) → responsive: the Claude Design mobile home (<lg) and
-  // the production "THE PLANT COMPANY" home (>=lg, unchanged).
+  // HOME (not filtering) → responsive: the Claude Design phone home (<md) and
+  // the production "THE PLANT COMPANY" home (>=md; tablets get it adapted down).
   if (isHome && !isFiltering) {
     return (
       <>
-        <div className="lg:hidden">
+        <div className="md:hidden">
           <PahHome />
         </div>
-        <div className="hidden lg:block">
+        <div className="hidden md:block">
           <PlantCompanyHome
             categories={categories}
             catLoading={catLoading}

@@ -76,7 +76,7 @@ export function Grid({
           {
             'grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]':
               column === 'auto',
-            'grid grid-cols-2 gap-3 gap-y-6 sm:gap-4 md:grid-cols-2 md:gap-5 md:gap-y-8 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4':
+            'grid grid-cols-2 gap-3 gap-y-6 sm:gap-4 md:gap-5 md:gap-y-8 min-[900px]:grid-cols-3 lg:gap-6 xl:grid-cols-4':
               column === 'five' || column === 'six',
           },
           gridClassName,

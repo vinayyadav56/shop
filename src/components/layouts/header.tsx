@@ -197,7 +197,7 @@ const Header = ({ layout }: { layout?: string }) => {
 
           {/* centred nav */}
           <nav
-            className={`hidden items-center gap-4 lg:flex xl:gap-7 ${
+            className={`hidden items-center gap-2.5 md:flex lg:gap-4 xl:gap-7 ${
               useLight ? 'text-white' : 'text-forest-900'
             }`}
           >
@@ -256,23 +256,23 @@ const Header = ({ layout }: { layout?: string }) => {
                 <button
                   type="button"
                   onClick={() => setSearchOpen(true)}
-                  className={`${actionCol} hidden lg:flex`}
+                  className={`${actionCol} hidden md:flex`}
                   aria-label={t('text-search') ?? 'Search'}
                 >
                   <SearchIcon className="h-[19px] w-[19px]" />
-                  <span className={actionLabel}>Search</span>
+                  <span className={`${actionLabel} hidden lg:block`}>Search</span>
                 </button>
 
                 {/* Track Order */}
-                <Link href="/track-order" className={`${actionCol} hidden lg:flex`}>
+                <Link href="/track-order" className={`${actionCol} hidden md:flex`}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[19px] w-[19px]"><path d="M5 17H3V6a1 1 0 0 1 1-1h11v12" /><path d="M15 9h4l3 3v5h-2" /><circle cx="7.5" cy="18" r="1.8" /><circle cx="17.5" cy="18" r="1.8" /></svg>
-                  <span className={actionLabel}>Track Order</span>
+                  <span className={`${actionLabel} hidden lg:block`}>Track Order</span>
                 </Link>
 
                 {/* Wishlist */}
-                <Link href="/wishlists" className={`${actionCol} hidden lg:flex`}>
+                <Link href="/wishlists" className={`${actionCol} hidden md:flex`}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[19px] w-[19px]"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z" /></svg>
-                  <span className={actionLabel}>Wishlist</span>
+                  <span className={`${actionLabel} hidden lg:block`}>Wishlist</span>
                 </Link>
 
                 {/* Cart */}
@@ -287,19 +287,19 @@ const Header = ({ layout }: { layout?: string }) => {
                 </button>
 
                 {/* Login / Account */}
-                <button type="button" onClick={onProfile} className={`${actionCol} hidden lg:flex`} aria-label={isAuthorize ? 'My account' : 'Login'}>
+                <button type="button" onClick={onProfile} className={`${actionCol} hidden md:flex`} aria-label={isAuthorize ? 'My account' : 'Login'}>
                   <Icon.user className="h-[19px] w-[19px]" />
-                  <span className={actionLabel}>{isAuthorize ? 'Account' : 'Login'}</span>
+                  <span className={`${actionLabel} hidden lg:block`}>{isAuthorize ? 'Account' : 'Login'}</span>
                 </button>
 
                 {/* mobile: search + menu */}
-                <button type="button" onClick={() => setSearchOpen(true)} className={`${iconBtn} lg:hidden`} aria-label={t('text-search') ?? 'Search'}>
+                <button type="button" onClick={() => setSearchOpen(true)} className={`${iconBtn} md:hidden`} aria-label={t('text-search') ?? 'Search'}>
                   <SearchIcon className="h-[18px] w-[18px]" />
                 </button>
                 <button
                   type="button"
                   onClick={() => setMenuOpen(true)}
-                  className={`grid h-10 w-10 place-items-center rounded-full lg:hidden ${
+                  className={`grid h-10 w-10 place-items-center rounded-full md:hidden ${
                     solid ? 'bg-forest-700 text-white' : 'bg-white/15 text-white backdrop-blur'
                   }`}
                   aria-label="Menu"

@@ -15,7 +15,7 @@ export const PRODUCT_INITIAL_FETCH_LIMIT = 30;
 export const DEFAULT_LANGUAGE =
   process.env.NEXT_PUBLIC_DEFAULT_LANGUAGE ?? 'en';
 export const EMAIL_VERIFIED = 'emailVerified';
-export const RESPONSIVE_WIDTH = 1024 as number;
+export const RESPONSIVE_WIDTH = 768 as number;
 
 export function getDirection(language: string | undefined) {
   if (!language) return 'ltr';

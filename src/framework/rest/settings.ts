@@ -22,7 +22,10 @@ export function useSettings() {
   const { data, isLoading, error, isFetching } = useQuery<Settings, Error>(
     [API_ENDPOINTS.SETTINGS, formattedOptions],
     ({ queryKey, pageParam }) =>
-      client.settings.all(Object.assign({}, queryKey[1], pageParam))
+      client.settings.all(Object.assign({}, queryKey[1], pageParam)),
+    // Always re-pull settings on mount so admin toggles (homepage banners / options) reflect
+    // promptly — the SSR-dehydrated value would otherwise stay cached for staleTime (~60s).
+    { refetchOnMount: 'always' }
   );
   const { isUnderMaintenance = false, maintenance = {} } = data?.options! ?? {};
   setMaintenanceDetails(isUnderMaintenance, maintenance);

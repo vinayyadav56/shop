@@ -175,7 +175,9 @@ export const getStaticProps: GetStaticProps<
       ...(await serverSideTranslations(locale!, ['common', 'banner'])),
       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
     },
-    revalidate: 120,
+    // Shorter ISR so admin homepage changes (banners/curation) reach the static home faster;
+    // the client also refetches settings on mount (see useSettings).
+    revalidate: 30,
   };
 };
 

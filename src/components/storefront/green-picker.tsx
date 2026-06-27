@@ -21,7 +21,7 @@ export default function GreenPicker() {
   React.useEffect(() => {
     const fromUrl = new URLSearchParams(window.location.search).get('green');
     const saved = window.localStorage.getItem('green');
-    setOpen(window.innerWidth >= 1024);
+    setOpen(window.innerWidth >= 768);
     const n = fromUrl && PALETTES.some((p) => p.n === fromUrl) ? fromUrl : saved && PALETTES.some((p) => p.n === saved) ? saved : '1';
     apply(n);
     // eslint-disable-next-line react-hooks/exhaustive-deps
