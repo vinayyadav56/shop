@@ -5,7 +5,6 @@ import { useState } from 'react';
 import Header from './header';
 import HeaderMinimal from './header-minimal';
 import Footer from '@/components/layouts/footer';
-import AnnouncementBar from '@/components/storefront/home/announcement-bar';
 import { SearchIcon } from '@/components/icons/search-icon';
 import { displayMobileHeaderSearchAtom } from '@/store/display-mobile-header-search-atom';
 import { useIsHomeExperience } from '@/lib/use-is-home-experience';
@@ -36,7 +35,6 @@ export default function HomeLayout({
 
   return (
     <div className="flex min-h-screen flex-col transition-colors duration-150" style={{ background: 'var(--pa-bg)' }}>
-      <AnnouncementBar />
       {/* Brand header is sticky/solid (see header.tsx). On the home it shows from md+
           (tablet/desktop use the production home); the phone home (<md) carries its
           own app bar, so the prod header is suppressed there. */}
