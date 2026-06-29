@@ -21,6 +21,12 @@ const ToastContainer = dynamic(
   () => import('react-toastify').then((module) => module.ToastContainer),
   { ssr: false },
 );
+// Agentation visual-feedback toolbar — staging/localhost only (gated inside the
+// component); ssr:false so it never runs server-side and never ships to prod.
+const AgentationToolbar = dynamic(
+  () => import('@/components/dev/agentation-toolbar'),
+  { ssr: false },
+);
 import Maintenance from '@/components/maintenance/layout';
 import { NotificationProvider } from '@/context/notify-content';
 import CitySync from '@/components/layouts/city-sync';
@@ -81,6 +87,7 @@ function CustomApp({
                     <ToastContainer autoClose={2000} theme="colored" />
                     <SocialLogin />
                     <FirstVisitLanguageModal />
+                    <AgentationToolbar />
                   </>
                 </CartProvider>
               </ModalProvider>
