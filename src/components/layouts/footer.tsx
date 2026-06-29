@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 import { useSettings, useSubscription } from '@/framework/settings';
 import { WordmarkStacked } from '@/components/storefront/logo-mark';
+import InlineLanguageSelect from '@/components/ui/inline-language-select';
 
 /** Footer matched to the "Grow with us." Web Home reference: newsletter band →
  *  brand + 5 link columns → sustainability badges → bottom bar with payment marks.
@@ -168,6 +169,7 @@ const Footer = () => {
       {/* bottom bar */}
       <div className="relative z-[1] mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 py-5 text-[12.5px] sm:px-8 sm:flex-row lg:px-16">
         <span className="text-[color:var(--g-band-ink-soft)]">© {year} Plant At Home. Made in India with care.</span>
+        <InlineLanguageSelect tone="dark" className="order-first sm:order-none" />
         <div className="flex items-center gap-5">
           <Link href="/privacy" className="text-[color:var(--g-band-ink-soft)] transition hover:text-white">Privacy</Link>
           <Link href="/terms" className="text-[color:var(--g-band-ink-soft)] transition hover:text-white">Terms</Link>

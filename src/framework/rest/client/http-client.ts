@@ -21,10 +21,18 @@ const Axios = axios.create({
 // Change request data/error here
 Axios.interceptors.request.use((config) => {
   const token = Cookies.get(AUTH_TOKEN_KEY);
+  // Enterprise i18n: advertise the active locale so the API's ResolveLanguage
+  // middleware localizes dynamic content. The app already passes `?language=`
+  // explicitly (which wins), but Accept-Language makes every call locale-aware
+  // (and covers any call site that doesn't pass the param).
+  const locale =
+    Router?.locale ||
+    (typeof window !== 'undefined' ? Cookies.get('NEXT_LOCALE') : undefined);
   //@ts-ignore
   config.headers = {
     ...config.headers,
     Authorization: `Bearer ${token ? token : ''}`,
+    ...(locale ? { 'Accept-Language': locale } : {}),
   };
   return config;
 });

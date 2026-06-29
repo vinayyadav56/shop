@@ -92,7 +92,8 @@ jobs:
           NEXT_PUBLIC_ADMIN_URL: https://plantathome-admin-staging.vercel.app
           NEXT_PUBLIC_RAZORPAY_KEY_ID: ${{ secrets.STAGING_RAZORPAY_KEY_ID }}
           NEXT_PUBLIC_DEFAULT_LANGUAGE: en
-          NEXT_PUBLIC_ENABLE_MULTI_LANG: 'false'
+          NEXT_PUBLIC_ENABLE_MULTI_LANG: 'true'
+          NEXT_PUBLIC_AVAILABLE_LANGUAGES: en,hi,ta
         run: yarn build:rest
 
   # ── 3. Deploy to Vercel (Staging) ─────────────────────────────────────────────
@@ -157,7 +158,8 @@ jobs:
             --build-env "NEXT_PUBLIC_SITE_URL=https://plantathome-shop-staging.vercel.app" \
             --build-env "NEXT_PUBLIC_ADMIN_URL=https://plantathome-admin-staging.vercel.app" \
             --build-env "NEXT_PUBLIC_DEFAULT_LANGUAGE=en" \
-            --build-env "NEXT_PUBLIC_ENABLE_MULTI_LANG=false" \
+            --build-env "NEXT_PUBLIC_ENABLE_MULTI_LANG=true" \
+            --build-env "NEXT_PUBLIC_AVAILABLE_LANGUAGES=en,hi,ta" \
             --build-env "NEXT_PUBLIC_GOOGLE_MAP_API_KEY=$GOOGLE_MAP_API_KEY" \
             --env "CHATBOT_SERVICE_URL=https://chatbot-service-production-321d.up.railway.app" \
             --env "CHATBOT_SERVICE_API_KEY=$AI_CHAT_SHARED_SECRET"

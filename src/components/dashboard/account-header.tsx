@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { useUser } from '@/framework/user';
+import InlineLanguageSelect from '@/components/ui/inline-language-select';
 
 /** Clean account header for the dashboard — avatar + name + email + wallet stat chips. */
 export default function AccountHeader() {
@@ -37,6 +38,7 @@ export default function AccountHeader() {
           <div className="min-w-0">
             <h1 className="font-heading truncate text-[1.5rem] font-bold not-italic leading-tight text-forest-900">{name}</h1>
             {email && <p className="truncate text-[13.5px] text-stone-500">{email}</p>}
+            <InlineLanguageSelect tone="light" className="mt-1.5" />
           </div>
         </div>
         {/* wallet chips */}

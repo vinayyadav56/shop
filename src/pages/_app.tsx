@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ModalProvider } from '@/components/ui/modal/modal.context';
 import ManagedModal from '@/components/ui/modal/managed-modal';
 import ManagedDrawer from '@/components/ui/drawer/managed-drawer';
+import FirstVisitLanguageModal from '@/components/ui/first-visit-language-modal';
 import DefaultSeo from '@/components/seo/default-seo';
 import { SearchProvider } from '@/components/ui/search/search.context';
 import PrivateRoute from '@/lib/private-route';
@@ -79,6 +80,7 @@ function CustomApp({
                     <ManagedDrawer />
                     <ToastContainer autoClose={2000} theme="colored" />
                     <SocialLogin />
+                    <FirstVisitLanguageModal />
                   </>
                 </CartProvider>
               </ModalProvider>
