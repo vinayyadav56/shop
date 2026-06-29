@@ -1,10 +1,12 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import { useBannerEnabled } from '@/lib/use-home-config';
 
 export function Gifting() {
   const router = useRouter();
+  const { t } = useTranslation('common');
   if (!useBannerEnabled('gifting')) return null;
   return (
     <div className="px-5 pb-[6px] pt-[26px]">
@@ -24,20 +26,20 @@ export function Gifting() {
 
         {/* content */}
         <div className="relative z-[3] flex flex-col items-center px-[26px] pb-[26px] pt-[28px] text-center text-white">
-          <span className="font-jost text-[9.5px] font-medium uppercase tracking-[0.34em] text-[#DCC07A]">The Art of Gifting</span>
+          <span className="font-jost text-[9.5px] font-medium uppercase tracking-[0.34em] text-[#DCC07A]">{t('m-gband-eyebrow')}</span>
           <div className="my-[11px] mb-[13px] flex items-center gap-[9px]">
             <span className="h-px w-[34px] bg-[linear-gradient(90deg,rgba(220,192,122,0),#C9A24B)]" />
             <i className="fa-solid fa-seedling text-[14px] text-[#DCC07A]" aria-hidden />
             <span className="h-px w-[34px] bg-[linear-gradient(90deg,#C9A24B,rgba(220,192,122,0))]" />
           </div>
           <h3 className="m-0 font-pahserif text-[30px] font-medium leading-[1.06] tracking-[0.01em] text-[#FCFBF6]">
-            Green gifting,<br /><span className="italic text-[#DCC07A]">always</span> a good idea.
+            {t('m-gband-title-1')}<br /><span className="italic text-[#DCC07A]">{t('m-gband-title-2')}</span> {t('m-gband-title-3')}
           </h3>
           <p className="mx-0 mb-[18px] mt-3 max-w-[248px] font-hanken text-[12px] leading-[1.55] text-[#F5F2EA]/[0.74]">
-            Hand-tied plants and gilded keepsakes, delivered with care to someone you love.
+            {t('m-gband-subtitle')}
           </p>
           <button type="button" onClick={() => router.push('/corporate-gifting')} className="pa-btn pa-btn-gold px-[22px] py-[11px] font-jost text-[11px] uppercase tracking-[0.14em]">
-            Explore gift plants
+            {t('m-gband-cta')}
             <i className="fa-solid fa-arrow-right text-[12px]" aria-hidden />
           </button>
         </div>

@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import { useAtom } from 'jotai';
 import { drawerAtom } from '@/store/drawer-atom';
 import { useCart } from '@/store/quick-cart/cart.context';
@@ -17,6 +18,7 @@ const CHIPS = [
 
 export function Hero() {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const [, setDrawer] = useAtom(drawerAtom);
   const { totalUniqueItems } = useCart();
   const showOffer = useBannerEnabled('heroOffer');
@@ -52,10 +54,10 @@ export function Hero() {
         {/* hero body */}
         <div>
           <span className="mb-3.5 inline-flex items-center gap-[7px] rounded-full border border-[#86E0A3]/60 bg-[#0F1E12]/[0.55] px-[13px] py-[5px] font-hanken text-[10px] font-bold uppercase tracking-[0.18em] text-white">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#4ADE80] shadow-[0_0_6px_#4ADE80]" />Live Plants
+            <span className="h-1.5 w-1.5 rounded-full bg-[#4ADE80] shadow-[0_0_6px_#4ADE80]" />{t('m-hero-badge')}
           </span>
           <h1 className="m-0 whitespace-nowrap font-hanken text-[30px] font-extrabold leading-[1.12] tracking-[-0.02em] text-white">
-            Bring Nature Home.<br /><span className="text-[#5FE08A]">Live Better.</span>
+            {t('m-hero-title-1')}<br /><span className="text-[#5FE08A]">{t('m-hero-title-2')}</span>
           </h1>
 
           {/* chips pill (left) + offer card (right) */}
@@ -74,11 +76,11 @@ export function Hero() {
 
             {showOffer ? (
               <div className="w-[100px] shrink-0 rounded-[14px] border border-white/20 bg-[#0D1C10]/[0.64] p-[9px_8px] text-center shadow-[0_10px_26px_rgba(0,0,0,0.32)]">
-                <div className="mb-[3px] text-[7px] font-semibold uppercase tracking-[0.1em] text-white/[0.82]">Limited Time Offer</div>
-                <div className="font-hanken text-[23px] font-extrabold leading-none text-white">40%<span className="text-[13px]"> OFF</span></div>
-                <div className="my-0.5 mb-2 text-[8px] text-white/[0.78]">On selected plants</div>
+                <div className="mb-[3px] text-[7px] font-semibold uppercase tracking-[0.1em] text-white/[0.82]">{t('m-hero-offer-eyebrow')}</div>
+                <div className="font-hanken text-[23px] font-extrabold leading-none text-white">40%<span className="text-[13px]"> {t('m-hero-offer-off')}</span></div>
+                <div className="my-0.5 mb-2 text-[8px] text-white/[0.78]">{t('m-hero-offer-subtext')}</div>
                 <button type="button" onClick={() => router.push('/plants/search')} className="inline-flex w-full items-center justify-center gap-1 rounded-[9px] bg-forest-600 px-1 py-1.5 font-hanken text-[10px] font-semibold text-white transition hover:bg-forest-700 active:scale-95 active:bg-forest-800">
-                  Shop now
+                  {t('m-hero-offer-cta')}
                   <i className="fa-solid fa-arrow-right text-[10px]" aria-hidden />
                 </button>
               </div>

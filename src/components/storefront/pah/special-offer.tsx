@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import { useBannerEnabled } from '@/lib/use-home-config';
 
 const PERKS = [
@@ -12,16 +13,17 @@ const PERKS = [
 
 export function SpecialOffer() {
   const router = useRouter();
+  const { t } = useTranslation('common');
   if (!useBannerEnabled('specialOffer')) return null;
   return (
     <div className="mb-6 px-5">
       <div className="relative flex items-center gap-3 overflow-hidden rounded-2xl bg-[linear-gradient(135deg,#234a2a,#0e2012)] p-4 text-white shadow-[0_8px_24px_rgba(34,48,26,0.09)]">
         <div className="w-[112px] flex-none">
-          <div className="mb-[5px] font-hanken text-[7.5px] font-bold uppercase tracking-[0.18em] text-[#DCC07A]">Special Offer</div>
-          <div className="whitespace-nowrap font-hanken text-[18px] font-extrabold leading-none tracking-[-0.01em] text-[#DCC07A]">FLAT 20% OFF</div>
-          <div className="mt-1 text-[9px] text-white/[0.72]">On orders above ₹999</div>
+          <div className="mb-[5px] font-hanken text-[7.5px] font-bold uppercase tracking-[0.18em] text-[#DCC07A]">{t('m-offer-eyebrow')}</div>
+          <div className="whitespace-nowrap font-hanken text-[18px] font-extrabold leading-none tracking-[-0.01em] text-[#DCC07A]">{t('m-offer-headline')}</div>
+          <div className="mt-1 text-[9px] text-white/[0.72]">{t('m-offer-subtext')}</div>
           <button type="button" onClick={() => router.push('/plants/search')} className="mt-2.5 inline-flex items-center gap-[5px] rounded-[9px] bg-[#3A6B33] px-3 py-1.5 font-hanken text-[11px] font-semibold text-white shadow-[0_4px_14px_rgba(0,0,0,0.2)]">
-            Shop now
+            {t('m-offer-cta')}
             <i className="fa-solid fa-arrow-right" aria-hidden style={{ fontSize: '10px', color: '#fff' }} />
           </button>
         </div>

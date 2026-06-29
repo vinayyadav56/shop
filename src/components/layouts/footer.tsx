@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 import { useSettings, useSubscription } from '@/framework/settings';
 import { WordmarkStacked } from '@/components/storefront/logo-mark';
 import InlineLanguageSelect from '@/components/ui/inline-language-select';
@@ -75,6 +76,7 @@ const PayMark = ({ label, children }: { label: string; children: React.ReactNode
 );
 
 function NewsletterForm() {
+  const { t } = useTranslation('common');
   const [email, setEmail] = React.useState('');
   const { mutate: subscribe, isLoading, isSubscribed } = useSubscription();
   return (
@@ -86,23 +88,24 @@ function NewsletterForm() {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-[17px] w-[17px] shrink-0 text-[color:var(--g-band-accent)]" aria-hidden><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m3.5 7 8.5 6 8.5-6" /></svg>
         <input
           type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-          placeholder="Your email address" aria-label="Email address"
+          placeholder={t('footer-newsletter-email-placeholder')} aria-label="Email address"
           className="min-w-0 flex-1 bg-transparent py-3 text-[15px] text-white outline-none placeholder:text-[color:var(--g-band-ink-soft)]"
         />
         <button type="submit" disabled={isLoading} className="inline-flex shrink-0 items-center gap-2 rounded-[10px] bg-[color:var(--g-cta-from,#2E5E2A)] px-6 py-3 text-[14px] font-bold text-white transition hover:brightness-110 active:scale-[0.97] disabled:opacity-60">
-          {isSubscribed ? 'Subscribed' : 'Subscribe'}
+          {isSubscribed ? t('footer-newsletter-subscribed') : t('footer-newsletter-subscribe')}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3" aria-hidden><path d="M5 12h13M13 6l6 6-6 6" /></svg>
         </button>
       </form>
       <p className="mt-2.5 flex items-center gap-2 text-[12px] text-[color:var(--g-band-ink-soft)]">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3" aria-hidden><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></svg>
-        We respect your inbox. Unsubscribe anytime.
+        {t('footer-newsletter-privacy-note')}
       </p>
     </div>
   );
 }
 
 const Footer = () => {
+  const { t } = useTranslation('common');
   const { settings }: any = useSettings();
   const contact = settings?.contactDetails ?? {};
   const email = contact?.emailAddress || settings?.contactEmail || 'hello@plantathome.in';
@@ -120,9 +123,9 @@ const Footer = () => {
       <div className="relative z-[1] border-b border-[color:var(--g-band-hairline)]">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-12 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-14 lg:px-16 lg:py-[50px]">
           <div className="flex-1">
-            <span className="text-[12px] font-semibold uppercase tracking-[0.28em] text-[color:var(--g-band-accent)]">Join the plant club</span>
-            <h3 className="font-cormorant mt-2.5 text-[2rem] font-medium leading-[1.02] tracking-[0.01em] text-white sm:text-[2.5rem]">Grow with us.</h3>
-            <p className="mt-2.5 max-w-[440px] text-[14.5px] leading-relaxed text-[color:var(--g-band-ink-soft)]">Plant care tips, new arrivals, and members-only offers — thoughtfully sent, never spammy.</p>
+            <span className="text-[12px] font-semibold uppercase tracking-[0.28em] text-[color:var(--g-band-accent)]">{t('footer-newsletter-eyebrow')}</span>
+            <h3 className="font-cormorant mt-2.5 text-[2rem] font-medium leading-[1.02] tracking-[0.01em] text-white sm:text-[2.5rem]">{t('footer-newsletter-heading')}</h3>
+            <p className="mt-2.5 max-w-[440px] text-[14.5px] leading-relaxed text-[color:var(--g-band-ink-soft)]">{t('footer-newsletter-subheading')}</p>
           </div>
           <NewsletterForm />
         </div>
@@ -133,9 +136,9 @@ const Footer = () => {
         {/* brand column */}
         <div className="col-span-2 md:col-span-3 lg:col-span-1 lg:max-w-[330px]">
           <WordmarkStacked light className="[&_*]:!text-white" />
-          <p className="mt-[18px] text-[13.5px] leading-relaxed text-[color:var(--g-band-ink-soft)]">Easy-care plants, beautiful pots, and everything you need to bring a little wilderness indoors — delivered with care.</p>
+          <p className="mt-[18px] text-[13.5px] leading-relaxed text-[color:var(--g-band-ink-soft)]">{t('footer-brand-description')}</p>
           <div className="mt-[22px] flex flex-col gap-2.5">
-            <span className={contactRow}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={iconC} aria-hidden><path d="M12 21s7-5.5 7-11a7 7 0 0 0-14 0c0 5.5 7 11 7 11Z" /><circle cx="12" cy="10" r="2.5" /></svg>Bengaluru, Karnataka, India</span>
+            <span className={contactRow}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={iconC} aria-hidden><path d="M12 21s7-5.5 7-11a7 7 0 0 0-14 0c0 5.5 7 11 7 11Z" /><circle cx="12" cy="10" r="2.5" /></svg>{t('footer-address')}</span>
             <a href={`tel:${phone}`} className={`${contactRow} transition hover:text-[color:var(--g-band-accent)]`}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={iconC} aria-hidden><path d="M5.5 3h3l1.7 4.3-2 1.6a13.5 13.5 0 0 0 6 6l1.6-2L20 14.6v3.1A2.3 2.3 0 0 1 17.7 20 15.8 15.8 0 0 1 4 6.3 2.3 2.3 0 0 1 5.5 3Z" /></svg>{phone}</a>
             <a href={`mailto:${email}`} className={`${contactRow} transition hover:text-[color:var(--g-band-accent)]`}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={iconC} aria-hidden><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m3.5 7 8.5 6 8.5-6" /></svg>{email}</a>
           </div>
@@ -168,12 +171,12 @@ const Footer = () => {
 
       {/* bottom bar */}
       <div className="relative z-[1] mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 py-5 text-[12.5px] sm:px-8 sm:flex-row lg:px-16">
-        <span className="text-[color:var(--g-band-ink-soft)]">© {year} Plant At Home. Made in India with care.</span>
+        <span className="text-[color:var(--g-band-ink-soft)]">© {year} {t('footer-copyright')}</span>
         <InlineLanguageSelect tone="dark" className="order-first sm:order-none" />
         <div className="flex items-center gap-5">
-          <Link href="/privacy" className="text-[color:var(--g-band-ink-soft)] transition hover:text-white">Privacy</Link>
-          <Link href="/terms" className="text-[color:var(--g-band-ink-soft)] transition hover:text-white">Terms</Link>
-          <Link href="/track-order" className="text-[color:var(--g-band-ink-soft)] transition hover:text-white">Track Order</Link>
+          <Link href="/privacy" className="text-[color:var(--g-band-ink-soft)] transition hover:text-white">{t('footer-privacy')}</Link>
+          <Link href="/terms" className="text-[color:var(--g-band-ink-soft)] transition hover:text-white">{t('footer-terms')}</Link>
+          <Link href="/track-order" className="text-[color:var(--g-band-ink-soft)] transition hover:text-white">{t('footer-track-order')}</Link>
           <span className="h-4 w-px bg-[color:var(--g-band-hairline)]" />
           <div className="flex items-center gap-2 text-[color:var(--g-band-ink-soft)]">
             <PayMark label="Visa"><span className="italic">VISA</span></PayMark>

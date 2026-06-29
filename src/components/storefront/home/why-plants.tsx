@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 import SafeImage from '@/components/ui/safe-image';
 
 /**
@@ -61,6 +62,7 @@ const BENEFITS: { title: string; body: string; img: string; icon: React.ReactNod
 ];
 
 export function WhyPlants() {
+  const { t } = useTranslation('common');
   return (
     <section className="bg-cream-50">
       <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-16 lg:pb-[60px] lg:pt-[66px]">
@@ -68,15 +70,15 @@ export function WhyPlants() {
         <div className="mx-auto mb-[46px] max-w-[760px] text-center">
           <span className="inline-flex items-center gap-2.5 font-jost text-[12px] font-medium uppercase tracking-[0.26em] text-forest-600">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[15px] w-[15px] text-forest-500"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg>
-            Why We Need Plants
+            {t('home-why-eyebrow')}
           </span>
           <div className="mx-auto mt-3.5 h-0.5 w-[54px] rounded-full bg-forest-500" />
           <h2 className="font-pahserif mt-[18px] text-[40px] font-bold not-italic leading-[1.02] tracking-[-0.012em] text-forest-900 sm:text-[56px]">
-            Small Plants, Big Impact
+            {t('home-why-title')}
           </h2>
           <p className="mx-auto mt-[18px] max-w-xl font-hanken text-[15px] leading-[1.55] text-stone-500 sm:text-[17px]">
-            Plants do more than just beautify your space — they nourish your well-being and support a{' '}
-            <strong className="font-bold text-forest-700">healthier planet.</strong>
+            {t('home-why-subtitle')}{' '}
+            <strong className="font-bold text-forest-700">{t('home-why-subtitle-strong')}</strong>
           </p>
         </div>
 
@@ -110,14 +112,14 @@ export function WhyPlants() {
           </div>
           <div className="hidden w-px self-stretch bg-sage-300 sm:my-[3px] sm:block" />
           <p className="flex-1 font-hanken text-[16px] leading-[1.45] text-forest-900 sm:text-[18px]">
-            Adding plants to your space is a simple step towards <strong className="font-bold">a healthier you</strong> and{' '}
-            <strong className="font-bold">a healthier planet.</strong>
+            {t('home-why-cta-band-text')} <strong className="font-bold">{t('home-why-cta-band-strong-1')}</strong> {t('home-why-cta-band-and')}{' '}
+            <strong className="font-bold">{t('home-why-cta-band-strong-2')}</strong>
           </p>
           <Link
             href="/plants/search"
             className="inline-flex shrink-0 items-center gap-[9px] rounded-xl bg-ds-accent px-[26px] py-[14px] font-jost text-[15px] font-bold text-white transition hover:opacity-90 active:scale-[0.97]"
           >
-            Bring Nature Home
+            {t('home-why-cta')}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
           </Link>
         </div>

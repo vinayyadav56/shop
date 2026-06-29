@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { useTranslation } from 'next-i18next';
 import type { Product } from '@/types';
 import { Icon } from '../icons';
 import { useTypes } from '@/framework/type';
@@ -53,6 +54,7 @@ export function BestSellers({
   products?: Product[];
   isLoading?: boolean;
 }) {
+  const { t } = useTranslation('common');
   const { types } = useTypes({ limit: TYPES_PER_PAGE });
   const homeSlug =
     (types ?? []).find((t) => t?.settings?.isHome)?.slug ?? (types ?? [])[0]?.slug ?? 'plants';
@@ -86,17 +88,17 @@ export function BestSellers({
             className="font-jost text-[11px] font-medium uppercase tracking-[0.2em] text-forest-600"
             style={{ marginBottom: 9 }}
           >
-            Bestsellers
+            {t('home-bestsellers-eyebrow')}
           </div>
           <h2 className="m-0 font-pahserif text-[46px] font-semibold leading-none tracking-[-0.005em] text-forest-900">
-            Our Most Loved Plants
+            {t('home-bestsellers-title')}
           </h2>
         </div>
         <Link
           href="/plants/search"
           className="flex shrink-0 items-center gap-1.5 whitespace-nowrap text-[14px] font-semibold text-forest-700"
         >
-          View All Plants
+          {t('home-bestsellers-view-all')}
           <Icon.arrow className="h-3.5 w-3.5" />
         </Link>
       </div>
@@ -118,7 +120,7 @@ export function BestSellers({
             ))}
         {!loading && list.length === 0 && (
           <p className="col-span-full w-full py-10 text-center text-[13px] text-stone-500">
-            New arrivals coming soon to this collection.
+            {t('home-bestsellers-empty')}
           </p>
         )}
       </div>

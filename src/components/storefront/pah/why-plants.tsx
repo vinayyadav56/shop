@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 import { PLACEHOLDER } from './_img';
 
 /** Mobile "Why We Need Plants" — horizontal benefit-card carousel + closing CTA
@@ -22,17 +23,18 @@ function CardImg({ src, alt }: { src: string; alt: string }) {
 }
 
 export function WhyPlants() {
+  const { t } = useTranslation('common');
   return (
     <div className="px-5 pb-2 pt-[30px]">
       {/* header */}
       <div className="mx-auto mb-5 max-w-[308px] text-center">
         <span className="inline-flex items-center gap-[7px] font-jost text-[10px] font-medium uppercase tracking-[0.22em] text-forest-600">
           <i className="fa-solid fa-seedling text-[12px] text-forest-500" aria-hidden />
-          Why We Need Plants
+          {t('m-why-eyebrow')}
         </span>
         <div className="mx-auto mt-2.5 h-0.5 w-[42px] rounded-full bg-forest-500" />
-        <h2 className="font-pahserif mt-3 text-[30px] font-bold leading-[1.04] tracking-[-0.01em] text-forest-900">Small Plants, Big Impact</h2>
-        <p className="mt-2.5 text-[12.5px] leading-[1.55] text-stone-500">Plants do more than beautify your space — they nourish your well-being and support a <strong className="font-bold text-forest-700">healthier planet.</strong></p>
+        <h2 className="font-pahserif mt-3 text-[30px] font-bold leading-[1.04] tracking-[-0.01em] text-forest-900">{t('m-why-title')}</h2>
+        <p className="mt-2.5 text-[12.5px] leading-[1.55] text-stone-500">{t('m-why-subtitle')} <strong className="font-bold text-forest-700">{t('m-why-subtitle-strong')}</strong></p>
       </div>
       {/* carousel */}
       <div className="pah-scroll -mx-5 flex gap-3 overflow-x-auto px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -51,8 +53,8 @@ export function WhyPlants() {
       {/* closing CTA strip */}
       <div className="mt-4 flex items-center gap-[11px] rounded-[13px] border border-kraft-200 bg-white py-2 pl-3 pr-2 shadow-[0_2px_8px_rgba(20,40,24,0.05)]">
         <span className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-forest-800 text-white"><i className="fa-solid fa-seedling text-[15px]" aria-hidden /></span>
-        <p className="min-w-0 flex-1 text-[11.5px] leading-[1.32] text-forest-900">A simple step toward <strong className="font-bold">a healthier you</strong> &amp; <strong className="font-bold">planet.</strong></p>
-        <Link href="/plants/search" className="inline-flex shrink-0 items-center gap-[5px] rounded-[9px] bg-forest-600 px-[14px] py-[9px] font-hanken text-[11.5px] font-bold text-white">Shop<i className="fa-solid fa-arrow-right text-[11px]" aria-hidden /></Link>
+        <p className="min-w-0 flex-1 text-[11.5px] leading-[1.32] text-forest-900">{t('m-why-cta-text')} <strong className="font-bold">{t('m-why-cta-text-strong-1')}</strong> &amp; <strong className="font-bold">{t('m-why-cta-text-strong-2')}</strong></p>
+        <Link href="/plants/search" className="inline-flex shrink-0 items-center gap-[5px] rounded-[9px] bg-forest-600 px-[14px] py-[9px] font-hanken text-[11.5px] font-bold text-white">{t('m-why-cta-button')}<i className="fa-solid fa-arrow-right text-[11px]" aria-hidden /></Link>
       </div>
     </div>
   );

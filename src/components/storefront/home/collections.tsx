@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'next-i18next';
 
 const COLLECTIONS: { title: string; desc: string; href: string; img: string }[] = [
   {
@@ -37,6 +38,7 @@ const COLLECTIONS: { title: string; desc: string; href: string; img: string }[] 
 ];
 
 function CollectionCard({ c }: { c: (typeof COLLECTIONS)[number] }) {
+  const { t } = useTranslation('common');
   const [err, setErr] = React.useState(false);
   return (
     <Link
@@ -60,7 +62,7 @@ function CollectionCard({ c }: { c: (typeof COLLECTIONS)[number] }) {
         </div>
         <div className="mt-[4px] text-[11px] leading-[1.35] text-white/[0.82]">{c.desc}</div>
         <span className="mt-[11px] inline-flex items-center gap-[5px] text-[12px] font-bold text-[#8FD56F]">
-          Explore
+          {t('home-collections-explore')}
           <svg
             width="12"
             height="12"
@@ -81,15 +83,16 @@ function CollectionCard({ c }: { c: (typeof COLLECTIONS)[number] }) {
 }
 
 export function Collections() {
+  const { t } = useTranslation('common');
   return (
     <section className="g-light-a px-5 pb-[40px] pt-[40px] sm:px-8 lg:px-[64px] lg:pb-[52px] lg:pt-[48px]">
       <div className="mb-[22px] flex items-end justify-between gap-4">
         <div>
           <div className="mb-[9px] font-jost text-[11px] font-medium uppercase tracking-[0.2em] text-forest-600">
-            Curated For You
+            {t('home-collections-eyebrow')}
           </div>
           <h2 className="m-0 flex items-center gap-[9px] font-pahserif text-[34px] font-semibold tracking-[-0.005em] text-forest-900 sm:text-[46px]">
-            Shop Our Best Collections
+            {t('home-collections-title')}
             <i className="fa-solid fa-spa text-[23px] text-forest-500" aria-hidden />
           </h2>
         </div>
@@ -97,7 +100,7 @@ export function Collections() {
           href="/plants/search"
           className="inline-flex shrink-0 items-center gap-[6px] whitespace-nowrap text-[14px] font-semibold text-forest-700"
         >
-          View All Collections
+          {t('home-collections-view-all')}
           <svg
             width="14"
             height="14"

@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 import { useBannerEnabled } from '@/lib/use-home-config';
 
 const PERKS: { a: string; b: string; icon: JSX.Element }[] = [
@@ -35,6 +36,7 @@ const PERKS: { a: string; b: string; icon: JSX.Element }[] = [
 ];
 
 export function SpringSaleBand() {
+  const { t } = useTranslation('common');
   if (!useBannerEnabled('specialOffer')) return null;
   return (
     <section style={{ marginTop: 48 }}>
@@ -65,21 +67,21 @@ export function SpringSaleBand() {
             className="font-hanken"
             style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, color: 'rgba(255,255,255,0.86)', marginBottom: 7 }}
           >
-            Spring Sale is Live!
+            {t('home-sale-eyebrow')}
             <i className="fa-solid fa-seedling" aria-hidden style={{ color: '#8FD56F', fontSize: 14 }} />
           </div>
           <div className="font-hanken" style={{ fontWeight: 800, fontSize: 30, lineHeight: 1, color: '#DCC07A' }}>
-            FLAT 20% OFF
+            {t('home-sale-discount')}
           </div>
           <div className="font-hanken" style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.8)', marginTop: 7 }}>
-            On Orders Above ₹999
+            {t('home-sale-condition')}
           </div>
           <Link
             href="/plants/search"
             className="font-hanken"
             style={{ marginTop: 16, display: 'inline-flex', alignItems: 'center', gap: 7, background: '#3A6B33', color: '#fff', borderRadius: 10, padding: '11px 22px', fontSize: 14, fontWeight: 700 }}
           >
-            Shop Now
+            {t('home-sale-cta')}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12h13M13 6l6 6-6 6" /></svg>
           </Link>
         </div>

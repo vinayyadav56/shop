@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 import { useBannerEnabled } from '@/lib/use-home-config';
 import { PLACEHOLDER } from './_img';
 
@@ -27,6 +28,7 @@ function HeroImg() {
 }
 
 export function CorporateGifting() {
+  const { t } = useTranslation('common');
   if (!useBannerEnabled('gifting')) return null;
   return (
     <div className="mx-5 mb-7 mt-[14px] rounded-[28px] bg-sage-100 pb-[24px] pl-[20px] pr-[20px] pt-[30px] shadow-[0_1px_3px_rgba(20,40,24,0.06)]">
@@ -36,15 +38,15 @@ export function CorporateGifting() {
       <div className="text-center">
         <span className="font-jost inline-flex items-center gap-2 rounded-[999px] border-[1.5px] border-sage-400 bg-white px-[14px] py-[7px] text-[9.5px] font-medium uppercase tracking-[0.2em] text-forest-700">
           <i className="fa-solid fa-seedling" aria-hidden style={{ fontSize: '11px', color: '#3A6B33' }} />
-          Green Gifting for Corporate
+          {t('m-gift-eyebrow')}
         </span>
-        <h2 className="font-pahserif mt-[14px] text-[30px] font-semibold leading-[1.06] tracking-[-0.01em] text-forest-900">Gift Green. Grow Meaningful <span className="text-forest-600">Connections.</span></h2>
+        <h2 className="font-pahserif mt-[14px] text-[30px] font-semibold leading-[1.06] tracking-[-0.01em] text-forest-900">{t('m-gift-title-1')} <span className="text-forest-600">{t('m-gift-title-2')}</span></h2>
         <div className="mt-[13px] flex items-center justify-center gap-[10px]">
           <div className="h-px w-[58px] bg-kraft-300" />
           <i className="fa-solid fa-seedling" aria-hidden style={{ fontSize: '12px', color: '#4E8244' }} />
           <div className="h-px w-[58px] bg-kraft-300" />
         </div>
-        <p className="mx-auto mt-[12px] max-w-[284px] text-[13px] leading-[1.55] text-[#33422F]">Thoughtful plant gifts that inspire, appreciate and leave a lasting impact.</p>
+        <p className="mx-auto mt-[12px] max-w-[284px] text-[13px] leading-[1.55] text-[#33422F]">{t('m-gift-subtitle')}</p>
       </div>
       {/* 4 reasons (2x2) */}
       <div className="mt-[22px] grid grid-cols-2 gap-x-[10px] gap-y-[18px]">
@@ -60,7 +62,7 @@ export function CorporateGifting() {
       {/* CTA */}
       <Link href="/corporate-gifting" className="font-jost mt-[20px] inline-flex w-full items-center justify-center gap-[10px] rounded-[12px] bg-forest-800 p-[15px] text-[12px] font-semibold uppercase tracking-[0.13em] text-white transition-colors hover:bg-forest-900">
         <i className="fa-solid fa-gift" aria-hidden style={{ fontSize: '15px' }} />
-        Gift Green, Grow Together
+        {t('m-gift-cta')}
       </Link>
       {/* assurance band */}
       <div className="mt-[18px] rounded-[16px] bg-forest-800 px-[18px] py-[4px]">

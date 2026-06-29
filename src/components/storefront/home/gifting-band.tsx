@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 import SafeImage from '@/components/ui/safe-image';
 import { useBannerEnabled } from '@/lib/use-home-config';
 
@@ -21,6 +22,7 @@ const ASSURE: { title: string; a: string; b: string; icon: React.ReactNode }[] =
 ];
 
 export function GiftingBand() {
+  const { t } = useTranslation('common');
   if (!useBannerEnabled('gifting')) return null;
   return (
     <section className="bg-[#F8F7F2]">
@@ -30,10 +32,10 @@ export function GiftingBand() {
         <div className="flex flex-col justify-center px-5 py-12 sm:px-8 lg:flex-[1_1_56%] lg:py-[34px] lg:pe-[30px] lg:ps-16">
           <span className="font-jost inline-flex w-fit items-center gap-2.5 rounded-full border-[1.5px] border-sage-400 bg-white/45 px-[18px] py-[9px] text-[11px] font-medium uppercase tracking-[0.22em] text-forest-700">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5 text-forest-600"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg>
-            Green Gifting for Corporate
+            {t('home-gift-eyebrow')}
           </span>
           <h2 className="font-cormorant mt-4 text-[2.4rem] font-semibold leading-[1.0] tracking-[-0.02em] text-forest-900 sm:text-[56px]">
-            Gift Green.<br />Grow Meaningful <span className="text-forest-600">Connections.</span>
+            {t('home-gift-title-1')}<br />{t('home-gift-title-2')} <span className="text-forest-600">{t('home-gift-title-3')}</span>
           </h2>
           <div className="mt-4 flex max-w-[472px] items-center gap-[13px]">
             <div className="h-px w-[120px] shrink-0 bg-kraft-300 sm:w-[186px]" />
@@ -41,7 +43,7 @@ export function GiftingBand() {
             <div className="h-px flex-1 bg-kraft-300" />
           </div>
           <p className="mt-3.5 max-w-[468px] text-[16px] leading-[1.58] tracking-[0.002em] text-[#33422F] sm:text-[19px]">
-            Thoughtful plant gifts that inspire, appreciate and leave a lasting impact.
+            {t('home-gift-subtitle')}
           </p>
           {/* four reasons */}
           <div className="mt-6 grid max-w-[820px] grid-cols-2 gap-y-7 sm:flex sm:items-stretch">
@@ -55,7 +57,7 @@ export function GiftingBand() {
           </div>
           <Link href="/corporate-gifting" className="font-jost mt-6 inline-flex w-fit items-center gap-3 rounded-[11px] bg-forest-800 px-[30px] py-[17px] text-[14px] font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-forest-900">
             <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><rect x="3" y="8" width="18" height="4" rx="1" /><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8M16.5 8a2.5 2.5 0 0 0 0-5C13 3 12 8 12 8" /></svg>
-            Gift Green, Grow Together
+            {t('home-gift-cta')}
           </Link>
         </div>
         {/* right photo */}

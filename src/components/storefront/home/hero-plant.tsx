@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBannerEnabled } from '@/lib/use-home-config';
 import { Icon } from '../icons';
@@ -180,6 +181,7 @@ const TRUST: { icon: keyof typeof Icon; title: string; sub: string }[] = [
 
 /** Functional delivery checker wired to the pincode serviceability allow-list. */
 function PincodeChecker() {
+  const { t } = useTranslation('common');
   const [pincode, setPincode] = React.useState('');
   const [submitted, setSubmitted] = React.useState('');
   const { result, loading, checked } = usePincodeServiceability(submitted);
@@ -202,7 +204,7 @@ function PincodeChecker() {
           value={pincode}
           inputMode="numeric"
           onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-          placeholder="Enter your pincode"
+          placeholder={t('home-hero-pincode-placeholder')}
           aria-label="Delivery pincode"
           className="min-w-0 flex-1 bg-transparent py-2.5 text-[14px] text-forest-900 outline-none placeholder:text-stone-400"
         />
@@ -210,14 +212,14 @@ function PincodeChecker() {
           type="submit"
           className="shrink-0 rounded-[9px] bg-forest-600 px-[22px] py-[11px] text-[14px] font-bold text-white transition hover:bg-forest-700"
         >
-          {isFetching ? 'Checking…' : 'Check Delivery'}
+          {isFetching ? t('home-hero-pincode-checking') : t('home-hero-pincode-check-cta')}
         </button>
       </form>
       {checked ? (
         <p className={`mt-[14px] text-[13px] font-medium ${serviceable ? 'text-[#7FC95E]' : 'text-amber-200'}`}>
           {serviceable
-            ? `Great news — we deliver to ${submitted}.`
-            : `${submitted} isn’t in our direct network yet — courier delivery may apply.`}
+            ? t('home-hero-pincode-serviceable', { pincode: submitted })
+            : t('home-hero-pincode-not-serviceable', { pincode: submitted })}
         </p>
       ) : (
         <p className="mt-[14px] flex items-center gap-[7px] text-[13px] text-white/85">
@@ -225,7 +227,7 @@ function PincodeChecker() {
             <circle cx="12" cy="12" r="9" />
             <path d="m8.5 12 2.3 2.3 4.7-4.7" />
           </svg>
-          Delivering to 500+ cities across India
+          {t('home-hero-pincode-coverage')}
         </p>
       )}
     </div>
@@ -233,6 +235,7 @@ function PincodeChecker() {
 }
 
 export function HeroPlant() {
+  const { t } = useTranslation('common');
   const { slides, configured } = useHeroSlides();
   const [reduce, setReduce] = React.useState(false);
   const [active, setActive] = React.useState(0);
@@ -289,7 +292,7 @@ export function HeroPlant() {
               aria-hidden
               style={{ fontSize: '12px', color: '#8FD56F' }}
             />
-            India’s Most Loved Plant Store
+            {t('home-hero-eyebrow')}
             <i
               className="fa-solid fa-leaf"
               aria-hidden
@@ -309,9 +312,9 @@ export function HeroPlant() {
             </motion.h1>
           ) : (
             <h1 className="font-pahserif text-[56px] font-bold leading-[1.0] tracking-[-0.015em] text-white">
-              <WordReveal text="Bring Nature Home." delay={0.1} />
+              <WordReveal text={t('home-hero-title-1')} delay={0.1} />
               <span className="block text-[#7FC95E]">
-                <WordReveal text="Live Better." delay={0.32} />
+                <WordReveal text={t('home-hero-title-2')} delay={0.32} />
               </span>
             </h1>
           )}
@@ -323,8 +326,7 @@ export function HeroPlant() {
             transition={{ delay: headline ? 0.12 : 0.58, duration: 0.7, ease: EXPO }}
             className="mt-[22px] max-w-[432px] text-[17px] leading-[1.5] text-white/[0.86]"
           >
-            {subheadline ??
-              'Premium plants, planters, seeds, fertilizers & everything you need for a thriving green space.'}
+            {subheadline ?? t('home-hero-subtitle')}
           </motion.p>
 
           {ctaText && ctaLink ? (
@@ -381,9 +383,9 @@ export function HeroPlant() {
               aria-hidden
               style={{ fontSize: '22px', color: '#8FD56F' }}
             />
-            <p className="font-jost text-[11px] font-medium uppercase tracking-[0.16em] text-white/[0.82]">Up To</p>
-            <p className="my-[3px] font-hanken text-[32px] font-extrabold leading-[1.04] text-white whitespace-nowrap">40% OFF</p>
-            <p className="text-[12.5px] text-white/[0.82]">On Bestsellers</p>
+            <p className="font-jost text-[11px] font-medium uppercase tracking-[0.16em] text-white/[0.82]">{t('home-hero-offer-eyebrow')}</p>
+            <p className="my-[3px] font-hanken text-[32px] font-extrabold leading-[1.04] text-white whitespace-nowrap">{t('home-hero-offer-amount')}</p>
+            <p className="text-[12.5px] text-white/[0.82]">{t('home-hero-offer-subtitle')}</p>
           </div>
         </motion.div>
       )}
