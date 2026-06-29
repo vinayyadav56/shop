@@ -64,19 +64,18 @@ const BENEFITS: { title: string; body: string; img: string; icon: React.ReactNod
 export function WhyPlants() {
   const { t } = useTranslation('common');
   return (
-    <section className="bg-cream-50">
-      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-16 lg:pb-[60px] lg:pt-[66px]">
+    <section className="border-t border-kraft-200/60 bg-white">
+      <div className="mx-auto max-w-7xl px-5 py-11 sm:px-8 lg:px-16 lg:pb-[48px] lg:pt-[52px]">
         {/* centred header */}
-        <div className="mx-auto mb-[46px] max-w-[760px] text-center">
-          <span className="inline-flex items-center gap-2.5 font-jost text-[12px] font-medium uppercase tracking-[0.26em] text-forest-600">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[15px] w-[15px] text-forest-500"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg>
+        <div className="mx-auto mb-[32px] max-w-[760px] text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-forest-600/15 bg-forest-600/[0.07] px-4 py-1.5 font-jost text-[11.5px] font-semibold uppercase tracking-[0.22em] text-forest-600">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[14px] w-[14px] text-forest-500"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg>
             {t('home-why-eyebrow')}
           </span>
-          <div className="mx-auto mt-3.5 h-0.5 w-[54px] rounded-full bg-forest-500" />
-          <h2 className="font-pahserif mt-[18px] text-[40px] font-bold not-italic leading-[1.02] tracking-[-0.012em] text-forest-900 sm:text-[56px]">
+          <h2 className="font-pahserif mt-4 text-[30px] font-bold not-italic leading-[1.05] tracking-[-0.012em] text-forest-900 sm:text-[42px]">
             {t('home-why-title')}
           </h2>
-          <p className="mx-auto mt-[18px] max-w-xl font-hanken text-[15px] leading-[1.55] text-stone-500 sm:text-[17px]">
+          <p className="mx-auto mt-3 max-w-xl font-hanken text-[14px] leading-[1.55] text-stone-500 sm:text-[15.5px]">
             {t('home-why-subtitle')}{' '}
             <strong className="font-bold text-forest-700">{t('home-why-subtitle-strong')}</strong>
           </p>
@@ -105,19 +104,21 @@ export function WhyPlants() {
           ))}
         </div>
 
-        {/* closing CTA band */}
-        <div className="mt-[38px] flex flex-col items-center gap-5 rounded-[18px] border border-sage-200 bg-sage-100 p-6 text-center sm:flex-row sm:gap-[28px] sm:px-8 sm:py-6 sm:text-start">
-          <div className="flex h-[62px] w-[62px] shrink-0 items-center justify-center rounded-full bg-forest-800 text-white shadow-[0_8px_20px_rgba(20,40,24,0.22)]">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[25px] w-[25px]"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg>
+        {/* closing CTA band — luxury forest + gold treatment */}
+        <div className="relative mt-[40px] flex flex-col items-center gap-5 overflow-hidden rounded-[22px] bg-[linear-gradient(120deg,#16301A_0%,#1E4023_55%,#2E5E2A_100%)] p-7 text-center shadow-[0_28px_60px_-30px_rgba(20,40,24,0.65)] ring-1 ring-white/10 sm:flex-row sm:gap-[30px] sm:px-9 sm:py-7 sm:text-start">
+          <div aria-hidden className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-[#DCC07A]/10 blur-3xl" />
+          <div aria-hidden className="pointer-events-none absolute -bottom-16 -left-10 h-44 w-44 rounded-full bg-[#8FD56F]/10 blur-3xl" />
+          <div className="relative flex h-[62px] w-[62px] shrink-0 items-center justify-center rounded-full bg-[linear-gradient(160deg,#DCC07A,#B8923E)] text-[#16301A] shadow-[0_12px_26px_rgba(184,146,62,0.4)]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" className="h-[25px] w-[25px]"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg>
           </div>
-          <div className="hidden w-px self-stretch bg-sage-300 sm:my-[3px] sm:block" />
-          <p className="flex-1 font-hanken text-[16px] leading-[1.45] text-forest-900 sm:text-[18px]">
-            {t('home-why-cta-band-text')} <strong className="font-bold">{t('home-why-cta-band-strong-1')}</strong> {t('home-why-cta-band-and')}{' '}
-            <strong className="font-bold">{t('home-why-cta-band-strong-2')}</strong>
+          <div className="relative hidden w-px self-stretch bg-white/15 sm:my-[3px] sm:block" />
+          <p className="relative flex-1 font-hanken text-[16px] leading-[1.5] text-white/90 sm:text-[18px]">
+            {t('home-why-cta-band-text')} <strong className="font-bold text-[#DCC07A]">{t('home-why-cta-band-strong-1')}</strong> {t('home-why-cta-band-and')}{' '}
+            <strong className="font-bold text-[#DCC07A]">{t('home-why-cta-band-strong-2')}</strong>
           </p>
           <Link
             href="/plants/search"
-            className="inline-flex shrink-0 items-center gap-[9px] rounded-xl bg-ds-accent px-[26px] py-[14px] font-jost text-[15px] font-bold text-white transition hover:opacity-90 active:scale-[0.97]"
+            className="relative inline-flex shrink-0 items-center gap-[9px] rounded-xl bg-[linear-gradient(180deg,#DCC07A,#B8923E)] px-[26px] py-[14px] font-jost text-[15px] font-bold text-[#16301A] shadow-[0_12px_26px_rgba(184,146,62,0.38)] transition hover:brightness-105 active:scale-[0.97]"
           >
             {t('home-why-cta')}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M5 12h13M13 6l6 6-6 6" /></svg>

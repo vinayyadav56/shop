@@ -258,9 +258,9 @@ const PlantAtHomeCard: React.FC<Props> = ({
             type="button"
             onClick={handleAskAi}
             aria-label={`Ask AI about ${product.name}`}
-            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-[#0D3B2E]/85 px-2.5 py-1.5 text-[11px] font-semibold text-white shadow-sm backdrop-blur transition hover:scale-[1.03] hover:bg-[#0D3B2E]"
+            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-[#0D3B2E] px-3 py-2 text-[12px] font-bold text-white shadow-[0_6px_18px_-6px_rgba(0,0,0,0.6)] ring-1 ring-[#8FD56F]/60 transition hover:scale-[1.04] hover:ring-[#8FD56F]"
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="#DCC07A" aria-hidden>
               <path d="M12 2l1.9 5.6L19.5 9.5 13.9 11.4 12 17l-1.9-5.6L4.5 9.5l5.6-1.9L12 2z" />
             </svg>
             Ask AI
@@ -278,6 +278,12 @@ const PlantAtHomeCard: React.FC<Props> = ({
         >
           {product.name}
         </button>
+
+        {(product as any).scientific_name && (
+          <p className="mt-0.5 truncate font-cormorant text-[12.5px] italic text-stone-500">
+            {(product as any).scientific_name}
+          </p>
+        )}
 
         <StarRow rating={ratingVal} count={reviewCount} />
 
@@ -311,11 +317,12 @@ const PlantAtHomeCard: React.FC<Props> = ({
             <button
               type="button"
               onClick={handleQuickView}
-              aria-label="Select options"
-              title="Select options"
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ds-accent text-white shadow-[0_8px_20px_-8px_rgba(46,94,42,0.7)] transition hover:brightness-110"
+              aria-label="Add to cart"
+              title="Add to cart"
+              className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-ds-accent px-3.5 text-[12px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(46,94,42,0.7)] transition hover:brightness-110"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[16px] w-[16px]"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" /></svg>
+              Add to cart
             </button>
           ) : (
             <AddToCart variant="icon" counterVariant="oganesson" data={product} />

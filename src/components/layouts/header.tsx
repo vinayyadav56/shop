@@ -170,8 +170,8 @@ const Header = ({ layout }: { layout?: string }) => {
           searchOpen
             ? 'bg-forest-900/95 shadow-[0_8px_28px_rgba(22,48,26,0.28)] backdrop-blur-xl'
             : solid
-            ? 'bg-white/95 shadow-[0_4px_24px_rgba(34,48,26,0.08)] backdrop-blur-xl'
-            : 'bg-gradient-to-b from-deep/85 via-deep/45 to-transparent'
+            ? 'bg-white/80 shadow-[0_4px_24px_rgba(34,48,26,0.08)] backdrop-blur-2xl backdrop-saturate-150'
+            : 'bg-forest-900/40 shadow-[0_4px_24px_rgba(22,48,26,0.18)] backdrop-blur-2xl backdrop-saturate-150'
         }`}
       >
         {/* announcement bar — centered shipping message (per reference); the city

@@ -67,7 +67,7 @@ export function BestSellers({
     type: activeSlug,
     limit: 12,
   });
-  const list = ((isHomeTab && (products?.length ?? 0) > 0 ? products : tabProducts) ?? []).slice(0, 6);
+  const list = ((isHomeTab && (products?.length ?? 0) > 0 ? products : tabProducts) ?? []).slice(0, 5);
   const loading = isHomeTab ? Boolean(isLoading) && list.length === 0 : tabLoading;
 
   return (
@@ -103,9 +103,9 @@ export function BestSellers({
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         {loading
-          ? Array.from({ length: 6 }).map((_, i) => (
+          ? Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="w-full">
                 <div className="aspect-square w-full animate-pulse rounded-xl bg-[#D9EDE2]" />
                 <div className="mt-3 h-4 w-3/4 animate-pulse rounded bg-[#D9EDE2]" />

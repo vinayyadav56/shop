@@ -4,35 +4,12 @@ import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { useBannerEnabled } from '@/lib/use-home-config';
 
-const PERKS: { a: string; b: string; icon: JSX.Element }[] = [
-  {
-    a: 'Best Quality',
-    b: 'Products',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" /><path d="m9 12 2 2 4-4" /></svg>
-    ),
-  },
-  {
-    a: 'Expert Plant',
-    b: 'Care Support',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" /><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" /></svg>
-    ),
-  },
-  {
-    a: 'Easy Returns',
-    b: '& Refunds',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" /><path d="M3 3v5h5" /></svg>
-    ),
-  },
-  {
-    a: 'Secure',
-    b: 'Payments',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="M3 10h18" /></svg>
-    ),
-  },
+// title / sub-title / supporting line / Font Awesome icon
+const PERKS: { a: string; b: string; c: string; icon: string }[] = [
+  { a: 'Best Quality', b: 'Products', c: 'Hand-picked, nursery-fresh', icon: 'fa-award' },
+  { a: 'Expert Plant', b: 'Care Support', c: 'Real guidance, anytime', icon: 'fa-headset' },
+  { a: 'Easy Returns', b: '& Refunds', c: '7-day, hassle-free', icon: 'fa-arrow-rotate-left' },
+  { a: 'Secure', b: 'Payments', c: '100% protected checkout', icon: 'fa-shield-halved' },
 ];
 
 export function SpringSaleBand() {
@@ -92,11 +69,18 @@ export function SpringSaleBand() {
         >
           {PERKS.map((p) => (
             <div key={`${p.a}-${p.b}`} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ flexShrink: 0, color: '#8FD56F' }}>{p.icon}</span>
-              <div className="font-hanken" style={{ fontSize: 13, fontWeight: 600, color: '#fff', lineHeight: 1.28 }}>
-                {p.a}
-                <br />
-                {p.b}
+              <span
+                style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 40, height: 40, borderRadius: 999, background: 'rgba(143,213,111,0.12)', border: '1px solid rgba(143,213,111,0.25)' }}
+              >
+                <i className={`fa-solid ${p.icon}`} aria-hidden style={{ color: '#8FD56F', fontSize: 17 }} />
+              </span>
+              <div className="font-hanken" style={{ lineHeight: 1.25 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>
+                  {p.a} {p.b}
+                </div>
+                <div style={{ fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,0.62)', marginTop: 2 }}>
+                  {p.c}
+                </div>
               </div>
             </div>
           ))}
