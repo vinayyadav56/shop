@@ -1,15 +1,11 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { useTranslation } from 'next-i18next';
 import SafeImage from '@/components/ui/safe-image';
+import { EXPO } from '@/components/storefront/motion';
 
-/**
- * "Small Plants, Big Impact" — the Web Home reference benefit section: a centred
- * header + 6 benefit cards (image + circular icon badge straddling the image,
- * title, divider, body) + a closing CTA band. Responsive 2 → 3 (md) → 6 (lg) cols
- * so tablets get a real grid (matches the breakpoint contract).
- */
 const BENEFITS: { title: string; body: string; img: string; icon: React.ReactNode }[] = [
   {
     title: 'Purify the Air',
@@ -61,13 +57,22 @@ const BENEFITS: { title: string; body: string; img: string; icon: React.ReactNod
   },
 ];
 
+const GRAIN = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
+
 export function WhyPlants() {
   const { t } = useTranslation('common');
   return (
     <section className="border-t border-kraft-200/60 bg-white">
       <div className="mx-auto max-w-7xl px-5 py-11 sm:px-8 lg:px-16 lg:pb-[48px] lg:pt-[52px]">
-        {/* centred header */}
-        <div className="mx-auto mb-[32px] max-w-[760px] text-center">
+
+        {/* header */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, ease: EXPO }}
+          className="mx-auto mb-8 max-w-[760px] text-center"
+        >
           <span className="inline-flex items-center gap-2 rounded-full border border-forest-600/15 bg-forest-600/[0.07] px-4 py-1.5 font-jost text-[11.5px] font-semibold uppercase tracking-[0.22em] text-forest-600">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[14px] w-[14px] text-forest-500"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg>
             {t('home-why-eyebrow')}
@@ -79,51 +84,109 @@ export function WhyPlants() {
             {t('home-why-subtitle')}{' '}
             <strong className="font-bold text-forest-700">{t('home-why-subtitle-strong')}</strong>
           </p>
-        </div>
+        </motion.div>
 
         {/* benefit cards */}
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6 lg:gap-[18px]">
-          {BENEFITS.map((b) => (
-            <div
+          {BENEFITS.map((b, i) => (
+            <motion.div
               key={b.title}
-              className="group relative overflow-hidden rounded-[18px] border border-kraft-200 bg-white shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,48,26,0.09)]"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, delay: i * 0.06, ease: EXPO }}
+              className="group relative overflow-hidden rounded-[18px] border border-kraft-200 bg-white shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition-all duration-300 hover:-translate-y-[6px] hover:border-forest-200 hover:shadow-[0_16px_36px_rgba(34,48,26,0.13)]"
             >
+              {/* image */}
               <div className="relative h-[140px] overflow-hidden bg-cream-100 sm:h-[160px] lg:h-[178px]">
-                <SafeImage src={b.img} alt={b.title} fill sizes="(max-width:768px) 50vw, (max-width:1024px) 33vw, 16vw" className="object-cover" />
+                <SafeImage
+                  src={b.img}
+                  alt={b.title}
+                  fill
+                  sizes="(max-width:768px) 50vw, (max-width:1024px) 33vw, 16vw"
+                  className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.08]"
+                />
+                {/* subtle green tint on hover */}
+                <div className="absolute inset-0 bg-forest-600/0 transition-colors duration-500 group-hover:bg-forest-600/12" />
               </div>
-              {/* circular icon badge straddling the image bottom */}
-              <div className="absolute left-1/2 top-[140px] flex h-[58px] w-[58px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-sage-200 bg-white text-forest-700 shadow-[0_6px_16px_rgba(20,40,24,0.12)] sm:top-[160px] lg:top-[178px]">
+
+              {/* icon badge */}
+              <div className="absolute left-1/2 top-[140px] flex h-[58px] w-[58px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-sage-200 bg-white text-forest-700 shadow-[0_6px_16px_rgba(20,40,24,0.12)] transition-all duration-300 group-hover:scale-110 group-hover:border-forest-300 group-hover:text-forest-600 group-hover:shadow-[0_8px_22px_rgba(20,80,24,0.2)] sm:top-[160px] lg:top-[178px]">
                 {b.icon}
               </div>
+
               <div className="px-[18px] pb-[26px] pt-[42px] text-center">
-                <h3 className="text-[16px] font-bold leading-[1.2] text-forest-900">{b.title}</h3>
-                <div className="mx-auto mb-[14px] mt-[11px] h-0.5 w-[26px] rounded-full bg-forest-500" />
+                <h3 className="text-[16px] font-bold leading-[1.2] text-forest-900 transition-colors duration-300 group-hover:text-forest-700">
+                  {b.title}
+                </h3>
+                {/* animated divider — grows + turns green on hover */}
+                <div className="mx-auto mb-[14px] mt-[11px] h-0.5 w-[26px] rounded-full bg-forest-400 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-[48px] group-hover:bg-[#4ADE80]" />
                 <p className="text-[12.5px] leading-[1.62] text-stone-500">{b.body}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        {/* closing CTA band — luxury forest + gold treatment */}
-        <div className="relative mt-[40px] flex flex-col items-center gap-5 overflow-hidden rounded-[22px] bg-[linear-gradient(120deg,#16301A_0%,#1E4023_55%,#2E5E2A_100%)] p-7 text-center shadow-[0_28px_60px_-30px_rgba(20,40,24,0.65)] ring-1 ring-white/10 sm:flex-row sm:gap-[30px] sm:px-9 sm:py-7 sm:text-start">
-          <div aria-hidden className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-[#DCC07A]/10 blur-3xl" />
-          <div aria-hidden className="pointer-events-none absolute -bottom-16 -left-10 h-44 w-44 rounded-full bg-[#8FD56F]/10 blur-3xl" />
-          <div className="relative flex h-[62px] w-[62px] shrink-0 items-center justify-center rounded-full bg-[linear-gradient(160deg,#DCC07A,#B8923E)] text-[#16301A] shadow-[0_12px_26px_rgba(184,146,62,0.4)]">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" className="h-[25px] w-[25px]"><path d="M7 20s-1-7 4-11c0 0 2 4-1 7" /><path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" /></svg>
+        {/* ── CTA band — next level ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 36 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.7, ease: EXPO }}
+          className="relative mt-10 overflow-hidden rounded-[24px]"
+        >
+          {/* background photo */}
+          <img
+            src="https://images.unsplash.com/photo-1470058869958-2a77ade41c02?w=1600&q=82&auto=format&fit=crop"
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          {/* dark overlay */}
+          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(5,16,8,0.96)_0%,rgba(10,28,14,0.90)_45%,rgba(18,46,22,0.78)_100%)]" />
+          {/* grain */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.055] mix-blend-overlay"
+            style={{ backgroundImage: GRAIN, backgroundSize: '180px 180px' }}
+          />
+          {/* green radial glow left */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-[radial-gradient(ellipse_at_0%_60%,rgba(74,222,128,0.10)_0%,transparent_65%)]" />
+          {/* gold glow right */}
+          <div className="pointer-events-none absolute -right-10 -top-10 h-56 w-56 rounded-full bg-[#C8F09A]/8 blur-3xl" />
+
+          <div className="relative z-10 flex flex-col items-center gap-6 px-7 py-9 text-center sm:px-10 lg:flex-row lg:gap-10 lg:px-12 lg:py-10 lg:text-left">
+
+            {/* icon */}
+            <div className="flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-2xl border border-[#4ADE80]/25 bg-[#4ADE80]/12 text-[#4ADE80]">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7">
+                <path d="M7 20s-1-7 4-11c0 0 2 4-1 7" />
+                <path d="M12 20c0-6 4-10 9-10 0 6-4 10-9 10Z" />
+              </svg>
+            </div>
+
+            {/* vertical divider */}
+            <div className="hidden w-px self-stretch bg-white/10 lg:block" />
+
+            {/* text */}
+            <p className="flex-1 font-hanken text-[18px] font-medium leading-[1.55] text-white/90 lg:text-[21px]">
+              {t('home-why-cta-band-text')}{' '}
+              <strong className="font-bold text-[#86EFAC]">{t('home-why-cta-band-strong-1')}</strong>
+              {' '}{t('home-why-cta-band-and')}{' '}
+              <strong className="font-bold text-[#86EFAC]">{t('home-why-cta-band-strong-2')}</strong>
+            </p>
+
+            {/* CTA */}
+            <Link
+              href="/plants/search"
+              className="shrink-0 inline-flex items-center gap-2 rounded-[13px] bg-[#4ADE80] px-6 py-3.5 font-hanken text-[14px] font-bold text-[#061a0b] shadow-[0_0_28px_rgba(74,222,128,0.25)] transition duration-200 hover:bg-[#22c55e] active:scale-[0.97]"
+            >
+              {t('home-why-cta')}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden>
+                <path d="M5 12h13M13 6l6 6-6 6" />
+              </svg>
+            </Link>
           </div>
-          <div className="relative hidden w-px self-stretch bg-white/15 sm:my-[3px] sm:block" />
-          <p className="relative flex-1 font-hanken text-[16px] leading-[1.5] text-white/90 sm:text-[18px]">
-            {t('home-why-cta-band-text')} <strong className="font-bold text-[#DCC07A]">{t('home-why-cta-band-strong-1')}</strong> {t('home-why-cta-band-and')}{' '}
-            <strong className="font-bold text-[#DCC07A]">{t('home-why-cta-band-strong-2')}</strong>
-          </p>
-          <Link
-            href="/plants/search"
-            className="relative inline-flex shrink-0 items-center gap-[9px] rounded-xl bg-[linear-gradient(180deg,#DCC07A,#B8923E)] px-[26px] py-[14px] font-jost text-[15px] font-bold text-[#16301A] shadow-[0_12px_26px_rgba(184,146,62,0.38)] transition hover:brightness-105 active:scale-[0.97]"
-          >
-            {t('home-why-cta')}
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-          </Link>
-        </div>
+        </motion.div>
+
       </div>
     </section>
   );

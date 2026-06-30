@@ -112,13 +112,14 @@ const Header = ({ layout }: { layout?: string }) => {
       setScrolled(false);
       return;
     }
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 10);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, [isHome]);
-  const solid = !isHome || scrolled;
-  const position = 'sticky';
+  const position = isHome ? 'fixed' : 'sticky';
+  // true = over dark hero (white icons/text), false = glass state (dark icons/text)
+  const overHero = isHome && !scrolled;
 
   const openCart = () => setDrawer({ display: true, view: 'cart' });
 
@@ -151,13 +152,7 @@ const Header = ({ layout }: { layout?: string }) => {
     else openModal('LOGIN_VIEW');
   };
 
-  // When the search overlay is open we drop a dark scrim behind the bar so the
-  // (white) nav items stay readable — the requested "black transparent overlay".
-  // useLight = white text/icons (transparent-over-hero OR search-open).
-  const useLight = !solid || searchOpen;
-  const iconBtn = `grid h-10 w-10 place-items-center rounded-full transition ${
-    useLight ? 'text-white hover:bg-white/10' : 'text-forest-900 hover:bg-forest/8'
-  }`;
+  const iconBtn = 'grid h-10 w-10 place-items-center rounded-full text-white transition hover:bg-white/10';
 
   return (
     <>
@@ -167,20 +162,16 @@ const Header = ({ layout }: { layout?: string }) => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: EXPO }}
         className={`${position} inset-x-0 top-0 z-50 w-full transition-all duration-300 ${
-          searchOpen
-            ? 'bg-forest-900/95 shadow-[0_8px_28px_rgba(22,48,26,0.28)] backdrop-blur-xl'
-            : solid
-            ? 'bg-white/80 shadow-[0_4px_24px_rgba(34,48,26,0.08)] backdrop-blur-2xl backdrop-saturate-150'
-            : 'bg-forest-900/40 shadow-[0_4px_24px_rgba(22,48,26,0.18)] backdrop-blur-2xl backdrop-saturate-150'
+          overHero
+            ? 'bg-transparent'
+            : 'bg-forest-900/95 backdrop-blur-xl shadow-[0_4px_24px_rgba(22,48,26,0.22)]'
         }`}
       >
-        {/* announcement bar — centered shipping message (per reference); the city
-            switcher stays on the left for the city-first delivery UX. */}
-        <div className="bg-forest-900 text-white">
-          <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2 text-[11px] font-medium tracking-wide sm:px-8">
+        {/* announcement bar — always white text, slides away on scroll */}
+        <div className={`overflow-hidden border-b border-white/[0.12] text-white transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-12 opacity-100'}`}>
+          <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2 text-[11px] font-medium tracking-wide sm:px-8 [text-shadow:0_1px_6px_rgba(0,0,0,0.7)]">
             <CitySwitcher tone="light" />
             <span className="pointer-events-none absolute left-1/2 hidden -translate-x-1/2 items-center gap-2.5 whitespace-nowrap sm:flex">
-              {/* shipping icon (was a leaf) — matches the free-shipping message */}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5 text-sage-300" aria-hidden><path d="M5 17H3V6h11v11" /><path d="M14 9h4l3 3v5h-2" /><circle cx="7.5" cy="18" r="1.6" /><circle cx="17.5" cy="18" r="1.6" /></svg>
               FREE SHIPPING on orders above ₹499
               <span className="h-3 w-px bg-white/30" />
@@ -191,125 +182,94 @@ const Header = ({ layout }: { layout?: string }) => {
         </div>
 
         {/* main bar */}
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
+        <div className="relative mx-auto flex max-w-7xl items-center px-5 py-2.5 sm:px-8">
+          {/* Logo */}
           <Link href="/" aria-label="PlantAtHome home" className="shrink-0">
-            <BrandLogo light={useLight} />
+            <BrandLogo light />
           </Link>
 
-          {/* centred nav */}
-          <nav
-            className={`hidden items-center gap-2.5 md:flex lg:gap-4 xl:gap-7 ${
-              useLight ? 'text-white' : 'text-forest-900'
-            }`}
-          >
-            {NAV.map((n) =>
-              n.menu ? (
-                <div key={n.label} className="group relative">
-                  <Link
-                    href={n.href}
-                    className={`inline-flex items-center gap-1 text-[13px] font-medium transition xl:text-[14px] ${
-                      useLight ? 'hover:text-white/80' : 'hover:text-forest-600'
-                    }`}
-                  >
-                    {n.label}
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 opacity-70 transition-transform duration-200 group-hover:rotate-180">
-                      <path d="m6 9 6 6 6-6" />
-                    </svg>
-                  </Link>
-                  {/* hover dropdown — white panel, readable over the transparent or solid bar */}
-                  <div className="invisible absolute left-1/2 top-full z-50 w-60 -translate-x-1/2 translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                    <div className="grid grid-cols-1 gap-0.5 rounded-2xl border border-forest-900/10 bg-white p-2 shadow-[0_28px_64px_-26px_rgba(13,59,36,0.45)]">
-                      {n.menu.map((m) => (
-                        <Link
-                          key={m.label}
-                          href={m.href}
-                          className="rounded-lg px-3.5 py-2 text-[13px] font-medium text-forest-900 transition hover:bg-[#EAF4E6] hover:text-[#4E8B31]"
-                        >
-                          {m.label}
-                        </Link>
-                      ))}
+          {/* ── LIQUID GLASS NAV PILL — centered ── */}
+          <nav className="absolute left-1/2 hidden -translate-x-1/2 md:block">
+            <div className="flex items-center gap-0 rounded-full border border-white/[0.22] bg-[linear-gradient(145deg,rgba(255,255,255,0.13)_0%,rgba(255,255,255,0.06)_100%)] px-1.5 py-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.26),0_4px_24px_rgba(0,0,0,0.14)] backdrop-blur-2xl backdrop-saturate-[1.8]">
+              {NAV.map((n) =>
+                n.menu ? (
+                  <div key={n.label} className="group relative">
+                    <Link
+                      href={n.href}
+                      className="inline-flex items-center gap-1 whitespace-nowrap rounded-full px-3.5 py-1.5 text-[13px] font-medium text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white"
+                    >
+                      {n.label}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-[11px] w-[11px] opacity-50 transition-transform duration-200 group-hover:rotate-180">
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </Link>
+                    {/* dropdown — glass panel */}
+                    <div className="invisible absolute left-1/2 top-full z-50 w-52 -translate-x-1/2 translate-y-2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                      <div className="grid grid-cols-1 gap-0.5 rounded-2xl border border-white/[0.18] bg-white/[0.88] p-1.5 shadow-[0_20px_60px_-12px_rgba(0,0,0,0.28)] backdrop-blur-2xl">
+                        {n.menu.map((m) => (
+                          <Link
+                            key={m.label}
+                            href={m.href}
+                            className="rounded-[10px] px-3.5 py-2 text-[13px] font-medium text-neutral-700 transition hover:bg-black/[0.06] hover:text-neutral-900"
+                          >
+                            {m.label}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <Link
-                  key={n.label}
-                  href={n.href}
-                  className={`text-[13px] font-medium transition xl:text-[14px] ${
-                    useLight ? 'hover:text-white/80' : 'hover:text-forest-600'
-                  }`}
-                >
-                  {n.label}
-                </Link>
-              ),
-            )}
+                ) : (
+                  <Link
+                    key={n.label}
+                    href={n.href}
+                    className="whitespace-nowrap rounded-full px-3.5 py-1.5 text-[13px] font-medium text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white"
+                  >
+                    {n.label}
+                  </Link>
+                ),
+              )}
+            </div>
           </nav>
 
-          {/* right cluster — Track Order · Wishlist · Cart · Login (per reference) */}
-          {(() => {
-            const actionCol = `group flex flex-col items-center gap-1 transition ${
-              useLight ? 'text-white hover:text-white/80' : 'text-forest-900 hover:text-forest-600'
-            }`;
-            const actionLabel = 'text-[10.5px] font-medium leading-none';
-            return (
-              <div className="flex items-center gap-2.5 sm:gap-4">
-                {/* compact search */}
-                <button
-                  type="button"
-                  onClick={() => setSearchOpen(true)}
-                  className={`${actionCol} hidden md:flex`}
-                  aria-label={t('text-search') ?? 'Search'}
-                >
-                  <SearchIcon className="h-[19px] w-[19px]" />
-                  <span className={`${actionLabel} hidden lg:block`}>Search</span>
-                </button>
+          {/* ── LIQUID GLASS ACTIONS PILL — right ── */}
+          <div className="ml-auto flex items-center gap-3">
+            {/* desktop: glass pill */}
+            <div className="hidden items-center gap-0 rounded-full border border-white/[0.22] bg-[linear-gradient(145deg,rgba(255,255,255,0.13)_0%,rgba(255,255,255,0.06)_100%)] px-1.5 py-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.26),0_4px_24px_rgba(0,0,0,0.14)] backdrop-blur-2xl backdrop-saturate-[1.8] md:flex">
+              {/* Search */}
+              <button type="button" onClick={() => setSearchOpen(true)} className="grid h-9 w-9 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white" aria-label={t('text-search') ?? 'Search'}>
+                <SearchIcon className="h-[18px] w-[18px]" />
+              </button>
+              {/* Track Order */}
+              <Link href="/track-order" className="grid h-9 w-9 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white" aria-label="Track Order">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M5 17H3V6a1 1 0 0 1 1-1h11v12" /><path d="M15 9h4l3 3v5h-2" /><circle cx="7.5" cy="18" r="1.8" /><circle cx="17.5" cy="18" r="1.8" /></svg>
+              </Link>
+              {/* Wishlist */}
+              <Link href="/wishlists" className="grid h-9 w-9 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white" aria-label="Wishlist">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z" /></svg>
+              </Link>
+              {/* divider */}
+              <span className="mx-1 h-4 w-px bg-white/20" />
+              {/* Cart */}
+              <button ref={cartBtnRef} data-cart-target type="button" onClick={openCart} className="relative grid h-9 w-9 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white" aria-label="Cart">
+                <Icon.bag className="h-[18px] w-[18px]" />
+                <span className="absolute -right-0.5 -top-0.5 grid h-[16px] min-w-[16px] place-items-center rounded-full bg-ds-accent px-1 text-[9px] font-bold text-white">
+                  {totalUniqueItems}
+                </span>
+              </button>
+              {/* Login */}
+              <button type="button" onClick={onProfile} className="grid h-9 w-9 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white" aria-label={isAuthorize ? 'My account' : 'Login'}>
+                <Icon.user className="h-[18px] w-[18px]" />
+              </button>
+            </div>
 
-                {/* Track Order */}
-                <Link href="/track-order" className={`${actionCol} hidden md:flex`}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[19px] w-[19px]"><path d="M5 17H3V6a1 1 0 0 1 1-1h11v12" /><path d="M15 9h4l3 3v5h-2" /><circle cx="7.5" cy="18" r="1.8" /><circle cx="17.5" cy="18" r="1.8" /></svg>
-                  <span className={`${actionLabel} hidden lg:block`}>Track Order</span>
-                </Link>
-
-                {/* Wishlist */}
-                <Link href="/wishlists" className={`${actionCol} hidden md:flex`}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[19px] w-[19px]"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z" /></svg>
-                  <span className={`${actionLabel} hidden lg:block`}>Wishlist</span>
-                </Link>
-
-                {/* Cart */}
-                <button ref={cartBtnRef} data-cart-target type="button" onClick={openCart} className={`${actionCol} relative`} aria-label="Cart">
-                  <span className="relative">
-                    <Icon.bag className="h-[19px] w-[19px]" />
-                    <span className="absolute -right-2 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-ds-accent px-1 text-[9px] font-bold text-white">
-                      {totalUniqueItems}
-                    </span>
-                  </span>
-                  <span className={`${actionLabel} hidden lg:block`}>Cart</span>
-                </button>
-
-                {/* Login / Account */}
-                <button type="button" onClick={onProfile} className={`${actionCol} hidden md:flex`} aria-label={isAuthorize ? 'My account' : 'Login'}>
-                  <Icon.user className="h-[19px] w-[19px]" />
-                  <span className={`${actionLabel} hidden lg:block`}>{isAuthorize ? 'Account' : 'Login'}</span>
-                </button>
-
-                {/* mobile: search + menu */}
-                <button type="button" onClick={() => setSearchOpen(true)} className={`${iconBtn} md:hidden`} aria-label={t('text-search') ?? 'Search'}>
-                  <SearchIcon className="h-[18px] w-[18px]" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMenuOpen(true)}
-                  className={`grid h-10 w-10 place-items-center rounded-full md:hidden ${
-                    solid ? 'bg-forest-700 text-white' : 'bg-white/15 text-white backdrop-blur'
-                  }`}
-                  aria-label="Menu"
-                >
-                  <Icon.menu className="h-5 w-5" />
-                </button>
-              </div>
-            );
-          })()}
+            {/* mobile: search + hamburger */}
+            <button type="button" onClick={() => setSearchOpen(true)} className={`${iconBtn} md:hidden`} aria-label={t('text-search') ?? 'Search'}>
+              <SearchIcon className="h-[18px] w-[18px]" />
+            </button>
+            <button type="button" onClick={() => setMenuOpen(true)} className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white backdrop-blur md:hidden" aria-label="Menu">
+              <Icon.menu className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
         {/* search overlay */}
@@ -320,7 +280,7 @@ const Header = ({ layout }: { layout?: string }) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25, ease: EXPO }}
-              className="border-t border-white/10 bg-white/95 backdrop-blur-xl"
+              className="border-t border-black/[0.06] bg-white/[0.96] backdrop-blur-2xl"
             >
               <div className="mx-auto flex max-w-5xl items-center gap-3 px-5 py-4 sm:px-8">
                 <div className="flex-1">
@@ -329,7 +289,7 @@ const Header = ({ layout }: { layout?: string }) => {
                 <button
                   type="button"
                   onClick={() => setSearchOpen(false)}
-                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-forest-900 hover:bg-forest/8"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-neutral-700 hover:bg-black/[0.06]"
                   aria-label="Close search"
                 >
                   <Icon.x className="h-5 w-5" />

@@ -30,8 +30,13 @@ export function PlantCompanyHome({
     <>
       {/* Section order matches the approved design reference:
           Hero → Category → Spring Sale → Collections → Bestsellers → Why Plants → Gifting → Trust */}
-      <HeroPlant />
-      <CategoryRow />
+      {/* Hero + category cards in one stacking context — cards float at hero bottom */}
+      <div className="relative">
+        <HeroPlant />
+        <div className="absolute bottom-0 left-0 right-0 z-[5] pb-5 sm:pb-6">
+          <CategoryRow />
+        </div>
+      </div>
       <SpringSaleBand />
       <Collections />
       <BestSellers products={products} isLoading={productsLoading} />

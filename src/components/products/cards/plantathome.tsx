@@ -288,12 +288,13 @@ const PlantAtHomeCard: React.FC<Props> = ({
         <StarRow rating={ratingVal} count={reviewCount} />
 
         <div
-          className="mt-auto flex items-end justify-between gap-2 pt-3"
+          className="mt-auto pt-3"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex min-w-0 items-end gap-1.5">
+          {/* price row */}
+          <div className="mb-2.5 flex items-end gap-1.5">
             {isVariable && (
-              <span className="self-end pb-0.5 text-[10.5px] uppercase tracking-[0.14em] text-stone-400">from</span>
+              <span className="self-end pb-0.5 text-[10px] uppercase tracking-[0.14em] text-stone-400">from</span>
             )}
             <span className="text-[17px] font-bold leading-none text-forest-900 sm:text-[18px]">
               {isVariable ? minPrice : price}
@@ -303,29 +304,27 @@ const PlantAtHomeCard: React.FC<Props> = ({
             )}
           </div>
 
+          {/* full-width action button */}
           {!inStock ? (
             <button
               type="button"
               onClick={handleQuickView}
-              aria-label="Notify me"
-              title="Notify me"
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-forest-800/40 text-forest-800 transition hover:bg-forest-800 hover:text-white"
+              className="flex h-10 w-full items-center justify-center gap-2 rounded-md border border-forest-800/30 text-[11px] font-bold uppercase tracking-[0.12em] text-forest-800 transition hover:bg-forest-800 hover:text-white"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.7 21a2 2 0 0 1-3.4 0" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[15px] w-[15px]"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.7 21a2 2 0 0 1-3.4 0" /></svg>
+              Notify me
             </button>
           ) : isVariable ? (
             <button
               type="button"
               onClick={handleQuickView}
-              aria-label="Add to cart"
-              title="Add to cart"
-              className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-ds-accent px-3.5 text-[12px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(46,94,42,0.7)] transition hover:brightness-110"
+              className="flex h-10 w-full items-center justify-center gap-2 rounded-md bg-ds-accent text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:brightness-110 focus:outline-0"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[16px] w-[16px]"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" /></svg>
-              Add to cart
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[15px] w-[15px]"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" /></svg>
+              Select options
             </button>
           ) : (
-            <AddToCart variant="icon" counterVariant="oganesson" data={product} />
+            <AddToCart variant="plantathome" counterVariant="plantathome" data={product} />
           )}
         </div>
       </div>

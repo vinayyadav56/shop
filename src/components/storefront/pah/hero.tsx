@@ -6,8 +6,9 @@ import { useAtom } from 'jotai';
 import { drawerAtom } from '@/store/drawer-atom';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { useBannerEnabled } from '@/lib/use-home-config';
+import { useHeroSlides } from '@/components/storefront/home/hero-plant';
 
-const HERO_IMG =
+const FALLBACK_IMG =
   'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=900&q=70';
 
 const CHIPS = [
@@ -22,11 +23,16 @@ export function Hero() {
   const [, setDrawer] = useAtom(drawerAtom);
   const { totalUniqueItems } = useCart();
   const showOffer = useBannerEnabled('heroOffer');
+  const { slides } = useHeroSlides();
+  const firstSlide = slides[0];
+  const heroImg = firstSlide?.type === 'video'
+    ? (firstSlide.poster ?? FALLBACK_IMG)
+    : (firstSlide?.src ?? FALLBACK_IMG);
 
   return (
     <div className="relative">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={HERO_IMG} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <img src={heroImg} alt="" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,30,18,0.72)_0%,rgba(15,30,18,0.34)_38%,rgba(15,30,18,0.26)_64%,rgba(15,30,18,0.40)_100%)]" />
 
       <div className="relative z-[2] px-5 pb-11 pt-3.5 text-white">

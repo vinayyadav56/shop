@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useSubscription } from '@/framework/settings';
 import { Hero } from './hero';
 import { SearchBar } from './search-bar';
 import { CategoryCircles } from './category-circles';
@@ -45,13 +46,15 @@ const FOOTER_COLS: { title: string; links: { label: string; href: string }[] }[]
 ];
 
 const FOOTER_SOCIAL: { name: string; faClass: string; href: string }[] = [
-  { name: 'Instagram', faClass: 'fa-instagram', href: '#' },
-  { name: 'Pinterest', faClass: 'fa-pinterest', href: '#' },
-  { name: 'Facebook', faClass: 'fa-facebook-f', href: '#' },
-  { name: 'YouTube', faClass: 'fa-youtube', href: '#' },
+  { name: 'Instagram', faClass: 'fa-instagram', href: 'https://instagram.com/plantathome' },
+  { name: 'Pinterest', faClass: 'fa-pinterest', href: 'https://pinterest.com/plantathome' },
+  { name: 'Facebook', faClass: 'fa-facebook-f', href: 'https://facebook.com/plantathome' },
+  { name: 'YouTube', faClass: 'fa-youtube', href: 'https://youtube.com/@plantathome' },
 ];
 
-function Footer({ onSubscribe }: { onSubscribe?: () => void }) {
+function Footer() {
+  const [email, setEmail] = React.useState('');
+  const { mutate: subscribe, isLoading, isSubscribed } = useSubscription();
   return (
     <footer className="relative mt-[26px] overflow-hidden bg-forest-900 px-[22px] pb-[88px] pt-[34px] text-[#E7EEE2] md:pb-6">
       {/* faint botanical ornament */}
@@ -90,24 +93,33 @@ function Footer({ onSubscribe }: { onSubscribe?: () => void }) {
           </p>
 
           {/* email field */}
-          <div
+          <form
+            onSubmit={(e) => { e.preventDefault(); if (email.trim() && !isLoading) subscribe({ email: email.trim() }); }}
             className="mt-4 flex items-center gap-2 rounded-[12px] border py-[5px] pl-[14px] pr-[5px]"
             style={{ background: 'rgba(255,255,255,0.07)', borderColor: 'rgba(231,238,226,0.18)' }}
           >
             <i className="fa-solid fa-envelope text-[16px] text-sage-300" aria-hidden />
             <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Your email address"
+              aria-label="Email address"
               className="min-w-0 flex-1 border-none bg-transparent py-2 font-hanken text-[13px] text-white outline-none placeholder:text-white/45"
             />
             <button
-              type="button"
+              type="submit"
               aria-label="Subscribe"
-              onClick={onSubscribe}
-              className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border-none bg-forest-600 transition-colors hover:bg-forest-500 active:scale-90 active:bg-forest-700"
+              disabled={isLoading}
+              className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border-none bg-forest-600 transition-colors hover:bg-forest-500 active:scale-90 active:bg-forest-700 disabled:opacity-60"
             >
-              <i className="fa-solid fa-arrow-right text-[14px] text-white" aria-hidden />
+              {isSubscribed
+                ? <i className="fa-solid fa-check text-[14px] text-white" aria-hidden />
+                : <i className="fa-solid fa-arrow-right text-[14px] text-white" aria-hidden />
+              }
             </button>
-          </div>
+          </form>
         </div>
 
         {/* divider */}

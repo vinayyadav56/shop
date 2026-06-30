@@ -50,7 +50,7 @@ const str = (v: any): string | undefined =>
  * and valid, otherwise the built-in villa-tour images. `configured` lets the
  * render path keep the default look byte-for-byte when nothing is set.
  */
-function useHeroSlides(): { slides: HeroSlideView[]; configured: boolean } {
+export function useHeroSlides(): { slides: HeroSlideView[]; configured: boolean } {
   const { settings } = useSettings() as any;
   const raw = settings?.heroSlides;
 
@@ -269,35 +269,39 @@ export function HeroPlant() {
       ? Math.max(0, Math.min(100, slide.overlayOpacity)) / 100
       : 1;
   const gradeStyle = {
-    background: `linear-gradient(96deg, rgba(8,20,12,${0.93 * k}) 0%, rgba(10,26,16,${0.82 * k}) 28%, rgba(10,26,16,${0.5 * k}) 55%, rgba(10,26,16,${0.16 * k}) 80%, rgba(10,26,16,${0.03 * k}) 100%)`,
+    background: `linear-gradient(96deg, rgba(8,20,12,${0.82 * k}) 0%, rgba(10,26,16,${0.62 * k}) 28%, rgba(10,26,16,${0.38 * k}) 55%, rgba(10,26,16,${0.12 * k}) 80%, rgba(10,26,16,${0.02 * k}) 100%)`,
   };
 
   return (
-    <section className="relative min-h-[632px] w-full overflow-hidden bg-[#0c1e12]">
+    <section className="relative min-h-screen w-full overflow-hidden bg-[#0c1e12]">
       <TourBurns slides={slides} active={active} reduce={reduce} />
 
       {/* premium green grade — protect the type on the left, reveal the room on the right */}
       <div className="absolute inset-0" style={gradeStyle} />
+      <div className="absolute inset-0 bg-[#0C1F13]/30 lg:hidden" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#081209]/85 to-transparent" />
+      {/* grain texture — editorial depth, breaks flat-green monotony */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[3] mix-blend-overlay opacity-[0.07]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundSize: '180px 180px',
+        }}
+      />
 
-      <div className="relative z-[2] max-w-[700px] px-16 pb-[92px] pt-9">
-        <div>
+      <div className="relative z-10 mx-auto max-w-7xl px-5 pb-[190px] pt-[132px] sm:px-8 lg:px-16">
+        <div className="max-w-2xl">
           <motion.span
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12, duration: 0.7, ease: EXPO }}
-            className="mb-6 inline-flex w-fit items-center gap-[9px] rounded-full border border-white/40 bg-white/[0.08] px-4 py-[7px] font-jost text-[11px] font-medium uppercase tracking-[0.16em] text-white"
+            className="mb-7 inline-flex w-fit items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.08] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90 backdrop-blur-md"
           >
-            <i
-              className="fa-solid fa-leaf"
-              aria-hidden
-              style={{ fontSize: '12px', color: '#8FD56F' }}
-            />
+            <span className="relative flex h-2 w-2 shrink-0">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#4ADE80] opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#4ADE80]" />
+            </span>
             {t('home-hero-eyebrow')}
-            <i
-              className="fa-solid fa-leaf"
-              aria-hidden
-              style={{ fontSize: '12px', color: '#8FD56F', transform: 'scaleX(-1)' }}
-            />
           </motion.span>
 
           {headline ? (
@@ -306,16 +310,20 @@ export function HeroPlant() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EXPO }}
-              className="font-pahserif text-[56px] font-bold leading-[1.0] tracking-[-0.015em] text-white"
+              className="font-pahserif text-[2.6rem] font-bold leading-[1.12] tracking-[-0.02em] text-white sm:text-[3.4rem] lg:text-[4.6rem]"
             >
               {headline}
             </motion.h1>
           ) : (
-            <h1 className="font-pahserif text-[56px] font-bold leading-[1.0] tracking-[-0.015em] text-white">
+            <h1 className="font-pahserif text-[2.6rem] font-bold leading-[1.12] tracking-[-0.02em] text-white sm:text-[3.4rem] lg:text-[4.6rem]">
               <WordReveal text={t('home-hero-title-1')} delay={0.1} />
-              <span className="block text-[#7FC95E]">
+              <motion.span
+                className="block"
+                animate={{ color: ['#C8F09A', '#EDE0A0', '#C8F09A'] }}
+                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+              >
                 <WordReveal text={t('home-hero-title-2')} delay={0.32} />
-              </span>
+              </motion.span>
             </h1>
           )}
 
@@ -346,10 +354,16 @@ export function HeroPlant() {
           ) : null}
 
           <motion.div
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ delay: 0.65, duration: 0.6, ease: EXPO }}
+            className="mt-8 h-px origin-left bg-gradient-to-r from-white/20 via-white/10 to-transparent"
+          />
+          <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.72, duration: 0.7, ease: EXPO }}
-            className="mt-[30px] flex items-center gap-9"
+            className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-3"
           >
             {TRUST.map((f) => {
               const Ico = Icon[f.icon];
@@ -369,23 +383,25 @@ export function HeroPlant() {
         </div>
       </div>
 
-      {/* floating glass offer card */}
+      {/* offer pill — bottom-right, above category row overlap */}
       {showHeroOffer && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.92, y: 18 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.85, ease: EXPO }}
-          className="absolute right-[17%] top-[33%] z-[2] hidden lg:block"
+          initial={{ opacity: 0, y: 20, scale: 0.94 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.65, duration: 0.8, ease: EXPO }}
+          className="absolute right-5 top-1/2 z-[45] hidden -translate-y-1/2 lg:block sm:right-8 lg:right-[110px]"
         >
-          <div className="w-[190px] rounded-[18px] border border-white/20 bg-[#0B1A0F]/[0.62] px-[18px] py-[22px] text-center shadow-[0_18px_44px_rgba(0,0,0,0.42)]">
-            <i
-              className="fa-solid fa-tags mx-auto mb-[10px] block"
-              aria-hidden
-              style={{ fontSize: '22px', color: '#8FD56F' }}
-            />
-            <p className="font-jost text-[11px] font-medium uppercase tracking-[0.16em] text-white/[0.82]">{t('home-hero-offer-eyebrow')}</p>
-            <p className="my-[3px] font-hanken text-[32px] font-extrabold leading-[1.04] text-white whitespace-nowrap">{t('home-hero-offer-amount')}</p>
-            <p className="text-[12.5px] text-white/[0.82]">{t('home-hero-offer-subtitle')}</p>
+          <div className="flex items-center gap-4 rounded-[20px] border border-white/[0.14] bg-white/[0.08] px-5 py-4 backdrop-blur-2xl">
+            {/* icon */}
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-[14px] bg-[#4ADE80]/20 ring-1 ring-[#4ADE80]/25">
+              <Icon.leaf className="h-[18px] w-[18px] text-[#4ADE80]" />
+            </div>
+            {/* text */}
+            <div>
+              <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/50">{t('home-hero-offer-eyebrow')}</p>
+              <span className="font-pahserif text-[2rem] font-bold leading-none text-white">{t('home-hero-offer-amount')}</span>
+              <p className="mt-0.5 text-[10.5px] font-semibold leading-[1.4] text-[#86EFAC]">{t('home-hero-offer-subtitle')}</p>
+            </div>
           </div>
         </motion.div>
       )}

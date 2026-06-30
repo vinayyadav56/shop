@@ -85,7 +85,7 @@ export function BestSellers({
       <div className="mb-[22px] flex items-end justify-between gap-4">
         <div>
           <div
-            className="font-jost text-[11px] font-medium uppercase tracking-[0.2em] text-forest-600"
+            className="font-jost text-[11px] font-bold uppercase tracking-[0.2em] text-[#4ADE80]"
             style={{ marginBottom: 9 }}
           >
             {t('home-bestsellers-eyebrow')}
