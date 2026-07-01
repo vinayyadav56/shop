@@ -186,8 +186,10 @@ const Header = ({ layout }: { layout?: string }) => {
             <BrandLogo light />
           </Link>
 
-          {/* ── nav — centered, flat on the dark bar (per reference) ── */}
-          <nav className="absolute left-1/2 hidden -translate-x-1/2 md:block">
+          {/* ── nav — centered between logo and actions, flat on the dark bar.
+              In-flow (not absolutely centered) so it can never overlap the
+              actions block at narrower desktop widths. ── */}
+          <nav className="hidden min-w-0 flex-1 justify-center md:flex">
             <div className="flex items-center gap-0.5">
               {NAV.map((n) =>
                 n.menu ? (

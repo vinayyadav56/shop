@@ -222,7 +222,7 @@ function PincodeChecker() {
             : t('home-hero-pincode-not-serviceable', { pincode: submitted })}
         </p>
       ) : (
-        <p className="mt-[14px] flex items-center gap-[7px] text-[13px] text-white/85">
+        <p className="mt-[14px] flex items-center gap-[7px] text-[13px] text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.65)]">
           <svg viewBox="0 0 24 24" fill="none" stroke="#7FC95E" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0">
             <circle cx="12" cy="12" r="9" />
             <path d="m8.5 12 2.3 2.3 4.7-4.7" />

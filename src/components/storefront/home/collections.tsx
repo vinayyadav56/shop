@@ -21,11 +21,11 @@ function CollectionCard({ c }: { c: any }) {
     >
       {/* text — top (per reference) */}
       <div className="p-4 pb-3">
-        <div className="truncate text-[15.5px] font-bold leading-tight text-forest-900">
+        <div className="line-clamp-2 text-[15.5px] font-bold leading-tight text-forest-900">
           {c.name}
         </div>
-        {c.description ? (
-          <div className="mt-1 line-clamp-2 text-[11.5px] leading-[1.35] text-stone-500">{c.description}</div>
+        {c.description || c.details ? (
+          <div className="mt-1 line-clamp-2 text-[11.5px] leading-[1.35] text-stone-500">{c.description || c.details}</div>
         ) : null}
       </div>
       {/* photo — fills the rest */}

@@ -68,11 +68,11 @@ export function CategoryRow() {
                     >
                       {/* text — left */}
                       <div className="flex min-w-0 flex-1 flex-col justify-center p-3.5">
-                        <p className="truncate font-hanken text-[15px] font-bold leading-snug text-forest-900">
+                        <p className="line-clamp-2 font-hanken text-[15px] font-bold leading-snug text-forest-900">
                           {c.name}
                         </p>
                         <p className="mt-1 line-clamp-2 font-hanken text-[11.5px] leading-snug text-stone-500">
-                          {c.description || 'Explore collection'}
+                          {c.description || c.details || 'Explore collection'}
                         </p>
                         <p className="mt-2 flex items-center gap-1 font-hanken text-[12px] font-semibold text-forest-900 transition-colors duration-200 group-hover:text-forest-700">
                           Shop Now
