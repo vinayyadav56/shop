@@ -5,7 +5,11 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'next-i18next';
 import { useCategories } from '@/framework/category';
 import { useHomeConfig, applyCuration } from '@/lib/use-home-config';
-import { CATEGORIES_PER_PAGE } from '@/framework/client/variables';
+
+// The home only needs the top-level categories. limit=1000 (CATEGORIES_PER_PAGE)
+// makes the API truncate the JSON mid-stream (server fatal while serializing),
+// which parse-fails in the browser and blanked this grid entirely.
+const HOME_CATEGORIES_LIMIT = 100;
 
 function CollectionCard({ c }: { c: any }) {
   const img = c.image?.original ?? c.image?.thumbnail;
@@ -45,7 +49,7 @@ function CollectionCard({ c }: { c: any }) {
 
 export function Collections() {
   const { t } = useTranslation('common');
-  const { categories: raw, isLoading } = useCategories({ limit: CATEGORIES_PER_PAGE, parent: 'null' } as any);
+  const { categories: raw, isLoading } = useCategories({ limit: HOME_CATEGORIES_LIMIT, parent: 'null' } as any);
   const { homeCategories } = useHomeConfig();
   const categories = applyCuration(raw ?? [], homeCategories).slice(0, 5);
 

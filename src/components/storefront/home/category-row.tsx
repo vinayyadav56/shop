@@ -4,7 +4,10 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useCategories } from '@/framework/category';
 import { useHomeConfig, applyCuration } from '@/lib/use-home-config';
-import { CATEGORIES_PER_PAGE } from '@/framework/client/variables';
+
+// Same query as collections.tsx (shared react-query cache). limit=1000 makes the
+// categories API truncate its JSON mid-stream — see collections.tsx.
+const HOME_CATEGORIES_LIMIT = 100;
 
 const FALLBACK_ICONS: JSX.Element[] = [
   <svg key="0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" /><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" /></svg>,
@@ -36,7 +39,7 @@ function Thumb({ src, fallback }: { src: string; fallback: JSX.Element }) {
 }
 
 export function CategoryRow() {
-  const { categories: raw, isLoading } = useCategories({ limit: CATEGORIES_PER_PAGE, parent: 'null' } as any);
+  const { categories: raw, isLoading } = useCategories({ limit: HOME_CATEGORIES_LIMIT, parent: 'null' } as any);
   const { homeCategories } = useHomeConfig();
   const categories = applyCuration(raw ?? [], homeCategories).slice(0, 5);
 
