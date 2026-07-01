@@ -167,9 +167,12 @@ const Header = ({ layout }: { layout?: string }) => {
             : 'bg-forest-900/95 backdrop-blur-xl shadow-[0_4px_24px_rgba(22,48,26,0.22)]'
         }`}
       >
-        {/* announcement bar — always white text, slides away on scroll */}
-        <div className={`overflow-hidden border-b border-white/[0.12] text-white transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-12 opacity-100'}`}>
-          <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2 text-[11px] font-medium tracking-wide sm:px-8 [text-shadow:0_1px_6px_rgba(0,0,0,0.7)]">
+        {/* announcement bar — translucent glass so the whole header reads as one
+            panel; still slides away on scroll. City switcher stays left for the
+            city-first delivery UX. */}
+        <div className={`overflow-hidden border-b border-white/10 bg-forest-900/60 text-white backdrop-blur-xl transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-12 opacity-100'}`}>
+          <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2 text-[11px] font-medium tracking-wide sm:px-8">
+
             <CitySwitcher tone="light" />
             <span className="pointer-events-none absolute left-1/2 hidden -translate-x-1/2 items-center gap-2.5 whitespace-nowrap sm:flex">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5 text-sage-300" aria-hidden><path d="M5 17H3V6h11v11" /><path d="M14 9h4l3 3v5h-2" /><circle cx="7.5" cy="18" r="1.6" /><circle cx="17.5" cy="18" r="1.6" /></svg>

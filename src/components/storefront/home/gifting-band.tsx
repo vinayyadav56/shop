@@ -58,8 +58,8 @@ export function GiftingBand() {
 
   return (
     <section className="bg-[#F8F7F2]">
-      {/* top — copy + photo */}
-      <div className="flex flex-col lg:min-h-[500px] lg:flex-row lg:items-stretch">
+      {/* top — copy + photo (constrained width so it doesn't run edge-to-edge) */}
+      <div className="mx-auto flex max-w-7xl flex-col lg:min-h-[460px] lg:flex-row lg:items-stretch">
 
         {/* left copy */}
         <motion.div
@@ -108,7 +108,7 @@ export function GiftingBand() {
           className="relative h-64 min-h-[260px] w-full overflow-hidden sm:h-80 lg:h-auto lg:flex-[1_1_44%]"
         >
           <SafeImage
-            src="https://images.unsplash.com/photo-1463320726281-696a485928c7?w=1100&q=72&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=1400&q=85&auto=format&fit=crop"
             alt="Corporate plant gifting"
             fill
             sizes="(max-width:1024px) 100vw, 44vw"

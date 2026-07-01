@@ -60,7 +60,7 @@ export function Collections() {
           <div className="mb-[9px] font-jost text-[11px] font-medium uppercase tracking-[0.2em] text-forest-600">
             {t('home-collections-eyebrow')}
           </div>
-          <h2 className="m-0 flex items-center gap-[9px] font-pahserif text-[34px] font-semibold tracking-[-0.005em] text-forest-900 sm:text-[46px]">
+          <h2 className="m-0 flex items-center gap-[9px] font-pahserif text-[26px] font-semibold tracking-[-0.005em] text-forest-900 sm:text-[34px]">
             {t('home-collections-title')}
             <i className="fa-solid fa-spa text-[23px] text-forest-500" aria-hidden />
           </h2>

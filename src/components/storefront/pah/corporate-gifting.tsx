@@ -24,7 +24,7 @@ const ASSURE: { title: string; sub: string; icon: string; size: number }[] = [
 function HeroImg() {
   const [err, setErr] = React.useState(false);
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={err ? PLACEHOLDER : 'https://images.unsplash.com/photo-1463320726281-696a485928c7?w=700&q=72&auto=format&fit=crop'} alt="Corporate plant gifting" loading="lazy" onError={() => setErr(true)} className="absolute inset-0 h-full w-full object-cover" />;
+  return <img src={err ? PLACEHOLDER : 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=900&q=82&auto=format&fit=crop'} alt="Corporate plant gifting" loading="lazy" onError={() => setErr(true)} className="absolute inset-0 h-full w-full object-cover" />;
 }
 
 export function CorporateGifting() {
