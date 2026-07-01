@@ -136,7 +136,7 @@ const Footer = () => {
 
       {/* ── newsletter band ── */}
       <div className="relative z-[1] border-b border-white/[0.09]">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-12 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-14 lg:px-16 lg:py-[52px]">
+        <div className="mx-auto flex max-w-5xl flex-col gap-8 px-5 py-12 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-14 lg:px-16 lg:py-[52px]">
           <div className="flex-1">
             <div className="inline-flex items-center gap-2.5 rounded-full border border-white/[0.12] bg-white/[0.06] px-3.5 py-1.5">
               <span className="relative flex h-[7px] w-[7px] shrink-0">
