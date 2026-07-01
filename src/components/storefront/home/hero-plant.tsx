@@ -210,7 +210,7 @@ function PincodeChecker() {
         />
         <button
           type="submit"
-          className="shrink-0 rounded-[9px] bg-forest-600 px-[22px] py-[11px] text-[14px] font-bold text-white transition hover:bg-forest-700"
+          className="shrink-0 rounded-[9px] bg-[#3E9B4F] px-[22px] py-[11px] text-[14px] font-bold text-white transition hover:bg-[#348544]"
         >
           {isFetching ? t('home-hero-pincode-checking') : t('home-hero-pincode-check-cta')}
         </button>
@@ -273,7 +273,7 @@ export function HeroPlant() {
   };
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-[#0c1e12]">
+    <section className="relative min-h-[680px] w-full overflow-hidden bg-[#0c1e12]">
       <TourBurns slides={slides} active={active} reduce={reduce} />
 
       {/* premium green grade — protect the type on the left, reveal the room on the right */}
@@ -289,19 +289,19 @@ export function HeroPlant() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-5 pb-[190px] pt-[132px] sm:px-8 lg:px-16">
+      <div className="relative z-10 mx-auto max-w-7xl px-5 pb-[230px] pt-[120px] sm:px-8 lg:px-16">
         <div className="max-w-2xl">
           <motion.span
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12, duration: 0.7, ease: EXPO }}
-            className="mb-7 inline-flex w-fit items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.08] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90 backdrop-blur-md"
+            className="mb-7 inline-flex w-fit items-center gap-2.5 rounded-full border border-white/35 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90"
           >
-            <span className="relative flex h-2 w-2 shrink-0">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#4ADE80] opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#4ADE80]" />
-            </span>
             {t('home-hero-eyebrow')}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 shrink-0 text-[#8FD56F]" aria-hidden>
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+              <path d="M2 21c0-3 1.85-5.36 5.08-6" />
+            </svg>
           </motion.span>
 
           {headline ? (
@@ -310,20 +310,18 @@ export function HeroPlant() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EXPO }}
-              className="font-pahserif text-[2.6rem] font-bold leading-[1.12] tracking-[-0.02em] text-white sm:text-[3.4rem] lg:text-[4.6rem]"
+              className="font-pahserif text-[2.4rem] font-bold leading-[1.12] tracking-[-0.02em] text-white sm:text-[3rem] lg:text-[3.6rem]"
             >
               {headline}
             </motion.h1>
           ) : (
-            <h1 className="font-pahserif text-[2.6rem] font-bold leading-[1.12] tracking-[-0.02em] text-white sm:text-[3.4rem] lg:text-[4.6rem]">
-              <WordReveal text={t('home-hero-title-1')} delay={0.1} />
-              <motion.span
-                className="block"
-                animate={{ color: ['#C8F09A', '#EDE0A0', '#C8F09A'] }}
-                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-              >
+            <h1 className="font-pahserif text-[2.4rem] font-bold leading-[1.12] tracking-[-0.02em] text-white sm:text-[3rem] lg:text-[3.6rem]">
+              <span className="block lg:whitespace-nowrap">
+                <WordReveal text={t('home-hero-title-1')} delay={0.1} />
+              </span>
+              <span className="block text-[#8FD56F]">
                 <WordReveal text={t('home-hero-title-2')} delay={0.32} />
-              </motion.span>
+              </span>
             </h1>
           )}
 
@@ -365,16 +363,19 @@ export function HeroPlant() {
             transition={{ delay: 0.72, duration: 0.7, ease: EXPO }}
             className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-3"
           >
-            {TRUST.map((f) => {
+            {TRUST.map((f, i) => {
               const Ico = Icon[f.icon];
               return (
-                <div key={f.title} className="flex items-center gap-[11px]">
-                  <Ico className="h-5 w-5 shrink-0 text-[#8FD56F]" />
-                  <div>
-                    <div className="text-[13.5px] font-bold leading-tight text-white">{f.title}</div>
-                    <div className="mt-0.5 text-[12px] leading-tight text-white/70">{f.sub}</div>
+                <React.Fragment key={f.title}>
+                  {i > 0 && <span aria-hidden className="hidden h-8 w-px bg-white/20 sm:block" />}
+                  <div className="flex items-center gap-[11px]">
+                    <Ico className="h-5 w-5 shrink-0 text-[#8FD56F]" />
+                    <div>
+                      <div className="text-[13.5px] font-bold leading-tight text-white">{f.title}</div>
+                      <div className="mt-0.5 text-[12px] leading-tight text-white/70">{f.sub}</div>
+                    </div>
                   </div>
-                </div>
+                </React.Fragment>
               );
             })}
           </motion.div>

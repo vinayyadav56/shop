@@ -8,8 +8,7 @@ import { EXPO } from '@/components/storefront/motion';
 
 const PERKS = [
   {
-    label: 'Best Quality',
-    sub: 'Hand-picked, nursery-fresh',
+    label: 'Best Quality Products',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
@@ -17,8 +16,7 @@ const PERKS = [
     ),
   },
   {
-    label: 'Expert Support',
-    sub: 'Real guidance, anytime',
+    label: 'Expert Plant Care Support',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
@@ -27,8 +25,7 @@ const PERKS = [
     ),
   },
   {
-    label: 'Easy Returns',
-    sub: '7-day, hassle-free',
+    label: 'Easy Returns & Refunds',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -38,7 +35,6 @@ const PERKS = [
   },
   {
     label: 'Secure Payments',
-    sub: '100% protected checkout',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 3 5 6v5c0 4 3 7 7 9 4-2 7-5 7-9V6Z" />
@@ -58,9 +54,9 @@ export function SpringSaleBand() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.65, ease: EXPO }}
-      className=""
+      className="py-6 lg:py-8"
     >
-      <div className="relative overflow-hidden bg-[linear-gradient(135deg,#1c4d28_0%,#0f2d1a_48%,#081a0f_100%)]">
+      <div className="relative mx-5 overflow-hidden rounded-[18px] bg-[linear-gradient(135deg,#1c4d28_0%,#0f2d1a_48%,#081a0f_100%)] sm:mx-8 lg:mx-16">
 
         {/* grain texture */}
         <div
@@ -86,7 +82,7 @@ export function SpringSaleBand() {
           <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
         </svg>
 
-        <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-4 px-5 py-5 sm:px-8 lg:flex-row lg:items-center lg:gap-0 lg:px-16 lg:py-6">
+        <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-4 px-5 py-5 sm:px-8 lg:flex-row lg:items-center lg:gap-0 lg:px-10 lg:py-6">
 
           {/* ── LEFT — offer block ── */}
           <div className="shrink-0 lg:w-[260px]">
@@ -102,7 +98,7 @@ export function SpringSaleBand() {
             </div>
 
             {/* discount */}
-            <div className="font-hanken text-[28px] font-extrabold leading-none tracking-[-0.03em] text-white">
+            <div className="font-pahserif text-[34px] font-bold leading-none tracking-[-0.01em] text-[#F2E3B8]">
               {t('home-sale-discount')}
             </div>
             <div className="mt-1 font-hanken text-[11px] leading-snug text-white/80">
@@ -127,24 +123,25 @@ export function SpringSaleBand() {
           <div className="h-px w-full bg-white/[0.08] lg:hidden" />
 
           {/* ── RIGHT — perks ── */}
-          <div className="grid grid-cols-2 gap-x-6 gap-y-3 lg:flex-1 lg:grid-cols-4 lg:gap-x-4">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-4 lg:flex lg:flex-1 lg:items-center lg:justify-between">
             {PERKS.map((p, i) => (
-              <motion.div
-                key={p.label}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 + i * 0.07, duration: 0.45, ease: EXPO }}
-                className="flex items-center gap-2.5"
-              >
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-[9px] border border-[#4ADE80]/20 bg-[#4ADE80]/[0.09] text-[#86EFAC] [&>svg]:h-4 [&>svg]:w-4">
-                  {p.icon}
-                </span>
-                <div>
-                  <div className="font-hanken text-[12.5px] font-bold leading-snug text-white">{p.label}</div>
-                  <div className="font-hanken text-[10.5px] leading-snug text-white/80">{p.sub}</div>
-                </div>
-              </motion.div>
+              <React.Fragment key={p.label}>
+                {i > 0 && <span aria-hidden className="hidden h-8 w-px shrink-0 bg-white/15 lg:block" />}
+                <motion.div
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 + i * 0.07, duration: 0.45, ease: EXPO }}
+                  className="flex items-center gap-3"
+                >
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/25 text-[#4ADE80] [&>svg]:h-[18px] [&>svg]:w-[18px]">
+                    {p.icon}
+                  </span>
+                  <div className="max-w-[120px] font-hanken text-[12.5px] font-semibold leading-[1.35] text-white">
+                    {p.label}
+                  </div>
+                </motion.div>
+              </React.Fragment>
             ))}
           </div>
 

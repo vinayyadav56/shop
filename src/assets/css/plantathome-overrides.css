@@ -103,6 +103,11 @@ h1, h2, h3, h4, h5 {
   line-height: 1.08;
   font-weight: 600;
 }
+/* Escape hatch: the fixed brand-serif utilities must beat the theme heading
+   rule above even when the admin Design System picks a sans heading font.
+   Same !important, higher specificity (class > element). */
+.font-pahserif { font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif !important; }
+.font-cormorant { font-family: 'Cormorant Garamond', Georgia, Cambria, serif !important; }
 /* small uppercase eyebrow labels (editorial luxury) */
 .pa-eyebrow, [class*="eyebrow"], .uppercase.tracking-\[0\.22em\] {
   font-family: var(--font-eyebrow);

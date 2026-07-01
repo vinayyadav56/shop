@@ -9,7 +9,7 @@ import { useTypes } from '@/framework/type';
 import { useProducts } from '@/framework/product';
 import { TYPES_PER_PAGE } from '@/framework/client/variables';
 
-const ProductCard = dynamic(() => import('@/components/products/cards/card'));
+const ProductCard = dynamic(() => import('@/components/products/cards/home-mini'));
 
 /** Vertical tab pills — lets the home sell all three worlds, not just plants. */
 export function VerticalTabs({
@@ -67,13 +67,13 @@ export function BestSellers({
     type: activeSlug,
     limit: 12,
   });
-  const list = ((isHomeTab && (products?.length ?? 0) > 0 ? products : tabProducts) ?? []).slice(0, 5);
+  const list = ((isHomeTab && (products?.length ?? 0) > 0 ? products : tabProducts) ?? []).slice(0, 6);
   const loading = isHomeTab ? Boolean(isLoading) && list.length === 0 : tabLoading;
 
   return (
     <section
       style={{
-        background: '#F4F1EA',
+        background: '#FAF9F4',
         borderTop: '1px solid #E9E3D6',
         borderBottom: '1px solid #E9E3D6',
         boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)',
@@ -103,14 +103,13 @@ export function BestSellers({
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 lg:gap-3.5">
         {loading
-          ? Array.from({ length: 5 }).map((_, i) => (
+          ? Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="w-full">
-                <div className="aspect-square w-full animate-pulse rounded-xl bg-[#D9EDE2]" />
+                <div className="aspect-square w-full animate-pulse rounded-t-[14px] bg-[#D9EDE2]" />
                 <div className="mt-3 h-4 w-3/4 animate-pulse rounded bg-[#D9EDE2]" />
-                <div className="mt-2 h-4 w-1/3 animate-pulse rounded bg-[#D9EDE2]" />
-                <div className="mt-3 h-9 w-full animate-pulse rounded-md bg-[#D9EDE2]" />
+                <div className="mt-2 h-4 w-1/2 animate-pulse rounded bg-[#D9EDE2]" />
               </div>
             ))
           : list.map((p) => (

@@ -118,8 +118,6 @@ const Header = ({ layout }: { layout?: string }) => {
     return () => window.removeEventListener('scroll', onScroll);
   }, [isHome]);
   const position = isHome ? 'fixed' : 'sticky';
-  // true = over dark hero (white icons/text), false = glass state (dark icons/text)
-  const overHero = isHome && !scrolled;
 
   const openCart = () => setDrawer({ display: true, view: 'cart' });
 
@@ -161,16 +159,13 @@ const Header = ({ layout }: { layout?: string }) => {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: EXPO }}
-        className={`${position} inset-x-0 top-0 z-50 w-full transition-all duration-300 ${
-          overHero
-            ? 'bg-transparent'
-            : 'bg-forest-900/95 backdrop-blur-xl shadow-[0_4px_24px_rgba(22,48,26,0.22)]'
+        className={`${position} inset-x-0 top-0 z-50 w-full bg-[#10230f] transition-shadow duration-300 ${
+          scrolled ? 'shadow-[0_4px_24px_rgba(0,0,0,0.35)]' : ''
         }`}
       >
-        {/* announcement bar — translucent glass so the whole header reads as one
-            panel; still slides away on scroll. City switcher stays left for the
-            city-first delivery UX. */}
-        <div className={`overflow-hidden border-b border-white/10 bg-forest-900/60 text-white backdrop-blur-xl transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-12 opacity-100'}`}>
+        {/* announcement bar — near-black strip (per reference), slides away on
+            scroll. City switcher stays left for the city-first delivery UX. */}
+        <div className={`overflow-hidden border-b border-white/10 bg-[#0A0D0A] text-white transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-12 opacity-100'}`}>
           <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2 text-[11px] font-medium tracking-wide sm:px-8">
 
             <CitySwitcher tone="light" />
@@ -191,9 +186,9 @@ const Header = ({ layout }: { layout?: string }) => {
             <BrandLogo light />
           </Link>
 
-          {/* ── LIQUID GLASS NAV PILL — centered ── */}
+          {/* ── nav — centered, flat on the dark bar (per reference) ── */}
           <nav className="absolute left-1/2 hidden -translate-x-1/2 md:block">
-            <div className="flex items-center gap-0 rounded-full border border-white/[0.22] bg-[linear-gradient(145deg,rgba(255,255,255,0.13)_0%,rgba(255,255,255,0.06)_100%)] px-1.5 py-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.26),0_4px_24px_rgba(0,0,0,0.14)] backdrop-blur-2xl backdrop-saturate-[1.8]">
+            <div className="flex items-center gap-0.5">
               {NAV.map((n) =>
                 n.menu ? (
                   <div key={n.label} className="group relative">
@@ -234,34 +229,37 @@ const Header = ({ layout }: { layout?: string }) => {
             </div>
           </nav>
 
-          {/* ── LIQUID GLASS ACTIONS PILL — right ── */}
+          {/* ── actions — right, stacked icon-over-label (per reference) ── */}
           <div className="ml-auto flex items-center gap-3">
-            {/* desktop: glass pill */}
-            <div className="hidden items-center gap-0 rounded-full border border-white/[0.22] bg-[linear-gradient(145deg,rgba(255,255,255,0.13)_0%,rgba(255,255,255,0.06)_100%)] px-1.5 py-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.26),0_4px_24px_rgba(0,0,0,0.14)] backdrop-blur-2xl backdrop-saturate-[1.8] md:flex">
+            <div className="hidden items-center gap-1 md:flex">
               {/* Search */}
-              <button type="button" onClick={() => setSearchOpen(true)} className="grid h-9 w-9 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white" aria-label={t('text-search') ?? 'Search'}>
+              <button type="button" onClick={() => setSearchOpen(true)} className="grid h-10 w-10 place-items-center rounded-lg text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label={t('text-search') ?? 'Search'}>
                 <SearchIcon className="h-[18px] w-[18px]" />
               </button>
               {/* Track Order */}
-              <Link href="/track-order" className="grid h-9 w-9 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white" aria-label="Track Order">
+              <Link href="/track-order" className="flex flex-col items-center gap-1 rounded-lg px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label="Track Order">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M5 17H3V6a1 1 0 0 1 1-1h11v12" /><path d="M15 9h4l3 3v5h-2" /><circle cx="7.5" cy="18" r="1.8" /><circle cx="17.5" cy="18" r="1.8" /></svg>
+                <span className="text-[11px] font-medium leading-none">Track Order</span>
               </Link>
               {/* Wishlist */}
-              <Link href="/wishlists" className="grid h-9 w-9 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white" aria-label="Wishlist">
+              <Link href="/wishlists" className="flex flex-col items-center gap-1 rounded-lg px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label="Wishlist">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z" /></svg>
+                <span className="text-[11px] font-medium leading-none">Wishlist</span>
               </Link>
-              {/* divider */}
-              <span className="mx-1 h-4 w-px bg-white/20" />
               {/* Cart */}
-              <button ref={cartBtnRef} data-cart-target type="button" onClick={openCart} className="relative grid h-9 w-9 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white" aria-label="Cart">
-                <Icon.bag className="h-[18px] w-[18px]" />
-                <span className="absolute -right-0.5 -top-0.5 grid h-[16px] min-w-[16px] place-items-center rounded-full bg-ds-accent px-1 text-[9px] font-bold text-white">
-                  {totalUniqueItems}
+              <button ref={cartBtnRef} data-cart-target type="button" onClick={openCart} className="flex flex-col items-center gap-1 rounded-lg px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label="Cart">
+                <span className="relative">
+                  <Icon.bag className="h-[18px] w-[18px]" />
+                  <span className="absolute -right-1.5 -top-1 grid h-[16px] min-w-[16px] place-items-center rounded-full bg-ds-accent px-1 text-[9px] font-bold text-white">
+                    {totalUniqueItems}
+                  </span>
                 </span>
+                <span className="text-[11px] font-medium leading-none">Cart</span>
               </button>
               {/* Login */}
-              <button type="button" onClick={onProfile} className="grid h-9 w-9 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white" aria-label={isAuthorize ? 'My account' : 'Login'}>
+              <button type="button" onClick={onProfile} className="flex flex-col items-center gap-1 rounded-lg px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label={isAuthorize ? 'My account' : 'Login'}>
                 <Icon.user className="h-[18px] w-[18px]" />
+                <span className="text-[11px] font-medium leading-none">{isAuthorize ? 'Account' : 'Login'}</span>
               </button>
             </div>
 

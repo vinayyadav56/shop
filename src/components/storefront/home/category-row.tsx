@@ -47,7 +47,7 @@ export function CategoryRow() {
 
           {isLoading && categories.length === 0
             ? Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="h-[82px] animate-pulse rounded-2xl bg-white/60" />
+                <div key={i} className="h-[150px] animate-pulse rounded-[14px] bg-white/60" />
               ))
             : categories.map((c: any, i: number) => {
                 const img = c.image?.original ?? c.image?.thumbnail ?? '';
@@ -61,27 +61,27 @@ export function CategoryRow() {
                   >
                     <Link
                       href={`/c/${c.slug}`}
-                      className="group flex h-[92px] items-center gap-3 overflow-hidden rounded-2xl border border-[#e8e2d8]/80 bg-[#F8F5EE] px-3 shadow-[0_4px_20px_rgba(5,16,8,0.18)] transition-all duration-300 hover:-translate-y-[3px] hover:border-[#4ADE80]/40 hover:shadow-[0_12px_32px_rgba(5,16,8,0.22)]"
+                      className="group flex h-[150px] overflow-hidden rounded-[14px] border border-kraft-200 bg-white shadow-[0_6px_18px_rgba(5,16,8,0.14)] transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_14px_32px_rgba(5,16,8,0.2)]"
                     >
-                      {/* thumbnail */}
-                      <div className="h-[62px] w-[62px] shrink-0 overflow-hidden rounded-[12px]">
-                        <Thumb src={img} fallback={FALLBACK_ICONS[i % FALLBACK_ICONS.length]} />
-                      </div>
-
-                      {/* text */}
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate font-hanken text-[13.5px] font-bold leading-snug text-forest-900">
+                      {/* text — left */}
+                      <div className="flex min-w-0 flex-1 flex-col justify-center p-3.5">
+                        <p className="truncate font-hanken text-[15px] font-bold leading-snug text-forest-900">
                           {c.name}
                         </p>
-                        <p className="mt-0.5 truncate font-hanken text-[11px] leading-snug text-stone-400">
+                        <p className="mt-1 line-clamp-2 font-hanken text-[11.5px] leading-snug text-stone-500">
                           {c.description || 'Explore collection'}
                         </p>
-                        <p className="mt-1.5 flex items-center gap-1 font-hanken text-[11px] font-semibold text-stone-400 transition-colors duration-200 group-hover:text-[#16a34a]">
-                          Shop now
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-[9px] w-[9px] transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden>
+                        <p className="mt-2 flex items-center gap-1 font-hanken text-[12px] font-semibold text-forest-900 transition-colors duration-200 group-hover:text-forest-700">
+                          Shop Now
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-[10px] w-[10px] transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden>
                             <path d="M5 12h13M13 6l6 6-6 6" />
                           </svg>
                         </p>
+                      </div>
+
+                      {/* product photo — right */}
+                      <div className="h-full w-[42%] shrink-0 overflow-hidden rounded-r-[14px]">
+                        <Thumb src={img} fallback={FALLBACK_ICONS[i % FALLBACK_ICONS.length]} />
                       </div>
                     </Link>
                   </motion.div>

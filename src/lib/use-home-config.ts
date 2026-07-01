@@ -32,5 +32,8 @@ export function applyCuration<T extends { slug?: string }>(
 ): T[] {
   if (!curated || curated.length === 0) return categories;
   const bySlug = new Map(categories.map((c) => [c.slug, c]));
-  return curated.map((s) => bySlug.get(s)).filter(Boolean) as T[];
+  const curatedList = curated.map((s) => bySlug.get(s)).filter(Boolean) as T[];
+  // Stale/mismatched admin slugs (data drift, localized slugs) must never
+  // blank the home grids — fall back to the uncurated list.
+  return curatedList.length > 0 ? curatedList : categories;
 }

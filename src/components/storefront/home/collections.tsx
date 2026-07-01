@@ -8,15 +8,24 @@ import { useHomeConfig, applyCuration } from '@/lib/use-home-config';
 import { CATEGORIES_PER_PAGE } from '@/framework/client/variables';
 
 function CollectionCard({ c }: { c: any }) {
-  const { t } = useTranslation('common');
   const img = c.image?.original ?? c.image?.thumbnail;
   const [err, setErr] = React.useState(false);
   return (
     <Link
       href={`/c/${c.slug}`}
-      className="group relative block cursor-pointer overflow-hidden rounded-[16px] bg-gradient-to-br from-[#1E5A35] to-[#0A2E1B] shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,48,26,0.12)]"
+      className="group flex aspect-[4/5] cursor-pointer flex-col overflow-hidden rounded-[16px] border border-kraft-200 bg-white shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,48,26,0.12)]"
     >
-      <div className="aspect-[4/5] relative overflow-hidden">
+      {/* text — top (per reference) */}
+      <div className="p-4 pb-3">
+        <div className="truncate text-[15.5px] font-bold leading-tight text-forest-900">
+          {c.name}
+        </div>
+        {c.description ? (
+          <div className="mt-1 line-clamp-2 text-[11.5px] leading-[1.35] text-stone-500">{c.description}</div>
+        ) : null}
+      </div>
+      {/* photo — fills the rest */}
+      <div className="relative min-h-0 flex-1 overflow-hidden">
         {img && !err ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -26,22 +35,9 @@ function CollectionCard({ c }: { c: any }) {
             onError={() => setErr(true)}
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-        ) : null}
-        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(9,22,13,0.9)_4%,rgba(9,22,13,0.42)_44%,rgba(9,22,13,0.03)_74%)]" />
-        <div className="absolute inset-x-0 bottom-0 p-[18px] text-white">
-          <div className="text-[15px] font-bold leading-[1.16] text-white">
-            {c.name}
-          </div>
-          {c.description ? (
-            <div className="mt-[4px] line-clamp-2 text-[11px] leading-[1.35] text-white/[0.82]">{c.description}</div>
-          ) : null}
-          <span className="mt-[11px] inline-flex items-center gap-[5px] text-[12px] font-bold text-[#8FD56F]">
-            {t('home-collections-explore')}
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <path d="M5 12h13M13 6l6 6-6 6" />
-            </svg>
-          </span>
-        </div>
+        ) : (
+          <div className="h-full w-full bg-sage-100" />
+        )}
       </div>
     </Link>
   );
