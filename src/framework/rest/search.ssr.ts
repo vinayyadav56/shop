@@ -10,7 +10,7 @@ import {
   SettingsQueryOptions,
   TypeQueryOptions,
 } from '@/types';
-import { TYPES_PER_PAGE } from '@/framework/client/variables';
+import { CATEGORIES_PER_PAGE, TYPES_PER_PAGE } from '@/framework/client/variables';
 
 export const getServerSideProps: GetServerSideProps = async ({
   locale,
@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   const categoryVariable = {
     type: searchType,
-    limit: 1000,
+    limit: CATEGORIES_PER_PAGE,
     parent: 'null',
     language: locale
   };

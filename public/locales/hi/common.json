@@ -636,5 +636,10 @@
   "footer-copyright": "Plant At Home. भारत में प्यार से बनाया गया।",
   "footer-privacy": "गोपनीयता",
   "footer-terms": "शर्तें",
-  "footer-track-order": "ऑर्डर ट्रैक करें"
+  "footer-track-order": "ऑर्डर ट्रैक करें",
+  "filter-show-products": "उत्पाद देखें",
+  "filter-search-placeholder": "खोजें…",
+  "filter-applied": "लागू फ़िल्टर",
+  "filter-remove": "हटाएँ",
+  "text-payment-unavailable": "ऑनलाइन भुगतान अभी अस्थायी रूप से उपलब्ध नहीं है। आपका ऑर्डर सुरक्षित है — कृपया थोड़ी देर बाद फिर से कोशिश करें।"
 }

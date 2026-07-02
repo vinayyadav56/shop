@@ -3,6 +3,7 @@ import { appWithTranslation } from 'next-i18next';
 import { SessionProvider } from 'next-auth/react';
 import '@/assets/css/main.css';
 import 'react-toastify/dist/ReactToastify.css';
+import '@/assets/css/toast-overrides.css';
 import { ModalProvider } from '@/components/ui/modal/modal.context';
 import ManagedModal from '@/components/ui/modal/managed-modal';
 import ManagedDrawer from '@/components/ui/drawer/managed-drawer';
@@ -84,7 +85,14 @@ function CustomApp({
                     )}
                     <ManagedModal />
                     <ManagedDrawer />
-                    <ToastContainer autoClose={2000} theme="colored" />
+                    <ToastContainer
+                      position="top-center"
+                      autoClose={3000}
+                      newestOnTop
+                      theme="light"
+                      closeOnClick
+                      pauseOnHover
+                    />
                     <SocialLogin />
                     <FirstVisitLanguageModal />
                     <AgentationToolbar />

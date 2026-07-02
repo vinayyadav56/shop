@@ -91,7 +91,7 @@ const HomeMiniCard: React.FC<{ product: Product; className?: string }> = ({
               onClick={handleQuickView}
               aria-label="Select options"
               title="Select options"
-              className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-forest-700 text-white transition duration-200 hover:bg-forest-800"
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-ds-btn text-white transition duration-200 hover:bg-ds-btn-hover"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden>
                 <circle cx="9" cy="21" r="1.6" />

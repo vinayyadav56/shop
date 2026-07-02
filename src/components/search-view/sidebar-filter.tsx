@@ -13,12 +13,22 @@ import { drawerAtom } from '@/store/drawer-atom';
 import ArrowNarrowLeft from '@/components/icons/arrow-narrow-left';
 import { useIsRTL } from '@/lib/locals';
 import Button from '@/components/ui/button';
+import AppliedFilters from '@/components/search-view/applied-filters';
 
-const FieldWrapper = ({ children, title }: any) => (
-  <div className="border-b border-forest-900/10 py-7 last:border-0">
-    <CustomDisclosure title={title}>{children}</CustomDisclosure>
+const FieldWrapper = ({ children, title, count }: any) => (
+  <div className="border-b border-forest-900/10 py-5 last:border-0">
+    <CustomDisclosure title={title} count={count}>{children}</CustomDisclosure>
   </div>
 );
+
+/** Selected-value count for a comma-separated URL filter param. */
+const useParamCount = (param: string) => {
+  const { query } = useRouter();
+  const raw = query[param];
+  return typeof raw === 'string' && raw.length
+    ? raw.split(',').filter(Boolean).length
+    : 0;
+};
 
 function ClearFiltersButton() {
   const { t } = useTranslation('common');
@@ -65,6 +75,10 @@ const SidebarFilter: React.FC<{
   const { isRTL } = useIsRTL();
   const { t } = useTranslation('common');
   const [_, closeSidebar] = useAtom(drawerAtom);
+  const categoryCount = useParamCount('category');
+  const tagCount = useParamCount('tags');
+  const manufacturerCount = useParamCount('manufacturer');
+  const priceCount = useParamCount('price') ? 1 : 0;
 
   return (
     <div
@@ -97,6 +111,9 @@ const SidebarFilter: React.FC<{
         <ClearFiltersButton />
       </div>
 
+      {/* active filters at a glance — one removable chip per value */}
+      <AppliedFilters />
+
       <div className="flex-1 px-5">
         <FieldWrapper title="text-search">
           <Search variant="minimal" label="search" />
@@ -108,30 +125,33 @@ const SidebarFilter: React.FC<{
           </FieldWrapper>
         )}
 
-        <FieldWrapper title="text-categories">
+        <FieldWrapper title="text-categories" count={categoryCount}>
           <CategoryFilter type={type} />
         </FieldWrapper>
 
-        <FieldWrapper title="text-sort-by-price">
+        <FieldWrapper title="text-sort-by-price" count={priceCount}>
           <PriceFilter />
         </FieldWrapper>
 
-        <FieldWrapper title="text-tags">
+        <FieldWrapper title="text-tags" count={tagCount}>
           <TagFilter type={type} />
         </FieldWrapper>
 
         {showManufacturers && (
-          <FieldWrapper title="text-manufacturers">
+          <FieldWrapper title="text-manufacturers" count={manufacturerCount}>
             <ManufacturerFilter type={type} />
           </FieldWrapper>
         )}
       </div>
-      <div className={classNames('sticky bottom-0 z-10 mt-auto border-t border-forest-900/10 bg-white p-5', inRail ? 'md:hidden' : 'lg:hidden')}>
+      <div className={classNames('sticky bottom-0 z-10 mt-auto flex gap-3 border-t border-forest-900/10 bg-white p-5', inRail ? 'md:hidden' : 'lg:hidden')}>
+        <div className="flex h-full items-center justify-center rounded border border-forest-900/15 px-4">
+          <ClearFiltersButton />
+        </div>
         <Button
           className="w-full"
           onClick={() => closeSidebar({ display: false, view: '' })}
         >
-          Show Products
+          {t('filter-show-products')}
         </Button>
       </div>
     </div>

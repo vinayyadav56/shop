@@ -5,6 +5,7 @@ import { addApolloState, initializeApollo } from './client';
 import { CategoriesDocument } from './gql/categories.graphql';
 import { SettingsDocument } from './gql/settings.graphql';
 import { getCategories } from '@/framework/utils/categories';
+import { CATEGORIES_PER_PAGE } from './client/variables';
 
 //@ts-ignore
 export const getServerSideProps: GetServerSideProps = async ({
@@ -24,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     query: CategoriesDocument,
     variables: getCategories({
       type: searchType,
-      limit: 1000,
+      limit: CATEGORIES_PER_PAGE,
       language: locale,
     }),
   });

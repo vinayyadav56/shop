@@ -76,7 +76,7 @@ export function ProductGrid({
               type="button"
               onClick={onLoadMore}
               disabled={isLoadingMore}
-              className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-forest-800 px-7 py-3 text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-forest-900 disabled:opacity-60 sm:w-auto"
+              className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-ds-btn px-7 py-3 text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ds-btn-hover disabled:opacity-60 sm:w-auto"
             >
               {isLoadingMore ? 'Loading…' : 'Load more'}
             </button>

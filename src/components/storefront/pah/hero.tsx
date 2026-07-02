@@ -85,7 +85,7 @@ export function Hero() {
                 <div className="mb-[3px] text-[7px] font-semibold uppercase tracking-[0.1em] text-white/[0.82]">{t('m-hero-offer-eyebrow')}</div>
                 <div className="font-hanken text-[23px] font-extrabold leading-none text-white">40%<span className="text-[13px]"> {t('m-hero-offer-off')}</span></div>
                 <div className="my-0.5 mb-2 text-[8px] text-white/[0.78]">{t('m-hero-offer-subtext')}</div>
-                <button type="button" onClick={() => router.push('/plants/search')} className="inline-flex w-full items-center justify-center gap-1 rounded-[9px] bg-forest-600 px-1 py-1.5 font-hanken text-[10px] font-semibold text-white transition hover:bg-forest-700 active:scale-95 active:bg-forest-800">
+                <button type="button" onClick={() => router.push('/plants/search')} className="inline-flex w-full items-center justify-center gap-1 rounded-[9px] bg-ds-btn px-1 py-1.5 font-hanken text-[10px] font-semibold text-white transition hover:bg-ds-btn-hover active:scale-95 active:bg-forest-800">
                   {t('m-hero-offer-cta')}
                   <i className="fa-solid fa-arrow-right text-[10px]" aria-hidden />
                 </button>

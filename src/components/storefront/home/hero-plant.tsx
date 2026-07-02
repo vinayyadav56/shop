@@ -210,7 +210,7 @@ function PincodeChecker() {
         />
         <button
           type="submit"
-          className="shrink-0 rounded-[9px] bg-[#3E9B4F] px-[22px] py-[11px] text-[14px] font-bold text-white transition hover:bg-[#348544]"
+          className="shrink-0 rounded-[9px] bg-ds-btn px-[22px] py-[11px] text-[14px] font-bold text-white transition hover:bg-ds-btn-hover"
         >
           {isFetching ? t('home-hero-pincode-checking') : t('home-hero-pincode-check-cta')}
         </button>

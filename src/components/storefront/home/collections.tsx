@@ -11,57 +11,106 @@ import { useHomeConfig, applyCuration } from '@/lib/use-home-config';
 // which parse-fails in the browser and blanked this grid entirely.
 const HOME_CATEGORIES_LIMIT = 100;
 
-function CollectionCard({ c }: { c: any }) {
-  const img = c.image?.original ?? c.image?.thumbnail;
+type CardData = {
+  slug: string;
+  name: string;
+  description?: string;
+  image?: string;
+};
+
+/** Circular/organic collection tile: arch-cropped photo, copy below. */
+function CollectionCard({ c }: { c: CardData }) {
   const [err, setErr] = React.useState(false);
   return (
     <Link
       href={`/c/${c.slug}`}
-      className="group flex aspect-[4/5] cursor-pointer flex-col overflow-hidden rounded-[16px] border border-kraft-200 bg-white shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(34,48,26,0.12)]"
+      className="group flex cursor-pointer flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1.5"
     >
-      {/* text — top (per reference) */}
-      <div className="p-4 pb-3">
-        <div className="line-clamp-2 text-[15.5px] font-bold leading-tight text-forest-900">
-          {c.name}
-        </div>
-        {c.description || c.details ? (
-          <div className="mt-1 line-clamp-2 text-[11.5px] leading-[1.35] text-stone-500">{c.description || c.details}</div>
-        ) : null}
-      </div>
-      {/* photo — fills the rest */}
-      <div className="relative min-h-0 flex-1 overflow-hidden">
-        {img && !err ? (
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-b-[18px] rounded-t-[999px] border border-kraft-200 bg-sage-100 shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition-shadow duration-300 group-hover:shadow-[0_12px_28px_rgba(34,48,26,0.15)]">
+        {c.image && !err ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={img}
+            src={c.image}
             alt={c.name}
             loading="lazy"
             onError={() => setErr(true)}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
           />
         ) : (
-          <div className="h-full w-full bg-sage-100" />
+          <div className="grid h-full w-full place-items-center text-sage-400">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-9 w-9" aria-hidden>
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+              <path d="M2 21c0-3 1.85-5.36 5.08-6" />
+            </svg>
+          </div>
         )}
       </div>
+      <div className="mt-3.5 text-[15.5px] font-bold leading-tight text-forest-900 transition-colors group-hover:text-forest-700">
+        {c.name}
+      </div>
+      {c.description ? (
+        <div className="mt-1 line-clamp-2 max-w-[220px] text-[11.5px] leading-[1.4] text-stone-500">
+          {c.description}
+        </div>
+      ) : null}
     </Link>
   );
 }
 
+// Tailwind needs literal class strings — map the admin-chosen count to columns.
+const COLS: Record<number, string> = {
+  3: 'lg:grid-cols-3',
+  4: 'lg:grid-cols-4',
+  5: 'lg:grid-cols-5',
+  6: 'lg:grid-cols-6',
+};
+
 export function Collections() {
   const { t } = useTranslation('common');
   const { categories: raw, isLoading } = useCategories({ limit: HOME_CATEGORIES_LIMIT, parent: 'null' } as any);
-  const { homeCategories } = useHomeConfig();
-  const categories = applyCuration(raw ?? [], homeCategories).slice(0, 5);
+  const { homeCategories, homeCollections } = useHomeConfig();
+
+  const count = Math.max(3, Math.min(6, Number(homeCollections?.count) || 5));
+  const bySlug = new Map((raw ?? []).map((c: any) => [c.slug, c]));
+
+  // Admin cards override; every field falls back to the linked category so a
+  // half-filled entry still renders complete.
+  const cards: CardData[] = (
+    homeCollections?.cards?.length
+      ? homeCollections.cards.map((card) => {
+          const cat: any = card.categorySlug ? bySlug.get(card.categorySlug) : null;
+          return {
+            slug: card.categorySlug || cat?.slug || '',
+            name: card.title || cat?.name || '',
+            description: card.subtitle || cat?.description || '',
+            image:
+              (typeof card.image === 'string' ? card.image : card.image?.original) ||
+              cat?.image?.original ||
+              cat?.image?.thumbnail ||
+              '',
+          };
+        })
+      : applyCuration(raw ?? [], homeCategories).map((c: any) => ({
+          slug: c.slug,
+          name: c.name,
+          description: c.description,
+          image: c.image?.original ?? c.image?.thumbnail ?? '',
+        }))
+  )
+    .filter((c) => c.slug && c.name)
+    .slice(0, count);
+
+  if (homeCollections?.enabled === false) return null;
 
   return (
     <section className="g-light-a px-5 pb-[40px] pt-[40px] sm:px-8 lg:px-[64px] lg:pb-[52px] lg:pt-[48px]">
-      <div className="mb-[22px] flex items-end justify-between gap-4">
+      <div className="mb-[26px] flex items-end justify-between gap-4">
         <div>
           <div className="mb-[9px] font-jost text-[11px] font-medium uppercase tracking-[0.2em] text-forest-600">
-            {t('home-collections-eyebrow')}
+            {homeCollections?.eyebrow || t('home-collections-eyebrow')}
           </div>
           <h2 className="m-0 flex items-center gap-[9px] font-pahserif text-[26px] font-semibold tracking-[-0.005em] text-forest-900 sm:text-[34px]">
-            {t('home-collections-title')}
+            {homeCollections?.heading || t('home-collections-title')}
             <i className="fa-solid fa-spa text-[23px] text-forest-500" aria-hidden />
           </h2>
         </div>
@@ -75,14 +124,14 @@ export function Collections() {
           </svg>
         </Link>
       </div>
-      <div className="grid grid-cols-2 gap-[16px] sm:grid-cols-3 lg:grid-cols-5">
-        {isLoading && categories.length === 0
-          ? Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="aspect-[4/5] animate-pulse rounded-[16px] bg-sage-100" />
+      <div className={`grid grid-cols-2 gap-[18px] sm:grid-cols-3 ${COLS[count] ?? COLS[5]}`}>
+        {isLoading && cards.length === 0
+          ? Array.from({ length: count }).map((_, i) => (
+              <div key={i} className="aspect-[3/4] animate-pulse rounded-b-[18px] rounded-t-[999px] bg-sage-100" />
             ))
-          : categories.map((c: any, i: number) => (
+          : cards.map((c, i) => (
               <motion.div
-                key={c.id ?? c.slug}
+                key={c.slug || i}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}

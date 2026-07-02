@@ -452,6 +452,7 @@ export function useGetPaymentIntent({
   form_change_gateway?: boolean;
 }) {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { openModal, closeModal } = useModalAction();
 
   const { data, isLoading, error, refetch, isFetching } = useQuery(
@@ -468,6 +469,11 @@ export function useGetPaymentIntent({
     // Make it dynamic for both gql and rest
     {
       enabled: false,
+      // A gateway that is down/misconfigured must fail visibly (branded toast),
+      // not silently strand the customer on a dead Pay Now button.
+      onError: () => {
+        toast.error(t('text-payment-unavailable'));
+      },
       onSuccess: (item) => {
         let data: any = '';
         if (isArray(item)) {

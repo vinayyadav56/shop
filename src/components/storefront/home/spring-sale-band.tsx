@@ -108,7 +108,7 @@ export function SpringSaleBand() {
             {/* CTA */}
             <Link
               href="/plants/search"
-              className="mt-3 inline-flex items-center gap-1.5 rounded-[9px] bg-[#4ADE80] px-4 py-2 font-hanken text-[12.5px] font-bold text-[#061a0b] transition duration-200 hover:bg-[#22c55e] active:scale-[0.97]"
+              className="mt-3 inline-flex items-center gap-1.5 rounded-[9px] bg-ds-cta px-4 py-2 font-hanken text-[12.5px] font-bold text-ds-cta-ink transition duration-200 hover:bg-ds-cta-hover active:scale-[0.97]"
             >
               {t('home-sale-cta')}
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>

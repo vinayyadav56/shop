@@ -24,7 +24,7 @@ export function PlantDoctorCard() {
             <svg className="absolute right-[13px] top-[11px]" width="11" height="11" viewBox="0 0 24 24" fill="#86E0A3"><path d="M12 2l1.6 5.4L19 9l-5.4 1.6L12 16l-1.6-5.4L5 9l5.4-1.6Z" /></svg>
           </div>
         </div>
-        <button type="button" onClick={() => router.push('/plant-doctor')} className="relative mt-3.5 inline-flex items-center gap-[7px] rounded-full bg-forest-600 px-[18px] py-[11px] font-hanken text-[13px] font-bold text-white shadow-[0_4px_14px_rgba(0,0,0,0.2)] transition hover:bg-forest-500 active:scale-95">
+        <button type="button" onClick={() => router.push('/plant-doctor')} className="relative mt-3.5 inline-flex items-center gap-[7px] rounded-full bg-ds-btn px-[18px] py-[11px] font-hanken text-[13px] font-bold text-white shadow-[0_4px_14px_rgba(0,0,0,0.2)] transition hover:bg-ds-btn-hover active:scale-95">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M3 8.5A1.5 1.5 0 0 1 4.5 7H7l1.2-1.7A1 1 0 0 1 9 4.9h6a1 1 0 0 1 .8.4L17 7h2.5A1.5 1.5 0 0 1 21 8.5v9A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5Z" /><circle cx="12" cy="12.4" r="3.1" /></svg>
           Diagnose now
         </button>

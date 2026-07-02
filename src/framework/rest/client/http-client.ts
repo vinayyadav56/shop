@@ -25,9 +25,17 @@ Axios.interceptors.request.use((config) => {
   // middleware localizes dynamic content. The app already passes `?language=`
   // explicitly (which wins), but Accept-Language makes every call locale-aware
   // (and covers any call site that doesn't pass the param).
-  const locale =
-    Router?.locale ||
-    (typeof window !== 'undefined' ? Cookies.get('NEXT_LOCALE') : undefined);
+  // BROWSER ONLY: the next/router singleton THROWS when read during SSR
+  // ("No router instance found"), which used to 500 every getServerSideProps
+  // page (all /orders/* routes). Server-side calls rely on ?language= instead.
+  let locale: string | undefined;
+  if (typeof window !== 'undefined') {
+    try {
+      locale = Router?.locale || Cookies.get('NEXT_LOCALE');
+    } catch {
+      locale = Cookies.get('NEXT_LOCALE');
+    }
+  }
   //@ts-ignore
   config.headers = {
     ...config.headers,

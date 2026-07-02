@@ -636,5 +636,10 @@
   "footer-copyright": "Plant At Home. Made in India with care.",
   "footer-privacy": "Privacy",
   "footer-terms": "Terms",
-  "footer-track-order": "Track Order"
+  "footer-track-order": "Track Order",
+  "filter-show-products": "Show Products",
+  "filter-search-placeholder": "Search…",
+  "filter-applied": "Applied filters",
+  "filter-remove": "Remove",
+  "text-payment-unavailable": "Online payment is temporarily unavailable. Your order is saved — please try again in a little while."
 }

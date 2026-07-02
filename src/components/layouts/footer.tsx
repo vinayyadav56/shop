@@ -90,7 +90,7 @@ function NewsletterForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="inline-flex shrink-0 items-center gap-2 rounded-[10px] bg-[#4ADE80] px-6 py-3 font-hanken text-[13.5px] font-bold text-[#061a0b] transition duration-200 hover:bg-[#22c55e] active:scale-[0.97] disabled:opacity-60"
+          className="inline-flex shrink-0 items-center gap-2 rounded-[10px] bg-ds-cta px-6 py-3 font-hanken text-[13.5px] font-bold text-ds-cta-ink transition duration-200 hover:bg-ds-cta-hover active:scale-[0.97] disabled:opacity-60"
         >
           {isSubscribed ? t('footer-newsletter-subscribed') : t('footer-newsletter-subscribe')}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3" aria-hidden><path d="M5 12h13M13 6l6 6-6 6" /></svg>

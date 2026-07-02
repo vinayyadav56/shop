@@ -5,10 +5,12 @@ import { useRouter } from 'next/router';
 import Scrollbar from '@/components/ui/scrollbar';
 import { useTranslation } from 'next-i18next';
 import { useCategories } from '@/framework/category';
+import { CATEGORIES_PER_PAGE } from '@/framework/client/variables';
 import ErrorMessage from '@/components/ui/error-message';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
 import { isEmpty } from 'lodash';
 import Alert from '@/components/ui/alert';
+import FilterListSearch from '@/components/search-view/filter-list-search';
 
 interface Props {
   categories: any[];
@@ -24,9 +26,19 @@ const CategoryFilterView = ({ categories }: Props) => {
     [router.query.category]
   );
   const [state, setState] = useState<string[]>(() => selectedValues);
+  const [needle, setNeedle] = useState('');
   useEffect(() => {
     setState(selectedValues);
   }, [selectedValues]);
+  const visible = useMemo(
+    () =>
+      needle.trim()
+        ? categories.filter((c) =>
+            c?.name?.toLowerCase().includes(needle.trim().toLowerCase()),
+          )
+        : categories,
+    [categories, needle],
+  );
 
   function handleChange(values: string[]) {
     router.push({
@@ -40,11 +52,14 @@ const CategoryFilterView = ({ categories }: Props) => {
 
   return (
     <div className="relative -mb-5 after:absolute after:bottom-0 after:flex after:h-6 after:w-full after:bg-gradient-to-t after:from-white ltr:after:left-0 rtl:after:right-0">
+      {categories.length > 8 && (
+        <FilterListSearch value={needle} onChange={setNeedle} />
+      )}
       <Scrollbar style={{ maxHeight: '400px' }} className="pb-6">
         <span className="sr-only">{t('text-categories')}</span>
         <div className="grid grid-cols-1 gap-4">
           <CheckboxGroup values={state} onChange={handleChange}>
-            {categories.filter(Boolean).map((plan) => (
+            {visible.filter(Boolean).map((plan) => (
               <Checkbox
                 key={plan.id}
                 label={plan.name}
@@ -66,7 +81,7 @@ const CategoryFilter: React.FC<{ type?: any }> = ({ type }) => {
   // @ts-ignore
   const { categories, isLoading, error } = useCategories({
     ...(type ? { type } : { type: query.searchType }),
-    limit: 1000,
+    limit: CATEGORIES_PER_PAGE,
   });
 
   if (error) return <ErrorMessage message={error.message} />;

@@ -79,6 +79,13 @@ module.exports = {
         'ds-accent': 'var(--ds-accent)',
         'ds-accent-soft': 'var(--ds-accent-soft)',
         'ds-accent-ink': 'var(--ds-accent-ink)',
+        // ── Backend-controlled button colors (admin Design System → Buttons) ──
+        // var() fallbacks reproduce the shipped look before any admin choice.
+        'ds-btn': 'var(--ds-btn, #2E5E2A)',
+        'ds-btn-hover': 'var(--ds-btn-hover, #285325)',
+        'ds-cta': 'var(--ds-cta, #4ADE80)',
+        'ds-cta-hover': 'var(--ds-cta-hover, #41c371)',
+        'ds-cta-ink': 'var(--ds-cta-ink, #061a0b)',
         // ── Approved neutral tokens (premium luxury palette) ──
         'pa-bg': 'var(--pa-bg)',
         'pa-card': 'var(--pa-card)',

@@ -636,5 +636,10 @@
   "footer-copyright": "Plant At Home. இந்தியாவில் அன்புடன் தயாரிக்கப்பட்டது.",
   "footer-privacy": "தனியுரிமை",
   "footer-terms": "விதிமுறைகள்",
-  "footer-track-order": "ஆர்டரைக் கண்காணி"
+  "footer-track-order": "ஆர்டரைக் கண்காணி",
+  "filter-show-products": "பொருட்களைக் காட்டு",
+  "filter-search-placeholder": "தேடுங்கள்…",
+  "filter-applied": "பயன்படுத்திய வடிப்பான்கள்",
+  "filter-remove": "நீக்கு",
+  "text-payment-unavailable": "ஆன்லைன் கட்டணம் தற்காலிகமாக கிடைக்கவில்லை. உங்கள் ஆர்டர் சேமிக்கப்பட்டுள்ளது — சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்."
 }

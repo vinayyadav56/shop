@@ -9,6 +9,7 @@ import ErrorMessage from '@/components/ui/error-message';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
 import { isEmpty } from 'lodash';
 import Alert from '@/components/ui/alert';
+import FilterListSearch from '@/components/search-view/filter-list-search';
 
 interface Props {
   manufacturers: any[];
@@ -26,9 +27,19 @@ const ManufacturerFilterView = ({ manufacturers }: Props) => {
     [router.query.manufacturer]
   );
   const [state, setState] = useState<string[]>(selectedValues);
+  const [needle, setNeedle] = useState('');
   useEffect(() => {
     setState(selectedValues);
   }, [selectedValues]);
+  const visible = useMemo(
+    () =>
+      needle.trim()
+        ? manufacturers.filter((c) =>
+            c?.name?.toLowerCase().includes(needle.trim().toLowerCase()),
+          )
+        : manufacturers,
+    [manufacturers, needle],
+  );
 
   function handleChange(values: string[]) {
     router.push({
@@ -42,11 +53,14 @@ const ManufacturerFilterView = ({ manufacturers }: Props) => {
 
   return (
     <div className="relative -mb-5 after:absolute after:bottom-0 after:flex after:h-6 after:w-full after:bg-gradient-to-t after:from-white ltr:after:left-0 rtl:after:right-0">
+      {manufacturers.length > 8 && (
+        <FilterListSearch value={needle} onChange={setNeedle} />
+      )}
       <Scrollbar style={{ maxHeight: '400px' }} className="pb-6">
         <span className="sr-only">{t('text-manufacturers')}</span>
         <div className="grid grid-cols-1 gap-4">
           <CheckboxGroup values={state} onChange={handleChange}>
-            {manufacturers.filter(Boolean).map((plan) => (
+            {visible.filter(Boolean).map((plan) => (
               <Checkbox
                 key={plan.id}
                 label={plan.name}

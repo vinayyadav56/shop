@@ -80,7 +80,7 @@ export default function FrequentlyBoughtTogether({ product }: { product: Product
           <button
             type="button"
             onClick={addAll}
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-forest-700 px-5 py-3 text-[13.5px] font-semibold text-white transition hover:bg-forest-800"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ds-btn px-5 py-3 text-[13.5px] font-semibold text-white transition hover:bg-ds-btn-hover"
           >
             Add All To Cart {formatINR(bundle)}
           </button>

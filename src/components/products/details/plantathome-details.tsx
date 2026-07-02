@@ -420,7 +420,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
                   'flex flex-1 items-center justify-center gap-2.5 rounded-full px-7 py-3.5 text-base font-semibold text-white transition',
                   !inStock || needsSelection || verticalBlocked
                     ? 'cursor-not-allowed bg-stone-300'
-                    : 'bg-forest-700 shadow-[0_14px_30px_-12px_rgba(46,94,42,0.65)] hover:bg-forest-800',
+                    : 'bg-ds-btn shadow-[0_14px_30px_-12px_rgba(46,94,42,0.65)] hover:bg-ds-btn-hover',
                 )}
               >
                 <Bag className="h-5 w-5" />
@@ -487,7 +487,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
             'flex min-h-[44px] items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition',
             !inStock || needsSelection || verticalBlocked
               ? 'cursor-not-allowed bg-stone-300'
-              : 'bg-forest-700 hover:bg-forest-800',
+              : 'bg-ds-btn hover:bg-ds-btn-hover',
           )}
         >
           <Bag className="h-4 w-4" />

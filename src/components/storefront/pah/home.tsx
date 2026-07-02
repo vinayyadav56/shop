@@ -112,7 +112,7 @@ function Footer() {
               type="submit"
               aria-label="Subscribe"
               disabled={isLoading}
-              className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border-none bg-forest-600 transition-colors hover:bg-forest-500 active:scale-90 active:bg-forest-700 disabled:opacity-60"
+              className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border-none bg-ds-btn transition-colors hover:bg-ds-btn-hover active:scale-90 active:bg-forest-700 disabled:opacity-60"
             >
               {isSubscribed
                 ? <i className="fa-solid fa-check text-[14px] text-white" aria-hidden />
