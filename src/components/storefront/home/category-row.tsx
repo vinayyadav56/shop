@@ -46,7 +46,7 @@ export function CategoryRow() {
   return (
     <section className="relative z-[5]">
       <div className="px-5 sm:px-8 lg:px-16">
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">
+        <div className="pah-rail [--rail-w:46%] grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">
 
           {isLoading && categories.length === 0
             ? Array.from({ length: 5 }).map((_, i) => (
@@ -57,8 +57,8 @@ export function CategoryRow() {
                 return (
                   <motion.div
                     key={c.id ?? c.slug}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ y: 20 }}
+                    whileInView={{ y: 0 }}
                     viewport={{ once: true, margin: '-20px' }}
                     transition={{ duration: 0.5, delay: (i % 5) * 0.06, ease: [0.22, 1, 0.36, 1] }}
                   >

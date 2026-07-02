@@ -62,7 +62,9 @@ const COLS: Record<number, string> = {
   3: 'lg:grid-cols-3',
   4: 'lg:grid-cols-4',
   5: 'lg:grid-cols-5',
-  6: 'lg:grid-cols-6',
+  // 6-up squeezes cards below ~180px between lg and xl — show 5 there,
+  // all 6 from xl (1280+). 1440+ desktop look is unchanged.
+  6: 'lg:grid-cols-5 xl:grid-cols-6 lg:max-xl:[&>*:nth-child(6)]:hidden',
 };
 
 export function Collections() {
@@ -124,7 +126,7 @@ export function Collections() {
           </svg>
         </Link>
       </div>
-      <div className={`grid grid-cols-2 gap-[18px] sm:grid-cols-3 ${COLS[count] ?? COLS[5]}`}>
+      <div className={`pah-rail [--rail-w:38%] grid grid-cols-2 gap-[18px] sm:grid-cols-3 ${COLS[count] ?? COLS[5]}`}>
         {isLoading && cards.length === 0
           ? Array.from({ length: count }).map((_, i) => (
               <div key={i} className="aspect-[3/4] animate-pulse rounded-b-[18px] rounded-t-[999px] bg-sage-100" />
@@ -132,8 +134,8 @@ export function Collections() {
           : cards.map((c, i) => (
               <motion.div
                 key={c.slug || i}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ y: 24 }}
+                whileInView={{ y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.5, delay: (i % 5) * 0.07, ease: [0.22, 1, 0.36, 1] }}
               >

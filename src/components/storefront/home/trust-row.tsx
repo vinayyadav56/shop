@@ -52,8 +52,8 @@ export function TrustRow() {
   return (
     <section className="font-hanken">
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ y: 24 }}
+        whileInView={{ y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.6, ease: EXPO }}
         className="relative border-t border-kraft-200 bg-white px-6 py-8 sm:px-10 lg:px-16 lg:py-9"
@@ -62,8 +62,8 @@ export function TrustRow() {
           {ITEMS.map((it, i) => (
             <motion.div
               key={it.title}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 18 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.09, duration: 0.5, ease: EXPO }}
               className="relative flex items-center gap-3.5 lg:px-8"

@@ -58,7 +58,7 @@ export function ProductGrid({
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-3.5 sm:gap-5 lg:grid-cols-4">
+        <div className="pah-rail [--rail-w:42%] grid grid-cols-2 gap-3.5 sm:gap-5 lg:grid-cols-4">
           {isLoading
             ? Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="aspect-[4/5] animate-pulse rounded-lg bg-sage-200" />

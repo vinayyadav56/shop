@@ -189,7 +189,9 @@ const Header = ({ layout }: { layout?: string }) => {
           {/* ── nav — centered between logo and actions, flat on the dark bar.
               In-flow (not absolutely centered) so it can never overlap the
               actions block at narrower desktop widths. ── */}
-          <nav className="hidden min-w-0 flex-1 justify-center md:flex">
+          {/* lg+ only: at tablet the 7 pills collide with logo/actions, so
+              768–1023 uses the hamburger's full-screen menu instead. */}
+          <nav className="hidden min-w-0 flex-1 justify-center lg:flex">
             <div className="flex items-center gap-0.5">
               {NAV.map((n) =>
                 n.menu ? (
@@ -241,12 +243,12 @@ const Header = ({ layout }: { layout?: string }) => {
               {/* Track Order */}
               <Link href="/track-order" className="flex flex-col items-center gap-1 rounded-lg px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label="Track Order">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M5 17H3V6a1 1 0 0 1 1-1h11v12" /><path d="M15 9h4l3 3v5h-2" /><circle cx="7.5" cy="18" r="1.8" /><circle cx="17.5" cy="18" r="1.8" /></svg>
-                <span className="text-[11px] font-medium leading-none">Track Order</span>
+                <span className="hidden text-[11px] font-medium leading-none xl:inline">Track Order</span>
               </Link>
               {/* Wishlist */}
               <Link href="/wishlists" className="flex flex-col items-center gap-1 rounded-lg px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label="Wishlist">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z" /></svg>
-                <span className="text-[11px] font-medium leading-none">Wishlist</span>
+                <span className="hidden text-[11px] font-medium leading-none xl:inline">Wishlist</span>
               </Link>
               {/* Cart */}
               <button ref={cartBtnRef} data-cart-target type="button" onClick={openCart} className="flex flex-col items-center gap-1 rounded-lg px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label="Cart">
@@ -256,12 +258,12 @@ const Header = ({ layout }: { layout?: string }) => {
                     {totalUniqueItems}
                   </span>
                 </span>
-                <span className="text-[11px] font-medium leading-none">Cart</span>
+                <span className="hidden text-[11px] font-medium leading-none xl:inline">Cart</span>
               </button>
               {/* Login */}
               <button type="button" onClick={onProfile} className="flex flex-col items-center gap-1 rounded-lg px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label={isAuthorize ? 'My account' : 'Login'}>
                 <Icon.user className="h-[18px] w-[18px]" />
-                <span className="text-[11px] font-medium leading-none">{isAuthorize ? 'Account' : 'Login'}</span>
+                <span className="hidden text-[11px] font-medium leading-none xl:inline">{isAuthorize ? 'Account' : 'Login'}</span>
               </button>
             </div>
 
@@ -269,7 +271,7 @@ const Header = ({ layout }: { layout?: string }) => {
             <button type="button" onClick={() => setSearchOpen(true)} className={`${iconBtn} md:hidden`} aria-label={t('text-search') ?? 'Search'}>
               <SearchIcon className="h-[18px] w-[18px]" />
             </button>
-            <button type="button" onClick={() => setMenuOpen(true)} className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white backdrop-blur md:hidden" aria-label="Menu">
+            <button type="button" onClick={() => setMenuOpen(true)} className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white backdrop-blur lg:hidden" aria-label="Menu">
               <Icon.menu className="h-5 w-5" />
             </button>
           </div>

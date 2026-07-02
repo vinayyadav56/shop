@@ -104,8 +104,8 @@ export function WhyPlants() {
 
         {/* header */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 24 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.6, ease: EXPO }}
           className="mx-auto mb-8 max-w-[760px] text-center"
@@ -128,12 +128,12 @@ export function WhyPlants() {
         </motion.div>
 
         {/* benefit cards — roomy 3-up rows (admin-configurable count) */}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <div className="pah-rail [--rail-w:52%] grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           {cards.map((b, i) => (
             <motion.div
               key={`${b.title}-${i}`}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 24 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.5, delay: (i % 3) * 0.07, ease: EXPO }}
               className="group relative overflow-hidden rounded-[18px] border border-kraft-200 bg-white shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition-all duration-300 hover:-translate-y-[6px] hover:border-forest-200 hover:shadow-[0_16px_36px_rgba(34,48,26,0.13)]"
@@ -170,8 +170,8 @@ export function WhyPlants() {
 
         {/* ── CTA band — next level ── */}
         <motion.div
-          initial={{ opacity: 0, y: 36 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 36 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.7, ease: EXPO }}
           className="relative mt-10 overflow-hidden rounded-[24px]"

@@ -50,8 +50,8 @@ export function SpringSaleBand() {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ y: 32 }}
+      whileInView={{ y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.65, ease: EXPO }}
       className="py-6 lg:py-8"
@@ -128,8 +128,8 @@ export function SpringSaleBand() {
               <React.Fragment key={p.label}>
                 {i > 0 && <span aria-hidden className="hidden h-8 w-px shrink-0 bg-white/15 lg:block" />}
                 <motion.div
-                  initial={{ opacity: 0, y: 14 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ y: 14 }}
+                  whileInView={{ y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 + i * 0.07, duration: 0.45, ease: EXPO }}
                   className="flex items-center gap-3"

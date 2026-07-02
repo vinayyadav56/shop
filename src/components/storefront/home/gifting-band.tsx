@@ -63,8 +63,8 @@ export function GiftingBand() {
 
         {/* left copy */}
         <motion.div
-          initial={{ opacity: 0, x: -28 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ x: -28 }}
+          whileInView={{ x: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, ease: EXPO }}
           className="flex flex-col justify-center px-5 py-12 sm:px-8 lg:flex-[1_1_56%] lg:py-[34px] lg:pe-[30px] lg:ps-16"
@@ -101,8 +101,8 @@ export function GiftingBand() {
 
         {/* right photo */}
         <motion.div
-          initial={{ opacity: 0, scale: 1.04 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ scale: 1.04 }}
+          whileInView={{ scale: 1 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.8, ease: EXPO }}
           className="relative h-64 min-h-[260px] w-full overflow-hidden sm:h-80 lg:h-auto lg:flex-[1_1_44%]"
@@ -122,8 +122,8 @@ export function GiftingBand() {
       {/* ── assurance band — next level ── */}
       <div className="px-5 pb-6 pt-4 sm:px-8 lg:px-16">
         <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 28 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.65, ease: EXPO }}
           className="relative overflow-hidden rounded-[20px] bg-[linear-gradient(135deg,#163320_0%,#0e2618_48%,#081508_100%)]"
@@ -142,8 +142,8 @@ export function GiftingBand() {
             {ASSURE.map((g, i) => (
               <motion.div
                 key={g.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ y: 20 }}
+                whileInView={{ y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.55, ease: EXPO }}
                 className="group flex flex-1 items-center gap-4 px-7 py-6 transition-colors duration-300 hover:bg-white/[0.035] sm:flex-col sm:items-start sm:px-8 sm:py-7 lg:flex-row lg:items-center"

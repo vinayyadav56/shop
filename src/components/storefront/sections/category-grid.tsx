@@ -45,7 +45,7 @@ export function CategoryGrid({
           </FadeUp>
         </div>
 
-        <div className="grid grid-cols-2 gap-3.5 sm:gap-4 md:grid-cols-3 lg:grid-cols-6">
+        <div className="pah-rail [--rail-w:38%] grid grid-cols-2 gap-3.5 sm:gap-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 lg:max-xl:[&>*:nth-child(6)]:hidden">
           {isLoading
             ? Array.from({ length: 6 }).map((_, i) => (
                 <div
