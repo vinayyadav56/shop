@@ -641,5 +641,6 @@
   "filter-search-placeholder": "Search…",
   "filter-applied": "Applied filters",
   "filter-remove": "Remove",
-  "text-payment-unavailable": "Online payment is temporarily unavailable. Your order is saved — please try again in a little while."
+  "text-payment-unavailable": "Online payment is temporarily unavailable. Your order is saved — please try again in a little while.",
+  "text-view-less": "View Less"
 }

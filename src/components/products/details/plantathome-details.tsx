@@ -14,6 +14,7 @@ import { HttpClient } from '@/framework/client/http-client';
 import { getStoredLatLng, getStoredCity } from '@/lib/customer-location';
 import VendorAvailabilityNote from '@/components/products/details/vendor-availability-note';
 import Truncate from '@/components/ui/truncate';
+import { useTranslation } from 'next-i18next';
 import { useSanitizeContent } from '@/lib/sanitize-content';
 import { displayImage } from '@/lib/display-product-preview-images';
 import { getVariations } from '@/lib/get-variations';
@@ -27,6 +28,41 @@ import { generateCartItem } from '@/store/quick-cart/generate-cart-item';
 import { cartAnimation } from '@/lib/cart-animation';
 import PlantAtHomeGallery from './plantathome/gallery';
 import PlantAtHomeAccordion, { AccordionItem } from './plantathome/accordion';
+
+/** Long product descriptions collapse to a preview with a View More toggle
+ *  so the details panel stays compact until the shopper opts in. */
+function ClampedDescription({ html }: { html: string }) {
+  const { t } = useTranslation('common');
+  const [open, setOpen] = useState(false);
+  // Short copy doesn't need the toggle — render it plainly.
+  const isLong = (html?.replace(/<[^>]+>/g, '') ?? '').length > 320;
+  if (!isLong) {
+    return <div className="react-editor-description" dangerouslySetInnerHTML={{ __html: html }} />;
+  }
+  return (
+    <div>
+      <div className="relative">
+        <div
+          className={`react-editor-description overflow-hidden ${open ? '' : 'max-h-[150px]'}`}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+        {!open && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white to-transparent" />
+        )}
+      </div>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-forest-700 transition-colors hover:text-forest-900"
+      >
+        {open ? t('text-view-less') : t('text-view-more')}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={`h-3 w-3 transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden>
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+    </div>
+  );
+}
 
 /* ── small inline icons ─────────────────────────────────────────── */
 const Star = ({ className = '' }: { className?: string }) => (
@@ -199,7 +235,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   if (content) {
     accordionItems.push({
       title: 'Description',
-      content: <div className="react-editor-description" dangerouslySetInnerHTML={{ __html: content }} />,
+      content: <ClampedDescription html={content} />,
     });
   }
   if (careSpecs.length) {
