@@ -57,14 +57,13 @@ function CollectionCard({ c }: { c: CardData }) {
   );
 }
 
-// Tailwind needs literal class strings — map the admin-chosen count to columns.
-const COLS: Record<number, string> = {
-  3: 'lg:grid-cols-3',
-  4: 'lg:grid-cols-4',
-  5: 'lg:grid-cols-5',
-  // 6-up squeezes cards below ~180px between lg and xl — show 5 there,
-  // all 6 from xl (1280+). 1440+ desktop look is unchanged.
-  6: 'lg:grid-cols-5 xl:grid-cols-6 lg:max-xl:[&>*:nth-child(6)]:hidden',
+// Tailwind needs literal class strings — per-count rail width so a full row
+// exactly fits at desktop (count=6 shows ~5 with a peek at lg, all 6 from xl).
+const RAIL_W: Record<number, string> = {
+  3: 'lg:[--rail-w:calc((100%_-_36px)/3)]',
+  4: 'lg:[--rail-w:calc((100%_-_54px)/4)]',
+  5: 'lg:[--rail-w:calc((100%_-_72px)/5)]',
+  6: 'lg:[--rail-w:calc((100%_-_72px)/5.15)] xl:[--rail-w:calc((100%_-_90px)/6)]',
 };
 
 export function Collections() {
@@ -126,7 +125,7 @@ export function Collections() {
           </svg>
         </Link>
       </div>
-      <div className={`pah-rail [--rail-w:38%] grid grid-cols-2 gap-[18px] sm:grid-cols-3 ${COLS[count] ?? COLS[5]}`}>
+      <div className={`pah-rail [--rail-w:38%] grid grid-cols-2 gap-[18px] sm:grid-cols-3 ${RAIL_W[count] ?? RAIL_W[5]}`}>
         {isLoading && cards.length === 0
           ? Array.from({ length: count }).map((_, i) => (
               <div key={i} className="aspect-[3/4] animate-pulse rounded-b-[18px] rounded-t-[999px] bg-sage-100" />

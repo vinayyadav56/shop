@@ -92,7 +92,7 @@ export default function PlantCareDetails({
 
       {/* spec grid */}
       {specs.length > 0 && (
-        <div className="pah-rail [--rail-w:42%] grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="pah-rail [--rail-w:46%] sm:[--rail-w:42%] lg:[--rail-w:calc((100%_-_36px)/4)] grid grid-cols-2 gap-3">
           {specs.map((s) => {
             const I = Icon[SPEC_ICON[s.label] ?? 'leaf'];
             return (

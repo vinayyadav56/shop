@@ -39,7 +39,7 @@ export function Testimonials() {
       <h2 className="mx-auto mb-10 max-w-2xl text-center font-cormorant text-4xl font-semibold not-italic text-forest sm:mb-14 sm:text-5xl lg:text-6xl">
         <WordReveal text="Plant parents, in their words" />
       </h2>
-      <div className="pah-rail [--rail-w:55%] grid gap-4 md:grid-cols-3 md:gap-6">
+      <div className="pah-rail [--rail-w:82%] md:[--rail-w:55%] lg:[--rail-w:calc((100%_-_48px)/3)] grid gap-4 md:gap-6">
         {TESTIMONIALS.map((t, i) => (
           <FadeUp key={t.name} delay={i * 0.08}>
             <div className="flex h-full flex-col rounded-2xl bg-white p-5 shadow-[0_22px_50px_rgba(31,42,33,0.08)] sm:p-7">
