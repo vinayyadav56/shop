@@ -56,7 +56,7 @@ export function TrustRow() {
         whileInView={{ y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.6, ease: EXPO }}
-        className="relative border-t border-kraft-200 bg-white px-6 py-8 sm:px-10 lg:px-16 lg:py-9"
+        className="relative border-t border-kraft-300/70 bg-[#F0EDE4] px-6 py-5 sm:px-10 lg:px-16 lg:py-6"
       >
         <div className="relative grid grid-cols-2 gap-6 lg:grid-cols-4 lg:gap-0">
           {ITEMS.map((it, i) => (
@@ -66,15 +66,15 @@ export function TrustRow() {
               whileInView={{ y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.09, duration: 0.5, ease: EXPO }}
-              className="relative flex items-center gap-3.5 lg:px-8"
+              className="relative flex items-center gap-3.5 lg:px-5"
             >
               {/* vertical divider between items on desktop */}
               {i > 0 && (
                 <div className="absolute inset-y-0 left-0 hidden w-px bg-gradient-to-b from-transparent via-forest-900/10 to-transparent lg:block" />
               )}
 
-              {/* icon chip */}
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-sage-100 text-forest-700">
+              {/* icon chip — white on the tinted band so it still lifts */}
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white text-forest-700 shadow-[0_2px_8px_rgba(34,48,26,0.08)]">
                 {it.icon}
               </div>
 

@@ -18,15 +18,17 @@ type CardData = {
   image?: string;
 };
 
-/** Circular/organic collection tile: arch-cropped photo, copy below. */
+/** Small circular collection tile (the mobile category-circles language,
+ *  scaled up): round photo with a white ring, bold name below. The subtitle
+ *  is intentionally not rendered (kept in the admin CMS data). */
 function CollectionCard({ c }: { c: CardData }) {
   const [err, setErr] = React.useState(false);
   return (
     <Link
       href={`/c/${c.slug}`}
-      className="group flex cursor-pointer flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1.5"
+      className="group flex cursor-pointer flex-col items-center text-center"
     >
-      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-b-[18px] rounded-t-[999px] border border-kraft-200 bg-sage-100 shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition-shadow duration-300 group-hover:shadow-[0_12px_28px_rgba(34,48,26,0.15)]">
+      <span className="relative block aspect-square w-full overflow-hidden rounded-full border-[3px] border-white bg-sage-100 shadow-[0_2px_10px_rgba(34,48,26,0.10)] ring-1 ring-kraft-200 transition duration-300 group-hover:shadow-[0_10px_26px_rgba(34,48,26,0.16)] group-hover:ring-forest-300">
         {c.image && !err ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -34,37 +36,20 @@ function CollectionCard({ c }: { c: CardData }) {
             alt={c.name}
             loading="lazy"
             onError={() => setErr(true)}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.07]"
           />
         ) : (
-          <div className="grid h-full w-full place-items-center text-sage-400">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-9 w-9" aria-hidden>
-              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
-              <path d="M2 21c0-3 1.85-5.36 5.08-6" />
-            </svg>
-          </div>
+          <span className="grid h-full w-full place-items-center text-sage-400">
+            <i className="fa-solid fa-leaf text-[26px]" aria-hidden />
+          </span>
         )}
-      </div>
-      <div className="mt-3.5 text-[15.5px] font-bold leading-tight text-forest-900 transition-colors group-hover:text-forest-700">
+      </span>
+      <span className="mt-3 font-hanken text-[14px] font-bold leading-tight text-forest-900 transition-colors group-hover:text-forest-700">
         {c.name}
-      </div>
-      {c.description ? (
-        <div className="mt-1 line-clamp-2 max-w-[220px] text-[11.5px] leading-[1.4] text-stone-500">
-          {c.description}
-        </div>
-      ) : null}
+      </span>
     </Link>
   );
 }
-
-// Tailwind needs literal class strings — per-count rail width so a full row
-// exactly fits at desktop (count=6 shows ~5 with a peek at lg, all 6 from xl).
-const RAIL_W: Record<number, string> = {
-  3: 'lg:[--rail-w:calc((100%_-_36px)/3)]',
-  4: 'lg:[--rail-w:calc((100%_-_54px)/4)]',
-  5: 'lg:[--rail-w:calc((100%_-_72px)/5)]',
-  6: 'lg:[--rail-w:calc((100%_-_72px)/5.15)] xl:[--rail-w:calc((100%_-_90px)/6)]',
-};
 
 export function Collections() {
   const { t } = useTranslation('common');
@@ -125,10 +110,13 @@ export function Collections() {
           </svg>
         </Link>
       </div>
-      <div className={`pah-rail [--rail-w:38%] grid grid-cols-2 gap-[18px] sm:grid-cols-3 ${RAIL_W[count] ?? RAIL_W[5]}`}>
+      <div className="pah-rail [--rail-w:31%] grid grid-cols-2 gap-[18px] sm:grid-cols-3 sm:[--rail-w:23%] md:[--rail-w:19%] lg:[--rail-w:164px] xl:[--rail-w:176px]">
         {isLoading && cards.length === 0
           ? Array.from({ length: count }).map((_, i) => (
-              <div key={i} className="aspect-[3/4] animate-pulse rounded-b-[18px] rounded-t-[999px] bg-sage-100" />
+              <div key={i} className="flex flex-col items-center gap-3">
+                <div className="aspect-square w-full animate-pulse rounded-full bg-sage-100" />
+                <div className="h-3.5 w-2/3 animate-pulse rounded bg-sage-100" />
+              </div>
             ))
           : cards.map((c, i) => (
               <motion.div

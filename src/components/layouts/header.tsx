@@ -159,13 +159,13 @@ const Header = ({ layout }: { layout?: string }) => {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: EXPO }}
-        className={`${position} inset-x-0 top-0 z-50 w-full bg-[#10230f] transition-shadow duration-300 ${
+        className={`${position} inset-x-0 top-0 z-50 w-full bg-[#10230f]/70 backdrop-blur-2xl backdrop-saturate-150 transition-shadow duration-300 ${
           scrolled ? 'shadow-[0_4px_24px_rgba(0,0,0,0.35)]' : ''
         }`}
       >
-        {/* announcement bar — near-black strip (per reference), slides away on
-            scroll. City switcher stays left for the city-first delivery UX. */}
-        <div className={`overflow-hidden border-b border-white/10 bg-[#0A0D0A] text-white transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-12 opacity-100'}`}>
+        {/* announcement bar — frosted near-black strip, slides away on scroll.
+            City switcher stays left for the city-first delivery UX. */}
+        <div className={`overflow-hidden border-b border-white/10 bg-[#0A0D0A]/75 text-white backdrop-blur-xl transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-12 opacity-100'}`}>
           <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2 text-[11px] font-medium tracking-wide sm:px-8">
 
             <CitySwitcher tone="light" />
