@@ -1,5 +1,4 @@
 import DashboardSidebar from '@/components/dashboard/sidebar';
-import AccountHeader from '@/components/dashboard/account-header';
 import GeneralLayout from '@/components/layouts/_general';
 import classNames from 'classnames';
 
@@ -16,9 +15,8 @@ export default function DashboardLayout({
     <GeneralLayout layout="general">
       <div className="_dashboard g-light-a">
         <div className={classNames('mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:py-12', className)}>
-          <AccountHeader />
-          <div className="mt-6 flex flex-col gap-6 lg:flex-row">
-            <DashboardSidebar className="shrink-0 lg:w-72" />
+          <div className="flex flex-col gap-6 lg:flex-row">
+            <DashboardSidebar className="shrink-0 lg:w-[300px]" />
             <div className="min-w-0 flex-1">{children}</div>
           </div>
         </div>

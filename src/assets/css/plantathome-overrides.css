@@ -106,6 +106,17 @@ h1, h2, h3, h4, h5 {
   line-height: 1.08;
   font-weight: 600;
 }
+/* Profile-picture uploader — frame the generic FileInput dropzone into a
+   compact sage-tinted card matching the account "Profile Picture" reference. */
+.pah-avatar-uploader { width: 168px; }
+.pah-avatar-uploader .border-dashed,
+.pah-avatar-uploader [class*="border-dashed"] {
+  border-radius: 16px;
+  background: var(--ds-accent-soft, #e7eee2);
+  border-color: rgba(46, 94, 42, 0.25);
+  min-height: 150px;
+}
+
 /* Escape hatch: the fixed brand-serif utilities must beat the theme heading
    rule above even when the admin Design System picks a sans heading font.
    Same !important, higher specificity (class > element). */

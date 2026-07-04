@@ -6,7 +6,6 @@ import ProfileContact from '@/components/profile/profile-contact';
 import Seo from '@/components/seo/seo';
 import { useUser } from '@/framework/user';
 import DashboardLayout from '@/layouts/_dashboard';
-import Email from "next-auth/providers/email";
 import ProfileUpdateEmail from "@/components/profile/profile-update-email";
 export { getStaticProps } from '@/framework/general.ssr';
 
