@@ -11,6 +11,7 @@ import {
 import { Image } from '@/components/ui/image';
 import { useRef, useState } from 'react';
 import { productPlaceholder } from '@/lib/placeholders';
+import { sanitizeContent } from '@/lib/sanitize-content';
 import { useIsRTL } from '@/lib/locals';
 import classNames from 'classnames';
 import { PlayIcon } from '../icons/play-icon';
@@ -85,7 +86,7 @@ export const ThumbsCarousel: React.FC<Props> = ({
                   {item.url.includes('iframe') ? (
                     <div
                       className="product-video-iframe"
-                      dangerouslySetInnerHTML={{ __html: item.url }}
+                      dangerouslySetInnerHTML={{ __html: sanitizeContent(item.url) }}
                     />
                   ) : (
                     <div className="product-video-iframe">

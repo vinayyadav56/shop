@@ -158,7 +158,7 @@ export const useContact = ({ reset }: { reset: () => void }) => {
       }
     },
     onError: (err) => {
-      console.log(err);
+      console.error(err);
     },
   });
 };
@@ -183,7 +183,7 @@ export function useLogin() {
       closeModal();
     },
     onError: (error: Error) => {
-      console.log(error.message);
+      console.error(error.message);
     },
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.NOTIFY_LOGS);
@@ -211,7 +211,7 @@ export function useSocialLogin() {
       }
     },
     onError: (error: Error) => {
-      console.log(error.message);
+      console.error(error.message);
     },
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.NOTIFY_LOGS);
@@ -242,7 +242,7 @@ export function useSendOtpCode({
       });
     },
     onError: (error: Error) => {
-      console.log(error.message);
+      console.error(error.message);
     },
   });
 
@@ -302,7 +302,7 @@ export function useOtpLogin() {
       closeModal();
     },
     onError: (error: Error) => {
-      console.log(error.message);
+      console.error(error.message);
     },
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.NOTIFY_LOGS);

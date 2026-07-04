@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
+import { sanitizeContent } from '@/lib/sanitize-content';
 
 type TruncateProps = {
   expandedText?: string;
@@ -31,20 +32,23 @@ const Truncate: React.FC<TruncateProps> = ({
     toggleLines();
   }
   if (!children) return null;
+  // Sanitize vendor/admin-supplied HTML (shop & author descriptions) before it
+  // reaches dangerouslySetInnerHTML — stored-XSS defense. Sanitizing AFTER the
+  // substring also repairs any tag cut mid-way by the truncation.
   const isCharacterLimitExceeded = children?.length > character;
   if (!isCharacterLimitExceeded) {
-    return <div dangerouslySetInnerHTML={{ __html: children }} />;
+    return <div dangerouslySetInnerHTML={{ __html: sanitizeContent(children) }} />;
   }
   return (
     <>
       {!expanded ? (
         <div
           dangerouslySetInnerHTML={{
-            __html: children?.substring(0, character) + '...',
+            __html: sanitizeContent(children?.substring(0, character) + '...'),
           }}
         />
       ) : (
-        <div dangerouslySetInnerHTML={{ __html: children }} />
+        <div dangerouslySetInnerHTML={{ __html: sanitizeContent(children) }} />
       )}
       <br />
       <span>

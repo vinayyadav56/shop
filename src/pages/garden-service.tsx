@@ -39,7 +39,7 @@ function LeadForm() {
   const onSubmit = (values: GardenLeadInput) => {
     mutate(values, {
       onSuccess: () => { setDone(true); reset(); toast.success('Thanks! Our garden team will reach out shortly.'); },
-      onError: () => toast.error('Something went wrong. Please call us instead.'),
+      onError: () => { toast.error('Something went wrong. Please call us instead.'); },
     });
   };
 

@@ -44,7 +44,7 @@ function EnquiryForm() {
   const onSubmit = (values: CorporateInput) =>
     mutate(values, {
       onSuccess: () => { setDone(true); reset(); toast.success('Thanks! Our gifting team will reach out.'); },
-      onError: () => toast.error('Something went wrong. Please call us instead.'),
+      onError: () => { toast.error('Something went wrong. Please call us instead.'); },
     });
 
   if (done) {

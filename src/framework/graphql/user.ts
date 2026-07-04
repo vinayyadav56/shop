@@ -68,7 +68,7 @@ export function useUser() {
       token.setEmailVerified(true);
     },
     onError: (err) => {
-      console.log(err);
+      console.error(err);
     },
   });
   return { me: data?.me, isLoading, error, isAuthorized };
@@ -150,7 +150,7 @@ export const useContact = ({ reset }: { reset: () => void }) => {
       }
     },
     onError: (err) => {
-      console.log(err);
+      console.error(err);
     },
   });
 
@@ -184,7 +184,7 @@ export function useLogin() {
       closeModal();
     },
     onError: (error) => {
-      console.log(error.message, 'error');
+      console.error(error.message, 'error');
     },
   });
 
@@ -222,7 +222,7 @@ export function useSocialLogin() {
       }
     },
     onError: (err) => {
-      console.log(err.message);
+      console.error(err.message);
     },
   });
 
@@ -261,7 +261,7 @@ export function useOtpLogin() {
       closeModal();
     },
     onError: (err) => {
-      console.log(err);
+      console.error(err);
       // setError(err.message);
     },
   });
@@ -307,7 +307,7 @@ export function useSendOtpCode({
       });
     },
     onError: (err) => {
-      console.log(err);
+      console.error(err);
     },
   });
 

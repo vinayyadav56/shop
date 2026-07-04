@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
 import sanitizeHtml from 'sanitize-html';
 
-export function useSanitizeContent({ description }: { description: string }) {
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-  if (!description) {
-    return;
-  }
-  const cleanDescription = sanitizeHtml(description, {
+/** Shared allow-list — youtube/vimeo iframes, safe inline styles, images. */
+const SANITIZE_OPTS: sanitizeHtml.IOptions = {
     allowedTags: sanitizeHtml?.defaults?.allowedTags?.concat(['img', 'iframe']),
     allowedAttributes: {
       p: ['style', 'class'],
@@ -54,7 +47,25 @@ export function useSanitizeContent({ description }: { description: string }) {
     allowedSchemesByTag: {
       img: ['data', 'http', 'https'],
     },
-  });
+};
+
+/** Plain, synchronous sanitizer for any consumer that renders vendor/admin
+ *  HTML via dangerouslySetInnerHTML (product/shop/author descriptions, video
+ *  embeds). Deterministic on server + client, so no hydration mismatch. */
+export function sanitizeContent(html?: string | null): string {
+  if (!html) return '';
+  return sanitizeHtml(html, SANITIZE_OPTS);
+}
+
+export function useSanitizeContent({ description }: { description: string }) {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  if (!description) {
+    return;
+  }
+  const cleanDescription = sanitizeHtml(description, SANITIZE_OPTS);
 
   return isClient ? cleanDescription : '';
 }

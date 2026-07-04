@@ -47,7 +47,7 @@ export function useRemoveFromWishlist() {
     },
     onError: (error: any) => {
       // toast.error(t(error.response?.data.message));
-      console.log(error);
+      console.error(error);
     },
   });
   function removeFromWishlist(slug: string) {
