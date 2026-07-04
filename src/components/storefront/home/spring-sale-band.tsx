@@ -56,7 +56,8 @@ export function SpringSaleBand() {
       transition={{ duration: 0.65, ease: EXPO }}
       className="py-6 lg:py-8"
     >
-      <div className="relative mx-5 overflow-hidden rounded-[18px] bg-[linear-gradient(135deg,#1c4d28_0%,#0f2d1a_48%,#081a0f_100%)] sm:mx-8 lg:mx-16">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
+      <div className="relative overflow-hidden rounded-[18px] bg-[linear-gradient(135deg,#1c4d28_0%,#0f2d1a_48%,#081a0f_100%)]">
 
         {/* grain texture */}
         <div
@@ -82,7 +83,7 @@ export function SpringSaleBand() {
           <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
         </svg>
 
-        <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-4 px-5 py-5 sm:px-8 lg:flex-row lg:items-center lg:gap-0 lg:px-10 lg:py-6">
+        <div className="relative z-10 flex flex-col gap-4 px-5 py-5 sm:px-8 lg:flex-row lg:items-center lg:gap-0 lg:px-10 lg:py-6">
 
           {/* ── LEFT — offer block ── */}
           <div className="shrink-0 lg:w-[260px]">
@@ -146,6 +147,7 @@ export function SpringSaleBand() {
           </div>
 
         </div>
+      </div>
       </div>
     </motion.section>
   );

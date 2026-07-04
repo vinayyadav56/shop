@@ -167,7 +167,7 @@ const Header = ({ layout }: { layout?: string }) => {
         {/* announcement bar — frosted near-black strip, slides away on scroll.
             City switcher stays left for the city-first delivery UX. */}
         <div className={`overflow-hidden border-b border-white/10 bg-[#0A0D0A]/75 text-white backdrop-blur-xl transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-12 opacity-100'}`}>
-          <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2 text-[11px] font-medium tracking-wide sm:px-8">
+          <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2 text-[11px] font-medium tracking-wide sm:px-8 lg:px-16">
 
             <CitySwitcher tone="light" />
             <span className="pointer-events-none absolute left-1/2 hidden -translate-x-1/2 items-center gap-2.5 whitespace-nowrap sm:flex">
@@ -181,7 +181,7 @@ const Header = ({ layout }: { layout?: string }) => {
         </div>
 
         {/* main bar */}
-        <div className="relative mx-auto flex max-w-7xl items-center px-5 py-2.5 sm:px-8">
+        <div className="relative mx-auto flex max-w-7xl items-center px-5 py-2.5 sm:px-8 lg:px-16">
           {/* Logo */}
           <Link href="/" aria-label="PlantAtHome home" className="shrink-0">
             <BrandLogo light />

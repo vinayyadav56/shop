@@ -56,9 +56,9 @@ export function TrustRow() {
         whileInView={{ y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.6, ease: EXPO }}
-        className="relative border-t border-kraft-300/70 bg-[#F0EDE4] px-6 py-5 sm:px-10 lg:px-16 lg:py-6"
+        className="relative border-t border-kraft-300/70 bg-[#F0EDE4] py-5 lg:py-6"
       >
-        <div className="relative grid grid-cols-2 gap-6 lg:grid-cols-4 lg:gap-0">
+        <div className="relative mx-auto grid max-w-7xl grid-cols-2 gap-6 px-5 sm:px-8 lg:grid-cols-4 lg:gap-0 lg:px-16">
           {ITEMS.map((it, i) => (
             <motion.div
               key={it.title}

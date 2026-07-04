@@ -89,7 +89,8 @@ export function Collections() {
   if (homeCollections?.enabled === false) return null;
 
   return (
-    <section className="g-light-a px-5 pb-[40px] pt-[40px] sm:px-8 lg:px-[64px] lg:pb-[52px] lg:pt-[48px]">
+    <section className="g-light-a">
+      <div className="mx-auto max-w-7xl px-5 pb-[40px] pt-[40px] sm:px-8 lg:px-16 lg:pb-[52px] lg:pt-[48px]">
       <div className="mb-[26px] flex items-end justify-between gap-4">
         <div>
           <div className="mb-[9px] font-jost text-[11px] font-medium uppercase tracking-[0.2em] text-forest-600">
@@ -110,7 +111,7 @@ export function Collections() {
           </svg>
         </Link>
       </div>
-      <div className="pah-rail [--rail-w:31%] grid grid-cols-2 gap-[18px] sm:grid-cols-3 sm:[--rail-w:23%] md:[--rail-w:19%] lg:[--rail-w:164px] xl:[--rail-w:176px]">
+      <div className="pah-rail [--rail-w:31%] grid grid-cols-2 gap-[18px] sm:grid-cols-3 sm:[--rail-w:23%] md:[--rail-w:19%] lg:[--rail-w:calc((100%_-_72px)/5)]">
         {isLoading && cards.length === 0
           ? Array.from({ length: count }).map((_, i) => (
               <div key={i} className="flex flex-col items-center gap-3">
@@ -129,6 +130,7 @@ export function Collections() {
                 <CollectionCard c={c} />
               </motion.div>
             ))}
+      </div>
       </div>
     </section>
   );

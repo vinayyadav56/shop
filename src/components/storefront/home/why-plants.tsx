@@ -114,7 +114,7 @@ export function WhyPlants() {
         </motion.div>
 
         {/* benefit cards — small, clean, single scrollable row */}
-        <div className="pah-rail [--rail-w:52%] lg:[--rail-w:calc((100%_-_48px)/4.2)] grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-6">
+        <div className="pah-rail [--rail-w:52%] lg:[--rail-w:calc((100%_-_72px)/4)] grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-6">
           {cards.map((b, i) => (
             <motion.div
               key={`${b.title}-${i}`}

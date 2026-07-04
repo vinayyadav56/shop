@@ -24,14 +24,14 @@ const NotFound: React.FC<NotFoundProps> = ({
     <div className="grid min-h-screen place-items-center p-4 sm:p-8">
       <div className="text-center">
         {title ? (
-          <p className="2xl: mb-4 text-sm uppercase tracking-widest text-body-dark sm:mb-5">
+          <p className="2xl: mb-4 text-sm uppercase tracking-widest text-stone-600 sm:mb-5">
             {t(title)}
           </p>
         ) : (
           ''
         )}
         {subTitle ? (
-          <h1 className="mb-5 text-2xl font-bold leading-normal text-bolder sm:text-3xl">
+          <h1 className="mb-5 text-2xl font-bold leading-normal text-forest-900 sm:text-3xl">
             {t(subTitle)}
           </h1>
         ) : (
@@ -47,7 +47,7 @@ const NotFound: React.FC<NotFoundProps> = ({
         {link ? (
           <Link
             href={link}
-            className="inline-flex items-center text-bolder underline hover:text-body-dark hover:no-underline focus:outline-none sm:text-base"
+            className="inline-flex items-center text-forest-900 underline hover:text-stone-600 hover:no-underline focus:outline-none sm:text-base"
           >
             {t(linkTitle)}
           </Link>

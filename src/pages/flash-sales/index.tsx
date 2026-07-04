@@ -30,7 +30,7 @@ const FlashDealsPage: NextPageWithLayout = () => {
   if (error) return <ErrorMessage message={error.message} />;
 
   return (
-    <div className="grow bg-[#F9F9F9] pb-8 lg:pb-10 xl:pb-14">
+    <div className="grow bg-[#F8F7F2] pb-8 lg:pb-10 xl:pb-14">
       <PageBanner
         title={t('text-available-flash-sale')}
         breadcrumbTitle={t('text-home')}

@@ -80,8 +80,8 @@ export function BestSellers({
         paddingTop: 52,
         paddingBottom: 52,
       }}
-      className="px-5 sm:px-10 lg:px-16"
     >
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
       <div className="mb-[22px] flex items-end justify-between gap-4">
         <div>
           <div
@@ -103,7 +103,7 @@ export function BestSellers({
         </Link>
       </div>
 
-      <div className="pah-rail [--rail-w:38%] lg:[--rail-w:calc((100%_-_56px)/5.15)] xl:[--rail-w:calc((100%_-_70px)/6)] grid grid-cols-2 gap-4 sm:grid-cols-3 lg:gap-3.5">
+      <div className="pah-rail [--rail-w:38%] lg:[--rail-w:calc((100%_-_56px)/5)] xl:[--rail-w:calc((100%_-_70px)/6)] grid grid-cols-2 gap-4 sm:grid-cols-3 lg:gap-3.5">
         {loading
           ? Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="w-full">
@@ -122,6 +122,7 @@ export function BestSellers({
             {t('home-bestsellers-empty')}
           </p>
         )}
+      </div>
       </div>
     </section>
   );

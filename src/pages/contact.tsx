@@ -1,7 +1,5 @@
 import { useTranslation } from 'next-i18next';
 import SuperAdminContactForm from '@/components/settings/super-admin-contact-form';
-import { Image } from '@/components/ui/image';
-import contactIllustration from '@/assets/contact-illustration.svg';
 import { getLayout } from '@/components/layouts/layout';
 // import { formatAddress } from '@/lib/format-address';
 import { getIcon } from '@/lib/get-icon';
@@ -26,16 +24,17 @@ export const ContactPage = () => {
         <div className="mx-auto flex w-full max-w-7xl flex-col px-5 py-10 pb-20 md:flex-row md:pb-10 xl:py-14 xl:px-8 xl:pb-14 2xl:px-14">
           {/* sidebar */}
           <div className="order-2 w-full shrink-0 rounded-xl border border-forest-900/10 bg-white p-5 md:order-1 md:w-72 lg:w-96">
-            <div className="mb-8 flex w-full items-center justify-center overflow-hidden">
-              <Image
-                src={contactIllustration}
+            <div className="mb-8 w-full overflow-hidden rounded-xl">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/hero-emerald.jpg"
                 alt={t('nav-menu-contact')}
-                className="h-auto w-full"
+                className="h-44 w-full object-cover"
               />
             </div>
 
             <div className="mb-8 flex flex-col">
-              <span className="mb-3 font-semibold text-heading">
+              <span className="mb-3 font-semibold text-forest-900">
                 {t('text-address')}
               </span>
               <span className="text-sm text-body">
@@ -54,7 +53,7 @@ export const ContactPage = () => {
             </div>
 
             <div className="mb-8 flex flex-col">
-              <span className="mb-3 font-semibold text-heading">
+              <span className="mb-3 font-semibold text-forest-900">
                 {t('text-phone')}
               </span>
               <span className="text-sm text-body">
@@ -65,7 +64,7 @@ export const ContactPage = () => {
             </div>
 
             <div className="mb-8 flex flex-col">
-              <span className="mb-3 font-semibold text-heading">
+              <span className="mb-3 font-semibold text-forest-900">
                 Email Address
               </span>
               <span className="text-sm text-body">
@@ -76,7 +75,7 @@ export const ContactPage = () => {
             </div>
             {settings?.contactDetails?.website && (
               <div className="mb-8 flex flex-col">
-                <span className="mb-3 font-semibold text-heading">
+                <span className="mb-3 font-semibold text-forest-900">
                   {t('text-website')}
                 </span>
                 <div className="flex items-center justify-between">
@@ -96,7 +95,7 @@ export const ContactPage = () => {
             )}
 
             <div className="mb-8 flex flex-col">
-              <span className="mb-4 font-semibold text-heading">
+              <span className="mb-4 font-semibold text-forest-900">
                 {t('text-follow-us')}
               </span>
               <div className="flex items-center justify-start">
@@ -129,7 +128,7 @@ export const ContactPage = () => {
 
           {/* Contact form */}
           <div className="order-1 mb-8 w-full rounded-xl border border-forest-900/10 bg-white p-5 md:order-2 md:mb-0 md:p-8 ltr:md:ml-7 rtl:md:mr-7 ltr:lg:ml-9 rtl:lg:mr-9">
-            <h1 className="mb-7 font-cormorant text-2xl font-medium text-forest-900 md:text-3xl">
+            <h1 className="mb-7 font-pahserif text-2xl font-medium text-forest-900 md:text-3xl">
               {t('text-questions-comments')}
             </h1>
             <SuperAdminContactForm />

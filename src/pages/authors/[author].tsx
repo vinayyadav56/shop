@@ -18,7 +18,7 @@ export default function Author({ author, variables }: any) {
     <>
       <div className="mx-auto min-h-screen max-w-screen-xl">
         <Details author={author} />
-        <h2 className="mb-8 text-2xl font-semibold tracking-tight text-heading lg:text-3xl">
+        <h2 className="mb-8 font-pahserif text-2xl font-semibold tracking-tight text-forest-900 lg:text-3xl">
           {t('text-author-books')}
         </h2>
         {/* //FIXME:  */}
@@ -35,7 +35,7 @@ export default function Author({ author, variables }: any) {
 const getLayout = (page: React.ReactElement) =>
   getSiteLayout(
     <div className="w-full bg-light">
-      <div className="mx-auto min-h-screen w-full max-w-1920 px-5 pt-10 pb-16 xl:py-14 xl:px-16">
+      <div className="mx-auto min-h-screen w-full max-w-7xl px-5 pt-10 pb-16 xl:py-14 xl:px-16">
         {page}
       </div>
     </div>

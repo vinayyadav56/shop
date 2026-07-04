@@ -17,7 +17,7 @@ export default function PrivacyPage() {
   return (
     <>
       <Seo title="Privacy" url="privacy" />
-      <section className="mx-auto w-full max-w-1920 g-light-a px-5 py-8 lg:py-10 lg:px-8 xl:py-14 xl:px-16 2xl:px-20">
+      <section className="mx-auto w-full max-w-7xl g-light-a px-5 py-8 lg:py-10 lg:px-8 xl:py-14 xl:px-16 2xl:px-20">
         <header className="mb-10 sm:mt-2 lg:mb-14 xl:mt-4">
           <h1 className="mb-4 font-cormorant text-2xl font-medium text-forest-900 sm:mb-5 sm:text-4xl md:text-3xl 2xl:mb-7 2xl:text-5xl">
             {t(title)}
@@ -39,8 +39,8 @@ export default function PrivacyPage() {
                     smooth={true}
                     duration={500}
                     to={makeTitleToDOMId(item.title)}
-                    activeClass="text-sm lg:text-base text-heading font-semibold"
-                    className="inline-flex cursor-pointer py-3 uppercase text-sub-heading"
+                    activeClass="text-sm lg:text-base text-forest-900 font-semibold"
+                    className="inline-flex cursor-pointer py-3 uppercase text-stone-600"
                   >
                     {t(item.title)}
                   </Link>
