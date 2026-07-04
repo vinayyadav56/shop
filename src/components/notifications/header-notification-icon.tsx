@@ -1,4 +1,5 @@
 import { NotificationIcon } from '@/components/icons/notification';
+import { goToSignin } from '@/lib/go-to-signin';
 import NotificationLists from '@/components/notifications/notification-lists';
 import Link from '@/components/ui/link';
 import NotifyHeaderContentLoader from '@/components/ui/loaders/notify-header-content';
@@ -31,7 +32,7 @@ const HeaderNotification: React.FC<HeaderNotificationProps> = ({
   const { t } = useTranslation();
   const { openModal } = useModalAction();
   const handleLogin = useCallback(() => {
-    return openModal('LOGIN_VIEW');
+    return goToSignin();
   }, []);
   const data = useNotification();
 

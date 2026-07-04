@@ -662,5 +662,12 @@
   "addresses-subtitle": "अपने बिलिंग और शिपिंग पते प्रबंधित करें",
   "add-new-address": "नया पता जोड़ें",
   "billing-address": "बिलिंग पता",
-  "shipping-address": "शिपिंग पता"
+  "shipping-address": "शिपिंग पता",
+  "signin-hero-line-1": "प्रकृति को घर लाएँ।",
+  "signin-hero-line-2": "बेहतर जिएँ।",
+  "signin-hero-sub": "ऑर्डर ट्रैक करने, पसंदीदा पौधे सहेजने और तेज़ चेकआउट के लिए साइन इन करें।",
+  "signin-welcome": "वापसी पर स्वागत है",
+  "signin-create-account": "अपना खाता बनाएँ",
+  "signin-tab-login": "लॉग इन",
+  "signin-tab-register": "साइन अप"
 }

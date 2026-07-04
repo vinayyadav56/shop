@@ -273,7 +273,7 @@ export function HeroPlant() {
   };
 
   return (
-    <section className="relative min-h-[680px] w-full overflow-hidden rounded-[28px] bg-[#0c1e12]">
+    <section className="relative min-h-[680px] w-full overflow-hidden bg-[#0c1e12]">
       <TourBurns slides={slides} active={active} reduce={reduce} />
 
       {/* premium green grade — protect the type on the left, reveal the room on the right */}

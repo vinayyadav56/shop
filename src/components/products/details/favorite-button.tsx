@@ -1,4 +1,5 @@
 import { HeartFillIcon } from '@/components/icons/heart-fill';
+import { goToSignin } from '@/lib/go-to-signin';
 import { HeartOutlineIcon } from '@/components/icons/heart-outline';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
 import { useModalAction } from '@/components/ui/modal/modal.context';
@@ -27,7 +28,7 @@ function FavoriteButton({
   const { openModal } = useModalAction();
   function toggle() {
     if (!isAuthorized) {
-      openModal('LOGIN_VIEW');
+      goToSignin();
       return;
     }
     toggleWishlist({ product_id: productId });

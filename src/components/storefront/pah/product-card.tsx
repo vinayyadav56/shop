@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { goToSignin } from '@/lib/go-to-signin';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
@@ -63,7 +64,7 @@ export function ProductCard({ product }: { product: Product }) {
   function onWish(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    if (!authorized) return openModal('LOGIN_VIEW');
+    if (!authorized) return goToSignin();
     setWished((v) => !v);
     toggleWishlist();
   }

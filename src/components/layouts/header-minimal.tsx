@@ -1,4 +1,5 @@
 import { CloseIcon } from '@/components/icons/close-icon';
+import { goToSignin } from '@/lib/go-to-signin';
 import { SearchIcon } from '@/components/icons/search-icon';
 import Alert from '@/components/ui/alert';
 import Button from '@/components/ui/button';
@@ -82,7 +83,7 @@ const HeaderMinimal = ({ layout }: { layout: string }) => {
   useActiveScroll(siteHeaderRef);
   const { width } = useWindowSize();
   const handleLogin = useCallback(() => {
-    return openModal('LOGIN_VIEW');
+    return goToSignin();
   }, []);
   return (
     <>

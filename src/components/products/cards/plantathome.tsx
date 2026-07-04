@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { goToSignin } from '@/lib/go-to-signin';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
@@ -170,7 +171,7 @@ const PlantAtHomeCard: React.FC<Props> = ({
     e.stopPropagation();
     e.preventDefault();
     if (!isAuthorized) {
-      openModal('LOGIN_VIEW');
+      goToSignin();
       return;
     }
     openModal('ASK_AI', { product });
@@ -179,7 +180,7 @@ const PlantAtHomeCard: React.FC<Props> = ({
     e.stopPropagation();
     e.preventDefault();
     if (!isAuthorized) {
-      openModal('LOGIN_VIEW');
+      goToSignin();
       return;
     }
     toggleWishlist({ product_id: product.id });

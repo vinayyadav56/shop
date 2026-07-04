@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form';
+import { goToSignin } from '@/lib/go-to-signin';
 import { useState } from 'react';
 import { useAtom } from 'jotai';
 import { toast } from 'react-toastify';
@@ -97,7 +98,7 @@ export default function CorporateGiftingPage() {
   const fmt = (n: number) => '₹' + Number(n).toLocaleString('en-IN');
 
   const buy = (id: number) => {
-    if (!isAuthorize) { openModal('LOGIN_VIEW'); return; }
+    if (!isAuthorize) { goToSignin(); return; }
     setBuyingId(id);
     checkout(id, {
       onSuccess: (res) => {

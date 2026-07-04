@@ -1,5 +1,6 @@
 'use client';
 import React, { useMemo, useState } from 'react';
+import { goToSignin } from '@/lib/go-to-signin';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import classNames from 'classnames';
@@ -203,7 +204,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   };
 
   const navigate = (path: string) => { router.push(path); closeModal(); };
-  const onAskAi = () => (isAuthorized ? openModal('ASK_AI', { product }) : openModal('LOGIN_VIEW'));
+  const onAskAi = () => (isAuthorized ? openModal('ASK_AI', { product }) : goToSignin());
 
   const ratingInt = Math.round(Number(ratings) || 5);
   const trustCount = Number(total_reviews) > 0 ? `${total_reviews}` : '12,000+';

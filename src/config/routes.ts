@@ -1,5 +1,6 @@
 export const Routes = {
   home: '/',
+  login: '/signin',
   gardenService: '/garden-service',
   corporateGifting: '/corporate-gifting',
   myPackages: '/my-packages',

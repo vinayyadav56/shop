@@ -662,5 +662,12 @@
   "addresses-subtitle": "Manage your billing and shipping addresses",
   "add-new-address": "Add New Address",
   "billing-address": "Billing Address",
-  "shipping-address": "Shipping Address"
+  "shipping-address": "Shipping Address",
+  "signin-hero-line-1": "Bring Nature Home.",
+  "signin-hero-line-2": "Live Better.",
+  "signin-hero-sub": "Sign in to track orders, save your favourite plants and check out faster.",
+  "signin-welcome": "Welcome back",
+  "signin-create-account": "Create your account",
+  "signin-tab-login": "Log in",
+  "signin-tab-register": "Sign up"
 }

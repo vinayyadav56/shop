@@ -25,7 +25,14 @@ const loginFormSchema = yup.object().shape({
     .required('error-email-required'),
   password: yup.string().required('error-password-required'),
 });
-function LoginForm() {
+type LoginFormProps = {
+  /** When provided (page context), switches to the register view in place
+   *  instead of opening the register modal. */
+  onSwitchToRegister?: () => void;
+  onForgot?: () => void;
+};
+
+export function LoginForm({ onSwitchToRegister, onForgot }: LoginFormProps = {}) {
   const { t } = useTranslation('common');
   const router = useRouter();
   const { openModal } = useModalAction();
@@ -71,7 +78,7 @@ function LoginForm() {
               error={t(errors.password?.message!)}
               variant="outline"
               className="mb-5"
-              forgotPageRouteOnClick={() => openModal('FORGOT_VIEW')}
+              forgotPageRouteOnClick={onForgot ?? (() => openModal('FORGOT_VIEW'))}
             />
             <div className="mt-8">
               <Button
@@ -143,7 +150,7 @@ function LoginForm() {
       <div className="text-sm text-center text-body sm:text-base">
         {t('text-no-account')}{' '}
         <button
-          onClick={() => openModal('REGISTER')}
+          onClick={onSwitchToRegister ?? (() => openModal('REGISTER'))}
           className="font-semibold underline transition-colors duration-200 text-[#175840] hover:text-[#1B6B50] hover:no-underline focus:text-[#1B6B50] focus:no-underline focus:outline-0 ltr:ml-1 rtl:mr-1"
         >
           {t('text-register')}

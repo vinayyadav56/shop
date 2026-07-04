@@ -1,4 +1,5 @@
 import React from 'react';
+import { goToSignin } from '@/lib/go-to-signin';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAtom } from 'jotai';
 import dynamic from 'next/dynamic';
@@ -147,7 +148,7 @@ const Header = ({ layout }: { layout?: string }) => {
 
   const onProfile = () => {
     if (isAuthorize) router.push('/profile');
-    else openModal('LOGIN_VIEW');
+    else goToSignin();
   };
 
   const iconBtn = 'grid h-10 w-10 place-items-center rounded-full text-white transition hover:bg-white/10';
