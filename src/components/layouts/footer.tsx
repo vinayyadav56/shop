@@ -3,20 +3,13 @@ import Link from 'next/link';
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { useSettings, useSubscription } from '@/framework/settings';
+import { useTypes } from '@/framework/type';
+import { TYPES_PER_PAGE } from '@/framework/client/variables';
+import { getVerticalMeta } from '@/components/storefront/verticals';
 import { WordmarkStacked } from '@/components/storefront/logo-mark';
 import InlineLanguageSelect from '@/components/ui/inline-language-select';
 
 const COLS: { title: string; links: { name: string; href: string }[] }[] = [
-  {
-    title: 'Shop',
-    links: [
-      { name: 'Indoor Plants', href: '/c/indoor' },
-      { name: 'Pots & Planters', href: '/tools' },
-      { name: 'Seeds', href: '/c/seeds' },
-      { name: 'Fertilizers', href: '/c/fertilizers' },
-      { name: 'Garden Tools', href: '/tools' },
-    ],
-  },
   {
     title: 'Plant Care',
     links: [
@@ -112,6 +105,23 @@ const Footer = () => {
   const phone = contact?.contact || settings?.contactPhone || '+91 98765 43210';
   const year = new Date().getFullYear();
 
+  // Shop column from the live catalogue (works on staging's 6 verticals and
+  // production's 3, whose slugs differ) + the All Categories index.
+  const { types } = useTypes({ limit: TYPES_PER_PAGE } as any);
+  const cols = React.useMemo(() => {
+    const shopLinks = (types ?? []).map((ty: any) => {
+      const meta = getVerticalMeta(ty.slug, ty.name);
+      return { name: ty.name ?? meta.label, href: meta.shopPath ?? meta.path };
+    });
+    return [
+      {
+        title: 'Shop',
+        links: [...shopLinks, { name: 'All Categories', href: '/categories' }],
+      },
+      ...COLS,
+    ];
+  }, [types]);
+
   return (
     <footer className="relative overflow-hidden g-footer text-white/80">
 
@@ -200,7 +210,7 @@ const Footer = () => {
         </div>
 
         {/* link columns */}
-        {COLS.map((col) => (
+        {cols.map((col) => (
           <div key={col.title}>
             <h4 className="mb-5 text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#86EFAC]">
               {col.title}

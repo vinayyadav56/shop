@@ -4,6 +4,7 @@ import type { Category, Product } from '@/types';
 import { HeroPlant } from './hero-plant';
 import { CategoryRow } from './category-row';
 import { SpringSaleBand } from './spring-sale-band';
+import { VerticalsBand } from './verticals-band';
 import { Collections } from './collections';
 import { BestSellers } from './best-sellers';
 import { WhyPlants } from './why-plants';
@@ -28,8 +29,8 @@ export function PlantCompanyHome({
 }) {
   return (
     <>
-      {/* Section order matches the approved design reference:
-          Hero → Category → Spring Sale → Collections → Bestsellers → Why Plants → Gifting → Trust */}
+      {/* Section order matches the approved design reference (+ Verticals band):
+          Hero → Category → Spring Sale → Verticals → Collections → Bestsellers → Why Plants → Gifting → Trust */}
       {/* Hero + category cards in one stacking context — cards float at hero
           bottom. Full-bleed 100%-width hero (per feedback). */}
       <div className="relative">
@@ -39,6 +40,7 @@ export function PlantCompanyHome({
         </div>
       </div>
       <SpringSaleBand />
+      <VerticalsBand />
       <Collections />
       <BestSellers products={products} isLoading={productsLoading} />
       <WhyPlants />

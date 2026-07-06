@@ -26,6 +26,11 @@ export interface VerticalMeta {
   blurb: string;
   scenes: string[];
   promise: PromiseItem[];
+  /** Where "shop this world" should land when the vertical page itself has no
+      catalogue yet (e.g. pots live under the tools type as a category). */
+  shopPath?: string;
+  /** True while the vertical exists as a type but has no products/categories. */
+  comingSoon?: boolean;
 }
 
 const PLANTS_PROMISE: PromiseItem[] = [
@@ -89,6 +94,42 @@ const META: Record<string, Omit<VerticalMeta, 'key' | 'path'>> = {
       'Sun-ripened seasonal fruit — harvested at its peak and delivered to your door the same day.',
     scenes: FARM_SCENES,
     promise: FARM_PROMISE,
+  },
+  'pots-planters': {
+    label: 'Pots & Planters',
+    tagline: 'A home for every plant.',
+    blurb:
+      'Terracotta, ceramic and designer planters — handmade finishes that let your greens take centre stage.',
+    scenes: ['/tools-3.jpg', '/tools-1.jpg', '/plants-3.jpg'],
+    promise: TOOLS_PROMISE,
+    // The pots catalogue currently lives under the tools type as a category.
+    shopPath: '/c/planters-pots',
+  },
+  seeds: {
+    label: 'Seeds',
+    tagline: 'Grow it from day one.',
+    blurb:
+      'Flower, vegetable and herb seeds with germination you can trust — kits and microgreens included.',
+    scenes: [
+      'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=1200&q=78&auto=format&fit=crop',
+      '/farm-2.jpg',
+      '/plants-1.jpg',
+    ],
+    promise: PLANTS_PROMISE,
+    comingSoon: true,
+  },
+  fertilizers: {
+    label: 'Fertilizers',
+    tagline: 'Feed the roots right.',
+    blurb:
+      'Organic plant food, compost and potting mixes — clean nutrition for soil that stays alive.',
+    scenes: [
+      'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&q=78&auto=format&fit=crop',
+      '/farm-3.jpg',
+      '/plants-2.jpg',
+    ],
+    promise: FARM_PROMISE,
+    comingSoon: true,
   },
 };
 

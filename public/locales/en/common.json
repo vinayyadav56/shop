@@ -669,5 +669,13 @@
   "signin-welcome": "Welcome back",
   "signin-create-account": "Create your account",
   "signin-tab-login": "Log in",
-  "signin-tab-register": "Sign up"
+  "signin-tab-register": "Sign up",
+  "home-verticals-eyebrow": "Explore PlantAtHome",
+  "home-verticals-title": "Six worlds, one green home.",
+  "home-verticals-sub": "Plants, pots, seeds, fertilizers, garden tools and farm-fresh boxes — everything your green space needs, in one place.",
+  "home-verticals-view-all": "All Categories",
+  "text-coming-soon": "Coming soon",
+  "categories-page-title": "All Categories",
+  "categories-count-label": "collections",
+  "categories-explore-vertical": "Explore world"
 }

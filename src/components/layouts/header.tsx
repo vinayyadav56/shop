@@ -16,70 +16,51 @@ import { authorizationAtom } from '@/store/authorization-atom';
 import { displayMobileHeaderSearchAtom } from '@/store/display-mobile-header-search-atom';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import CitySwitcher from '@/components/location/city-switcher';
+import { useTypes } from '@/framework/type';
+import { TYPES_PER_PAGE } from '@/framework/client/variables';
+import { getVerticalMeta } from '@/components/storefront/verticals';
 
 const Search = dynamic(() => import('@/components/ui/search/search'));
 
-// Nav matches the design reference: Plants, Pots & Planters, Seeds, Fertilizers,
-// Garden Tools (each with a category dropdown), then Plant Care + Offers.
-const NAV: { label: string; href: string; menu?: { label: string; href: string }[] }[] = [
-  {
-    label: 'Plants',
-    href: '/plants',
-    menu: [
-      { label: 'Indoor Plants', href: '/c/indoor' },
-      { label: 'Outdoor Plants', href: '/c/outdoor' },
-      { label: 'Flowering Plants', href: '/c/flowering' },
-      { label: 'Air-purifying', href: '/c/air-purifying' },
-      { label: 'Succulents & Cacti', href: '/c/succulents-cacti' },
-      { label: 'Pet-friendly', href: '/c/pet-friendly' },
-      { label: 'Herbs', href: '/c/herbs' },
-      { label: 'Climbers & Vines', href: '/c/climbers-vines' },
-    ],
-  },
-  {
-    label: 'Pots & Planters',
-    href: '/tools',
-    menu: [
-      { label: 'Ceramic Pots', href: '/c/ceramic-pots' },
-      { label: 'Plastic Planters', href: '/c/plastic-planters' },
-      { label: 'Hanging Planters', href: '/c/hanging-planters' },
-      { label: 'Self-Watering Pots', href: '/c/self-watering' },
-      { label: 'Pot Stands', href: '/c/pot-stands' },
-    ],
-  },
-  {
-    label: 'Seeds',
-    href: '/c/seeds',
-    menu: [
-      { label: 'Flower Seeds', href: '/c/flower-seeds' },
-      { label: 'Vegetable Seeds', href: '/c/vegetable-seeds' },
-      { label: 'Herb Seeds', href: '/c/herb-seeds' },
-      { label: 'Microgreens', href: '/c/microgreens' },
-      { label: 'Seed Kits', href: '/c/seed-kits' },
-    ],
-  },
-  {
-    label: 'Fertilizers',
-    href: '/c/fertilizers',
-    menu: [
-      { label: 'Organic Fertilizers', href: '/c/organic-fertilizers' },
-      { label: 'Liquid Fertilizers', href: '/c/liquid-fertilizers' },
-      { label: 'Compost & Manure', href: '/c/compost' },
-      { label: 'Plant Food', href: '/c/plant-food' },
-      { label: 'Soil & Potting Mix', href: '/c/soil-mix' },
-    ],
-  },
-  {
-    label: 'Garden Tools',
-    href: '/tools',
-    menu: [
-      { label: 'Hand Tools', href: '/c/hand-tools' },
-      { label: 'Watering Cans', href: '/c/watering' },
-      { label: 'Pruning & Cutting', href: '/c/pruning' },
-      { label: 'Gloves & Aprons', href: '/c/gloves' },
-      { label: 'Tool Sets', href: '/c/tool-sets' },
-    ],
-  },
+type NavItem = { label: string; href: string; menu?: { label: string; href: string }[] };
+
+// Vertical nav entries are built at render time from the API types (city-aware,
+// works on any catalogue — staging's 6 verticals AND production's 3, whose slugs
+// differ, e.g. farm-box). Only the dropdown CONTENTS are curated here, keyed by
+// type slug with REAL category slugs (verified against the live catalogue — the
+// old hardcoded list had guessed slugs that 404'd). A type without an entry
+// simply renders as a plain link.
+const CATEGORY_MENUS: Record<string, { label: string; href: string }[]> = {
+  plants: [
+    { label: 'Indoor Plants', href: '/c/indoor' },
+    { label: 'Outdoor Plants', href: '/c/outdoor' },
+    { label: 'Flowering Plants', href: '/c/flowering' },
+    { label: 'Air-purifying', href: '/c/air-purifying' },
+    { label: 'Succulents & Cacti', href: '/c/succulents-cacti' },
+    { label: 'Pet-friendly', href: '/c/pet-friendly' },
+    { label: 'Herbs', href: '/c/herbs' },
+    { label: 'Climbers & Vines', href: '/c/climbers-vines' },
+    { label: 'All Categories', href: '/categories' },
+  ],
+  tools: [
+    { label: 'Pruning & Cutting', href: '/c/pruning-cutting' },
+    { label: 'Watering', href: '/c/watering-tools' },
+    { label: 'Soil & Care', href: '/c/soil-care' },
+    { label: 'Tool Sets', href: '/c/tool-sets' },
+    { label: 'Accessories', href: '/c/tool-accessories' },
+    { label: 'All Categories', href: '/categories' },
+  ],
+  farmbox: [
+    { label: 'Seasonal Veg Box', href: '/c/veg-box' },
+    { label: 'Fresh Fruits', href: '/c/fresh-fruits' },
+    { label: 'Salad & Greens', href: '/c/salad-greens' },
+    { label: 'Herbs', href: '/c/fresh-herbs' },
+    { label: 'Exotic Picks', href: '/c/exotic-picks' },
+    { label: 'Juices & Cold-press', href: '/c/juices-cold-press' },
+  ],
+};
+
+const NAV_TAIL: NavItem[] = [
   { label: 'Plant Care', href: '/plant-doctor' },
   { label: 'Offers', href: '/offers' },
 ];
@@ -151,6 +132,21 @@ const Header = ({ layout }: { layout?: string }) => {
     else goToSignin();
   };
 
+  // Vertical nav items from the live catalogue (SSR-prefetched with the same
+  // query key, so no flash). Ops city kill-switches hide a vertical here too.
+  const { types } = useTypes({ limit: TYPES_PER_PAGE } as any);
+  const NAV: NavItem[] = React.useMemo(() => {
+    const verticals: NavItem[] = (types ?? []).map((ty: any) => {
+      const meta = getVerticalMeta(ty.slug, ty.name);
+      return {
+        label: ty.name ?? meta.label,
+        href: meta.shopPath ?? meta.path,
+        menu: CATEGORY_MENUS[ty.slug],
+      };
+    });
+    return [...verticals, ...NAV_TAIL];
+  }, [types]);
+
   const iconBtn = 'grid h-10 w-10 place-items-center rounded-full text-white transition hover:bg-white/10';
 
   return (
@@ -170,7 +166,7 @@ const Header = ({ layout }: { layout?: string }) => {
           <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2 text-[11px] font-medium tracking-wide sm:px-8 lg:px-16">
 
             <CitySwitcher tone="light" />
-            <span className="pointer-events-none absolute left-1/2 hidden -translate-x-1/2 items-center gap-2.5 whitespace-nowrap sm:flex">
+            <span className="pointer-events-none absolute left-1/2 hidden -translate-x-1/2 items-center gap-2.5 whitespace-nowrap lg:flex">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5 text-sage-300" aria-hidden><path d="M5 17H3V6h11v11" /><path d="M14 9h4l3 3v5h-2" /><circle cx="7.5" cy="18" r="1.6" /><circle cx="17.5" cy="18" r="1.6" /></svg>
               FREE SHIPPING on orders above ₹499
               <span className="h-3 w-px bg-white/30" />
@@ -190,9 +186,10 @@ const Header = ({ layout }: { layout?: string }) => {
           {/* ── nav — centered between logo and actions, flat on the dark bar.
               In-flow (not absolutely centered) so it can never overlap the
               actions block at narrower desktop widths. ── */}
-          {/* lg+ only: at tablet the 7 pills collide with logo/actions, so
-              768–1023 uses the hamburger's full-screen menu instead. */}
-          <nav className="hidden min-w-0 flex-1 justify-center lg:flex">
+          {/* xl+ only: with 8 verticals the pill row measures ~730px and collides
+              with logo/actions through the whole lg range (1024–1210), so
+              768–1279 uses the hamburger's full-screen menu instead. */}
+          <nav className="hidden min-w-0 flex-1 justify-center xl:flex">
             <div className="flex items-center gap-0.5">
               {NAV.map((n) =>
                 n.menu ? (
@@ -272,7 +269,7 @@ const Header = ({ layout }: { layout?: string }) => {
             <button type="button" onClick={() => setSearchOpen(true)} className={`${iconBtn} md:hidden`} aria-label={t('text-search') ?? 'Search'}>
               <SearchIcon className="h-[18px] w-[18px]" />
             </button>
-            <button type="button" onClick={() => setMenuOpen(true)} className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white backdrop-blur lg:hidden" aria-label="Menu">
+            <button type="button" onClick={() => setMenuOpen(true)} className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white backdrop-blur xl:hidden" aria-label="Menu">
               <Icon.menu className="h-5 w-5" />
             </button>
           </div>
@@ -313,7 +310,7 @@ const Header = ({ layout }: { layout?: string }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] flex flex-col bg-forest p-7 text-white"
+            className="fixed inset-0 z-[70] flex flex-col overflow-y-auto overscroll-contain bg-forest p-7 text-white"
           >
             <div className="mb-10 flex items-center justify-between">
               <BrandLogo light />

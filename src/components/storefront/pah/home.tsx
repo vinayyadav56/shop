@@ -6,6 +6,7 @@ import { Hero } from './hero';
 import { SearchBar } from './search-bar';
 import { CategoryCircles } from './category-circles';
 import { SpecialOffer } from './special-offer';
+import { VerticalsRail } from './verticals-rail';
 import { Collections } from './collections';
 import { BestSellers } from './best-sellers';
 import { TrustRow } from './trust-row';
@@ -257,6 +258,7 @@ export default function PahHome(_props: { variables?: any }) {
           <SearchBar />
           <CategoryCircles />
           <SpecialOffer />
+          <VerticalsRail />
           <Collections />
           <BestSellers />
           <TrustRow />
