@@ -63,8 +63,8 @@ export function LogoMark({
   );
 }
 
-/** Stacked serif wordmark — the mockup's "THE PLANT / COMPANY" style, with the
- *  PlantAtHome brand name. Small leaf sits under the second line. */
+/** Horizontal brand lockup (per the home reference): leaf mark + two-tone
+ *  "Plant atHome" serif name + small caps tagline. */
 export function WordmarkStacked({
   light = false,
   className = '',
@@ -73,18 +73,21 @@ export function WordmarkStacked({
   className?: string;
 }) {
   const fg = light ? 'text-white' : 'text-forest-900';
-  const leaf = light ? 'text-sage-300' : 'text-forest-600';
+  const accent = light ? 'text-[#8FD56F]' : 'text-forest-600';
+  const tagline = light ? 'text-white/70' : 'text-stone-500';
   return (
-    <span className={`inline-flex flex-col leading-none ${className}`}>
-      <span className={`font-cormorant text-[19px] font-bold uppercase tracking-[0.18em] ${fg}`}>
-        Plant
-      </span>
-      <span className={`mt-0.5 flex items-center gap-1.5 font-cormorant text-[19px] font-bold uppercase tracking-[0.18em] ${fg}`}>
-        At Home
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={`h-3.5 w-3.5 ${leaf}`} aria-hidden>
-          <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
-          <path d="M2 21c0-3 1.85-5.36 5.08-6" />
-        </svg>
+    <span className={`inline-flex items-center gap-2.5 ${className}`}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={`h-7 w-7 shrink-0 ${accent}`} aria-hidden>
+        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+        <path d="M2 21c0-3 1.85-5.36 5.08-6" />
+      </svg>
+      <span className="flex flex-col">
+        <span className={`font-pahserif text-[20px] font-bold leading-none ${fg}`}>
+          Plant <span className={accent}>atHome</span>
+        </span>
+        <span className={`mt-0.5 text-[9px] font-medium uppercase tracking-[0.22em] ${tagline}`}>
+          Bring Nature Home
+        </span>
       </span>
     </span>
   );

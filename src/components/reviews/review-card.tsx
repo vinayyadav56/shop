@@ -1,4 +1,5 @@
 import { useTranslation } from 'next-i18next';
+import { goToSignin } from '@/lib/go-to-signin';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import cn from 'classnames';
@@ -37,7 +38,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   } = review;
   function feedback(value: { positive: boolean } | { negative: boolean }) {
     if (!isAuthorized) {
-      openModal('LOGIN_VIEW');
+      goToSignin();
       return;
     }
     createFeedback({
@@ -48,7 +49,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   }
   function openAbuseReportModal() {
     if (!isAuthorized) {
-      openModal('LOGIN_VIEW');
+      goToSignin();
       return;
     }
     openModal('ABUSE_REPORT', {

@@ -30,6 +30,7 @@ interface Props {
     | 'text'
     | 'plantathome'
     | 'icon'
+    | 'homeMini'
     | 'florine';
   counterVariant?:
     | 'helium'
@@ -87,8 +88,11 @@ export const AddToCart = ({
     removeItemFromCart(item.id);
   };
   const outOfStock = isInCart(item?.id) && !isInStock(item.id);
+  // Guard `status` — related-products/quick-view payloads are slim projections
+  // that omit it; `data.status.toLowerCase()` unguarded white-screened every
+  // simple-product PDP (Tools/FarmBox). Absent status = treat as publishable.
   const disabledState =
-    disabled || outOfStock || data.status.toLowerCase() != 'publish';
+    disabled || outOfStock || (data?.status ? data.status.toLowerCase() !== 'publish' : false);
 
   return !isInCart(item?.id) ? (
     <div>

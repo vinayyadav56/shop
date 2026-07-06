@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBannerEnabled } from '@/lib/use-home-config';
 import { Icon } from '../icons';
@@ -49,7 +50,7 @@ const str = (v: any): string | undefined =>
  * and valid, otherwise the built-in villa-tour images. `configured` lets the
  * render path keep the default look byte-for-byte when nothing is set.
  */
-function useHeroSlides(): { slides: HeroSlideView[]; configured: boolean } {
+export function useHeroSlides(): { slides: HeroSlideView[]; configured: boolean } {
   const { settings } = useSettings() as any;
   const raw = settings?.heroSlides;
 
@@ -180,90 +181,61 @@ const TRUST: { icon: keyof typeof Icon; title: string; sub: string }[] = [
 
 /** Functional delivery checker wired to the pincode serviceability allow-list. */
 function PincodeChecker() {
+  const { t } = useTranslation('common');
   const [pincode, setPincode] = React.useState('');
   const [submitted, setSubmitted] = React.useState('');
   const { result, loading, checked } = usePincodeServiceability(submitted);
   const serviceable = result?.serviceable;
   const isFetching = loading;
   return (
-    <div className="mt-9 w-full max-w-md">
+    <div className="mt-7 max-w-[432px]">
       <form
         onSubmit={(e) => {
           e.preventDefault();
           setSubmitted(pincode);
         }}
-        className="flex items-center gap-1.5 rounded-2xl bg-white p-1.5 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.55)]"
+        className="flex items-center gap-2 rounded-xl bg-white py-[5px] pl-4 pr-[5px] shadow-[0_10px_26px_rgba(0,0,0,0.24)]"
       >
-        <span className="grid h-10 w-9 shrink-0 place-items-center text-[var(--ds-accent)]">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-            <circle cx="12" cy="10" r="3" />
-          </svg>
-        </span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#908A7E" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px] shrink-0">
+          <path d="M20 10c0 5-8 11-8 11s-8-6-8-11a8 8 0 0 1 16 0Z" />
+          <circle cx="12" cy="10" r="2.6" />
+        </svg>
         <input
           value={pincode}
           inputMode="numeric"
           onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-          placeholder="Enter your pincode"
+          placeholder={t('home-hero-pincode-placeholder')}
           aria-label="Delivery pincode"
-          className="min-w-0 flex-1 bg-transparent text-[14.5px] text-forest-900 outline-none placeholder:text-stone-400"
+          className="min-w-0 flex-1 bg-transparent py-2.5 text-[14px] text-forest-900 outline-none placeholder:text-stone-400"
         />
         <button
           type="submit"
-          className="shrink-0 rounded-xl bg-[var(--ds-accent)] px-6 py-3 text-[13px] font-semibold text-white transition hover:bg-[#3f7327]"
+          className="shrink-0 rounded-[9px] bg-ds-btn px-[22px] py-[11px] text-[14px] font-bold text-white transition hover:bg-ds-btn-hover"
         >
-          {isFetching ? 'Checking…' : 'Check Delivery'}
+          {isFetching ? t('home-hero-pincode-checking') : t('home-hero-pincode-check-cta')}
         </button>
       </form>
       {checked ? (
-        <p className={`mt-3 pl-1 text-[13px] font-medium ${serviceable ? 'text-[#A8E6B0]' : 'text-amber-200'}`}>
+        <p className={`mt-[14px] text-[13px] font-medium ${serviceable ? 'text-[#7FC95E]' : 'text-amber-200'}`}>
           {serviceable
-            ? `✓ Great news — we deliver to ${submitted}.`
-            : `${submitted} isn’t in our direct network yet — courier delivery may apply.`}
+            ? t('home-hero-pincode-serviceable', { pincode: submitted })
+            : t('home-hero-pincode-not-serviceable', { pincode: submitted })}
         </p>
       ) : (
-        <p className="mt-3 flex items-center gap-1.5 pl-1 text-[13px] text-white/80">
-          <span className="text-[#A8E6B0]">✓</span> Delivering to 500+ cities across India
+        <p className="mt-[14px] flex items-center gap-[7px] text-[13px] text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.65)]">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#7FC95E" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0">
+            <circle cx="12" cy="12" r="9" />
+            <path d="m8.5 12 2.3 2.3 4.7-4.7" />
+          </svg>
+          {t('home-hero-pincode-coverage')}
         </p>
       )}
     </div>
   );
 }
 
-/** Subtle drifting leaf particles for hero atmosphere (low-opacity, slow, non-interactive). */
-function LeafParticles() {
-  const leaves = [
-    { left: '14%', top: '24%', size: 26, delay: 0, dur: 15 },
-    { left: '80%', top: '18%', size: 20, delay: 2.5, dur: 19 },
-    { left: '58%', top: '68%', size: 22, delay: 5, dur: 17 },
-    { left: '34%', top: '78%', size: 16, delay: 1.5, dur: 21 },
-  ];
-  return (
-    <div className="pointer-events-none absolute inset-0 z-[2] overflow-hidden">
-      {leaves.map((l, i) => (
-        <motion.svg
-          key={i}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="rgba(168,230,176,0.5)"
-          strokeWidth="1.4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{ left: l.left, top: l.top, width: l.size, height: l.size }}
-          className="absolute"
-          initial={{ opacity: 0 }}
-          animate={{ y: [0, -20, 8, 0], x: [0, 12, -8, 0], rotate: [0, 18, -12, 0], opacity: [0, 0.55, 0.5, 0] }}
-          transition={{ duration: l.dur, delay: l.delay, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
-          <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
-        </motion.svg>
-      ))}
-    </div>
-  );
-}
-
 export function HeroPlant() {
+  const { t } = useTranslation('common');
   const { slides, configured } = useHeroSlides();
   const [reduce, setReduce] = React.useState(false);
   const [active, setActive] = React.useState(0);
@@ -297,28 +269,39 @@ export function HeroPlant() {
       ? Math.max(0, Math.min(100, slide.overlayOpacity)) / 100
       : 1;
   const gradeStyle = {
-    background: `linear-gradient(90deg, rgba(8,34,20,${0.94 * k}) 0%, rgba(8,34,20,${0.76 * k}) 45%, rgba(8,34,20,${0.3 * k}) 100%)`,
+    background: `linear-gradient(96deg, rgba(8,20,12,${0.82 * k}) 0%, rgba(10,26,16,${0.62 * k}) 28%, rgba(10,26,16,${0.38 * k}) 55%, rgba(10,26,16,${0.12 * k}) 80%, rgba(10,26,16,${0.02 * k}) 100%)`,
   };
 
   return (
-    <section className="relative -mt-[115px] flex w-full overflow-hidden bg-[#081209]">
+    <section className="relative min-h-[680px] w-full overflow-hidden bg-[#0c1e12]">
       <TourBurns slides={slides} active={active} reduce={reduce} />
-      <LeafParticles />
 
       {/* premium green grade — protect the type on the left, reveal the room on the right */}
       <div className="absolute inset-0" style={gradeStyle} />
-      <div className="absolute inset-0 bg-[#0C1F13]/45 lg:hidden" />
+      <div className="absolute inset-0 bg-[#0C1F13]/30 lg:hidden" />
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#081209]/85 to-transparent" />
+      {/* grain texture — editorial depth, breaks flat-green monotony */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[3] mix-blend-overlay opacity-[0.07]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundSize: '180px 180px',
+        }}
+      />
 
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-center px-5 pb-16 pt-[150px] sm:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-5 pb-[230px] pt-[120px] max-lg:pb-[200px] sm:px-8 lg:px-16">
         <div className="max-w-2xl">
           <motion.span
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12, duration: 0.7, ease: EXPO }}
-            className="mb-7 inline-flex w-fit items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md"
+            className="mb-7 inline-flex w-fit items-center gap-2.5 rounded-full border border-white/35 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/90"
           >
-            <Icon.leaf className="h-3.5 w-3.5 text-[#A8E6B0]" /> India’s Most Loved Plant Store
+            {t('home-hero-eyebrow')}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 shrink-0 text-[#8FD56F]" aria-hidden>
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+              <path d="M2 21c0-3 1.85-5.36 5.08-6" />
+            </svg>
           </motion.span>
 
           {headline ? (
@@ -327,15 +310,17 @@ export function HeroPlant() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EXPO }}
-              className="font-playfair text-[2.9rem] font-bold leading-[1.03] tracking-tight text-white sm:text-[4rem] lg:text-[4.7rem]"
+              className="font-pahserif text-[2.4rem] font-bold leading-[1.12] tracking-[-0.02em] text-white sm:text-[3rem] lg:text-[3.6rem]"
             >
               {headline}
             </motion.h1>
           ) : (
-            <h1 className="font-playfair text-[2.9rem] font-bold leading-[1.03] tracking-tight text-white sm:text-[4rem] lg:text-[4.7rem]">
-              <WordReveal text="Bring Nature Home." delay={0.1} />
-              <span className="block text-[#5FBF6A]">
-                <WordReveal text="Live Better." delay={0.32} />
+            <h1 className="font-pahserif text-[2.4rem] font-bold leading-[1.12] tracking-[-0.02em] text-white sm:text-[3rem] lg:text-[3.6rem]">
+              <span className="block lg:whitespace-nowrap">
+                <WordReveal text={t('home-hero-title-1')} delay={0.1} />
+              </span>
+              <span className="block text-[#8FD56F]">
+                <WordReveal text={t('home-hero-title-2')} delay={0.32} />
               </span>
             </h1>
           )}
@@ -345,10 +330,9 @@ export function HeroPlant() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: headline ? 0.12 : 0.58, duration: 0.7, ease: EXPO }}
-            className="mt-6 max-w-lg text-[15px] leading-7 text-white/85 sm:text-[17px]"
+            className="mt-[22px] max-w-[432px] text-[17px] leading-[1.5] text-white/[0.86]"
           >
-            {subheadline ??
-              'Premium plants, planters, seeds, fertilizers & everything you need for a thriving green space.'}
+            {subheadline ?? t('home-hero-subtitle')}
           </motion.p>
 
           {ctaText && ctaLink ? (
@@ -368,21 +352,30 @@ export function HeroPlant() {
           ) : null}
 
           <motion.div
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ delay: 0.65, duration: 0.6, ease: EXPO }}
+            className="mt-8 h-px origin-left bg-gradient-to-r from-white/20 via-white/10 to-transparent"
+          />
+          <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.72, duration: 0.7, ease: EXPO }}
-            className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3"
+            className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-3"
           >
-            {TRUST.map((f) => {
+            {TRUST.map((f, i) => {
               const Ico = Icon[f.icon];
               return (
-                <div key={f.title} className="flex items-center gap-2.5">
-                  <Ico className="h-5 w-5 shrink-0 text-[#A8E6B0]" />
-                  <span>
-                    <span className="block text-[13px] font-semibold leading-tight text-white">{f.title}</span>
-                    <span className="block text-[11px] leading-tight text-white/60">{f.sub}</span>
-                  </span>
-                </div>
+                <React.Fragment key={f.title}>
+                  {i > 0 && <span aria-hidden className="hidden h-8 w-px bg-white/20 sm:block" />}
+                  <div className="flex items-center gap-[11px]">
+                    <Ico className="h-5 w-5 shrink-0 text-[#8FD56F]" />
+                    <div>
+                      <div className="text-[13.5px] font-bold leading-tight text-white">{f.title}</div>
+                      <div className="mt-0.5 text-[12px] leading-tight text-white/70">{f.sub}</div>
+                    </div>
+                  </div>
+                </React.Fragment>
               );
             })}
           </motion.div>
@@ -391,21 +384,25 @@ export function HeroPlant() {
         </div>
       </div>
 
-      {/* floating glass offer card */}
+      {/* offer pill — bottom-right, above category row overlap */}
       {showHeroOffer && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.92, y: 18 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.85, ease: EXPO }}
-          className="absolute right-8 top-1/2 z-10 hidden -translate-y-1/2 lg:block xl:right-20"
+          initial={{ opacity: 0, y: 20, scale: 0.94 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.65, duration: 0.8, ease: EXPO }}
+          className="absolute right-5 top-1/2 z-[45] hidden -translate-y-1/2 lg:block sm:right-8 lg:right-[110px]"
         >
-          <div className="rounded-[28px] border border-white/20 bg-white/10 px-10 py-9 text-center shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)] backdrop-blur-2xl">
-            <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-white/15">
-              <Icon.leaf className="h-6 w-6 text-[#A8E6B0]" />
+          <div className="flex items-center gap-4 rounded-[20px] border border-white/[0.14] bg-white/[0.08] px-5 py-4 backdrop-blur-2xl">
+            {/* icon */}
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-[14px] bg-[#4ADE80]/20 ring-1 ring-[#4ADE80]/25">
+              <Icon.leaf className="h-[18px] w-[18px] text-[#4ADE80]" />
             </div>
-            <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-white/80">Up To</p>
-            <p className="font-playfair text-[3.6rem] font-bold leading-[0.95] text-white">40% OFF</p>
-            <p className="mt-1.5 text-[13.5px] text-white/75">On Bestsellers</p>
+            {/* text */}
+            <div>
+              <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/50">{t('home-hero-offer-eyebrow')}</p>
+              <span className="font-pahserif text-[2rem] font-bold leading-none text-white">{t('home-hero-offer-amount')}</span>
+              <p className="mt-0.5 text-[10.5px] font-semibold leading-[1.4] text-[#86EFAC]">{t('home-hero-offer-subtitle')}</p>
+            </div>
           </div>
         </motion.div>
       )}

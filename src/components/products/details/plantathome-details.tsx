@@ -1,5 +1,6 @@
 'use client';
 import React, { useMemo, useState } from 'react';
+import { goToSignin } from '@/lib/go-to-signin';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import classNames from 'classnames';
@@ -14,6 +15,7 @@ import { HttpClient } from '@/framework/client/http-client';
 import { getStoredLatLng, getStoredCity } from '@/lib/customer-location';
 import VendorAvailabilityNote from '@/components/products/details/vendor-availability-note';
 import Truncate from '@/components/ui/truncate';
+import { useTranslation } from 'next-i18next';
 import { useSanitizeContent } from '@/lib/sanitize-content';
 import { displayImage } from '@/lib/display-product-preview-images';
 import { getVariations } from '@/lib/get-variations';
@@ -27,6 +29,41 @@ import { generateCartItem } from '@/store/quick-cart/generate-cart-item';
 import { cartAnimation } from '@/lib/cart-animation';
 import PlantAtHomeGallery from './plantathome/gallery';
 import PlantAtHomeAccordion, { AccordionItem } from './plantathome/accordion';
+
+/** Long product descriptions collapse to a preview with a View More toggle
+ *  so the details panel stays compact until the shopper opts in. */
+function ClampedDescription({ html }: { html: string }) {
+  const { t } = useTranslation('common');
+  const [open, setOpen] = useState(false);
+  // Short copy doesn't need the toggle — render it plainly.
+  const isLong = (html?.replace(/<[^>]+>/g, '') ?? '').length > 320;
+  if (!isLong) {
+    return <div className="react-editor-description" dangerouslySetInnerHTML={{ __html: html }} />;
+  }
+  return (
+    <div>
+      <div className="relative">
+        <div
+          className={`react-editor-description overflow-hidden ${open ? '' : 'max-h-[150px]'}`}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+        {!open && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white to-transparent" />
+        )}
+      </div>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-forest-700 transition-colors hover:text-forest-900"
+      >
+        {open ? t('text-view-less') : t('text-view-more')}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={`h-3 w-3 transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden>
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+    </div>
+  );
+}
 
 /* ── small inline icons ─────────────────────────────────────────── */
 const Star = ({ className = '' }: { className?: string }) => (
@@ -151,7 +188,9 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   const badge = getBadge(product);
 
   const availableQty = hasVariations && isSelected ? Number(selectedVariation?.quantity) : Number(quantity);
-  const inStock = availableQty > 0 && !(selectedVariation?.is_disable);
+  // City-inventory model: never out of stock — keep only the intentional
+  // variation "disable" toggle. Stock quantity does not gate orderability.
+  const inStock = !(selectedVariation?.is_disable);
   const needsSelection = hasVariations && !isSelected;
 
   /* cart */
@@ -165,7 +204,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   };
 
   const navigate = (path: string) => { router.push(path); closeModal(); };
-  const onAskAi = () => (isAuthorized ? openModal('ASK_AI', { product }) : openModal('LOGIN_VIEW'));
+  const onAskAi = () => (isAuthorized ? openModal('ASK_AI', { product }) : goToSignin());
 
   const ratingInt = Math.round(Number(ratings) || 5);
   const trustCount = Number(total_reviews) > 0 ? `${total_reviews}` : '12,000+';
@@ -197,7 +236,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   if (content) {
     accordionItems.push({
       title: 'Description',
-      content: <div className="react-editor-description" dangerouslySetInnerHTML={{ __html: content }} />,
+      content: <ClampedDescription html={content} />,
     });
   }
   if (careSpecs.length) {
@@ -418,7 +457,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
                   'flex flex-1 items-center justify-center gap-2.5 rounded-full px-7 py-3.5 text-base font-semibold text-white transition',
                   !inStock || needsSelection || verticalBlocked
                     ? 'cursor-not-allowed bg-stone-300'
-                    : 'bg-forest-700 shadow-[0_14px_30px_-12px_rgba(46,94,42,0.65)] hover:bg-forest-800',
+                    : 'bg-ds-btn shadow-[0_14px_30px_-12px_rgba(46,94,42,0.65)] hover:bg-ds-btn-hover',
                 )}
               >
                 <Bag className="h-5 w-5" />
@@ -485,7 +524,7 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
             'flex min-h-[44px] items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition',
             !inStock || needsSelection || verticalBlocked
               ? 'cursor-not-allowed bg-stone-300'
-              : 'bg-forest-700 hover:bg-forest-800',
+              : 'bg-ds-btn hover:bg-ds-btn-hover',
           )}
         >
           <Bag className="h-4 w-4" />

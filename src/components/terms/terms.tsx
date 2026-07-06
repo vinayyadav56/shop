@@ -26,8 +26,8 @@ const Terms = ({ isLoading, terms }: TermsProps) => {
               <TermsListLoader />
             </>
           ) : (
-            terms?.map((item: RefundPolicy | TermsAndConditions) => (
-              <li key={item?.title}>
+            terms?.map((item: RefundPolicy | TermsAndConditions, index) => (
+              <li key={`${makeTitleToDOMId(item?.title) || 'term'}-${index}`}>
                 <AnchorLink
                   spy={true}
                   offset={0}

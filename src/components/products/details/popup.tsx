@@ -1,6 +1,7 @@
 import Spinner from '@/components/ui/loaders/spinner/spinner';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
+import { useModalAction } from '@/components/ui/modal/modal.context';
 import Details from './details';
 import PlantAtHomeProductDetails from './plantathome-details';
 import ShortDetails from './short-details';
@@ -15,6 +16,7 @@ interface ProductPopupProps {
 }
 const Popup: React.FC<ProductPopupProps> = ({ productSlug }) => {
   const { t } = useTranslation('common');
+  const { closeModal } = useModalAction();
   const [showStickyShortDetails] = useAtom(stickyShortDetailsAtom);
   const { product, isLoading } = useProduct({ slug: productSlug });
 
@@ -31,6 +33,17 @@ const Popup: React.FC<ProductPopupProps> = ({ productSlug }) => {
   return (
     <AttributesProvider>
       <article className="relative z-[51] w-full max-w-6xl bg-white md:rounded-xl xl:min-w-[1152px]">
+        {/* close — always-visible cross so the quick view is easy to dismiss */}
+        <button
+          type="button"
+          onClick={closeModal}
+          aria-label={t('text-close')}
+          className="absolute right-3 top-3 z-[60] grid h-9 w-9 place-items-center rounded-full bg-white/95 text-stone-500 shadow-[0_2px_10px_rgba(20,40,24,0.18)] transition hover:text-forest-900 hover:shadow-[0_4px_14px_rgba(20,40,24,0.25)]"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="h-4 w-4" aria-hidden>
+            <path d="M6 6l12 12M18 6 6 18" />
+          </svg>
+        </button>
         {/* Sticky bar */}
         <ShortDetails product={productItem} isSticky={showStickyShortDetails} />
         {/* End of sticky bar */}

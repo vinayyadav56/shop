@@ -28,6 +28,10 @@ export type ColorScheme = {
 export type DesignSystem = {
   fontTheme: { id: string; heading: string; body: string };
   colorTheme: { id: string; accent: string; accentSoft: string; accentInk: string; accentRgb: string; accentInkRgb: string };
+  /** Backend-controlled button colors: `primary` = solid buttons on light
+   *  surfaces, `cta` = the bright call-to-action on dark bands. Hover shades
+   *  are derived automatically. */
+  buttons: { primary: string; cta: string };
   density: 'comfortable' | 'compact';
 };
 
@@ -134,6 +138,31 @@ export const DEFAULT_FONT_PAIRING =
   FONT_PAIRINGS.find((p) => p.recommended) ?? FONT_PAIRINGS[FONT_PAIRINGS.length - 1];
 export const DEFAULT_COLOR_SCHEME = COLOR_SCHEMES[0];
 
+// Defaults reproduce the storefront's shipped look: forest-700 solid buttons
+// on light surfaces + the bright lime CTA used on dark bands.
+export const DEFAULT_BUTTONS = { primary: '#2E5E2A', cta: '#4ADE80' };
+/** Fixed readable ink on the (bright) CTA color. */
+export const CTA_INK = '#061a0b';
+
+const HEX_RE = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
+
+/** Darken a hex color by `amount` (0-1) — used to derive hover shades. */
+export function darkenHex(hex: string, amount = 0.12): string {
+  const m = HEX_RE.exec(hex?.trim?.() ?? '');
+  if (!m) return hex;
+  let h = m[1];
+  if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+  const n = parseInt(h, 16);
+  const f = (v: number) => Math.max(0, Math.min(255, Math.round(v * (1 - amount))));
+  const r = f((n >> 16) & 255);
+  const g = f((n >> 8) & 255);
+  const b = f(n & 255);
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+}
+
+const safeHex = (v: any, fallback: string): string =>
+  typeof v === 'string' && HEX_RE.test(v.trim()) ? v.trim() : fallback;
+
 export const DEFAULT_DESIGN_SYSTEM: DesignSystem = {
   fontTheme: {
     id: DEFAULT_FONT_PAIRING.id,
@@ -148,6 +177,7 @@ export const DEFAULT_DESIGN_SYSTEM: DesignSystem = {
     accentRgb: DEFAULT_COLOR_SCHEME.accentRgb,
     accentInkRgb: DEFAULT_COLOR_SCHEME.accentInkRgb,
   },
+  buttons: { ...DEFAULT_BUTTONS },
   density: 'comfortable',
 };
 
@@ -168,6 +198,10 @@ export function resolveDesignSystem(raw: any): DesignSystem {
   return {
     fontTheme: { id: fp.id, heading: fp.heading, body: fp.body },
     colorTheme: { id: cs.id, accent: cs.accent, accentSoft: cs.accentSoft, accentInk: cs.accentInk, accentRgb: cs.accentRgb, accentInkRgb: cs.accentInkRgb },
+    buttons: {
+      primary: safeHex(raw?.buttons?.primary, DEFAULT_BUTTONS.primary),
+      cta: safeHex(raw?.buttons?.cta, DEFAULT_BUTTONS.cta),
+    },
     density,
   };
 }
@@ -206,6 +240,12 @@ export function applyDesignSystem(raw: any, persist = true): DesignSystem {
   root.style.setProperty('--color-accent-500', ds.colorTheme.accentRgb);
   root.style.setProperty('--color-accent-600', ds.colorTheme.accentInkRgb);
   root.style.setProperty('--color-accent-700', ds.colorTheme.accentInkRgb);
+  // Backend-controlled button colors (bg-ds-btn / bg-ds-cta utilities).
+  root.style.setProperty('--ds-btn', ds.buttons.primary);
+  root.style.setProperty('--ds-btn-hover', darkenHex(ds.buttons.primary));
+  root.style.setProperty('--ds-cta', ds.buttons.cta);
+  root.style.setProperty('--ds-cta-hover', darkenHex(ds.buttons.cta));
+  root.style.setProperty('--ds-cta-ink', CTA_INK);
   root.setAttribute('data-density', ds.density);
   if (persist) {
     try {
@@ -221,6 +261,10 @@ export function applyDesignSystem(raw: any, persist = true): DesignSystem {
           accentInk: ds.colorTheme.accentInk,
           accentRgb: ds.colorTheme.accentRgb,
           accentInkRgb: ds.colorTheme.accentInkRgb,
+          btn: ds.buttons.primary,
+          btnHover: darkenHex(ds.buttons.primary),
+          cta: ds.buttons.cta,
+          ctaHover: darkenHex(ds.buttons.cta),
           density: ds.density,
           google: googleFontsUrl(ds.fontTheme.id),
           fontId: ds.fontTheme.id,
@@ -240,4 +284,4 @@ export function applyDesignSystem(raw: any, persist = true): DesignSystem {
 export const DS_PREPAINT_SCRIPT =
   "(function(){try{var s=localStorage.getItem('" +
   DS_STORAGE_KEY +
-  "');if(!s)return;var d=JSON.parse(s);var r=document.documentElement;if(d.heading)r.style.setProperty('--font-heading',d.heading);if(d.body)r.style.setProperty('--font-body',d.body);if(d.accent)r.style.setProperty('--ds-accent',d.accent);if(d.accentSoft)r.style.setProperty('--ds-accent-soft',d.accentSoft);if(d.accentInk)r.style.setProperty('--ds-accent-ink',d.accentInk);if(d.accentRgb){r.style.setProperty('--color-accent',d.accentRgb);r.style.setProperty('--color-accent-500',d.accentRgb);}if(d.accentInkRgb){r.style.setProperty('--color-accent-hover',d.accentInkRgb);r.style.setProperty('--color-accent-600',d.accentInkRgb);r.style.setProperty('--color-accent-700',d.accentInkRgb);}if(d.density)r.setAttribute('data-density',d.density);if(d.google&&d.fontId){var id='ds-font-'+d.fontId;if(!document.getElementById(id)){var l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href=d.google;document.head.appendChild(l);}}}catch(e){}})();";
+  "');if(!s)return;var d=JSON.parse(s);var r=document.documentElement;if(d.heading)r.style.setProperty('--font-heading',d.heading);if(d.body)r.style.setProperty('--font-body',d.body);if(d.accent)r.style.setProperty('--ds-accent',d.accent);if(d.accentSoft)r.style.setProperty('--ds-accent-soft',d.accentSoft);if(d.accentInk)r.style.setProperty('--ds-accent-ink',d.accentInk);if(d.accentRgb){r.style.setProperty('--color-accent',d.accentRgb);r.style.setProperty('--color-accent-500',d.accentRgb);}if(d.accentInkRgb){r.style.setProperty('--color-accent-hover',d.accentInkRgb);r.style.setProperty('--color-accent-600',d.accentInkRgb);r.style.setProperty('--color-accent-700',d.accentInkRgb);}if(d.btn){r.style.setProperty('--ds-btn',d.btn);}if(d.btnHover){r.style.setProperty('--ds-btn-hover',d.btnHover);}if(d.cta){r.style.setProperty('--ds-cta',d.cta);}if(d.ctaHover){r.style.setProperty('--ds-cta-hover',d.ctaHover);}if(d.density)r.setAttribute('data-density',d.density);if(d.google&&d.fontId){var id='ds-font-'+d.fontId;if(!document.getElementById(id)){var l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href=d.google;document.head.appendChild(l);}}}catch(e){}})();";

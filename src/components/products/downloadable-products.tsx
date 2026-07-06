@@ -92,7 +92,7 @@ const DownloadableProducts: React.FC = () => {
                       ? item?.file?.fileable?.product?.slug
                       : item?.file?.fileable?.slug
                   }`}
-                  className="text-base font-semibold text-heading transition-colors hover:text-accent"
+                  className="text-base font-semibold text-forest-900 transition-colors hover:text-accent"
                 >
                   {!isVariableProduct(item) && item?.file?.fileable?.name}
                   {isVariableProduct(item) && (

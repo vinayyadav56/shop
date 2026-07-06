@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 import { useProducts } from '@/framework/product';
 import { useTypes } from '@/framework/type';
 import { TYPES_PER_PAGE } from '@/framework/client/variables';
@@ -8,9 +9,10 @@ import { ProductCard } from './product-card';
 import { cn } from '@/lib/cn';
 
 export function BestSellers() {
+  const { t } = useTranslation('common');
   const { types } = useTypes({ limit: TYPES_PER_PAGE });
   // Vertical filter chips: "All" + one per vertical (Plants, Tools, Farmbox…).
-  const chips = [{ label: 'All', slug: null as string | null }, ...((types ?? []).map((t) => ({ label: t.name, slug: t.slug as string })))];
+  const chips = [{ label: t('m-bestsellers-chip-all'), slug: null as string | null }, ...((types ?? []).map((t) => ({ label: t.name, slug: t.slug as string })))];
   const [active, setActive] = React.useState<string | null>(null);
 
   const { products, isLoading } = useProducts({
@@ -20,17 +22,17 @@ export function BestSellers() {
   const list = (products ?? []).filter(Boolean).slice(0, 12);
 
   return (
-    <div>
+    <div className="mb-7">
       <div className="mb-1 px-5">
-        <div className="mb-[5px] font-hanken text-[9.5px] font-bold uppercase tracking-[0.2em] text-forest-600">Best Sellers</div>
+        <div className="mb-[5px] font-hanken text-[9.5px] font-bold uppercase tracking-[0.2em] text-forest-600">{t('m-bestsellers-eyebrow')}</div>
         <div className="flex items-center justify-between gap-3">
           <h2 className="flex items-center gap-1.5 font-hanken text-[18px] font-extrabold tracking-[-0.01em] text-forest-900">
-            Our Most Loved Plants
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4E8244" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M11 20c-4 0-7-3-7-7 0-1 .2-2 .6-2.8C8 11 11 13 11 17Z" /><path d="M11 20c4 0 9-3 9-9 0-2-.5-4-1-5-3 .5-8 2.5-8 9Z" /></svg>
+            {t('m-bestsellers-title')}
+            <i className="fa-solid fa-leaf text-[15px] text-forest-500" aria-hidden />
           </h2>
           <Link href="/plants/search" className="flex shrink-0 items-center gap-[3px] text-[12.5px] font-semibold text-forest-700">
-            View all
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2E5E2A" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+            {t('m-bestsellers-view-all')}
+            <i className="fa-solid fa-arrow-right text-[11px]" aria-hidden />
           </Link>
         </div>
       </div>
@@ -64,7 +66,7 @@ export function BestSellers() {
             ))
           : list.length > 0
           ? list.map((p) => <ProductCard key={p.id} product={p} />)
-          : <p className="py-6 text-[13px] text-stone-500">No products here yet — try another filter.</p>}
+          : <p className="py-6 text-[13px] text-stone-500">{t('m-bestsellers-empty')}</p>}
       </div>
     </div>
   );

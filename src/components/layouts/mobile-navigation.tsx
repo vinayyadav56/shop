@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { goToSignin } from '@/lib/go-to-signin';
 import { motion } from 'framer-motion';
 import { NavbarIcon } from '@/components/icons/navbar-icon';
 import { HomeIcon } from '@/components/icons/home-icon';
@@ -29,7 +30,7 @@ export default function MobileNavigation({
   }
 
   function handleJoin() {
-    return openModal('LOGIN_VIEW');
+    return goToSignin();
   }
 
   return (

@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form';
+import { goToSignin } from '@/lib/go-to-signin';
 import { useState } from 'react';
 import { useAtom } from 'jotai';
 import { toast } from 'react-toastify';
@@ -44,7 +45,7 @@ function EnquiryForm() {
   const onSubmit = (values: CorporateInput) =>
     mutate(values, {
       onSuccess: () => { setDone(true); reset(); toast.success('Thanks! Our gifting team will reach out.'); },
-      onError: () => toast.error('Something went wrong. Please call us instead.'),
+      onError: () => { toast.error('Something went wrong. Please call us instead.'); },
     });
 
   if (done) {
@@ -79,7 +80,7 @@ function EnquiryForm() {
         </div>
         <textarea {...register('message')} placeholder="Anything specific? (branding, budget, timeline)" rows={2} className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-green-500 focus:outline-0" />
       </div>
-      <button type="submit" disabled={isLoading} className="mt-5 w-full rounded-full bg-green-600 px-6 py-4 text-base font-bold text-white transition hover:bg-green-700 disabled:opacity-60">
+      <button type="submit" disabled={isLoading} className="pa-btn pa-btn-primary pa-btn-lg mt-5 w-full">
         {isLoading ? 'Sending…' : 'Request a quote →'}
       </button>
       <p className="mt-3 text-center text-xs text-gray-400">🔒 B2B enquiries only · Trusted by teams across India</p>
@@ -97,7 +98,7 @@ export default function CorporateGiftingPage() {
   const fmt = (n: number) => '₹' + Number(n).toLocaleString('en-IN');
 
   const buy = (id: number) => {
-    if (!isAuthorize) { openModal('LOGIN_VIEW'); return; }
+    if (!isAuthorize) { goToSignin(); return; }
     setBuyingId(id);
     checkout(id, {
       onSuccess: (res) => {
@@ -129,8 +130,8 @@ export default function CorporateGiftingPage() {
               Memorable, sustainable plant gifts for clients and teams — custom branded, delivered in bulk across India. Buy a ready hamper or get a tailored quote.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <a href="#tiers" className="rounded-full bg-green-500 px-7 py-4 text-base font-bold text-white shadow-lg transition hover:bg-green-400">Browse gift hampers</a>
-              <a href="#quote" className="rounded-full border border-white/40 bg-white/10 px-6 py-4 text-base font-semibold text-white backdrop-blur">Get a bulk quote</a>
+              <a href="#tiers" className="pa-btn pa-btn-primary pa-btn-lg">Browse gift hampers</a>
+              <a href="#quote" className="pa-btn pa-btn-outline pa-btn-lg border-white/40 bg-white/10 text-white backdrop-blur hover:border-white hover:bg-white/20">Get a bulk quote</a>
             </div>
           </div>
           <div id="quote" className="lg:justify-self-end lg:w-[26rem]"><EnquiryForm /></div>
@@ -167,7 +168,7 @@ export default function CorporateGiftingPage() {
                   {(t.items ?? []).map((it, j) => <li key={j} className="flex gap-2"><span className="text-green-400">✓</span><span>{it.name}</span></li>)}
                 </ul>
                 <button onClick={() => buy(t.id)} disabled={buying && buyingId === t.id}
-                  className="mt-6 rounded-full bg-green-500 py-3 text-center font-semibold text-white transition hover:bg-green-400 disabled:opacity-60">
+                  className="pa-btn pa-btn-primary mt-6 w-full">
                   {buying && buyingId === t.id ? 'Starting…' : isAuthorize ? 'Buy now' : 'Login to buy'}
                 </button>
                 <a href="#quote" className="mt-2 text-center text-sm text-green-200 underline">or get a bulk quote</a>
@@ -211,7 +212,7 @@ export default function CorporateGiftingPage() {
         <div className="mx-auto max-w-3xl px-5">
           <h2 className="text-3xl font-bold">Gifting at scale, made effortless</h2>
           <p className="mt-2 text-green-50/90">Tell us your occasion and quantity — we’ll handle the rest.</p>
-          <a href="#quote" className="mt-6 inline-block rounded-full bg-white px-8 py-4 font-bold text-green-700 shadow-lg">Get a custom quote →</a>
+          <a href="#quote" className="pa-btn pa-btn-outline pa-btn-lg mt-6 border-white bg-white text-green-700 shadow-lg hover:bg-green-700 hover:text-white">Get a custom quote →</a>
         </div>
       </section>
     </div>

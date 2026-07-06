@@ -53,7 +53,7 @@ export default function FrequentlyBoughtTogether({ product }: { product: Product
 
       <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center">
         {/* scrollable product track (left/right) — min-w-0 so ONLY this scrolls, not the page */}
-        <div className="flex min-w-0 flex-1 flex-nowrap items-start gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex min-w-0 flex-1 flex-nowrap snap-x snap-mandatory items-start gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&>*]:snap-start">
           {items.map((it: any, i) => (
             <React.Fragment key={i}>
               <div className="flex w-[84px] shrink-0 flex-col items-center text-center">
@@ -80,7 +80,7 @@ export default function FrequentlyBoughtTogether({ product }: { product: Product
           <button
             type="button"
             onClick={addAll}
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-forest-700 px-5 py-3 text-[13.5px] font-semibold text-white transition hover:bg-forest-800"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ds-btn px-5 py-3 text-[13.5px] font-semibold text-white transition hover:bg-ds-btn-hover"
           >
             Add All To Cart {formatINR(bundle)}
           </button>

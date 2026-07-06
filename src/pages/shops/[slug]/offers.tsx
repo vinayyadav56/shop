@@ -43,7 +43,7 @@ export default function ShopOffersPage() {
   if (error) return <ErrorMessage message={error.message} />;
   if (!isLoading && !coupons.length) {
     return (
-      <div className="max-w-lg min-h-full px-4 pt-6 pb-8 mx-auto bg-gray-100 lg:p-10">
+      <div className="max-w-lg min-h-full px-4 pt-6 pb-8 mx-auto bg-[#F8F7F2] lg:p-10">
         <NotFound text="text-no-coupon" />
       </div>
     );
@@ -56,7 +56,7 @@ export default function ShopOffersPage() {
         title={t('text-offers-title')}
         breadcrumbTitle={t('text-home')}
       />
-      <div className="w-full px-4 py-12 mx-auto bg-gray-100 max-w-1920 lg:py-14 lg:px-8 xl:py-24 xl:px-16 2xl:px-20">
+      <div className="w-full px-4 py-12 mx-auto bg-[#F8F7F2] max-w-1920 lg:py-14 lg:px-8 xl:py-24 xl:px-16 2xl:px-20">
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 xl:gap-8 2xl:grid-cols-6">
           {isLoading && !isValidCoupon.length ? (
             rangeMap(6, (i) => (
@@ -67,7 +67,7 @@ export default function ShopOffersPage() {
               <CouponCard key={item.id} coupon={item} />
             ))
           ) : (
-            <div className="max-w-lg mx-auto bg-gray-100 col-span-full">
+            <div className="max-w-lg mx-auto bg-[#F8F7F2] col-span-full">
               <NotFound text="text-no-coupon" />
             </div>
           )}

@@ -21,7 +21,7 @@ type HeliumProps = {
 const Helium: React.FC<HeliumProps> = ({ product, className }) => {
   const { t } = useTranslation('common');
   const { query } = useRouter();
-  const { name, image, unit, quantity, min_price, max_price, product_type } = product ?? {};
+  const { name, image, unit, min_price, max_price, product_type } = product ?? {};
 
   const { price, basePrice, discount } = usePrice({
     amount: product.sale_price ? product.sale_price : product.price!,
@@ -35,7 +35,8 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
     return openModal('PRODUCT_DETAILS', product.slug);
   }
 
-  const inStock = Number(quantity) > 0;
+  // City-inventory model: products are always orderable; never show out-of-stock.
+  const inStock = true;
 
   return (
     <article
@@ -63,15 +64,6 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
         {discount && (
           <div className="pa-helium-badge absolute top-3 ltr:right-3 rtl:left-3">
             {discount}
-          </div>
-        )}
-
-        {/* Out of stock overlay */}
-        {!inStock && (
-          <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
-            <span className="px-3 py-1.5 rounded-full bg-red-500 text-white text-xs font-bold">
-              Out of Stock
-            </span>
           </div>
         )}
       </div>

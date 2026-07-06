@@ -42,8 +42,9 @@ module.exports = {
         heading: ['var(--font-heading)', '"Cormorant Garamond"', 'Georgia', 'serif'],
         display: ['var(--font-heading)', '"Cormorant Garamond"', 'Georgia', 'serif'],
         serif: ['var(--font-heading)', '"Cormorant Garamond"', 'Georgia', 'serif'],
-        // Editorial + luxury display aliases also follow the active heading font.
-        cormorant: ['var(--font-heading)', '"Cormorant Garamond"', 'Georgia', 'Cambria', 'serif'],
+        // Editorial luxury alias: fixed brand serif (NOT theme-switched) — the
+        // storefront wordmark/display type must stay serif under any admin font.
+        cormorant: ['"Cormorant Garamond"', 'Georgia', 'Cambria', 'serif'],
         playfair: ['var(--font-heading)', '"Playfair Display"', '"Cormorant Garamond"', 'Georgia', 'serif'],
         // Product-page accent fonts: Poppins (geometric) + Caveat (script) stay fixed.
         poppins: ['"Poppins"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
@@ -78,6 +79,13 @@ module.exports = {
         'ds-accent': 'var(--ds-accent)',
         'ds-accent-soft': 'var(--ds-accent-soft)',
         'ds-accent-ink': 'var(--ds-accent-ink)',
+        // ── Backend-controlled button colors (admin Design System → Buttons) ──
+        // var() fallbacks reproduce the shipped look before any admin choice.
+        'ds-btn': 'var(--ds-btn, #2E5E2A)',
+        'ds-btn-hover': 'var(--ds-btn-hover, #285325)',
+        'ds-cta': 'var(--ds-cta, #4ADE80)',
+        'ds-cta-hover': 'var(--ds-cta-hover, #41c371)',
+        'ds-cta-ink': 'var(--ds-cta-ink, #061a0b)',
         // ── Approved neutral tokens (premium luxury palette) ──
         'pa-bg': 'var(--pa-bg)',
         'pa-card': 'var(--pa-card)',

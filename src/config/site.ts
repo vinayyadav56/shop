@@ -43,24 +43,12 @@ export const siteSettings = {
     { href: Routes.checkout, label: 'auth-menu-checkout' },
     { href: Routes.changePassword, label: 'profile-sidebar-password' },
   ],
+  // Order matches the account-page reference; Change Password + the two
+  // conditionally-shown items (notifications, cards) sit after the primary set.
   dashboardSidebarMenu: [
     {
       href: Routes.profile,
       label: 'profile-sidebar-profile',
-    },
-    {
-      href: Routes.changePassword,
-      label: 'profile-sidebar-password',
-    },
-    {
-      href: Routes.notifyLogs,
-      label: 'profile-sidebar-notifications',
-    },
-    {
-      href: Routes.cards,
-      label: 'profile-sidebar-my-cards',
-      // MultiPayment: Make it dynamic or from mapper
-      cardsPayment: [PaymentGateway.STRIPE],
     },
     {
       href: Routes.orders,
@@ -93,6 +81,20 @@ export const siteSettings = {
     {
       href: Routes.help,
       label: 'profile-sidebar-help',
+    },
+    {
+      href: Routes.changePassword,
+      label: 'profile-sidebar-password',
+    },
+    {
+      href: Routes.notifyLogs,
+      label: 'profile-sidebar-notifications',
+    },
+    {
+      href: Routes.cards,
+      label: 'profile-sidebar-my-cards',
+      // MultiPayment: Make it dynamic or from mapper
+      cardsPayment: [PaymentGateway.STRIPE],
     },
     {
       href: Routes.logout,

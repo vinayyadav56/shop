@@ -234,43 +234,18 @@ const Details: React.FC<Props> = ({
             )}
 
             <div className="mt-6 flex flex-col items-center md:mt-6 lg:flex-row">
-              {Number(quantity) > 0 ? (
-                <div className="mb-3 w-full lg:mb-0 lg:max-w-[400px]">
-                  <AddToCart
-                    data={product}
-                    variant="big"
-                    variation={selectedVariation}
-                    disabled={selectedVariation?.is_disable || !isSelected}
-                  />
-                </div>
-              ) : (
-                ''
-              )}
+              <div className="mb-3 w-full lg:mb-0 lg:max-w-[400px]">
+                <AddToCart
+                  data={product}
+                  variant="big"
+                  variation={selectedVariation}
+                  disabled={selectedVariation?.is_disable || !isSelected}
+                />
+              </div>
 
-              {!product?.is_external
-                ? !hasVariations && (
-                    <>
-                      {Number(quantity) > 0 ? (
-                        <span className="whitespace-nowrap text-base text-body ltr:lg:ml-7 rtl:lg:mr-7">
-                          {quantity} {t('text-pieces-available')}
-                        </span>
-                      ) : (
-                        <div className="whitespace-nowrap text-base text-red-500">
-                          {t('text-out-stock')}
-                        </div>
-                      )}
-                    </>
-                  )
-                : ''}
-
-              {!isEmpty(selectedVariation) && (
+              {!isEmpty(selectedVariation) && selectedVariation?.is_disable && (
                 <span className="whitespace-nowrap text-base text-body ltr:lg:ml-7 rtl:lg:mr-7">
-                  {selectedVariation?.is_disable ||
-                  selectedVariation.quantity === 0
-                    ? t('text-out-stock')
-                    : `${selectedVariation.quantity} ${t(
-                        'text-pieces-available',
-                      )}`}
+                  {t('text-unavailable')}
                 </span>
               )}
             </div>

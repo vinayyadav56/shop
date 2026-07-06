@@ -30,7 +30,7 @@ const ShopsPage: NextPageWithLayout = () => {
   if (error) return <ErrorMessage message={error.message} />;
   if (!isLoading && !shops.length) {
     return (
-      <div className="min-h-full bg-gray-100 px-4 pt-6 pb-8 lg:p-8">
+      <div className="min-h-full bg-[#F8F7F2] px-4 pt-6 pb-8 lg:p-8">
         <NotFound text="text-no-shops" />
       </div>
     );
@@ -39,7 +39,7 @@ const ShopsPage: NextPageWithLayout = () => {
   return (
     <div className="min-h-screen bg-light ">
       <div className="mx-auto flex w-full max-w-6xl flex-col p-8 px-5 pt-14 lg:px-6 2xl:px-8">
-        <h3 className="mb-8 text-2xl font-bold text-heading">
+        <h3 className="mb-8 font-pahserif text-2xl font-bold text-forest-900">
           {t('text-all-shops')}
         </h3>
 

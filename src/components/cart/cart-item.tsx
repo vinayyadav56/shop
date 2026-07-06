@@ -10,12 +10,11 @@ interface CartItemProps {
 }
 
 const CartItem = ({ item }: CartItemProps) => {
-  const { isInStock, clearItemFromCart, addItemToCart, removeItemFromCart } =
-    useCart();
+  const { clearItemFromCart, addItemToCart, removeItemFromCart } = useCart();
 
   const { price } = usePrice({ amount: item.price });
   const { price: itemTotal } = usePrice({ amount: item.itemTotal });
-  const outOfStock = !isInStock(item.id);
+  // City-inventory model: cart items are always orderable; never out of stock.
 
   function handleIncrement(e: React.MouseEvent) {
     e.stopPropagation();
@@ -44,9 +43,6 @@ const CartItem = ({ item }: CartItemProps) => {
           sizes="72px"
           className="object-cover"
         />
-        {outOfStock && (
-          <span className="pa-cart-oos">Out of stock</span>
-        )}
       </div>
 
       {/* Content */}
@@ -71,7 +67,6 @@ const CartItem = ({ item }: CartItemProps) => {
             <button
               className="pa-qty-btn"
               onClick={handleIncrement}
-              disabled={outOfStock}
               aria-label="Increase quantity"
             >
               <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">

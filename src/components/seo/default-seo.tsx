@@ -1,8 +1,15 @@
 import { useSettings } from '@/framework/settings';
 import { DefaultSeo as NextDefaultSeo } from 'next-seo';
+import { useRouter } from 'next/router';
+
+const OG_LOCALE: Record<string, string> = {
+  en: 'en_IN', hi: 'hi_IN', ta: 'ta_IN', te: 'te_IN', mr: 'mr_IN',
+  kn: 'kn_IN', bn: 'bn_IN', gu: 'gu_IN', ml: 'ml_IN', pa: 'pa_IN',
+};
 
 const DefaultSeo = () => {
   const { settings } : any = useSettings();
+  const { locale } = useRouter();
 
   // Admin-managed favicon (Tools → Logo & Branding). When set, it becomes the
   // browser-tab / search icon site-wide with no redeploy; otherwise the built-in
@@ -63,7 +70,7 @@ const DefaultSeo = () => {
         title: settings?.seo?.ogTitle,
         description: settings?.seo?.ogDescription,
         type: 'website',
-        locale: 'en_IN',
+        locale: OG_LOCALE[locale ?? 'en'] ?? 'en_IN',
         site_name: settings?.siteTitle,
         images: [
           {

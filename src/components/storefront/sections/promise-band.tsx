@@ -5,7 +5,7 @@ import type { PromiseItem } from '../verticals';
 export function PromiseBand({ items }: { items: PromiseItem[] }) {
   return (
     <section className="bg-gradient-to-b from-[#081209] via-[#0E2415] to-[#081209] py-12 text-white sm:py-16 lg:py-20">
-      <div className="mx-auto grid max-w-7xl gap-5 px-5 sm:px-8 md:grid-cols-3 md:gap-8">
+      <div className="pah-rail [--rail-w:80%] md:[--rail-w:55%] lg:[--rail-w:calc((100%_-_64px)/3)] mx-auto grid max-w-7xl gap-5 px-5 sm:px-8 md:gap-8">
         {items.map((b, i) => {
           const I = Icon[b.icon];
           return (

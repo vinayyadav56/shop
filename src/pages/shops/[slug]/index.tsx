@@ -101,7 +101,7 @@ const ShopPage: NextPageWithLayout<
   }, [handleMaintenanceCheck]);
 
   return (
-    <div className="flex flex-col bg-gray-100 lg:flex-row lg:items-start lg:p-8">
+    <div className="flex flex-col bg-[#F8F7F2] lg:flex-row lg:items-start lg:p-8">
       <ShopSidebar shop={shop} className="sticky top-24 lg:top-28" />
 
       <div

@@ -63,12 +63,12 @@ function createApolloClient() {
           token.setEmailVerified(false);
           Router.push(Routes.verifyEmail);
         }
-        console.log(
+        console.error(
           `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
         );
       });
 
-    if (networkError) console.log(`[Network error]: ${networkError}`);
+    if (networkError) console.error(`[Network error]: ${networkError}`);
   });
 
   return new ApolloClient({

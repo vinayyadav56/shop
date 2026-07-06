@@ -12,11 +12,11 @@ function Circle({ c }: { c: Category }) {
   const img = c?.image?.original || c?.image?.thumbnail;
   return (
     <Link href={`/c/${c.slug}`} className="flex w-16 shrink-0 flex-col items-center gap-2">
-      <span className="relative h-16 w-16 overflow-hidden rounded-full border-2 border-white bg-sage-100 shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition active:scale-95">
+      <span className="relative h-16 w-16 overflow-hidden rounded-full border-2 border-white bg-sage-100 shadow-[0_2px_8px_rgba(34,48,26,0.07)] transition hover:shadow-[0_8px_24px_rgba(34,48,26,0.09)] active:scale-95">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={err || !img ? PLACEHOLDER : img} alt={c.name} loading="lazy" onError={() => setErr(true)} className="absolute inset-0 h-full w-full object-cover" />
       </span>
-      <span className="text-center text-[10.5px] font-semibold leading-[1.2] text-stone-600">{c.name}</span>
+      <span className="text-center font-hanken text-[10.5px] font-semibold leading-[1.2] text-stone-600">{c.name}</span>
     </Link>
   );
 }
@@ -31,16 +31,16 @@ export function CategoryCircles() {
       {isLoading && list.length === 0
         ? Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="flex w-16 shrink-0 flex-col items-center gap-2">
-              <div className="h-16 w-16 animate-pulse rounded-full bg-sage-100" />
+              <div className="h-16 w-16 animate-pulse rounded-full border-2 border-white bg-sage-100 shadow-[0_2px_8px_rgba(34,48,26,0.07)]" />
               <div className="h-3 w-12 animate-pulse rounded bg-sage-100" />
             </div>
           ))
         : list.map((c) => <Circle key={c.id ?? c.slug} c={c} />)}
-      <Link href="/categories" className="flex w-16 shrink-0 flex-col items-center gap-2">
-        <span className="grid h-16 w-16 place-items-center rounded-full border border-sage-200 bg-sage-100 text-forest-700 transition active:scale-95">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="6" height="6" rx="1.4" /><rect x="14" y="4" width="6" height="6" rx="1.4" /><rect x="4" y="14" width="6" height="6" rx="1.4" /><rect x="14" y="14" width="6" height="6" rx="1.4" /></svg>
+      <Link href="/plants/search" className="flex w-16 shrink-0 flex-col items-center gap-2">
+        <span className="grid h-16 w-16 place-items-center rounded-full border border-sage-200 bg-sage-100 text-forest-700 transition hover:bg-sage-200 active:scale-95">
+          <i className="fa-solid fa-table-cells-large" aria-hidden style={{ fontSize: '22px' }} />
         </span>
-        <span className="text-center text-[10.5px] font-semibold leading-[1.2] text-stone-600">View All</span>
+        <span className="text-center font-hanken text-[10.5px] font-semibold leading-[1.2] text-stone-600">View All</span>
       </Link>
     </div>
   );

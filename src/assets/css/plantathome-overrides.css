@@ -87,6 +87,9 @@
 
 /* ── Base ───────────────────────────────────────────────────── */
 html { scroll-behavior: smooth; }
+/* Never allow horizontal page scroll from stray offscreen decorations or
+   dev overlays. `clip` (not `hidden`) so position:sticky keeps working. */
+html { overflow-x: clip; }
 
 body {
   font-family: var(--font-body) !important;
@@ -102,6 +105,48 @@ h1, h2, h3, h4, h5 {
   letter-spacing: 0;
   line-height: 1.08;
   font-weight: 600;
+}
+/* Profile-picture uploader — frame the generic FileInput dropzone into a
+   compact sage-tinted card matching the account "Profile Picture" reference. */
+.pah-avatar-uploader { width: 168px; }
+.pah-avatar-uploader .border-dashed,
+.pah-avatar-uploader [class*="border-dashed"] {
+  border-radius: 16px;
+  background: var(--ds-accent-soft, #e7eee2);
+  border-color: rgba(46, 94, 42, 0.25);
+  min-height: 150px;
+}
+
+/* Escape hatch: the fixed brand-serif utilities must beat the theme heading
+   rule above even when the admin Design System picks a sans heading font.
+   Same !important, higher specificity (class > element). */
+.font-pahserif { font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif !important; }
+.font-cormorant { font-family: 'Cormorant Garamond', Georgia, Cambria, serif !important; }
+
+/* ── Card rail (ALL widths) ─────────────────────────────────────
+   Curated card sections NEVER wrap into rows: one horizontal snap-scrolling
+   row at every width. Card width comes from the per-section --rail-w var
+   (responsive via Tailwind arbitrary properties) — at desktop it's an
+   exact-fit fraction so a full row looks identical to the old grid, and any
+   extra cards scroll instead of wrapping. Gaps come from the section's own
+   Tailwind gap-* classes (they apply to flex just like grid).
+   `!important` display beats the `.grid` utility; `> *` sizes the existing
+   wrappers (incl. framer-motion divs) without per-card edits. Scrollbar is
+   hidden; touch / trackpad / shift-wheel scrolling still work. */
+.pah-rail {
+  display: flex !important;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.pah-rail::-webkit-scrollbar { display: none; }
+.pah-rail > * {
+  flex: 0 0 auto;
+  width: var(--rail-w, 42%);
+  scroll-snap-align: start;
 }
 /* small uppercase eyebrow labels (editorial luxury) */
 .pa-eyebrow, [class*="eyebrow"], .uppercase.tracking-\[0\.22em\] {
@@ -272,6 +317,32 @@ button[data-variant="normal"]:hover:not(:disabled),
 .pa-add-btn:hover::before { opacity: 1; }
 .pa-add-btn:active { transform: scale(0.97); }
 .pa-add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Canonical CTA buttons — UNIFORM across the whole storefront.
+   Use .pa-btn + a variant everywhere instead of ad-hoc green/forest CTAs.
+   One color, radius, padding, font. Filled buttons keep WHITE text on hover. */
+.pa-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-body); font-weight: 600; line-height: 1;
+  border-radius: var(--pa-radius-pill); padding: 12px 24px; font-size: 14px;
+  cursor: pointer; white-space: nowrap; border: 1px solid transparent;
+  transition: var(--pa-t); text-decoration: none;
+}
+.pa-btn-primary { background: var(--pa-grad); color: #fff; box-shadow: 0 4px 16px rgba(27,94,32,0.3); }
+.pa-btn-primary:hover:not(:disabled) { background: linear-gradient(135deg,#0D3D14 0%,#1B5E3A 100%); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(27,94,32,0.4); }
+.pa-btn-secondary { background: var(--ds-accent-soft); color: var(--ds-accent-ink); border-color: rgba(27,94,32,0.12); }
+.pa-btn-secondary:hover:not(:disabled) { background: var(--ds-accent-ink); color: #fff; }
+.pa-btn-outline { background: transparent; color: var(--ds-accent-ink); border-color: rgba(27,94,32,0.25); }
+.pa-btn-outline:hover:not(:disabled) { background: var(--ds-accent-ink); color: #fff; border-color: var(--ds-accent-ink); }
+.pa-btn-gold { background: linear-gradient(180deg,var(--gold-300,#DCC07A),var(--gold-500,#B8923E)); color: var(--forest-900,#16301A); box-shadow: 0 8px 20px rgba(184,146,62,0.35); }
+.pa-btn-gold:hover:not(:disabled) { filter: brightness(1.05); transform: translateY(-2px); }
+.pa-btn-sm { padding: 9px 16px; font-size: 13px; }
+.pa-btn-lg { padding: 15px 30px; font-size: 15px; }
+.pa-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+.pa-btn:active:not(:disabled) { transform: scale(0.97); }
+/* Safety net: every filled/accent CTA keeps WHITE text on hover. */
+button[data-variant="normal"]:hover, .btn-accent:hover, .pa-btn-primary:hover,
+.pa-btn-secondary:hover, .pa-btn-outline:hover, .pa-place-order-btn:hover { color: #fff !important; }
 
 /* ── HERO SECTION ───────────────────────────────────────────── */
 .pa-hero {
@@ -652,19 +723,6 @@ button[data-variant="normal"]:hover:not(:disabled),
 }
 
 /* ── BENEFITS SECTION ───────────────────────────────────────── */
-.pa-benefits-section {
-  padding: var(--pa-section) 0;
-  background: var(--pa-bg);
-}
-.pa-benefits-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
-  margin-top: 0;
-}
-@media (max-width: 1100px) { .pa-benefits-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 700px)  { .pa-benefits-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
-@media (max-width: 420px)  { .pa-benefits-grid { grid-template-columns: 1fr; } }
 
 .pa-benefit-card {
   padding: 32px 24px;
@@ -2572,7 +2630,7 @@ textarea:focus {
 
 /* ── Scrollbar ───────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #F4F7F1; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(46,107,74,0.25); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(46,107,74,0.45); }
 

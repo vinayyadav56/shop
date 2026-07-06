@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { goToSignin } from '@/lib/go-to-signin';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
@@ -63,7 +64,7 @@ export function ProductCard({ product }: { product: Product }) {
   function onWish(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    if (!authorized) return openModal('LOGIN_VIEW');
+    if (!authorized) return goToSignin();
     setWished((v) => !v);
     toggleWishlist();
   }
@@ -120,7 +121,7 @@ export function ProductCard({ product }: { product: Product }) {
             type="button"
             onClick={onAdd}
             aria-label={isVariable ? 'Select options' : 'Add to cart'}
-            className={cn('grid h-[30px] w-[30px] place-items-center rounded-full text-white transition active:scale-90', added ? 'bg-forest-800' : 'bg-forest-600 hover:bg-forest-700')}
+            className={cn('grid h-[30px] w-[30px] place-items-center rounded-full text-white transition active:scale-90', added ? 'bg-forest-800' : 'bg-ds-btn hover:bg-ds-btn-hover')}
           >
             {added ? (
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>

@@ -1,77 +1,155 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { useTranslation } from 'next-i18next';
 import { useBannerEnabled } from '@/lib/use-home-config';
+import { EXPO } from '@/components/storefront/motion';
 
-const PERKS: { title: string; icon: JSX.Element }[] = [
+const PERKS = [
   {
-    title: 'Best Quality\nProducts',
+    label: 'Best Quality Products',
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" /><path d="m9 12 2 2 4-4" /></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
+      </svg>
     ),
   },
   {
-    title: 'Expert Plant\nCare Support',
+    label: 'Expert Plant Care Support',
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" /><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" /></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+      </svg>
     ),
   },
   {
-    title: 'Easy Returns\n& Refunds',
+    label: 'Easy Returns & Refunds',
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" /><path d="M3 3v5h5" /></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+        <path d="M3 3v5h5" />
+      </svg>
     ),
   },
   {
-    title: 'Secure\nPayments',
+    label: 'Secure Payments',
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="M3 10h18" /></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3 5 6v5c0 4 3 7 7 9 4-2 7-5 7-9V6Z" />
+        <path d="m9 12 2 2 4-4" />
+      </svg>
     ),
   },
 ];
 
 export function SpringSaleBand() {
+  const { t } = useTranslation('common');
   if (!useBannerEnabled('specialOffer')) return null;
+
   return (
-    <section className="bg-transparent">
-      <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-12">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0A2E1B] via-[#0D3B24] to-[#13503E] px-6 py-8 sm:px-10 lg:py-10">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(45%_60%_at_85%_30%,rgba(200,169,107,0.14),transparent_70%)]" />
-          <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-            {/* offer */}
-            <div className="lg:max-w-xs">
-              <p className="flex items-center gap-2 text-[12.5px] font-semibold text-[#C8A96B]">
-                <span aria-hidden>🌿</span> Spring Sale is Live!
-              </p>
-              <h2 className="mt-2 font-playfair text-[2.1rem] font-bold leading-none text-[#C8A96B] sm:text-[2.6rem]">
-                FLAT 20% OFF
-              </h2>
-              <p className="mt-1 text-[13.5px] text-white/80">On Orders Above ₹999</p>
-              <Link
-                href="/plants/search"
-                className="mt-5 inline-flex items-center justify-center rounded-lg bg-[var(--ds-accent)] px-6 py-2.5 text-[12.5px] font-semibold text-white transition hover:bg-[#5aa03a]"
-              >
-                Shop Now
-              </Link>
+    <motion.section
+      initial={{ y: 32 }}
+      whileInView={{ y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.65, ease: EXPO }}
+      className="py-6 lg:py-8"
+    >
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
+      <div className="relative overflow-hidden rounded-[18px] bg-[linear-gradient(135deg,#1c4d28_0%,#0f2d1a_48%,#081a0f_100%)]">
+
+        {/* grain texture */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.055] mix-blend-overlay"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+            backgroundSize: '180px 180px',
+          }}
+        />
+
+        {/* soft radial glow on left */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-[380px] bg-[radial-gradient(ellipse_at_10%_50%,rgba(74,222,128,0.13)_0%,transparent_65%)]" />
+
+        {/* decorative background leaf */}
+        <svg
+          aria-hidden
+          className="pointer-events-none absolute -bottom-10 right-6 opacity-[0.065]"
+          width="220" height="220" viewBox="0 0 24 24"
+          fill="none" stroke="white" strokeWidth="0.55"
+          strokeLinecap="round" strokeLinejoin="round"
+        >
+          <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+          <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+        </svg>
+
+        <div className="relative z-10 flex flex-col gap-4 px-5 py-5 sm:px-8 lg:flex-row lg:items-center lg:gap-0 lg:px-10 lg:py-6">
+
+          {/* ── LEFT — offer block ── */}
+          <div className="shrink-0 lg:w-[260px]">
+            {/* pulsing badge */}
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#4ADE80]/25 bg-[#4ADE80]/10 px-3 py-1">
+              <span className="relative flex h-[6px] w-[6px]">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#4ADE80] opacity-70" />
+                <span className="relative inline-flex h-[6px] w-[6px] rounded-full bg-[#4ADE80]" />
+              </span>
+              <span className="font-hanken text-[10px] font-bold uppercase tracking-[0.16em] text-[#86EFAC]">
+                {t('home-sale-eyebrow')}
+              </span>
             </div>
 
-            {/* perks */}
-            <div className="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4 lg:gap-x-10">
-              {PERKS.map((p) => (
-                <div key={p.title} className="flex items-center gap-3 lg:flex-col lg:items-center lg:text-center">
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/15 text-[#A8E6B0]">
+            {/* discount */}
+            <div className="font-pahserif text-[34px] font-bold leading-none tracking-[-0.01em] text-[#F2E3B8]">
+              {t('home-sale-discount')}
+            </div>
+            <div className="mt-1 font-hanken text-[11px] leading-snug text-white/80">
+              {t('home-sale-condition')}
+            </div>
+
+            {/* CTA */}
+            <Link
+              href="/plants/search"
+              className="mt-3 inline-flex items-center gap-1.5 rounded-[9px] bg-ds-cta px-4 py-2 font-hanken text-[12.5px] font-bold text-ds-cta-ink transition duration-200 hover:bg-ds-cta-hover active:scale-[0.97]"
+            >
+              {t('home-sale-cta')}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M5 12h13M13 6l6 6-6 6" />
+              </svg>
+            </Link>
+          </div>
+
+          {/* vertical divider */}
+          <div className="hidden w-px self-stretch bg-white/[0.1] lg:mx-10 lg:block" />
+          {/* horizontal divider on mobile */}
+          <div className="h-px w-full bg-white/[0.08] lg:hidden" />
+
+          {/* ── RIGHT — perks ── */}
+          <div className="grid grid-cols-2 gap-x-6 gap-y-4 lg:flex lg:flex-1 lg:items-center lg:justify-between">
+            {PERKS.map((p, i) => (
+              <React.Fragment key={p.label}>
+                {i > 0 && <span aria-hidden className="hidden h-8 w-px shrink-0 bg-white/15 lg:block" />}
+                <motion.div
+                  initial={{ y: 14 }}
+                  whileInView={{ y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 + i * 0.07, duration: 0.45, ease: EXPO }}
+                  className="flex items-center gap-3"
+                >
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/25 text-[#4ADE80] [&>svg]:h-[18px] [&>svg]:w-[18px]">
                     {p.icon}
                   </span>
-                  <span className="whitespace-pre-line text-[12.5px] font-medium leading-tight text-white/90">
-                    {p.title}
-                  </span>
-                </div>
-              ))}
-            </div>
+                  <div className="max-w-[120px] font-hanken text-[12.5px] font-semibold leading-[1.35] text-white">
+                    {p.label}
+                  </div>
+                </motion.div>
+              </React.Fragment>
+            ))}
           </div>
+
         </div>
       </div>
-    </section>
+      </div>
+    </motion.section>
   );
 }
 

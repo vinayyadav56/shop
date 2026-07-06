@@ -1,4 +1,5 @@
 import React from 'react';
+import { goToSignin } from '@/lib/go-to-signin';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAtom } from 'jotai';
 import dynamic from 'next/dynamic';
@@ -15,70 +16,59 @@ import { authorizationAtom } from '@/store/authorization-atom';
 import { displayMobileHeaderSearchAtom } from '@/store/display-mobile-header-search-atom';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import CitySwitcher from '@/components/location/city-switcher';
+import { useTypes } from '@/framework/type';
+import { TYPES_PER_PAGE } from '@/framework/client/variables';
+import { getVerticalMeta } from '@/components/storefront/verticals';
 
 const Search = dynamic(() => import('@/components/ui/search/search'));
 
-// Nav matches the design reference: Plants, Pots & Planters, Seeds, Fertilizers,
-// Garden Tools (each with a category dropdown), then Plant Care + Offers.
-const NAV: { label: string; href: string; menu?: { label: string; href: string }[] }[] = [
-  {
-    label: 'Plants',
-    href: '/plants',
-    menu: [
-      { label: 'Indoor Plants', href: '/c/indoor' },
-      { label: 'Outdoor Plants', href: '/c/outdoor' },
-      { label: 'Flowering Plants', href: '/c/flowering' },
-      { label: 'Air-purifying', href: '/c/air-purifying' },
-      { label: 'Succulents & Cacti', href: '/c/succulents-cacti' },
-      { label: 'Pet-friendly', href: '/c/pet-friendly' },
-      { label: 'Herbs', href: '/c/herbs' },
-      { label: 'Climbers & Vines', href: '/c/climbers-vines' },
-    ],
-  },
-  {
-    label: 'Pots & Planters',
-    href: '/tools',
-    menu: [
-      { label: 'Ceramic Pots', href: '/c/ceramic-pots' },
-      { label: 'Plastic Planters', href: '/c/plastic-planters' },
-      { label: 'Hanging Planters', href: '/c/hanging-planters' },
-      { label: 'Self-Watering Pots', href: '/c/self-watering' },
-      { label: 'Pot Stands', href: '/c/pot-stands' },
-    ],
-  },
-  {
-    label: 'Seeds',
-    href: '/c/seeds',
-    menu: [
-      { label: 'Flower Seeds', href: '/c/flower-seeds' },
-      { label: 'Vegetable Seeds', href: '/c/vegetable-seeds' },
-      { label: 'Herb Seeds', href: '/c/herb-seeds' },
-      { label: 'Microgreens', href: '/c/microgreens' },
-      { label: 'Seed Kits', href: '/c/seed-kits' },
-    ],
-  },
-  {
-    label: 'Fertilizers',
-    href: '/c/fertilizers',
-    menu: [
-      { label: 'Organic Fertilizers', href: '/c/organic-fertilizers' },
-      { label: 'Liquid Fertilizers', href: '/c/liquid-fertilizers' },
-      { label: 'Compost & Manure', href: '/c/compost' },
-      { label: 'Plant Food', href: '/c/plant-food' },
-      { label: 'Soil & Potting Mix', href: '/c/soil-mix' },
-    ],
-  },
-  {
-    label: 'Garden Tools',
-    href: '/tools',
-    menu: [
-      { label: 'Hand Tools', href: '/c/hand-tools' },
-      { label: 'Watering Cans', href: '/c/watering' },
-      { label: 'Pruning & Cutting', href: '/c/pruning' },
-      { label: 'Gloves & Aprons', href: '/c/gloves' },
-      { label: 'Tool Sets', href: '/c/tool-sets' },
-    ],
-  },
+type NavItem = { label: string; href: string; menu?: { label: string; href: string }[] };
+
+// Vertical nav entries are built at render time from the API types (city-aware,
+// works on any catalogue — staging's 6 verticals AND production's 3, whose slugs
+// differ, e.g. farm-box). Only the dropdown CONTENTS are curated here, keyed by
+// type slug with REAL category slugs (verified against the live catalogue — the
+// old hardcoded list had guessed slugs that 404'd). A type without an entry
+// simply renders as a plain link.
+const CATEGORY_MENUS: Record<string, { label: string; href: string }[]> = {
+  plants: [
+    { label: 'Indoor Plants', href: '/c/indoor' },
+    { label: 'Outdoor Plants', href: '/c/outdoor' },
+    { label: 'Flowering Plants', href: '/c/flowering' },
+    { label: 'Air-purifying', href: '/c/air-purifying' },
+    { label: 'Succulents & Cacti', href: '/c/succulents-cacti' },
+    { label: 'Pet-friendly', href: '/c/pet-friendly' },
+    { label: 'Herbs', href: '/c/herbs' },
+    { label: 'Climbers & Vines', href: '/c/climbers-vines' },
+    { label: 'All Categories', href: '/categories' },
+  ],
+  tools: [
+    { label: 'Pruning & Cutting', href: '/c/pruning-cutting' },
+    { label: 'Watering', href: '/c/watering-tools' },
+    { label: 'Soil & Care', href: '/c/soil-care' },
+    { label: 'Tool Sets', href: '/c/tool-sets' },
+    { label: 'Accessories', href: '/c/tool-accessories' },
+    { label: 'All Categories', href: '/categories' },
+  ],
+  farmbox: [
+    { label: 'Seasonal Veg Box', href: '/c/veg-box' },
+    { label: 'Fresh Fruits', href: '/c/fresh-fruits' },
+    { label: 'Salad & Greens', href: '/c/salad-greens' },
+    { label: 'Herbs', href: '/c/fresh-herbs' },
+    { label: 'Exotic Picks', href: '/c/exotic-picks' },
+    { label: 'Juices & Cold-press', href: '/c/juices-cold-press' },
+  ],
+  // Production's FarmBox type slug + its live root categories.
+  'farm-box': [
+    { label: 'Tropical Fruits', href: '/c/tropical-fruits' },
+    { label: 'Citrus', href: '/c/citrus' },
+    { label: 'Berries', href: '/c/berries' },
+    { label: 'Stone Fruits', href: '/c/stone-fruits' },
+    { label: 'All Categories', href: '/categories' },
+  ],
+};
+
+const NAV_TAIL: NavItem[] = [
   { label: 'Plant Care', href: '/plant-doctor' },
   { label: 'Offers', href: '/offers' },
 ];
@@ -112,13 +102,12 @@ const Header = ({ layout }: { layout?: string }) => {
       setScrolled(false);
       return;
     }
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 10);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, [isHome]);
-  const solid = !isHome || scrolled;
-  const position = 'sticky';
+  const position = isHome ? 'fixed' : 'sticky';
 
   const openCart = () => setDrawer({ display: true, view: 'cart' });
 
@@ -148,16 +137,25 @@ const Header = ({ layout }: { layout?: string }) => {
 
   const onProfile = () => {
     if (isAuthorize) router.push('/profile');
-    else openModal('LOGIN_VIEW');
+    else goToSignin();
   };
 
-  // When the search overlay is open we drop a dark scrim behind the bar so the
-  // (white) nav items stay readable — the requested "black transparent overlay".
-  // useLight = white text/icons (transparent-over-hero OR search-open).
-  const useLight = !solid || searchOpen;
-  const iconBtn = `grid h-10 w-10 place-items-center rounded-full transition ${
-    useLight ? 'text-white hover:bg-white/10' : 'text-forest-900 hover:bg-forest/8'
-  }`;
+  // Vertical nav items from the live catalogue (SSR-prefetched with the same
+  // query key, so no flash). Ops city kill-switches hide a vertical here too.
+  const { types } = useTypes({ limit: TYPES_PER_PAGE } as any);
+  const NAV: NavItem[] = React.useMemo(() => {
+    const verticals: NavItem[] = (types ?? []).map((ty: any) => {
+      const meta = getVerticalMeta(ty.slug, ty.name);
+      return {
+        label: ty.name ?? meta.label,
+        href: meta.shopPath ?? meta.path,
+        menu: CATEGORY_MENUS[ty.slug],
+      };
+    });
+    return [...verticals, ...NAV_TAIL];
+  }, [types]);
+
+  const iconBtn = 'grid h-10 w-10 place-items-center rounded-full text-white transition hover:bg-white/10';
 
   return (
     <>
@@ -166,21 +164,18 @@ const Header = ({ layout }: { layout?: string }) => {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: EXPO }}
-        className={`${position} inset-x-0 top-0 z-50 w-full transition-all duration-300 ${
-          searchOpen
-            ? 'bg-forest-900/95 shadow-[0_8px_28px_rgba(22,48,26,0.28)] backdrop-blur-xl'
-            : solid
-            ? 'bg-white/95 shadow-[0_4px_24px_rgba(34,48,26,0.08)] backdrop-blur-xl'
-            : 'bg-gradient-to-b from-deep/85 via-deep/45 to-transparent'
+        className={`${position} inset-x-0 top-0 z-50 w-full bg-[#10230f]/70 backdrop-blur-2xl backdrop-saturate-150 transition-shadow duration-300 ${
+          scrolled ? 'shadow-[0_4px_24px_rgba(0,0,0,0.35)]' : ''
         }`}
       >
-        {/* announcement bar — centered shipping message (per reference); the city
-            switcher stays on the left for the city-first delivery UX. */}
-        <div className="bg-forest-900 text-white">
-          <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2 text-[11px] font-medium tracking-wide sm:px-8">
+        {/* announcement bar — frosted near-black strip, slides away on scroll.
+            City switcher stays left for the city-first delivery UX. */}
+        <div className={`overflow-hidden border-b border-white/10 bg-[#0A0D0A]/75 text-white backdrop-blur-xl transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-12 opacity-100'}`}>
+          <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-2 text-[11px] font-medium tracking-wide sm:px-8 lg:px-16">
+
             <CitySwitcher tone="light" />
-            <span className="pointer-events-none absolute left-1/2 hidden -translate-x-1/2 items-center gap-2.5 whitespace-nowrap sm:flex">
-              <Icon.leaf className="h-3.5 w-3.5 text-sage-300" />
+            <span className="pointer-events-none absolute left-1/2 hidden -translate-x-1/2 items-center gap-2.5 whitespace-nowrap lg:flex">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5 text-sage-300" aria-hidden><path d="M5 17H3V6h11v11" /><path d="M14 9h4l3 3v5h-2" /><circle cx="7.5" cy="18" r="1.6" /><circle cx="17.5" cy="18" r="1.6" /></svg>
               FREE SHIPPING on orders above ₹499
               <span className="h-3 w-px bg-white/30" />
               Extra 5% OFF on prepaid orders
@@ -190,125 +185,102 @@ const Header = ({ layout }: { layout?: string }) => {
         </div>
 
         {/* main bar */}
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
+        <div className="relative mx-auto flex max-w-7xl items-center px-5 py-2.5 sm:px-8 lg:px-16">
+          {/* Logo */}
           <Link href="/" aria-label="PlantAtHome home" className="shrink-0">
-            <BrandLogo light={useLight} />
+            <BrandLogo light />
           </Link>
 
-          {/* centred nav */}
-          <nav
-            className={`hidden items-center gap-2.5 md:flex lg:gap-4 xl:gap-7 ${
-              useLight ? 'text-white' : 'text-forest-900'
-            }`}
-          >
-            {NAV.map((n) =>
-              n.menu ? (
-                <div key={n.label} className="group relative">
-                  <Link
-                    href={n.href}
-                    className={`inline-flex items-center gap-1 text-[13px] font-medium transition xl:text-[14px] ${
-                      useLight ? 'hover:text-white/80' : 'hover:text-forest-600'
-                    }`}
-                  >
-                    {n.label}
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 opacity-70 transition-transform duration-200 group-hover:rotate-180">
-                      <path d="m6 9 6 6 6-6" />
-                    </svg>
-                  </Link>
-                  {/* hover dropdown — white panel, readable over the transparent or solid bar */}
-                  <div className="invisible absolute left-1/2 top-full z-50 w-60 -translate-x-1/2 translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                    <div className="grid grid-cols-1 gap-0.5 rounded-2xl border border-forest-900/10 bg-white p-2 shadow-[0_28px_64px_-26px_rgba(13,59,36,0.45)]">
-                      {n.menu.map((m) => (
-                        <Link
-                          key={m.label}
-                          href={m.href}
-                          className="rounded-lg px-3.5 py-2 text-[13px] font-medium text-forest-900 transition hover:bg-[#EAF4E6] hover:text-[#4E8B31]"
-                        >
-                          {m.label}
-                        </Link>
-                      ))}
+          {/* ── nav — centered between logo and actions, flat on the dark bar.
+              In-flow (not absolutely centered) so it can never overlap the
+              actions block at narrower desktop widths. ── */}
+          {/* xl+ only: with 8 verticals the pill row measures ~730px and collides
+              with logo/actions through the whole lg range (1024–1210), so
+              768–1279 uses the hamburger's full-screen menu instead. */}
+          <nav className="hidden min-w-0 flex-1 justify-center xl:flex">
+            <div className="flex items-center gap-0.5">
+              {NAV.map((n) =>
+                n.menu ? (
+                  <div key={n.label} className="group relative">
+                    <Link
+                      href={n.href}
+                      className="inline-flex items-center gap-1 whitespace-nowrap rounded-full px-3.5 py-1.5 text-[13px] font-medium text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white"
+                    >
+                      {n.label}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-[11px] w-[11px] opacity-50 transition-transform duration-200 group-hover:rotate-180">
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </Link>
+                    {/* dropdown — glass panel */}
+                    <div className="invisible absolute left-1/2 top-full z-50 w-52 -translate-x-1/2 translate-y-2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                      <div className="grid grid-cols-1 gap-0.5 rounded-2xl border border-white/[0.18] bg-white/[0.88] p-1.5 shadow-[0_20px_60px_-12px_rgba(0,0,0,0.28)] backdrop-blur-2xl">
+                        {n.menu.map((m) => (
+                          <Link
+                            key={m.label}
+                            href={m.href}
+                            className="rounded-[10px] px-3.5 py-2 text-[13px] font-medium text-neutral-700 transition hover:bg-black/[0.06] hover:text-neutral-900"
+                          >
+                            {m.label}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <Link
-                  key={n.label}
-                  href={n.href}
-                  className={`text-[13px] font-medium transition xl:text-[14px] ${
-                    useLight ? 'hover:text-white/80' : 'hover:text-forest-600'
-                  }`}
-                >
-                  {n.label}
-                </Link>
-              ),
-            )}
+                ) : (
+                  <Link
+                    key={n.label}
+                    href={n.href}
+                    className="whitespace-nowrap rounded-full px-3.5 py-1.5 text-[13px] font-medium text-white/90 transition-colors hover:bg-white/[0.15] hover:text-white"
+                  >
+                    {n.label}
+                  </Link>
+                ),
+              )}
+            </div>
           </nav>
 
-          {/* right cluster — Track Order · Wishlist · Cart · Login (per reference) */}
-          {(() => {
-            const actionCol = `group flex flex-col items-center gap-1 transition ${
-              useLight ? 'text-white hover:text-white/80' : 'text-forest-900 hover:text-forest-600'
-            }`;
-            const actionLabel = 'text-[10.5px] font-medium leading-none';
-            return (
-              <div className="flex items-center gap-2.5 sm:gap-4">
-                {/* compact search */}
-                <button
-                  type="button"
-                  onClick={() => setSearchOpen(true)}
-                  className={`${actionCol} hidden md:flex`}
-                  aria-label={t('text-search') ?? 'Search'}
-                >
-                  <SearchIcon className="h-[19px] w-[19px]" />
-                  <span className={`${actionLabel} hidden lg:block`}>Search</span>
-                </button>
-
-                {/* Track Order */}
-                <Link href="/track-order" className={`${actionCol} hidden md:flex`}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[19px] w-[19px]"><path d="M5 17H3V6a1 1 0 0 1 1-1h11v12" /><path d="M15 9h4l3 3v5h-2" /><circle cx="7.5" cy="18" r="1.8" /><circle cx="17.5" cy="18" r="1.8" /></svg>
-                  <span className={`${actionLabel} hidden lg:block`}>Track Order</span>
-                </Link>
-
-                {/* Wishlist */}
-                <Link href="/wishlists" className={`${actionCol} hidden md:flex`}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[19px] w-[19px]"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z" /></svg>
-                  <span className={`${actionLabel} hidden lg:block`}>Wishlist</span>
-                </Link>
-
-                {/* Cart */}
-                <button ref={cartBtnRef} data-cart-target type="button" onClick={openCart} className={`${actionCol} relative`} aria-label="Cart">
-                  <span className="relative">
-                    <Icon.bag className="h-[19px] w-[19px]" />
-                    <span className="absolute -right-2 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-ds-accent px-1 text-[9px] font-bold text-white">
-                      {totalUniqueItems}
-                    </span>
+          {/* ── actions — right, stacked icon-over-label (per reference) ── */}
+          <div className="ml-auto flex items-center gap-3">
+            <div className="hidden items-center gap-1 md:flex">
+              {/* Search */}
+              <button type="button" onClick={() => setSearchOpen(true)} className="grid h-10 w-10 place-items-center rounded-lg text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label={t('text-search') ?? 'Search'}>
+                <SearchIcon className="h-[18px] w-[18px]" />
+              </button>
+              {/* Track Order */}
+              <Link href="/track-order" className="flex flex-col items-center gap-1 rounded-lg px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label="Track Order">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M5 17H3V6a1 1 0 0 1 1-1h11v12" /><path d="M15 9h4l3 3v5h-2" /><circle cx="7.5" cy="18" r="1.8" /><circle cx="17.5" cy="18" r="1.8" /></svg>
+                <span className="hidden text-[11px] font-medium leading-none xl:inline">Track Order</span>
+              </Link>
+              {/* Wishlist */}
+              <Link href="/wishlists" className="flex flex-col items-center gap-1 rounded-lg px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label="Wishlist">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z" /></svg>
+                <span className="hidden text-[11px] font-medium leading-none xl:inline">Wishlist</span>
+              </Link>
+              {/* Cart */}
+              <button ref={cartBtnRef} data-cart-target type="button" onClick={openCart} className="flex flex-col items-center gap-1 rounded-lg px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label="Cart">
+                <span className="relative">
+                  <Icon.bag className="h-[18px] w-[18px]" />
+                  <span className="absolute -right-1.5 -top-1 grid h-[16px] min-w-[16px] place-items-center rounded-full bg-ds-accent px-1 text-[9px] font-bold text-white">
+                    {totalUniqueItems}
                   </span>
-                  <span className={`${actionLabel} hidden lg:block`}>Cart</span>
-                </button>
+                </span>
+                <span className="hidden text-[11px] font-medium leading-none xl:inline">Cart</span>
+              </button>
+              {/* Login */}
+              <button type="button" onClick={onProfile} className="flex flex-col items-center gap-1 rounded-lg px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white" aria-label={isAuthorize ? 'My account' : 'Login'}>
+                <Icon.user className="h-[18px] w-[18px]" />
+                <span className="hidden text-[11px] font-medium leading-none xl:inline">{isAuthorize ? 'Account' : 'Login'}</span>
+              </button>
+            </div>
 
-                {/* Login / Account */}
-                <button type="button" onClick={onProfile} className={`${actionCol} hidden md:flex`} aria-label={isAuthorize ? 'My account' : 'Login'}>
-                  <Icon.user className="h-[19px] w-[19px]" />
-                  <span className={`${actionLabel} hidden lg:block`}>{isAuthorize ? 'Account' : 'Login'}</span>
-                </button>
-
-                {/* mobile: search + menu */}
-                <button type="button" onClick={() => setSearchOpen(true)} className={`${iconBtn} md:hidden`} aria-label={t('text-search') ?? 'Search'}>
-                  <SearchIcon className="h-[18px] w-[18px]" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMenuOpen(true)}
-                  className={`grid h-10 w-10 place-items-center rounded-full md:hidden ${
-                    solid ? 'bg-forest-700 text-white' : 'bg-white/15 text-white backdrop-blur'
-                  }`}
-                  aria-label="Menu"
-                >
-                  <Icon.menu className="h-5 w-5" />
-                </button>
-              </div>
-            );
-          })()}
+            {/* mobile: search + hamburger */}
+            <button type="button" onClick={() => setSearchOpen(true)} className={`${iconBtn} md:hidden`} aria-label={t('text-search') ?? 'Search'}>
+              <SearchIcon className="h-[18px] w-[18px]" />
+            </button>
+            <button type="button" onClick={() => setMenuOpen(true)} className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white backdrop-blur xl:hidden" aria-label="Menu">
+              <Icon.menu className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
         {/* search overlay */}
@@ -319,7 +291,7 @@ const Header = ({ layout }: { layout?: string }) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25, ease: EXPO }}
-              className="border-t border-white/10 bg-white/95 backdrop-blur-xl"
+              className="border-t border-black/[0.06] bg-white/[0.96] backdrop-blur-2xl"
             >
               <div className="mx-auto flex max-w-5xl items-center gap-3 px-5 py-4 sm:px-8">
                 <div className="flex-1">
@@ -328,7 +300,7 @@ const Header = ({ layout }: { layout?: string }) => {
                 <button
                   type="button"
                   onClick={() => setSearchOpen(false)}
-                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-forest-900 hover:bg-forest/8"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-neutral-700 hover:bg-black/[0.06]"
                   aria-label="Close search"
                 >
                   <Icon.x className="h-5 w-5" />
@@ -346,7 +318,7 @@ const Header = ({ layout }: { layout?: string }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] flex flex-col bg-forest p-7 text-white"
+            className="fixed inset-0 z-[70] flex flex-col overflow-y-auto overscroll-contain bg-forest p-7 text-white"
           >
             <div className="mb-10 flex items-center justify-between">
               <BrandLogo light />

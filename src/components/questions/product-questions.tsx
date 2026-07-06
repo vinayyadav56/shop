@@ -1,4 +1,5 @@
 import { useTranslation } from 'next-i18next';
+import { goToSignin } from '@/lib/go-to-signin';
 import QuestionCard from '@/components/questions/question-card';
 import Pagination from '@/components/ui/pagination';
 import { useEffect, useState } from 'react';
@@ -43,7 +44,7 @@ const ProductQuestions: React.FC<ProductQuestionsProps> = ({
 
   const openQuestionModal = () => {
     if (!isAuthorized) {
-      openModal('LOGIN_VIEW');
+      goToSignin();
       return;
     }
     openModal('QUESTION_FORM', { product_id: productId, shop_id: shopId });

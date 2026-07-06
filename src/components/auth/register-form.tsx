@@ -23,7 +23,12 @@ const registerFormSchema = yup.object().shape({
   password: yup.string().required('error-password-required'),
 });
 
-function RegisterForm() {
+type RegisterFormProps = {
+  /** When provided (page context), switches to the login view in place. */
+  onSwitchToLogin?: () => void;
+};
+
+export function RegisterForm({ onSwitchToLogin }: RegisterFormProps = {}) {
   const { t } = useTranslation('common');
   const { openModal } = useModalAction();
   const { mutate, isLoading, formError } = useRegister();
@@ -112,7 +117,7 @@ function RegisterForm() {
       <div className="text-center text-sm text-body sm:text-base">
         {t('text-already-account')}{' '}
         <button
-          onClick={() => openModal('LOGIN_VIEW')}
+          onClick={onSwitchToLogin ?? (() => openModal('LOGIN_VIEW'))}
           className="font-semibold text-[#175840] underline transition-colors duration-200 hover:text-[#1B6B50] hover:no-underline focus:text-[#1B6B50] focus:no-underline focus:outline-0 ltr:ml-1 rtl:mr-1"
         >
           {t('text-login')}

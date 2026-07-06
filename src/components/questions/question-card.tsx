@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { goToSignin } from '@/lib/go-to-signin';
 import cn from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { useModalAction } from '@/components/ui/modal/modal.context';
@@ -31,7 +32,7 @@ export default function QuestionCard({ question }: QuestionCardProps) {
 
   function feedback(value: { positive: boolean } | { negative: boolean }) {
     if (!isAuthorized) {
-      openModal('LOGIN_VIEW');
+      goToSignin();
       return;
     }
     createFeedback({

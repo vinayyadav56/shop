@@ -9,19 +9,17 @@ type Props = {
 
 export default function DashboardLayout({
   children,
-  layout,
   className,
 }: React.PropsWithChildren<Props>) {
   return (
     <GeneralLayout layout="general">
-      <div
-        className={classNames(
-          '_dashboard mx-auto flex w-full max-w-1920 flex-col items-stretch g-light-a px-5 py-10 lg:flex-row xl:py-14 xl:px-8 2xl:px-14',
-          className,
-        )}
-      >
-        <DashboardSidebar className="hidden shrink-0 ltr:mr-8 rtl:ml-8 lg:block lg:w-80" />
-        {children}
+      <div className="_dashboard g-light-a">
+        <div className={classNames('mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:py-12', className)}>
+          <div className="flex flex-col gap-6 lg:flex-row">
+            <DashboardSidebar className="shrink-0 lg:w-[300px]" />
+            <div className="min-w-0 flex-1">{children}</div>
+          </div>
+        </div>
       </div>
     </GeneralLayout>
   );

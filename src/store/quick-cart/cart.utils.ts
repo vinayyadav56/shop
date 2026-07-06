@@ -65,10 +65,11 @@ export function updateItem(
 export function removeItem(items: Item[], id: Item["id"]) {
   return items.filter((existingItem) => existingItem.id !== id);
 }
-export function inStock(items: Item[], id: Item["id"]) {
-  const item = getItem(items, id);
-  if (item) return item["quantity"]! < item["stock"]!;
-  return false;
+export function inStock(_items: Item[], _id: Item["id"]) {
+  // City-inventory model: per-unit stock is never a blocker — any item in the
+  // customer's city is always orderable (vendors fulfil on demand). City/vertical
+  // availability is gated separately (location gate + verify unavailable_products).
+  return true;
 }
 export const calculateItemTotals = (items: Item[]) =>
   items.map((item) => ({

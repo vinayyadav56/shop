@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { goToSignin } from '@/lib/go-to-signin';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
@@ -131,9 +132,13 @@ const StarRow = ({ rating, count }: { rating: number; count: number }) => {
 };
 
 /* ─── Reference-style listing card ─────────────────────────────── */
-type Props = { product: Product; className?: string };
+type Props = { product: Product; className?: string; priority?: boolean };
 
-const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
+const PlantAtHomeCard: React.FC<Props> = ({
+  product,
+  className = '',
+  priority = false,
+}) => {
   const [imgError, setImgError] = useState(false);
   const { openModal } = useModalAction();
   const { isAuthorized } = useUser();
@@ -152,7 +157,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
   const badge = getBadge(product.tags);
   const ratingVal = Number((product as any).ratings) || 0;
   const reviewCount = Number((product as any).total_reviews) || 0;
-  const inStock = Number(product.quantity) > 0;
+  const inStock = true; // city-inventory model: never out of stock (city availability gated elsewhere)
   const isVariable = product.product_type?.toLowerCase() === 'variable';
   const image = product.image?.original ?? product.image?.thumbnail ?? '';
 
@@ -166,7 +171,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
     e.stopPropagation();
     e.preventDefault();
     if (!isAuthorized) {
-      openModal('LOGIN_VIEW');
+      goToSignin();
       return;
     }
     openModal('ASK_AI', { product });
@@ -175,7 +180,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
     e.stopPropagation();
     e.preventDefault();
     if (!isAuthorized) {
-      openModal('LOGIN_VIEW');
+      goToSignin();
       return;
     }
     toggleWishlist({ product_id: product.id });
@@ -202,6 +207,7 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
             alt={product.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={priority}
             onError={() => setImgError(true)}
             className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
           />
@@ -253,9 +259,9 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
             type="button"
             onClick={handleAskAi}
             aria-label={`Ask AI about ${product.name}`}
-            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-[#0D3B2E]/85 px-2.5 py-1.5 text-[11px] font-semibold text-white shadow-sm backdrop-blur transition hover:scale-[1.03] hover:bg-[#0D3B2E]"
+            className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-[#0D3B2E] px-3 py-2 text-[12px] font-bold text-white shadow-[0_6px_18px_-6px_rgba(0,0,0,0.6)] ring-1 ring-[#8FD56F]/60 transition hover:scale-[1.04] hover:ring-[#8FD56F]"
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="#DCC07A" aria-hidden>
               <path d="M12 2l1.9 5.6L19.5 9.5 13.9 11.4 12 17l-1.9-5.6L4.5 9.5l5.6-1.9L12 2z" />
             </svg>
             Ask AI
@@ -274,15 +280,22 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
           {product.name}
         </button>
 
+        {(product as any).scientific_name && (
+          <p className="mt-0.5 truncate font-cormorant text-[12.5px] italic text-stone-500">
+            {(product as any).scientific_name}
+          </p>
+        )}
+
         <StarRow rating={ratingVal} count={reviewCount} />
 
         <div
-          className="mt-auto flex items-end justify-between gap-2 pt-3"
+          className="mt-auto pt-3"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex min-w-0 items-end gap-1.5">
+          {/* price row */}
+          <div className="mb-2.5 flex items-end gap-1.5">
             {isVariable && (
-              <span className="self-end pb-0.5 text-[10.5px] uppercase tracking-[0.14em] text-stone-400">from</span>
+              <span className="self-end pb-0.5 text-[10px] uppercase tracking-[0.14em] text-stone-400">from</span>
             )}
             <span className="text-[17px] font-bold leading-none text-forest-900 sm:text-[18px]">
               {isVariable ? minPrice : price}
@@ -292,28 +305,27 @@ const PlantAtHomeCard: React.FC<Props> = ({ product, className = '' }) => {
             )}
           </div>
 
+          {/* full-width action button */}
           {!inStock ? (
             <button
               type="button"
               onClick={handleQuickView}
-              aria-label="Notify me"
-              title="Notify me"
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-forest-800/40 text-forest-800 transition hover:bg-forest-800 hover:text-white"
+              className="flex h-10 w-full items-center justify-center gap-2 rounded-md border border-forest-800/30 text-[11px] font-bold uppercase tracking-[0.12em] text-forest-800 transition hover:bg-forest-800 hover:text-white"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.7 21a2 2 0 0 1-3.4 0" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[15px] w-[15px]"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.7 21a2 2 0 0 1-3.4 0" /></svg>
+              Notify me
             </button>
           ) : isVariable ? (
             <button
               type="button"
               onClick={handleQuickView}
-              aria-label="Select options"
-              title="Select options"
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ds-accent text-white shadow-[0_8px_20px_-8px_rgba(46,94,42,0.7)] transition hover:brightness-110"
+              className="flex h-10 w-full items-center justify-center gap-2 rounded-md bg-ds-accent text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:brightness-110 focus:outline-0"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[15px] w-[15px]"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" /></svg>
+              Select options
             </button>
           ) : (
-            <AddToCart variant="icon" counterVariant="oganesson" data={product} />
+            <AddToCart variant="plantathome" counterVariant="plantathome" data={product} />
           )}
         </div>
       </div>

@@ -42,7 +42,7 @@ export default function Manufacturer({ manufacturer, variables }: any) {
     <>
       <div className="flex flex-col w-full">
         <Details manufacturer={manufacturer} />
-        <h2 className="mb-8 text-3xl font-semibold tracking-tight text-heading">
+        <h2 className="mb-8 font-pahserif text-3xl font-semibold tracking-tight text-forest-900">
           {manufacturer?.type?.name}
         </h2>
         <Grid
@@ -69,7 +69,7 @@ const GetLayout = (page: React.ReactElement) => {
     <GeneralLayout>
       <>
         <div className="w-full bg-light">
-          <div className="flex w-full min-h-screen px-5 pt-10 pb-16 mx-auto max-w-1920 rtl:space-x-reverse lg:space-x-10 xl:py-14 xl:px-16">
+          <div className="flex w-full min-h-screen px-5 pt-10 pb-16 mx-auto max-w-7xl rtl:space-x-reverse lg:space-x-10 xl:py-14 xl:px-16">
             <div className="hidden w-80 shrink-0 lg:block">
               <StickyBox offsetTop={140} offsetBottom={30}>
                 <SidebarFilter type={type} showManufacturers={false} />

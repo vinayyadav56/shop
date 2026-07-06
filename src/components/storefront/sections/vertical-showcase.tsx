@@ -29,7 +29,7 @@ export function VerticalShowcase() {
           </h2>
         </div>
 
-        <div className="grid gap-4 sm:gap-5 lg:grid-cols-3">
+        <div className="pah-rail [--rail-w:84%] sm:[--rail-w:60%] lg:[--rail-w:calc((100%_-_40px)/3)] grid gap-4 sm:gap-5">
           {list.map((t, i) => {
             const meta = getVerticalMeta(t.slug, t.name);
             const href = t.slug === homeSlug ? '/' : `/${t.slug}`;

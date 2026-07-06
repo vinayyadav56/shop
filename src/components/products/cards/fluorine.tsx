@@ -8,7 +8,6 @@ import classNames from 'classnames';
 import { Routes } from '@/config/routes';
 import { useCallback, useMemo } from 'react';
 import dayjs from 'dayjs';
-import { useTranslation } from 'next-i18next';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { ExternalIconNew } from '@/components/icons/external-icon';
 // import { PlusIcon } from '@/components/icons/plus-icon';
@@ -50,7 +49,6 @@ const Fluorine: React.FC<FluorineProps> = ({
   start_date,
   end_date,
 }) => {
-  const { t } = useTranslation();
   const currentDate = dayjs().format('DD-MMM-YYYY');
 
   const discountVariablePrice = useMemo(() => {
@@ -243,32 +241,22 @@ const Fluorine: React.FC<FluorineProps> = ({
               </>
             )}
           </div>
-          {Number(product?.quantity) <= 0 && (
-            <div className="rounded bg-[#F75159] bg-opacity-10 p-2 text-sm text-[#F75159]">
-              {t('text-out-stock')}
-            </div>
-          )}
           {currentDate === start_date ? (
             <div>
               {product?.product_type.toLowerCase() === 'variable' ||
               product?.is_external ? (
-                <>
-                  {Number(product?.quantity) > 0 && (
-                    <button
-                      onClick={handleProductQuickView}
-                      // className="flex h-[2.125rem] w-[2.125rem] items-center justify-center rounded-full bg-accent text-lg text-white transition-colors hover:bg-accent-hover hover:text-white focus:bg-accent-hover focus:text-white focus:outline-0"
-                      className="text-xl text-accent"
-                    >
-                      <EyeIcon />
-                    </button>
-                  )}
-                </>
+                <button
+                  onClick={handleProductQuickView}
+                  // className="flex h-[2.125rem] w-[2.125rem] items-center justify-center rounded-full bg-accent text-lg text-white transition-colors hover:bg-accent-hover hover:text-white focus:bg-accent-hover focus:text-white focus:outline-0"
+                  className="text-xl text-accent"
+                >
+                  <EyeIcon />
+                </button>
               ) : (
                 <>
-                  {Number(product?.quantity) > 0 &&
-                    !discountSimplePrice?.isInvalidPrice && (
-                      <AddToCart variant="florine" data={product} />
-                    )}
+                  {!discountSimplePrice?.isInvalidPrice && (
+                    <AddToCart variant="florine" data={product} />
+                  )}
                 </>
               )}
             </div>

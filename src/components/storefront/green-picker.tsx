@@ -36,10 +36,10 @@ export default function GreenPicker() {
   if (!IS_STAGING) return null;
 
   return (
-    <div className="fixed bottom-16 left-3 z-[90] lg:bottom-5">
+    <div className="fixed bottom-20 right-3 z-[90] lg:bottom-3">
       {open ? (
-        <div className="flex items-center gap-2 rounded-full border border-black/10 bg-white/95 py-2 pl-3 pr-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.35)] backdrop-blur">
-          <span className="text-[10.5px] font-bold uppercase tracking-[0.08em] text-stone-500">Green</span>
+        <div className="flex items-center gap-1.5 rounded-full border border-black/10 bg-white/95 py-1.5 pl-2.5 pr-1.5 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.35)] backdrop-blur">
+          <span className="text-[9px] font-bold uppercase tracking-[0.08em] text-stone-400">Green</span>
           {PALETTES.map((p) => (
             <button
               key={p.n}
@@ -47,19 +47,19 @@ export default function GreenPicker() {
               title={`${p.n}. ${p.name}`}
               aria-label={`Use palette ${p.name}`}
               onClick={() => apply(p.n)}
-              className={`grid h-7 w-7 place-items-center rounded-full transition ${
+              className={`grid h-5 w-5 place-items-center rounded-full transition ${
                 active === p.n ? 'ring-2 ring-offset-1 ring-[#B58E39]' : 'hover:scale-110'
               }`}
               style={{ backgroundColor: p.dot }}
             >
-              <span className="text-[10.5px] font-bold" style={{ color: p.num }}>{p.n}</span>
+              <span className="text-[9px] font-bold" style={{ color: p.num }}>{p.n}</span>
             </button>
           ))}
           <button
             type="button"
             aria-label="Hide palette picker"
             onClick={() => setOpen(false)}
-            className="ml-1 grid h-6 w-6 place-items-center rounded-full text-stone-400 hover:bg-black/5"
+            className="ml-0.5 grid h-5 w-5 place-items-center rounded-full text-stone-400 hover:bg-black/5"
           >
             ×
           </button>
@@ -69,7 +69,7 @@ export default function GreenPicker() {
           type="button"
           aria-label="Show palette picker"
           onClick={() => setOpen(true)}
-          className="grid h-9 w-9 place-items-center rounded-full border border-black/10 bg-white/95 shadow-lg backdrop-blur"
+          className="grid h-7 w-7 place-items-center rounded-full border border-black/10 bg-white/95 text-[11px] shadow-lg backdrop-blur"
           style={{ color: PALETTES.find((p) => p.n === active)?.dot }}
         >
           ●

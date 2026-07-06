@@ -76,6 +76,7 @@
     "yup": "1.3.2"
   },
   "devDependencies": {
+    "agentation": "^3.0.2",
     "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/import-types-preset": "3.0.0",
     "@graphql-codegen/typescript": "4.0.1",

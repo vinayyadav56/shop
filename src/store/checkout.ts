@@ -10,6 +10,8 @@ interface DeliveryTime {
 }
 
 interface VerifiedResponse {
+  // Server-authoritative subtotal from /checkout/verify (margin-over-cost pricing).
+  amount?: number;
   total_tax: number;
   shipping_charge: number;
   unavailable_products: any[];

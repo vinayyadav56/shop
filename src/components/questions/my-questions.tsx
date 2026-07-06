@@ -50,7 +50,7 @@ function QuestionItem({ question }: { question: Question }) {
         </div>
         <div className="flex flex-col">
           <Link
-            className="mb-0.5 inline-block text-sm font-semibold text-heading transition-colors hover:text-accent"
+            className="mb-0.5 inline-block text-sm font-semibold text-forest-900 transition-colors hover:text-accent"
             href={Routes.product(product?.slug)}
           >
             {product?.name}
@@ -82,7 +82,7 @@ function QuestionItem({ question }: { question: Question }) {
       </div>
 
       <div className="rounded-md bg-gray-50 px-4 py-3">
-        <p className="mb-2.5 text-base font-semibold text-heading">
+        <p className="mb-2.5 text-base font-semibold text-forest-900">
           <span
             className="inline-block uppercase ltr:mr-1 rtl:ml-1"
             title={t('text-question')}
@@ -94,7 +94,7 @@ function QuestionItem({ question }: { question: Question }) {
         {answer && (
           <p className="text-base">
             <span
-              className="inline-block font-semibold uppercase text-heading ltr:mr-1 rtl:ml-1"
+              className="inline-block font-semibold uppercase text-forest-900 ltr:mr-1 rtl:ml-1"
               title={t('text-answer')}
             >
               A:
@@ -136,7 +136,7 @@ const MyQuestions: React.FC = () => {
     return (
       <div className="flex w-full flex-col">
         <div className="mb-8 flex items-center justify-center sm:mb-10">
-          <h1 className="text-center text-lg font-semibold text-heading sm:text-xl">
+          <h1 className="text-center text-lg font-semibold text-forest-900 sm:text-xl">
             {t('profile-sidebar-my-questions')}
           </h1>
         </div>
@@ -151,7 +151,7 @@ const MyQuestions: React.FC = () => {
     return (
       <div className="flex w-full flex-col">
         <div className="mb-8 flex items-center justify-between sm:mb-10">
-          <h1 className="ml-auto text-center text-lg font-semibold text-heading sm:text-xl">
+          <h1 className="ml-auto text-center text-lg font-semibold text-forest-900 sm:text-xl">
             {t('profile-sidebar-my-questions')}
           </h1>
         </div>
@@ -167,7 +167,7 @@ const MyQuestions: React.FC = () => {
     <>
       <div className="flex w-full flex-col">
         <div className="mb-2 flex items-center justify-center md:mb-8">
-          <h1 className="text-center text-lg font-semibold text-heading sm:text-xl">
+          <h1 className="text-center text-lg font-semibold text-forest-900 sm:text-xl">
             {t('profile-sidebar-my-questions')}
           </h1>
         </div>

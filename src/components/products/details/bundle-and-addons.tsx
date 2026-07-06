@@ -96,7 +96,7 @@ export default function BundleAndAddons({ product }: { product: Product }) {
                     className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition ${
                       inCart
                         ? 'bg-sage-100 text-forest-800 hover:bg-sage-200'
-                        : 'bg-forest-700 text-white hover:bg-forest-800'
+                        : 'bg-ds-btn text-white hover:bg-ds-btn-hover'
                     }`}
                   >
                     {inCart ? 'Added ✓' : 'Add pot'}

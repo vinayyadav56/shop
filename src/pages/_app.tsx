@@ -3,9 +3,11 @@ import { appWithTranslation } from 'next-i18next';
 import { SessionProvider } from 'next-auth/react';
 import '@/assets/css/main.css';
 import 'react-toastify/dist/ReactToastify.css';
+import '@/assets/css/toast-overrides.css';
 import { ModalProvider } from '@/components/ui/modal/modal.context';
 import ManagedModal from '@/components/ui/modal/managed-modal';
 import ManagedDrawer from '@/components/ui/drawer/managed-drawer';
+import FirstVisitLanguageModal from '@/components/ui/first-visit-language-modal';
 import DefaultSeo from '@/components/seo/default-seo';
 import { SearchProvider } from '@/components/ui/search/search.context';
 import PrivateRoute from '@/lib/private-route';
@@ -18,6 +20,12 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 const ToastContainer = dynamic(
   () => import('react-toastify').then((module) => module.ToastContainer),
+  { ssr: false },
+);
+// Agentation visual-feedback toolbar — staging/localhost only (gated inside the
+// component); ssr:false so it never runs server-side and never ships to prod.
+const AgentationToolbar = dynamic(
+  () => import('@/components/dev/agentation-toolbar'),
   { ssr: false },
 );
 import Maintenance from '@/components/maintenance/layout';
@@ -77,8 +85,17 @@ function CustomApp({
                     )}
                     <ManagedModal />
                     <ManagedDrawer />
-                    <ToastContainer autoClose={2000} theme="colored" />
+                    <ToastContainer
+                      position="top-center"
+                      autoClose={3000}
+                      newestOnTop
+                      theme="light"
+                      closeOnClick
+                      pauseOnHover
+                    />
                     <SocialLogin />
+                    <FirstVisitLanguageModal />
+                    <AgentationToolbar />
                   </>
                 </CartProvider>
               </ModalProvider>

@@ -58,7 +58,7 @@ export function ProductGrid({
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-3.5 sm:gap-5 lg:grid-cols-4">
+        <div className="pah-rail [--rail-w:46%] sm:[--rail-w:42%] lg:[--rail-w:calc((100%_-_60px)/4)] grid grid-cols-2 gap-3.5 sm:gap-5">
           {isLoading
             ? Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="aspect-[4/5] animate-pulse rounded-lg bg-sage-200" />
@@ -76,7 +76,7 @@ export function ProductGrid({
               type="button"
               onClick={onLoadMore}
               disabled={isLoadingMore}
-              className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-forest-800 px-7 py-3 text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-forest-900 disabled:opacity-60 sm:w-auto"
+              className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-ds-btn px-7 py-3 text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ds-btn-hover disabled:opacity-60 sm:w-auto"
             >
               {isLoadingMore ? 'Loading…' : 'Load more'}
             </button>

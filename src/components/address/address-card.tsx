@@ -10,6 +10,8 @@ interface AddressProps {
   onEdit?: () => void;
   onDelete?: () => void;
   userId?: any;
+  /** Show a "Default" pill (display-only — no is_default flag in the data). */
+  defaultBadge?: boolean;
 }
 const AddressCard: React.FC<AddressProps> = ({
   checked,
@@ -17,6 +19,7 @@ const AddressCard: React.FC<AddressProps> = ({
   userId,
   onEdit,
   onDelete,
+  defaultBadge,
 }) => {
   const { t } = useTranslation();
   return (
@@ -28,7 +31,14 @@ const AddressCard: React.FC<AddressProps> = ({
           </svg>
         </span>
       )}
-      <p className="pa-address-title">{address?.title}</p>
+      <div className="flex items-center gap-2">
+        <p className="pa-address-title">{address?.title}</p>
+        {defaultBadge && (
+          <span className="rounded-full bg-sage-100 px-2 py-0.5 text-[10.5px] font-semibold text-forest-700">
+            {t('text-default')}
+          </span>
+        )}
+      </div>
       <p className="pa-address-body">{formatAddress(address?.address)}</p>
       <div className="pa-address-actions">
         {onEdit && (

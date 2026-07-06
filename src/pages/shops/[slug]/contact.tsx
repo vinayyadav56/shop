@@ -31,7 +31,7 @@ export default function VendorContactPage() {
   return (
     <>
       <Seo title={'Contact'} url={'contact'} />
-      <div className="w-full bg-gray-100">
+      <div className="w-full bg-[#F8F7F2]">
         <div className="flex flex-col w-full px-5 py-10 pb-20 mx-auto max-w-7xl md:flex-row md:pb-10 xl:py-14 xl:px-8 xl:pb-14 2xl:px-14">
           {/* sidebar */}
           <div className="order-2 w-full p-5 rounded-lg shrink-0 bg-light md:order-1 md:w-72 lg:w-96">
@@ -44,7 +44,7 @@ export default function VendorContactPage() {
             </div>
 
             <div className="flex flex-col mb-8">
-              <span className="mb-3 font-semibold text-heading">
+              <span className="mb-3 font-semibold text-forest-900">
                 {t('text-address')}
               </span>
               <span className="text-sm text-body">
@@ -65,7 +65,7 @@ export default function VendorContactPage() {
             </div>
 
             <div className="flex flex-col mb-8">
-              <span className="mb-3 font-semibold text-heading">
+              <span className="mb-3 font-semibold text-forest-900">
                 {t('text-phone')}
               </span>
               <span className="text-sm text-body">
@@ -76,7 +76,7 @@ export default function VendorContactPage() {
             </div>
             {shopData?.settings?.website && (
               <div className="flex flex-col mb-8">
-                <span className="mb-3 font-semibold text-heading">
+                <span className="mb-3 font-semibold text-forest-900">
                   {t('text-website')}
                 </span>
                 <div className="flex items-center justify-between">
@@ -87,7 +87,7 @@ export default function VendorContactPage() {
                     href={shopData?.settings?.website ?? Routes?.home}
                     target="_blank"
                     // rel="noreferrer"
-                    className="text-sm font-semibold text-accent hover:text-accent-hover focus:text-blue-500 focus:outline-none"
+                    className="text-sm font-semibold text-accent hover:text-accent-hover focus:text-forest-600 focus:outline-none"
                   >
                     {t('text-visit-site')}
                   </Link>
@@ -96,7 +96,7 @@ export default function VendorContactPage() {
             )}
 
             <div className="flex flex-col mb-8">
-              <span className="mb-4 font-semibold text-heading">
+              <span className="mb-4 font-semibold text-forest-900">
                 {t('text-follow-us')}
               </span>
               <div className="flex items-center justify-start">
@@ -126,7 +126,7 @@ export default function VendorContactPage() {
 
           {/* Contact form */}
           <div className="order-1 w-full p-5 mb-8 rounded-lg bg-light md:order-2 md:mb-0 md:p-8 ltr:md:ml-7 rtl:md:mr-7 ltr:lg:ml-9 rtl:lg:mr-9">
-            <h1 className="mb-2.5 font-body text-xl font-bold text-heading md:text-2xl">
+            <h1 className="mb-2.5 font-pahserif text-xl font-bold text-forest-900 md:text-2xl">
               {t('text-vendor-comments')}
             </h1>
             <VendorContactForm shop={shopData} />

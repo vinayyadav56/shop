@@ -6,8 +6,10 @@ export class BasePage {
 
   async goto(path = '/') {
     await this.page.goto(path, { waitUntil: 'domcontentloaded' });
-    // Settle client fetches/hydration; tolerate a busy analytics socket.
-    await this.page.waitForLoadState('networkidle').catch(() => undefined);
+    // Settle client fetches/hydration; tolerate a busy analytics socket. Bounded so a
+    // never-idle socket (analytics / lazy images) can't consume the whole test budget —
+    // the page is interactive ~1.5s after domcontentloaded.
+    await this.page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => undefined);
     await this.dismissLocationGate();
   }
 

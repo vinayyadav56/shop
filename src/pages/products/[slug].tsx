@@ -65,7 +65,7 @@ const ProductPage: NextPageWithLayout<
 
               {/* Frequently Bought Together + Why PlantAtHome */}
               <section className="bg-[#FAF8F2]">
-                <div className="mx-auto grid max-w-7xl gap-5 px-5 pb-2 pt-6 sm:px-8 lg:grid-cols-2">
+                <div className="mx-auto grid max-w-7xl gap-5 px-5 pb-2 pt-6 sm:px-8 lg:px-16 lg:grid-cols-2">
                   <FrequentlyBoughtTogether product={product} />
                   <WhyPlantAtHome />
                 </div>
@@ -74,7 +74,7 @@ const ProductPage: NextPageWithLayout<
               {/* You May Also Like */}
               {related.length > 0 && (
                 <section className="bg-[#FAF8F2]">
-                  <div className="mx-auto max-w-7xl px-5 py-9 sm:px-8">
+                  <div className="mx-auto max-w-7xl px-5 py-9 sm:px-8 lg:px-16">
                     <div className="mb-6 flex items-center justify-between">
                       <h2 className="font-poppins flex items-center gap-2 text-[1.4rem] font-bold text-forest-700">
                         You May Also Like

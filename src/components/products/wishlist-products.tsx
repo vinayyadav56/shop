@@ -63,7 +63,7 @@ function WishlistItem({ product }: { product: Product }) {
         <div className="flex w-full flex-col sm:items-start">
           <Link
             href={`${Routes.products}/${product?.slug}`}
-            className="text-lg font-semibold text-heading transition-colors hover:text-accent"
+            className="text-lg font-semibold text-forest-900 transition-colors hover:text-accent"
             locale={product?.language}
           >
             {product?.name}
@@ -78,17 +78,17 @@ function WishlistItem({ product }: { product: Product }) {
         <div className="mt-4 flex w-full flex-col justify-between space-y-3 xs:flex-row xs:space-y-0 sm:w-auto sm:flex-col sm:justify-end sm:space-y-3 md:mt-0">
           {product?.product_type.toLowerCase() === 'variable' ? (
             <div className="flex items-center space-x-1.5 rtl:space-x-reverse">
-              <span className="text-xl font-semibold text-heading">
+              <span className="text-xl font-semibold text-forest-900">
                 {minPrice}
               </span>
               <span> - </span>
-              <span className="text-xl font-semibold text-heading">
+              <span className="text-xl font-semibold text-forest-900">
                 {maxPrice}
               </span>
             </div>
           ) : (
             <span className="flex min-w-150 items-center sm:justify-end">
-              <ins className="text-xl font-semibold text-heading no-underline">
+              <ins className="text-xl font-semibold text-forest-900 no-underline">
                 {price}
               </ins>
               {basePrice && (
@@ -100,23 +100,10 @@ function WishlistItem({ product }: { product: Product }) {
           )}
 
           <div className="flex items-center space-x-6 rtl:space-x-reverse sm:justify-end">
-            {Number(product?.quantity) > 0 && (
-              <>
-                {product?.product_type.toLowerCase() === 'variable' ? (
-                  <AddToCartBtn
-                    variant="text"
-                    onClick={handleVariableProduct}
-                  />
-                ) : (
-                  <AddToCart variant="text" data={product} />
-                )}
-              </>
-            )}
-
-            {Number(product?.quantity) <= 0 && (
-              <span className="whitespace-nowrap text-sm font-semibold text-red-300 sm:mt-0">
-                {t('text-out-stock')}
-              </span>
+            {product?.product_type.toLowerCase() === 'variable' ? (
+              <AddToCartBtn variant="text" onClick={handleVariableProduct} />
+            ) : (
+              <AddToCart variant="text" data={product} />
             )}
             <span className="flex h-7 w-px border-r border-dashed border-gray-300" />
             <button
@@ -145,7 +132,7 @@ const WishlistProducts: React.FC = () => {
     return (
       <div className="flex w-full flex-col">
         <div className="mb-8 flex items-center justify-center sm:mb-10">
-          <h1 className="text-center text-lg font-semibold text-heading sm:text-xl">
+          <h1 className="text-center text-lg font-semibold text-forest-900 sm:text-xl">
             {t('profile-sidebar-my-wishlist')}
           </h1>
         </div>
@@ -160,7 +147,7 @@ const WishlistProducts: React.FC = () => {
     return (
       <div className="flex w-full flex-col">
         <div className="mb-8 flex items-center justify-between sm:mb-10">
-          <h1 className="ml-auto text-center text-lg font-semibold text-heading sm:text-xl">
+          <h1 className="ml-auto text-center text-lg font-semibold text-forest-900 sm:text-xl">
             {t('profile-sidebar-my-wishlist')}
           </h1>
         </div>
@@ -176,7 +163,7 @@ const WishlistProducts: React.FC = () => {
     <>
       <div className="flex w-full flex-col">
         <div className="mb-8 flex items-center justify-center sm:mb-10">
-          <h1 className="text-center text-lg font-semibold text-heading sm:text-xl">
+          <h1 className="text-center text-lg font-semibold text-forest-900 sm:text-xl">
             {t('profile-sidebar-my-wishlist')}
           </h1>
         </div>

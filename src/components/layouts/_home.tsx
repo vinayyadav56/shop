@@ -35,13 +35,19 @@ export default function HomeLayout({
 
   return (
     <div className="flex min-h-screen flex-col transition-colors duration-150" style={{ background: 'var(--pa-bg)' }}>
-      {/* Brand header is sticky/solid (see header.tsx); hidden on the mobile home. */}
-      {pahMobile ? <div className="hidden lg:block">{headerEl}</div> : headerEl}
+      {/* Brand header is sticky/solid (see header.tsx). On the home it shows from md+
+          (tablet/desktop use the production home); the phone home (<md) carries its
+          own app bar, so the prod header is suppressed there. */}
+      {pahMobile ? <div className="hidden md:block">{headerEl}</div> : headerEl}
 
       <main className="min-h-screen flex-1">{children}</main>
 
+      {/* Footer: the shared footer is the DESKTOP "Grow with us" Web Home footer.
+          On the phone home (<md) PahHome renders its own Mobile-Home-matched footer,
+          so suppress this one there (mirrors the header treatment) to avoid a
+          duplicate footer. Desktop home + all other pages keep it. */}
       {pahMobile ? (
-        <div className="hidden lg:block">
+        <div className="hidden md:block">
           <Footer />
         </div>
       ) : (
