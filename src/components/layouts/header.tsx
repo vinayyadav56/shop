@@ -58,6 +58,14 @@ const CATEGORY_MENUS: Record<string, { label: string; href: string }[]> = {
     { label: 'Exotic Picks', href: '/c/exotic-picks' },
     { label: 'Juices & Cold-press', href: '/c/juices-cold-press' },
   ],
+  // Production's FarmBox type slug + its live root categories.
+  'farm-box': [
+    { label: 'Tropical Fruits', href: '/c/tropical-fruits' },
+    { label: 'Citrus', href: '/c/citrus' },
+    { label: 'Berries', href: '/c/berries' },
+    { label: 'Stone Fruits', href: '/c/stone-fruits' },
+    { label: 'All Categories', href: '/categories' },
+  ],
 };
 
 const NAV_TAIL: NavItem[] = [

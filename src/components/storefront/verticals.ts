@@ -53,6 +53,17 @@ const PLANTS_SCENES = ['/plants-1.jpg', '/plants-2.jpg', '/plants-3.jpg'];
 const TOOLS_SCENES = ['/tools-1.jpg', '/tools-2.jpg', '/tools-3.jpg'];
 const FARM_SCENES = ['/farm-1.jpg', '/farm-2.jpg', '/farm-3.jpg'];
 
+// Shared by both catalogue spellings of the vertical: staging uses `farmbox`,
+// production uses `farm-box`.
+const FARMBOX_META = {
+  label: 'FarmBox',
+  tagline: 'Farm-fresh, every week.',
+  blurb:
+    'Organic fruits, vegetables and salad greens — harvested at dawn, delivered to your door the same day.',
+  scenes: FARM_SCENES,
+  promise: FARM_PROMISE,
+};
+
 /** Bespoke per-slug presentation. Covers staging + production vertical slugs. */
 const META: Record<string, Omit<VerticalMeta, 'key' | 'path'>> = {
   plants: {
@@ -79,14 +90,8 @@ const META: Record<string, Omit<VerticalMeta, 'key' | 'path'>> = {
     scenes: TOOLS_SCENES,
     promise: TOOLS_PROMISE,
   },
-  farmbox: {
-    label: 'FarmBox',
-    tagline: 'Farm-fresh, every week.',
-    blurb:
-      'Organic fruits, vegetables and salad greens — harvested at dawn, delivered to your door the same day.',
-    scenes: FARM_SCENES,
-    promise: FARM_PROMISE,
-  },
+  farmbox: FARMBOX_META,
+  'farm-box': FARMBOX_META,
   'fresh-fruits': {
     label: 'Fresh Fruits',
     tagline: 'Farm-fresh, every week.',
