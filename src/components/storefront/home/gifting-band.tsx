@@ -84,12 +84,13 @@ export function GiftingBand() {
           <p className="mt-3.5 max-w-[468px] text-[16px] leading-[1.58] tracking-[0.002em] text-[#33422F] sm:text-[19px]">
             {t('home-gift-subtitle')}
           </p>
-          <div className="mt-6 grid max-w-[820px] grid-cols-2 gap-y-7 sm:flex sm:items-stretch">
+          {/* equal-width columns so all four reasons sit in symmetry */}
+          <div className="mt-6 grid max-w-[820px] grid-cols-2 gap-y-7 sm:grid-cols-4 sm:items-stretch">
             {REASONS.map((r, i) => (
-              <div key={r.a} className="relative flex flex-1 flex-col items-center px-2 text-center sm:px-3.5">
+              <div key={r.a} className="relative flex flex-col items-center px-2 text-center sm:px-3.5">
                 {i > 0 && <div className="absolute left-0 top-1/2 hidden h-16 w-px -translate-y-1/2 bg-kraft-300 sm:block" />}
                 <div className="flex h-[58px] w-[58px] items-center justify-center rounded-full bg-sage-100 text-forest-700 sm:h-[62px] sm:w-[62px]">{r.icon}</div>
-                <div className="mt-3.5 text-[13px] font-semibold leading-[1.45] tracking-[0.01em] text-forest-900 sm:text-[13.5px]">{r.a}<br />{r.b}</div>
+                <div className="mt-3.5 text-[12px] font-semibold leading-[1.45] tracking-[0.01em] text-forest-900 sm:text-[12.5px]">{r.a}<br />{r.b}</div>
               </div>
             ))}
           </div>

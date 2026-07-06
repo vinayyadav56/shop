@@ -71,18 +71,6 @@ export function SpringSaleBand() {
         {/* soft radial glow on left */}
         <div className="pointer-events-none absolute inset-y-0 left-0 w-[380px] bg-[radial-gradient(ellipse_at_10%_50%,rgba(74,222,128,0.13)_0%,transparent_65%)]" />
 
-        {/* decorative background leaf */}
-        <svg
-          aria-hidden
-          className="pointer-events-none absolute -bottom-10 right-6 opacity-[0.065]"
-          width="220" height="220" viewBox="0 0 24 24"
-          fill="none" stroke="white" strokeWidth="0.55"
-          strokeLinecap="round" strokeLinejoin="round"
-        >
-          <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
-          <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
-        </svg>
-
         <div className="relative z-10 flex flex-col gap-4 px-5 py-5 sm:px-8 lg:flex-row lg:items-center lg:gap-0 lg:px-10 lg:py-6">
 
           {/* ── LEFT — offer block ── */}
