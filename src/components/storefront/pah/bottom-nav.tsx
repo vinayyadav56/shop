@@ -8,6 +8,14 @@ import { authorizationAtom } from '@/store/authorization-atom';
 import { drawerAtom } from '@/store/drawer-atom';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 
+const ACCENT = '#2E5E2A';
+const MUTED = '#8A8A82';
+
+/**
+ * Modern mobile bottom tab bar — a clean full-width bar where the active tab
+ * lifts on a soft forest pill (Material-3 / native-app feel) with an accent
+ * colour + slightly heavier stroke. Rendered mobile-only (md:hidden).
+ */
 const ICONS: Record<string, React.ReactNode> = {
   Home: <><path d="M3 11 12 4l9 7" /><path d="M5.5 9.5V20h13V9.5" /></>,
   Categories: <><path d="M8 6h12M8 12h12M8 18h12" /><circle cx="3.5" cy="6" r="1.2" /><circle cx="3.5" cy="12" r="1.2" /><circle cx="3.5" cy="18" r="1.2" /></>,
@@ -32,24 +40,48 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 z-30 w-full rounded-t-[20px] border-t border-kraft-200 bg-white px-2 pb-[max(16px,env(safe-area-inset-bottom))] pt-[9px] shadow-[0_-6px_20px_rgba(34,48,26,0.08)] md:hidden">
-      <div className="mx-auto flex max-w-[440px] justify-around">
+    <nav className="fixed bottom-0 left-0 z-30 w-full border-t border-kraft-200/80 bg-white/95 pb-[max(8px,env(safe-area-inset-bottom))] pt-1.5 shadow-[0_-8px_28px_rgba(34,48,26,0.10)] backdrop-blur-xl md:hidden">
+      <div className="mx-auto flex max-w-[440px] items-stretch">
         {items.map((n) => (
           <motion.button
             key={n.label}
             type="button"
-            whileTap={{ scale: 0.88 }}
+            whileTap={{ scale: 0.9 }}
             onClick={n.go}
             aria-label={n.label}
             aria-current={n.active ? 'page' : undefined}
-            className="relative flex flex-col items-center gap-1 px-2 pb-1 pt-2"
-            style={{ color: n.active ? 'var(--pah-active,#2E5E2A)' : '#908A7E' }}
+            className="relative flex flex-1 select-none flex-col items-center justify-center gap-[3px] pb-0.5 pt-1"
           >
-            {n.active ? <span className="absolute top-0 h-[5px] w-[5px] rounded-full bg-forest-600 shadow-[0_0_6px_rgba(46,139,87,0.5)]" /> : null}
-            <span style={{ color: n.active ? '#2E5E2A' : '#908A7E' }}>
-              <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{ICONS[n.label]}</svg>
+            {/* icon + sliding active pill */}
+            <span className="relative flex h-8 w-[52px] items-center justify-center">
+              {n.active && (
+                <motion.span
+                  layoutId="pah-nav-pill"
+                  transition={{ type: 'spring', stiffness: 520, damping: 34 }}
+                  className="absolute inset-0 rounded-full bg-[#E7F2E1]"
+                />
+              )}
+              <svg
+                width="23"
+                height="23"
+                viewBox="0 0 24 24"
+                className="relative"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={n.active ? 2 : 1.7}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ color: n.active ? ACCENT : MUTED }}
+              >
+                {ICONS[n.label]}
+              </svg>
             </span>
-            <span className="text-[10.5px]" style={{ color: n.active ? '#2E5E2A' : '#908A7E', fontWeight: n.active ? 700 : 500 }}>{n.label}</span>
+            <span
+              className="text-[10.5px] leading-none"
+              style={{ color: n.active ? ACCENT : MUTED, fontWeight: n.active ? 700 : 500 }}
+            >
+              {n.label}
+            </span>
           </motion.button>
         ))}
       </div>
