@@ -94,11 +94,23 @@ function SignInPage() {
               ))}
             </div>
 
-            {mode === 'login' ? (
-              <LoginForm onSwitchToRegister={() => setMode('register')} />
-            ) : (
-              <RegisterForm onSwitchToLogin={() => setMode('login')} />
-            )}
+            {/* Both forms stay mounted, stacked in the same grid cell, so the
+                column keeps the taller form's height — switching tabs no longer
+                makes the page jump up and down. */}
+            <div className="grid">
+              <div
+                className={`[grid-area:1/1] ${mode === 'login' ? '' : 'invisible'}`}
+                aria-hidden={mode !== 'login'}
+              >
+                <LoginForm onSwitchToRegister={() => setMode('register')} />
+              </div>
+              <div
+                className={`[grid-area:1/1] ${mode === 'register' ? '' : 'invisible'}`}
+                aria-hidden={mode !== 'register'}
+              >
+                <RegisterForm onSwitchToLogin={() => setMode('login')} />
+              </div>
+            </div>
           </div>
         </div>
       </div>

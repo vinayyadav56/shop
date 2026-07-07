@@ -273,7 +273,7 @@ export function HeroPlant() {
   };
 
   return (
-    <section className="relative min-h-[680px] w-full overflow-hidden bg-[#0c1e12]">
+    <section className="relative min-h-[620px] w-full overflow-hidden bg-[#0c1e12]">
       <TourBurns slides={slides} active={active} reduce={reduce} />
 
       {/* premium green grade — protect the type on the left, reveal the room on the right */}
@@ -289,7 +289,7 @@ export function HeroPlant() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-5 pb-[230px] pt-[120px] max-lg:pb-[200px] sm:px-8 lg:px-16">
+      <div className="relative z-10 mx-auto max-w-7xl px-5 pb-[205px] pt-[112px] max-lg:pb-[180px] sm:px-8 lg:px-16">
         <div className="max-w-2xl">
           <motion.span
             initial={{ opacity: 0, y: 14 }}
