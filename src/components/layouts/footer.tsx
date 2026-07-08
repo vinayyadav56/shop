@@ -103,6 +103,9 @@ const Footer = () => {
   const contact = settings?.contactDetails ?? {};
   const email = contact?.emailAddress || settings?.contactEmail || 'hello@plantathome.in';
   const phone = contact?.contact || settings?.contactPhone || '+91 98765 43210';
+  // Company address is admin-managed (Settings → Company Information); the locale
+  // string is only a fallback for a blank installation.
+  const address = contact?.location?.formattedAddress || t('footer-address');
   const year = new Date().getFullYear();
 
   // Shop column from the live catalogue (works on staging's 6 verticals and
@@ -180,7 +183,7 @@ const Footer = () => {
           <div className="mt-5 flex flex-col gap-2.5">
             <span className="flex items-center gap-3 text-[13px] text-white/60">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[14px] w-4 shrink-0 text-[#86EFAC]" aria-hidden><path d="M12 21s7-5.5 7-11a7 7 0 0 0-14 0c0 5.5 7 11 7 11Z" /><circle cx="12" cy="10" r="2.5" /></svg>
-              {t('footer-address')}
+              {address}
             </span>
             <a href={`tel:${phone}`} className="flex items-center gap-3 text-[13px] text-white/60 transition hover:text-white">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-[14px] w-4 shrink-0 text-[#86EFAC]" aria-hidden><path d="M5.5 3h3l1.7 4.3-2 1.6a13.5 13.5 0 0 0 6 6l1.6-2L20 14.6v3.1A2.3 2.3 0 0 1 17.7 20 15.8 15.8 0 0 1 4 6.3 2.3 2.3 0 0 1 5.5 3Z" /></svg>
