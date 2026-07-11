@@ -71,10 +71,21 @@ try {
   const cartHasItem = (await page.locator('text=Remove').count()) > 0;
   step('login replayed pending add → cart has item', cartHasItem);
 
-  // Checkout
+  // Checkout — 4-step wizard
   await page.click('[data-testid="to-checkout"]');
   await page.waitForURL(/\/checkout/, { timeout: 10000 });
+  // Step 0: contact
+  await page.fill('input[placeholder="Your name"]', 'Test Buyer');
+  await page.fill('input[placeholder="you@email.com"]', 'buyer@example.com');
+  await page.fill('input[placeholder="Phone number"]', '+919999999999');
+  await page.click('[data-testid="wizard-next"]');
+  // Step 1: address
   await page.fill('input[placeholder="Flat / house, street, area"]', '12 Garden Lane');
+  await page.fill('input[placeholder="City"]', 'Test City');
+  await page.click('[data-testid="wizard-next"]');
+  // Step 2: delivery slot
+  await page.click('[data-testid="wizard-next"]');
+  // Step 3: review → confirm → pay
   await page.click('[data-testid="continue-to-pay"]');
   await page.waitForSelector('[data-testid="checkout-total"]', { timeout: 15000 });
   const checkoutTotal = (await page.locator('[data-testid="checkout-total"]').textContent())?.trim();
