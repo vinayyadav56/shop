@@ -129,6 +129,27 @@ export async function loadGeneralData() {
   return { dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))) };
 }
 
+/** PDP loader (mirrors product.ssr.ts): settings prefetch + product by slug.
+ *  Returns null → notFound. */
+export async function loadProductData(slug: string) {
+  const queryClient = new QueryClient();
+  await queryClient
+    .prefetchQuery({
+      queryKey: [API_ENDPOINTS.SETTINGS, { language: LOCALE }],
+      queryFn: ({ queryKey }: any) => client.settings.all(queryKey[1]),
+    })
+    .catch(() => {});
+  try {
+    const product = await client.products.get({ slug, language: LOCALE });
+    return {
+      product,
+      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+    };
+  } catch {
+    return null;
+  }
+}
+
 /** All type slugs for generateStaticParams (fail-soft → []). */
 export async function loadTypeSlugs(): Promise<string[]> {
   try {

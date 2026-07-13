@@ -1,0 +1,60 @@
+'use client';
+
+import Seo from '@/components/seo/seo';
+import NotFound from '@/components/ui/not-found';
+import { useFAQs } from '@/framework/faqs';
+import { useTranslation } from 'next-i18next';
+import { LIMIT_HUNDRED } from '@/lib/constants';
+import { getLayoutWithFooter } from '@/components/layouts/layout-with-footer';
+import PageBanner from '@/components/banners/page-banner';
+import FAQ from '@/components/faq/faq';
+import ErrorMessage from '@/components/ui/error-message';
+
+export default function HelpPage() {
+  const { t } = useTranslation();
+  const { faqs, isLoading, error } = useFAQs({
+    faq_type: 'global',
+    issued_by: 'Super Admin',
+    limit: LIMIT_HUNDRED,
+  });
+
+  if (error) return <ErrorMessage message={error.message} />;
+
+  return (
+    <>
+      <Seo title="Help" url="help" />
+      <section className="w-full min-h-screen pb-16 mx-auto max-w-1920 g-light-a lg:pb-10 xl:pb-14">
+        <PageBanner
+          title={t('text-faq-title')}
+          breadcrumbTitle={t('text-home')}
+        />
+        <div className="w-full max-w-screen-lg px-5 py-10 mx-auto">
+          {isLoading && !faqs.length ? (
+            <div className="space-y-3">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="animate-pulse rounded bg-sage-100 h-14" />
+              ))}
+            </div>
+          ) : !faqs.length ? (
+            <div className="min-h-full p-5 md:p-8 lg:p-12 2xl:p-16">
+              <NotFound text="text-no-faq" className="h-96" />
+            </div>
+          ) : (
+            <FAQ data={faqs as any} isLoading={isLoading} />
+          )}
+        </div>
+      </section>
+    </>
+  );
+}
+
+HelpPage.getLayout = getLayoutWithFooter;
+
+
+/* ── App Router body wrapper (added by port; V1 _app.tsx getLayout semantics) ── */
+
+export function PageBody(props: any) {
+  const page = <HelpPage {...props} />;
+  const withLayout = (HelpPage as any).getLayout ? (HelpPage as any).getLayout(page) : page;
+  return withLayout;
+}

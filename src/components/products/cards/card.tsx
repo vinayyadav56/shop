@@ -1,14 +1,12 @@
 import type { Product } from '@/types';
-import dynamic from 'next/dynamic';
 
 // Plant At Home uses ONE consistent small-luxury product card across every
 // product type, so the listing matches the home grid. (Upstream Pickbazar
-// routed by `type.settings.productCard` to per-type cards — neon/helium/etc.
-// Those products are configured with non-plantathome settings, which meant
-// the listing rendered an off-brand card with price ranges + boxed "+".)
-const PlantAtHome = dynamic(
-  () => import('@/components/products/cards/plantathome'),
-);
+// routed by `type.settings.productCard` to per-type cards — neon/helium/etc.)
+// App Router port: STATIC import — this card always renders, and next/dynamic
+// of always-rendered components infinite-loops hydration under React 19 (the
+// PDP's SSR'd related-products grid hit exactly that).
+import PlantAtHome from '@/components/products/cards/plantathome';
 
 interface ProductCardProps {
   product: Product;
