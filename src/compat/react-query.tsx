@@ -175,7 +175,19 @@ const STRING_KEY_METHODS = new Set([
   'resetQueries',
 ]);
 
-function wrapClient<T extends object>(client: T): T {
+/** v3 accepted string / string[] query keys on these — type them loosely. */
+type CompatQueryClient = Omit<
+  QueryClientV5,
+  'invalidateQueries' | 'refetchQueries' | 'removeQueries' | 'cancelQueries' | 'resetQueries'
+> & {
+  invalidateQueries: (arg?: any, opts?: any) => Promise<void>;
+  refetchQueries: (arg?: any, opts?: any) => Promise<void>;
+  removeQueries: (arg?: any) => void;
+  cancelQueries: (arg?: any) => Promise<void>;
+  resetQueries: (arg?: any, opts?: any) => Promise<void>;
+};
+
+function wrapClient(client: QueryClientV5): CompatQueryClient {
   return new Proxy(client, {
     get(target: any, prop: string) {
       const orig = target[prop];
@@ -190,10 +202,10 @@ function wrapClient<T extends object>(client: T): T {
       if (typeof orig === 'function') return orig.bind(target);
       return orig;
     },
-  });
+  }) as unknown as CompatQueryClient;
 }
 
-export function useQueryClient() {
+export function useQueryClient(): CompatQueryClient {
   const client = useQueryClientV5();
   return React.useMemo(() => wrapClient(client), [client]);
 }
@@ -208,6 +220,32 @@ export class QueryClient extends QueryClientV5 {
       config = { ...config, defaultOptions: { ...config.defaultOptions, queries: { ...q, gcTime: cacheTime } } };
     }
     super(config);
+  }
+
+  // v3 accepted string/array keys directly on these methods.
+  invalidateQueries(arg?: any, ...rest: any[]): Promise<void> {
+    if (typeof arg === 'string' || Array.isArray(arg)) {
+      return super.invalidateQueries({ queryKey: toArr(arg) } as any, ...(rest as [any]));
+    }
+    return super.invalidateQueries(arg, ...(rest as [any]));
+  }
+  refetchQueries(arg?: any, ...rest: any[]): Promise<void> {
+    if (typeof arg === 'string' || Array.isArray(arg)) {
+      return super.refetchQueries({ queryKey: toArr(arg) } as any, ...(rest as [any]));
+    }
+    return super.refetchQueries(arg, ...(rest as [any]));
+  }
+  removeQueries(arg?: any): void {
+    if (typeof arg === 'string' || Array.isArray(arg)) {
+      return super.removeQueries({ queryKey: toArr(arg) } as any);
+    }
+    return super.removeQueries(arg);
+  }
+  resetQueries(arg?: any, ...rest: any[]): Promise<void> {
+    if (typeof arg === 'string' || Array.isArray(arg)) {
+      return super.resetQueries({ queryKey: toArr(arg) } as any, ...(rest as [any]));
+    }
+    return super.resetQueries(arg, ...(rest as [any]));
   }
 }
 

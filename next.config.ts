@@ -10,8 +10,10 @@ const COMPAT_ALIASES = {
   'react-query': './src/compat/react-query.tsx',
   'react-query/hydration': './src/compat/react-query-hydration.tsx',
   'next-i18next': './src/compat/next-i18next.tsx',
+  'react-i18next': './src/compat/next-i18next.tsx',
   'next-seo': './src/compat/next-seo.tsx',
   'next/router': './src/compat/next-router.ts',
+  'next-auth/react': './src/compat/next-auth-react.tsx',
 };
 
 const nextConfig: NextConfig = {

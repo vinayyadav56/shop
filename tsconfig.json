@@ -25,8 +25,10 @@
       "react-query/hydration": ["./src/compat/react-query-hydration"],
       "next-i18next": ["./src/compat/next-i18next"],
       "next-i18next/serverSideTranslations": ["./src/compat/next-i18next"],
+      "react-i18next": ["./src/compat/next-i18next"],
       "next/router": ["./src/compat/next-router"],
-      "next-seo": ["./src/compat/next-seo"]
+      "next-seo": ["./src/compat/next-seo"],
+      "next-auth/react": ["./src/compat/next-auth-react"]
     }
   },
   "include": [

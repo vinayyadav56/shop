@@ -27,9 +27,11 @@ const NAMESPACES: Record<string, Record<string, string>> = {
   terms: terms as any,
 };
 
-export type TFunction = (key: string, vars?: Record<string, any>) => string;
+/** i18next's t() accepts anything stringable (V1 passes Errors in one spot). */
+export type TFunction = (key: any, vars?: Record<string, any>) => string;
 
-function translate(defaultNs: string, key: string, vars?: Record<string, any>): string {
+function translate(defaultNs: string, rawKey: any, vars?: Record<string, any>): string {
+  const key = typeof rawKey === 'string' ? rawKey : String(rawKey?.message ?? rawKey ?? '');
   let ns = defaultNs;
   let k = key;
   const idx = key.indexOf(':');
