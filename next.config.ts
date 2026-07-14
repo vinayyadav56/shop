@@ -17,7 +17,17 @@ const COMPAT_ALIASES = {
 };
 
 const nextConfig: NextConfig = {
-  reactStrictMode: true,
+  // OFF deliberately (dev-only switch; production never mounts StrictMode).
+  // With it ON, `next dev` intermittently livelocks on data-rich pages
+  // (~80% of loads): React 19's dev double-render widens a hydration race
+  // where a pending inlined-Flight/lazy chunk is retried in sync microtask
+  // renders that starve the very <script> task that would resolve it —
+  // proven via CDP pause-on-exceptions (ReactPromise from readChunk in
+  // resolveLazy) and 6/6-healthy vs 5/6-frozen A/B probes on this exact
+  // config flag. Real app-level loop causes (v5 tracked-result spread,
+  // render-phase cookie writes, always-rendered next/dynamic) are all fixed;
+  // this residual race is framework-level under the ported V1 tree.
+  reactStrictMode: false,
   // Same-origin API proxy (mirrors V1's Vercel rewrite): the browser calls
   // /rest-api on this host; Next proxies to the legacy marvel API. SSR calls
   // the API directly via NEXT_PUBLIC_REST_API_ENDPOINT.

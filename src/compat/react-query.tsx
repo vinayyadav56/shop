@@ -124,7 +124,13 @@ export function useInfiniteQuery<TData = unknown, TError = unknown>(
   const q = useInfiniteQueryV5<any, TError>({
     queryKey: toArr(key),
     queryFn: (ctx: any) => fn({ queryKey: ctx.queryKey as any, pageParam: ctx.pageParam }),
-    initialPageParam: undefined,
+    // v5 REQUIRES a defined initialPageParam. `undefined` violates the contract
+    // and makes the infinite-query observer emit a fresh result on every
+    // getOptimisticResult() → uSES snapshot churn → sync re-render per
+    // microtask → the dev "keeps loading" livelock (starves the pending RSC
+    // stream chunk it is itself waiting on). `null` is v3-faithful: V1
+    // queryFns do Object.assign({}, opts, pageParam), and null merges as no-op.
+    initialPageParam: null,
     getNextPageParam: (lastPage: any, allPages: any) => {
       const r = getNextPageParam?.(lastPage, allPages);
       return r === false || r == null ? undefined : r;

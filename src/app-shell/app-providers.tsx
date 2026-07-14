@@ -12,7 +12,6 @@
  */
 
 import * as React from 'react';
-import dynamic from 'next/dynamic';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { SearchProvider } from '@/components/ui/search/search.context';
 import { ModalProvider } from '@/components/ui/modal/modal.context';
@@ -30,7 +29,11 @@ import LocationGate from '@/components/location/location-gate';
 import TrackingBridge from '@/lib/analytics/tracking-bridge';
 import DesignSystemApplier from '@/lib/design-system-applier';
 
-const ToastContainer = dynamic(() => import('react-toastify').then((m) => m.ToastContainer), { ssr: false });
+// STATIC import — V1's _app.tsx imported ToastContainer statically; the port's
+// dynamic() made it the last always-rendered React.lazy in the shell, which is
+// the known React-19 hydration-suspension livelock pattern (resolveLazy pending
+// → sync re-render per microtask → starves the very stream it waits on).
+import { ToastContainer } from 'react-toastify';
 
 export default function AppProviders({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(
