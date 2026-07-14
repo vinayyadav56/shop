@@ -1,0 +1,5 @@
+title = "PlantAtHome Shop Gitleaks Config"
+
+[allowlist]
+  description = "Historical commit contains a commented-out NextAuth.js example JWT secret from the official docs — not a real credential"
+  commits = ["fc86829be3c3229adbeb82e863e91675bbbf17d5"]
