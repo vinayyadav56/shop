@@ -325,8 +325,11 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
         <div className="mt-7 grid gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16">
           <PlantAtHomeGallery gallery={previewImages} productId={id} productName={name} badge={badge} />
 
-          {/* info panel */}
-          <div className="flex flex-col">
+          {/* info panel — min-w-0 is load-bearing: as a grid item its default
+              min-width:auto lets the pot-picker rail's intrinsic width inflate
+              the whole column (pot toggle blew out to ~1400px when the pot
+              list opened); min-w-0 keeps the rail scrolling inside instead. */}
+          <div className="flex min-w-0 flex-col">
             <h1
               className={classNames(
                 'font-cormorant text-[2.4rem] font-semibold leading-[1.05] tracking-tight text-forest-900 sm:text-[3rem]',
