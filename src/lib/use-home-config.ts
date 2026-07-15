@@ -28,6 +28,36 @@ export type HomeCollectionsConfig = {
   }>;
 };
 
+/** Admin-editable Corporate Gifting page content (settings.options.giftingContent). */
+export type GiftingImage =
+  | { original?: string; thumbnail?: string }
+  | string
+  | null;
+export type GiftingContentConfig = {
+  heroImage?: GiftingImage;
+  galleryEyebrow?: string;
+  galleryHeading?: string;
+  gallerySubtitle?: string;
+  gallery?: Array<{
+    image?: GiftingImage;
+    caption?: string;
+    order?: number;
+  }>;
+};
+
+/** Resolve a CMS image field (object|string|null) to a usable URL, or ''. */
+export function resolveImageUrl(img: GiftingImage): string {
+  if (!img) return '';
+  if (typeof img === 'string') return img;
+  return img.original ?? img.thumbnail ?? '';
+}
+
+/** Corporate Gifting page CMS block (gallery + optional hero image). */
+export function useGiftingConfig(): GiftingContentConfig | null {
+  const { settings } = useSettings() as any;
+  return (settings?.giftingContent ?? null) as GiftingContentConfig | null;
+}
+
 /**
  * Admin-driven homepage config from settings.options (passthrough, no API change):
  * - banners: per-banner on/off flags (default ON when unset)

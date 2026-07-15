@@ -5,6 +5,7 @@ export interface GardenTemplate {
   id: number;
   name: string;
   tagline?: string;
+  badge?: string | null;
   description?: string;
   items?: Array<{ category: string; name: string; qty?: number; note?: string }>;
   suggested_visits: number;
