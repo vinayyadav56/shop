@@ -71,33 +71,35 @@ export function SpringSaleBand() {
         {/* soft radial glow on left */}
         <div className="pointer-events-none absolute inset-y-0 left-0 w-[380px] bg-[radial-gradient(ellipse_at_10%_50%,rgba(74,222,128,0.13)_0%,transparent_65%)]" />
 
-        <div className="relative z-10 flex flex-col gap-4 px-5 py-5 sm:px-8 md:flex-row md:items-center md:gap-0 lg:px-10 lg:py-6">
+        {/* tree renders from md up, so base classes = the compact tablet design;
+            lg restores the original desktop band untouched. */}
+        <div className="relative z-10 flex items-center px-6 py-5 sm:px-8 lg:px-10 lg:py-6">
 
           {/* ── LEFT — offer block ── */}
-          <div className="shrink-0 md:w-[210px] lg:w-[260px]">
+          <div className="w-[188px] shrink-0 lg:w-[260px]">
             {/* pulsing badge */}
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#4ADE80]/25 bg-[#4ADE80]/10 px-3 py-1">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-[#4ADE80]/25 bg-[#4ADE80]/10 px-3 py-1 lg:mb-3">
               <span className="relative flex h-[6px] w-[6px]">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#4ADE80] opacity-70" />
                 <span className="relative inline-flex h-[6px] w-[6px] rounded-full bg-[#4ADE80]" />
               </span>
-              <span className="font-hanken text-[10px] font-bold uppercase tracking-[0.16em] text-[#86EFAC]">
+              <span className="whitespace-nowrap font-hanken text-[9px] font-bold uppercase tracking-[0.14em] text-[#86EFAC] lg:text-[10px] lg:tracking-[0.16em]">
                 {t('home-sale-eyebrow')}
               </span>
             </div>
 
             {/* discount */}
-            <div className="font-pahserif text-[34px] font-bold leading-none tracking-[-0.01em] text-[#F2E3B8]">
+            <div className="whitespace-nowrap font-pahserif text-[27px] font-bold leading-none tracking-[-0.01em] text-[#F2E3B8] lg:text-[34px]">
               {t('home-sale-discount')}
             </div>
-            <div className="mt-1 font-hanken text-[11px] leading-snug text-white/80">
+            <div className="mt-1 whitespace-nowrap font-hanken text-[10.5px] leading-snug text-white/80 lg:text-[11px]">
               {t('home-sale-condition')}
             </div>
 
             {/* CTA */}
             <Link
               href="/plants/search"
-              className="mt-3 inline-flex items-center gap-1.5 rounded-[9px] bg-ds-cta px-4 py-2 font-hanken text-[12.5px] font-bold text-ds-cta-ink transition duration-200 hover:bg-ds-cta-hover active:scale-[0.97]"
+              className="mt-2.5 inline-flex items-center gap-1.5 rounded-[9px] bg-ds-cta px-3.5 py-1.5 font-hanken text-[11.5px] font-bold text-ds-cta-ink transition duration-200 hover:bg-ds-cta-hover active:scale-[0.97] lg:mt-3 lg:px-4 lg:py-2 lg:text-[12.5px]"
             >
               {t('home-sale-cta')}
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -107,26 +109,25 @@ export function SpringSaleBand() {
           </div>
 
           {/* vertical divider */}
-          <div className="hidden w-px self-stretch bg-white/[0.1] md:mx-6 md:block lg:mx-10" />
-          {/* horizontal divider on mobile */}
-          <div className="h-px w-full bg-white/[0.08] md:hidden" />
+          <div className="mx-6 w-px self-stretch bg-white/[0.1] lg:mx-10" />
 
-          {/* ── RIGHT — perks ── */}
-          <div className="grid grid-cols-2 gap-x-6 gap-y-4 md:flex md:flex-1 md:items-center md:justify-between">
+          {/* ── RIGHT — perks: 2×2 grid with one-line labels on tablet,
+                original 4-across row with dividers from lg ── */}
+          <div className="grid flex-1 grid-cols-2 gap-x-7 gap-y-3.5 lg:flex lg:items-center lg:justify-between lg:gap-0">
             {PERKS.map((p, i) => (
               <React.Fragment key={p.label}>
-                {i > 0 && <span aria-hidden className="hidden h-8 w-px shrink-0 bg-white/15 md:block" />}
+                {i > 0 && <span aria-hidden className="hidden h-8 w-px shrink-0 bg-white/15 lg:block" />}
                 <motion.div
                   initial={{ y: 14 }}
                   whileInView={{ y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 + i * 0.07, duration: 0.45, ease: EXPO }}
-                  className="flex items-center gap-3"
+                  className="flex items-center gap-2.5 lg:gap-3"
                 >
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/25 text-[#4ADE80] md:h-9 md:w-9 lg:h-11 lg:w-11 [&>svg]:h-[18px] [&>svg]:w-[18px] md:[&>svg]:h-[15px] md:[&>svg]:w-[15px] lg:[&>svg]:h-[18px] lg:[&>svg]:w-[18px]">
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/25 text-[#4ADE80] lg:h-11 lg:w-11 [&>svg]:h-[13px] [&>svg]:w-[13px] lg:[&>svg]:h-[18px] lg:[&>svg]:w-[18px]">
                     {p.icon}
                   </span>
-                  <div className="max-w-[120px] font-hanken text-[12.5px] font-semibold leading-[1.35] text-white md:max-w-[96px] md:text-[11px] lg:max-w-[120px] lg:text-[12.5px]">
+                  <div className="whitespace-nowrap font-hanken text-[11px] font-semibold leading-[1.35] text-white lg:max-w-[120px] lg:whitespace-normal lg:text-[12.5px]">
                     {p.label}
                   </div>
                 </motion.div>
