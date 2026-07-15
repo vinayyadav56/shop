@@ -1,16 +1,20 @@
 import { useAtom } from 'jotai';
-import { shippingAddressAtom } from '@/store/checkout';
+import { shippingAddressAtom, verifiedResponseAtom } from '@/store/checkout';
 import { usePincodeServiceability } from '@/lib/use-pincode-serviceability';
+import DeliveryNotifyMe from '@/components/location/delivery-notify-me';
 
 /**
  * Shows whether the selected shipping pincode is serviceable. Surfaced in the
  * Address step so the customer gets immediate feedback; the actual hard block
- * lives in PlaceOrderAction.
+ * lives in PlaceOrderAction. Also surfaces the server's coverage verdict from
+ * /checkout/verify (per-vendor pincode coverage) when items got blocked.
  */
 export default function PincodeServiceability() {
   const [shipping] = useAtom(shippingAddressAtom);
+  const [verifiedResponse] = useAtom(verifiedResponseAtom);
   const zip = (shipping as any)?.address?.zip as string | undefined;
   const { result, loading, checked } = usePincodeServiceability(zip);
+  const coverage = (verifiedResponse as any)?.coverage;
 
   if (!zip) return null;
   if (loading) {
@@ -24,17 +28,26 @@ export default function PincodeServiceability() {
 
   if (result.serviceable) {
     return (
-      <div className="pa-pin pa-pin--ok">
-        ✓ We deliver to {result.pincode}
-        {result.area ? ` · ${result.area}` : result.city ? ` · ${result.city}` : ''}
-        {result.eta_days ? ` · ~${result.eta_days} day delivery` : ''}
-      </div>
+      <>
+        <div className="pa-pin pa-pin--ok">
+          ✓ We deliver to {result.pincode}
+          {result.area ? ` · ${result.area}` : result.city ? ` · ${result.city}` : ''}
+          {result.eta_days ? ` · ~${result.eta_days} day delivery` : ''}
+        </div>
+        {coverage?.blocked_products?.length ? (
+          <div className="pa-pin pa-pin--no">
+            {coverage.message ||
+              `Some items in your cart can't be delivered to ${coverage.pincode} and were excluded.`}
+          </div>
+        ) : null}
+      </>
     );
   }
   return (
     <div className="pa-pin pa-pin--no">
       ✗ Sorry, we don’t deliver to {result.pincode} yet. Please use a serviceable
       delivery address to continue.
+      <DeliveryNotifyMe pincode={zip} />
     </div>
   );
 }

@@ -957,6 +957,13 @@ export interface VerifiedCheckoutData {
   unavailable_products?: number[];
   wallet_currency?: number;
   wallet_amount?: number;
+  /** Per-vendor pincode coverage verdict (delivery-coverage system). */
+  coverage?: {
+    pincode: string;
+    blocked_products: number[];
+    reason: string;
+    message?: string;
+  };
 }
 
 export interface Wishlist {
