@@ -254,6 +254,7 @@ export interface Product {
   min_price: number;
   max_price: number;
   image: Attachment;
+  size_guide?: Attachment;
   status: string;
   gallery: Attachment[];
   shop: Shop;
