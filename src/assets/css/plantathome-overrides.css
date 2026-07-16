@@ -125,8 +125,8 @@ h1, h2, h3, h4, h5 {
 /* Escape hatch: the fixed brand-serif utilities must beat the theme heading
    rule above even when the admin Design System picks a sans heading font.
    Same !important, higher specificity (class > element). */
-.font-pahserif { font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif !important; }
-.font-cormorant { font-family: 'Cormorant Garamond', Georgia, Cambria, serif !important; }
+.font-pahserif { font-family: var(--font-sans) !important; }
+.font-cormorant { font-family: var(--font-sans) !important; }
 
 /* ── Card rail (ALL widths) ─────────────────────────────────────
    Curated card sections NEVER wrap into rows: one horizontal snap-scrolling
@@ -1937,7 +1937,7 @@ select:focus {
   flex-shrink: 0;
 }
 .pa-cart-header-title {
-  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-family: var(--font-sans) !important;
   font-size: 22px;
   font-weight: 700;
   color: #fff;
@@ -2846,7 +2846,7 @@ textarea:focus {
   margin: 0 0 8px;
 }
 .pa-checkout-page-title {
-  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-family: var(--font-sans) !important;
   font-size: clamp(30px, 3.8vw, 42px);
   font-weight: 700;
   line-height: 1.05;
