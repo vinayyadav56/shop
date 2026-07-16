@@ -1,7 +1,6 @@
 'use client';
 import React, { useMemo, useState } from 'react';
 import { goToSignin } from '@/lib/go-to-signin';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from '@/compat/next-router';
 import classNames from 'classnames';
@@ -435,20 +434,19 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
                 );
               })}
 
-            {/* Size Guide — per-product image uploaded in admin; shown inline when set */}
+            {/* Size Guide — per-product image uploaded in admin; shown inline when set.
+                Plain <img> (like the pot picker) so any chart shape renders at its
+                natural aspect ratio without next/image's fixed-dimension letterboxing. */}
             {size_guide?.original && (
               <div className="mt-6">
                 <p className="mb-3 text-base font-semibold capitalize text-forest-900">Size guide</p>
-                <div className="overflow-hidden rounded-2xl border border-kraft-300/70 bg-white">
-                  <Image
-                    src={size_guide.original}
-                    alt={`${name} size guide`}
-                    width={1200}
-                    height={1200}
-                    sizes="(max-width:1024px) 100vw, 55vw"
-                    className="h-auto w-full object-contain"
-                  />
-                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={size_guide.original}
+                  alt={`${name} size guide`}
+                  loading="lazy"
+                  className="h-auto w-full rounded-2xl border border-kraft-300/70 bg-white"
+                />
               </div>
             )}
 
