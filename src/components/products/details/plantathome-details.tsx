@@ -172,7 +172,10 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
         ...(loc ? { lat: loc.lat, lng: loc.lng } : {}),
         ...(customerCity ? { city: customerCity } : {}),
       }),
-    { enabled: !!id, retry: 0, staleTime: 60_000 },
+    // keepPreviousData: hold the last result while re-fetching for a newly
+    // selected size, so the delivery line + price don't collapse/jump (the query
+    // key changes with the variation). Prevents the section from fluctuating.
+    { enabled: !!id, retry: 0, staleTime: 60_000, keepPreviousData: true },
   );
   const fulfillment = vendorPriceData?.fulfillment as
     | { fulfillment_mode?: 'local' | 'courier'; eta_days?: number }

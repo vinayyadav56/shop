@@ -110,7 +110,7 @@ const PotPicker: React.FC<Props> = ({ plantSize, fallbackSize = null, selected, 
   return (
     <div className="mt-6">
       <p className="mb-3 text-base font-semibold capitalize text-forest-900">Choose your pot</p>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid max-w-sm grid-cols-2 gap-3">
         {/* Without Pot */}
         <button
           type="button"
