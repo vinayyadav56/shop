@@ -125,6 +125,9 @@ class Client {
       HttpClient.get<ProductPaginator>(API_ENDPOINTS.PRODUCTS, {
         searchJoin: 'and',
         with: 'type;author',
+        // Never show unpriced catalogue entries (imported names awaiting vendor
+        // rates) as buyable ₹0 cards on any customer surface incl. search.
+        hide_unpriced: 1,
         ...params,
         search: HttpClient.formatSearchParams({
           type,
