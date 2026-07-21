@@ -18,6 +18,7 @@ import { HomeIconNew } from '@/components/icons/home-icon-new';
 import OrderViewHeader from './order-view-header';
 import OrderStatusProgressBox from '@/components/orders/order-status-progress-box';
 import CourierTrackingMap from '@/components/orders/courier-tracking-map';
+import ParcelShipments from '@/components/orders/parcel-shipments';
 
 function OrderView({ order, language, settings, loadingStatus }: any) {
   const { t } = useTranslation('common');
@@ -115,6 +116,9 @@ function OrderView({ order, language, settings, loadingStatus }: any) {
             <div className="mb-8">
               <CourierTrackingMap tracking={order?.tracking_number} />
             </div>
+
+            {/* Per-parcel tracking: each shipment's own status/courier/ETA (split orders) */}
+            <ParcelShipments tracking={order?.tracking_number} />
 
             <div className="flex flex-col lg:flex-row">
               <div className="mb-12 w-full lg:mb-0 lg:w-1/2 ltr:lg:pr-3 rtl:lg:pl-3">

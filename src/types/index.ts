@@ -1175,3 +1175,25 @@ export interface ShopMaintenanceEvent {
   isMaintenance: boolean;
   isShopUnderMaintenance: boolean;
 }
+// ── Per-parcel customer tracking (GET orders/{tracking}/shipments) ──────────────
+export interface OrderShipmentItem {
+  name: string | null;
+  slug: string | null;
+  image: { thumbnail?: string; original?: string } | string | null;
+  quantity: number;
+}
+
+export interface OrderShipment {
+  fulfillment_mode: 'local' | 'courier' | null;
+  courier_name: string | null;
+  awb_number: string | null;
+  tracking_url: string | null;
+  status: string | null;
+  last_status: string | null;
+  payment_method: string | null;
+  shipped_at: string | null;
+  delivered_at: string | null;
+  eta_days: number | null;
+  expected_delivery_at: string | null;
+  items: OrderShipmentItem[];
+}

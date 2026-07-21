@@ -30,6 +30,7 @@ import type {
   Order,
   OrderPaginator,
   OrderQueryOptions,
+  OrderShipment,
   OrderStatusPaginator,
   OtpLoginInputType,
   OTPResponse,
@@ -351,6 +352,13 @@ class Client {
         // Guest orders require their per-order token; harmless for owned orders.
         ...(token ? { token } : {}),
       }),
+    // Per-parcel tracking: each shipment's status/courier/ETA + items. Guest orders
+    // are gated by the same per-order token; any failure returns { shipments: [] }.
+    shipments: (tracking_number: string, token?: string) =>
+      HttpClient.get<{ shipments: OrderShipment[] }>(
+        `${API_ENDPOINTS.ORDERS}/${tracking_number}/shipments`,
+        token ? { token } : {},
+      ),
     create: (input: CreateOrderInput) =>
       HttpClient.post<Order>(API_ENDPOINTS.ORDERS, input),
     refunds: (params: Pick<QueryOptions, 'limit'>) =>

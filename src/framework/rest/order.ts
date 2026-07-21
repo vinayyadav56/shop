@@ -6,6 +6,7 @@ import {
   Order,
   OrderPaginator,
   OrderQueryOptions,
+  OrderShipment,
   PaymentGateway,
   QueryOptions,
   RefundPolicyQueryOptions,
@@ -97,6 +98,40 @@ export function useOrder({ tracking_number }: { tracking_number: string }) {
     isFetching,
     isLoading,
     refetch,
+    error,
+  };
+}
+
+/**
+ * Per-parcel tracking: the order's shipments (status / courier / ETA / items).
+ * Same guest-token plumbing as useOrder; the API returns { shipments: [] } for
+ * anything not permitted, so the UI can render nothing without special-casing.
+ */
+export function useOrderShipments({
+  tracking_number,
+}: {
+  tracking_number?: string;
+}) {
+  const { query } = useRouter();
+  const token = useMemo(
+    () =>
+      tracking_number
+        ? resolveOrderToken(tracking_number, query?.token as string | undefined)
+        : undefined,
+    [tracking_number, query?.token]
+  );
+  const { data, isLoading, error } = useQuery<
+    { shipments: OrderShipment[] },
+    Error
+  >(
+    [API_ENDPOINTS.ORDERS, tracking_number, 'shipments', token],
+    () => client.orders.shipments(tracking_number!, token),
+    { enabled: Boolean(tracking_number), refetchOnWindowFocus: true, retry: 0 }
+  );
+
+  return {
+    shipments: data?.shipments ?? [],
+    isLoading,
     error,
   };
 }
