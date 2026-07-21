@@ -2,11 +2,14 @@
 import { useState } from 'react';
 import { useCustomerCity } from '@/lib/use-customer-city';
 import CityPickerDialog from './city-picker-dialog';
+import ChangeCityDialog from './change-city-dialog';
 
 /**
- * Header "Deliver to: <city> ▼" chip. Opens the searchable city picker; the
- * chosen city is persisted (fires pah-location-changed so the nav/products
- * re-evaluate). `tone` adapts the colour to the (transparent vs solid) header.
+ * Header "📍 <city> · Change" chip (Shopping-City redesign). Opens the
+ * searchable city picker; a pick with an existing city routes through the
+ * ChangeCityDialog (confirm → cart re-validation → dropped-items report)
+ * so the cart can never silently carry another city's items. `tone` adapts
+ * the colour to the (transparent vs solid) header.
  */
 export default function CitySwitcher({
   className = '',
@@ -17,7 +20,17 @@ export default function CitySwitcher({
 }) {
   const { city, setCity } = useCustomerCity();
   const [open, setOpen] = useState(false);
+  const [pendingCity, setPendingCity] = useState<string | null>(null);
   const color = tone === 'light' ? 'text-white/90' : 'text-forest-900';
+
+  function onPick(name: string) {
+    if (!city) {
+      setCity(name); // nothing to migrate — first selection
+      return;
+    }
+    if (name.toLowerCase() === city.toLowerCase()) return; // same city — no-op
+    setPendingCity(name); // confirm + cart migration
+  }
 
   return (
     <>
@@ -25,20 +38,25 @@ export default function CitySwitcher({
         type="button"
         onClick={() => setOpen(true)}
         className={`inline-flex items-center gap-1.5 text-[12px] font-medium ${color} ${className}`}
-        aria-label="Change delivery city"
+        aria-label="Change shopping city"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
-        <span>
-          Deliver to:{' '}
-          <span className="font-semibold">{city ?? 'Select city'}</span>
+        <span className="font-semibold">{city ?? 'Select city'}</span>
+        <span className={tone === 'light' ? 'text-white/60' : 'text-stone-400'}>
+          · Change
         </span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><polyline points="6 9 12 15 18 9" /></svg>
       </button>
 
       <CityPickerDialog
         open={open}
         onClose={() => setOpen(false)}
-        onPick={(name) => setCity(name)}
+        onPick={onPick}
+      />
+      <ChangeCityDialog
+        open={pendingCity !== null}
+        targetCity={pendingCity}
+        onClose={() => setPendingCity(null)}
+        onSwitched={() => setPendingCity(null)}
       />
     </>
   );

@@ -1,11 +1,14 @@
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { RadioGroup } from '@headlessui/react';
 import { useAtom, WritableAtom } from 'jotai';
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import AddressCard from '@/components/address/address-card';
 import { AddressHeader } from '@/components/address/address-header';
 import { useTranslation } from 'next-i18next';
 import type { Address } from '@/types';
+import { useCustomerCity } from '@/lib/use-customer-city';
+import { addressCityOf, normalizeCityClient } from '@/lib/shopping-city';
+import CityMismatchDialog from './city-mismatch-dialog';
 
 interface AddressesProps {
   addresses: Address[] | undefined | null;
@@ -17,6 +20,14 @@ interface AddressesProps {
   type: string;
 }
 
+/**
+ * Saved-address picker, Shopping-City aware: addresses in the current shopping
+ * city come first; other-city addresses sit in a visually separated "Other
+ * cities" group and picking one opens the mismatch dialog ([Choose Another
+ * Address] / [Change Shopping City]) instead of selecting it. Auto-select only
+ * ever picks a MATCHING address. Addresses whose city is unknown are treated
+ * as matching (the server checkout gate is the final authority).
+ */
 export const AddressGrid: React.FC<AddressesProps> = ({
   addresses,
   label,
@@ -29,17 +40,39 @@ export const AddressGrid: React.FC<AddressesProps> = ({
   const { t } = useTranslation('common');
   const [selectedAddress, setAddress] = useAtom(atom);
   const { openModal } = useModalAction();
+  const { city: shoppingCity } = useCustomerCity();
+  const [mismatch, setMismatch] = useState<Address | null>(null);
 
-  useEffect(() => {
-    if (addresses?.length) {
-      if (selectedAddress?.id) {
-        const index = addresses.findIndex((a) => a.id === selectedAddress.id);
-        setAddress(addresses[index]);
+  const cityKey = normalizeCityClient(shoppingCity);
+  const { matching, others } = useMemo(() => {
+    const matching: Address[] = [];
+    const others: Address[] = [];
+    for (const a of addresses ?? []) {
+      const ac = addressCityOf(a);
+      if (!shoppingCity || !ac || normalizeCityClient(ac) === cityKey) {
+        matching.push(a);
       } else {
-        setAddress(addresses?.[0]);
+        others.push(a);
       }
     }
-  }, [addresses, addresses?.length, selectedAddress?.id, setAddress]);
+    return { matching, others };
+  }, [addresses, shoppingCity, cityKey]);
+
+  useEffect(() => {
+    if (matching.length) {
+      if (selectedAddress?.id) {
+        const found = matching.find((a) => a.id === selectedAddress.id);
+        setAddress(found ?? matching[0]);
+      } else {
+        setAddress(matching[0]);
+      }
+    } else if (selectedAddress?.id) {
+      // The previously selected address no longer matches the shopping city.
+      const stillListed = (addresses ?? []).some((a) => a.id === selectedAddress.id);
+      if (!stillListed) setAddress(null as any);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matching, matching.length, selectedAddress?.id, setAddress]);
 
   function onAdd() {
     openModal('ADD_OR_UPDATE_ADDRESS', { customerId: userId, type });
@@ -49,6 +82,15 @@ export const AddressGrid: React.FC<AddressesProps> = ({
   }
   function onDelete(address: any) {
     openModal('DELETE_ADDRESS', { customerId: userId, addressId: address?.id });
+  }
+
+  function pick(address: Address) {
+    const ac = addressCityOf(address);
+    if (shoppingCity && ac && normalizeCityClient(ac) !== cityKey) {
+      setMismatch(address);
+      return;
+    }
+    setAddress(address);
   }
 
   return (
@@ -61,24 +103,69 @@ export const AddressGrid: React.FC<AddressesProps> = ({
           </span>
         </div>
       ) : (
-        <RadioGroup value={selectedAddress} onChange={setAddress}>
-          <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {addresses?.map((address) => (
-              <RadioGroup.Option value={address} key={address?.id}>
-                {({ checked }: { checked: boolean }) => (
-                  <AddressCard
-                    checked={checked}
-                    onDelete={() => onDelete(address)}
-                    onEdit={() => onEdit(address)}
-                    address={address}
-                  />
-                )}
-              </RadioGroup.Option>
-            ))}
-          </div>
-        </RadioGroup>
+        <>
+          {matching.length ? (
+            <RadioGroup value={selectedAddress} onChange={pick}>
+              <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+                {matching.map((address) => (
+                  <RadioGroup.Option value={address} key={address?.id}>
+                    {({ checked }: { checked: boolean }) => (
+                      <AddressCard
+                        checked={checked}
+                        onDelete={() => onDelete(address)}
+                        onEdit={() => onEdit(address)}
+                        address={address}
+                      />
+                    )}
+                  </RadioGroup.Option>
+                ))}
+              </div>
+            </RadioGroup>
+          ) : (
+            <div className="grid grid-cols-1 gap-4">
+              <span className="relative rounded border border-border-200 bg-gray-100 px-5 py-6 text-center text-sm text-stone-600">
+                No saved address in{' '}
+                <span className="font-semibold">{shoppingCity}</span> yet — add
+                one, or change your shopping city.
+              </span>
+            </div>
+          )}
+
+          {others.length ? (
+            <div className="mt-5 border-t border-dashed border-border-200 pt-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-stone-400">
+                Other cities (not deliverable while shopping in {shoppingCity})
+              </p>
+              <div className="grid grid-cols-1 gap-4 opacity-70 sm:grid-cols-2 md:grid-cols-3">
+                {others.map((address) => (
+                  <button
+                    type="button"
+                    key={address?.id}
+                    onClick={() => pick(address)}
+                    className="text-left"
+                  >
+                    <AddressCard
+                      checked={false}
+                      onDelete={() => onDelete(address)}
+                      onEdit={() => onEdit(address)}
+                      address={address}
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </>
       )}
+
+      <CityMismatchDialog
+        open={mismatch !== null}
+        shoppingCity={shoppingCity ?? ''}
+        addressCity={addressCityOf(mismatch) ?? ''}
+        onClose={() => setMismatch(null)}
+        onChooseAnother={() => setMismatch(null)}
+      />
     </div>
   );
 };

@@ -10,14 +10,33 @@ interface Props {
   open: boolean;
   onClose: () => void;
   onPick: (cityName: string) => void;
+  /**
+   * Mandatory mode (first visit): the dialog cannot be dismissed — no overlay
+   * close, no Esc — until a city is picked. GPS/IP stay HELPERS that only
+   * suggest; the shopper always confirms by tapping a city.
+   */
+  blocking?: boolean;
+  title?: string;
+  subtitle?: string;
+  /** Pre-highlighted suggestion (e.g. IP-detected city) shown as a one-tap banner. */
+  suggestedCity?: string | null;
 }
 
 /**
- * Searchable serviceable-city picker. Used by the header city switcher and the
- * "Select City" action of the non-serviceable popup. Includes a one-tap
- * "Detect my location" (GPS → reverse-geocode) that fills the city. Fail-safe.
+ * Searchable serviceable-city picker. Used by the header city switcher, the
+ * "Select City" action of the non-serviceable popup, and (blocking mode) the
+ * mandatory first-visit Shopping-City selection. Includes a one-tap
+ * "Detect my location" (GPS → reverse-geocode) that SUGGESTS the city. Fail-safe.
  */
-export default function CityPickerDialog({ open, onClose, onPick }: Props) {
+export default function CityPickerDialog({
+  open,
+  onClose,
+  onPick,
+  blocking = false,
+  title,
+  subtitle,
+  suggestedCity,
+}: Props) {
   const { data: cities } = useAllCities();
   const [q, setQ] = useState('');
   const [detecting, setDetecting] = useState(false);
@@ -57,6 +76,8 @@ export default function CityPickerDialog({ open, onClose, onPick }: Props) {
     onClose();
   }
 
+  const [gpsSuggestion, setGpsSuggestion] = useState<string | null>(null);
+
   async function detect() {
     setDetecting(true);
     try {
@@ -65,7 +86,9 @@ export default function CityPickerDialog({ open, onClose, onPick }: Props) {
         const addr = await reverseGeocode(coords.lat, coords.lng);
         if (addr?.city) {
           track('location_detected', { label: addr.city, meta: { source: 'gps' } });
-          choose(addr.city);
+          // GPS never DECIDES the city — it only suggests; the shopper confirms.
+          setGpsSuggestion(addr.city);
+          setQ(addr.city);
           return;
         }
       }
@@ -75,9 +98,23 @@ export default function CityPickerDialog({ open, onClose, onPick }: Props) {
     }
   }
 
+  // Only surface a suggestion that is actually a serviceable city — the
+  // banner's one tap must never select a city we can't deliver to.
+  const rawSuggestion = gpsSuggestion ?? suggestedCity ?? null;
+  const suggestion = useMemo(() => {
+    if (!rawSuggestion) return null;
+    const match = (cities ?? []).find(
+      (c) => c.name?.toLowerCase() === rawSuggestion.toLowerCase(),
+    );
+    return match?.name ?? null;
+  }, [rawSuggestion, cities]);
+
   return (
     <Transition show={open} as={Fragment}>
-      <Dialog onClose={onClose} className="relative z-[70]">
+      <Dialog
+        onClose={blocking ? () => {} : onClose}
+        className="relative z-[70]"
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-200"
@@ -102,11 +139,26 @@ export default function CityPickerDialog({ open, onClose, onPick }: Props) {
           >
             <Dialog.Panel className="w-full max-w-md rounded-2xl bg-white p-5 shadow-xl">
               <Dialog.Title className="text-lg font-semibold text-forest-900">
-                Choose your delivery city
+                {title ?? 'Choose your delivery city'}
               </Dialog.Title>
               <p className="mt-1 text-sm text-stone-500">
-                We’ll show delivery times and serviceability for this city.
+                {subtitle ??
+                  'We’ll show delivery times and serviceability for this city.'}
               </p>
+
+              {suggestion ? (
+                <button
+                  type="button"
+                  onClick={() => choose(suggestion)}
+                  className="mt-3 flex w-full items-center justify-between rounded-lg border border-accent/30 bg-accent/5 px-3.5 py-2.5 text-left text-sm"
+                >
+                  <span className="text-stone-600">
+                    You seem to be near{' '}
+                    <span className="font-semibold text-heading">{suggestion}</span>
+                  </span>
+                  <span className="font-semibold text-accent">Use this</span>
+                </button>
+              ) : null}
 
               <input
                 autoFocus

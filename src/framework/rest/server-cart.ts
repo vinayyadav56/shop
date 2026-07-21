@@ -1,5 +1,6 @@
 import { HttpClient } from './client/http-client';
 import { API_ENDPOINTS } from './client/api-endpoints';
+import { getStoredCity } from '@/lib/customer-location';
 import { generateCartItem } from '@/store/quick-cart/generate-cart-item';
 import type { Item } from '@/store/quick-cart/cart.utils';
 
@@ -51,5 +52,12 @@ export async function getServerCart(): Promise<Array<{ item: any; quantity: numb
 }
 
 export async function saveServerCart(items: Array<Item & any>): Promise<void> {
-  await HttpClient.put(API_ENDPOINTS.CART, { items: itemsToCartLines(items) });
+  // Stamp the cart with the shopping city (Shopping-City redesign): the server
+  // resolves + persists shopping_city_id/shopping_city on the account cart, so
+  // a cart always belongs to exactly one city across devices.
+  const shopping_city = getStoredCity();
+  await HttpClient.put(API_ENDPOINTS.CART, {
+    items: itemsToCartLines(items),
+    ...(shopping_city ? { shopping_city } : {}),
+  });
 }

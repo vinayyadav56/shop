@@ -13,17 +13,21 @@ import { GoogleMapLocation } from '@/types';
 import { useUpdateUser } from '@/framework/user';
 import GooglePlacesAutocomplete from '@/components/form/google-places-autocomplete';
 import StateCitySelect from '@/components/location/state-city-select';
+import AddressMapPicker, { type PinResult } from '@/components/address/address-map-picker';
 import { useSettings } from '@/framework/settings';
 
 type FormValues = {
   title: string;
   type: AddressType;
+  address_type?: 'home' | 'office' | 'other';
   address: {
     country: string;
     city: string;
     state: string;
     zip: string;
     street_address: string;
+    street_address2?: string;
+    landmark?: string;
   };
   location: GoogleMapLocation;
 };
@@ -136,6 +140,25 @@ export const AddressForm: React.FC<any> = ({
               )
             }
 
+            {/* Draggable delivery pin (Shopping-City redesign): search only positions
+                the pin; the PIN decides lat/lng, and the server reverse-geocodes it
+                into city/district/state/pincode (typed values are never trusted). */}
+            {process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY ? (
+              <div className="col-span-2">
+                <AddressMapPicker
+                  lat={(watch('location') as any)?.lat}
+                  lng={(watch('location') as any)?.lng}
+                  onPin={(r: PinResult) => {
+                    const prev: any = getValues('location') ?? {};
+                    setValue('location', { ...prev, lat: r.lat, lng: r.lng } as any);
+                    if (r.geo?.city) setValue('address.city', r.geo.city, { shouldValidate: true });
+                    if (r.geo?.state) setValue('address.state', r.geo.state, { shouldValidate: true });
+                    if (r.geo?.pincode) setValue('address.zip', r.geo.pincode, { shouldValidate: true });
+                  }}
+                />
+              </div>
+            ) : null}
+
             <Input
               label={t('text-country')}
               {...register('address.country')}
@@ -178,6 +201,33 @@ export const AddressForm: React.FC<any> = ({
               className="col-span-2"
             />
 
+            <Input
+              label="Apartment / floor (optional)"
+              {...register('address.street_address2')}
+              variant="outline"
+            />
+            <Input
+              label="Landmark (optional)"
+              {...register('address.landmark')}
+              variant="outline"
+            />
+
+            <div className="col-span-2">
+              <Label>Address label</Label>
+              <div className="flex items-center gap-4">
+                {(['home', 'office', 'other'] as const).map((v) => (
+                  <Radio
+                    key={v}
+                    id={`address-type-${v}`}
+                    {...register('address_type')}
+                    type="radio"
+                    value={v}
+                    label={v.charAt(0).toUpperCase() + v.slice(1)}
+                  />
+                ))}
+              </div>
+            </div>
+
             <Button
               className="w-full col-span-2"
               loading={isLoading}
@@ -202,15 +252,22 @@ export default function CreateOrUpdateAddressForm() {
   const { mutate: updateProfile } = useUpdateUser();
 
   const onSubmit = (values: FormValues) => {
+    const loc: any = values.location ?? {};
     const formattedInput = {
       id: address?.id,
       // customer_id: customerId,
       title: values.title,
       type: values.type,
+      address_type: values.address_type ?? 'home',
       address: {
         ...values.address,
       },
       location: values.location,
+      // Pin coordinates (source of truth) — the server reverse-geocodes these
+      // into rg_city/rg_district/rg_state/rg_pincode on save.
+      ...(Number(loc.lat) && Number(loc.lng)
+        ? { latitude: Number(loc.lat), longitude: Number(loc.lng) }
+        : {}),
     };
     updateProfile({
       id: customerId,
@@ -228,6 +285,7 @@ export default function CreateOrUpdateAddressForm() {
         defaultValues={{
           title: address?.title ?? '',
           type: address?.type ?? type,
+          address_type: address?.address_type ?? 'home',
           address: {
             city: address?.address?.city ?? '',
             country: address?.address?.country ?? 'India',

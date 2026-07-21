@@ -4,7 +4,13 @@ import isEmpty from 'lodash/isEmpty';
 import { useCreateOrder } from '@/framework/order';
 import ValidationError from '@/components/ui/validation-error';
 import { formatOrderedProduct } from '@/lib/format-ordered-product';
-import { getStoredLatLng } from '@/lib/customer-location';
+import { getStoredLatLng, getStoredCity } from '@/lib/customer-location';
+import {
+  deliverToAtom,
+  recipientNameAtom,
+  recipientPhoneAtom,
+} from '@/store/deliver-to';
+import CityMismatchDialog from './city-mismatch-dialog';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { checkoutAtom, discountAtom, walletAtom } from '@/store/checkout';
 import {
@@ -57,6 +63,25 @@ export const PlaceOrderAction: React.FC<{
   ] = useAtom(checkoutAtom);
   const [discount] = useAtom(discountAtom);
   const [use_wallet_points] = useAtom(walletAtom);
+
+  // Shopping-City redesign: delivery-type + recipient + the hard-gate dialog.
+  const [deliverTo] = useAtom(deliverToAtom);
+  const [recipientName] = useAtom(recipientNameAtom);
+  const [recipientPhone] = useAtom(recipientPhoneAtom);
+  const [cityMismatch, setCityMismatch] = useState<any | null>(null);
+
+  // Order-time 422 gate (useCreateOrder dispatches this event on
+  // SHOPPING_CITY_MISMATCH) and verify-time gate (checkout/verify returns
+  // city_mismatch in the response) both open the same dialog.
+  useEffect(() => {
+    const onMismatch = (e: any) => setCityMismatch(e.detail);
+    window.addEventListener('pah-city-mismatch', onMismatch);
+    return () => window.removeEventListener('pah-city-mismatch', onMismatch);
+  }, []);
+  useEffect(() => {
+    const vm = (verified_response as any)?.city_mismatch;
+    if (vm?.code === 'SHOPPING_CITY_MISMATCH') setCityMismatch(vm);
+  }, [verified_response]);
 
   // Serviceability / courier mode (set by the location gate). When the shopper
   // chose "Continue Anyway" from a non-serviceable area we ALLOW the order and
@@ -171,7 +196,15 @@ export const PlaceOrderAction: React.FC<{
       is_non_serviceable_order: courierMode,
       ...(detectedCity ? { detected_city: detectedCity } : {}),
       ...(serviceableCity ? { serviceable_city: serviceableCity } : {}),
+      // Shopping-City redesign: the declared shopping city arms the server's
+      // hard mismatch gate; deliver_to + recipient ride on shipping_address.
+      ...(getStoredCity() ? { shopping_city: getStoredCity() } : {}),
+      deliver_to: deliverTo,
     };
+    if (deliverTo === 'someone_else') {
+      (input.shipping_address as any).recipient_name = recipientName.trim();
+      (input.shipping_address as any).recipient_phone = recipientPhone.trim();
+    }
     delete input.billing_address.__typename;
     delete input.shipping_address.__typename;
     track(courierMode ? 'non_serviceable_order' : 'serviceable_order', {
@@ -195,6 +228,15 @@ export const PlaceOrderAction: React.FC<{
     }
     if (!use_wallet_points && !payment_gateway) {
       setErrorMessage('Gateway Is Required');
+      return;
+    }
+    if (
+      deliverTo === 'someone_else' &&
+      (!recipientName.trim() || !recipientPhone.trim())
+    ) {
+      setErrorMessage(
+        'Recipient name and phone are required to deliver to someone else.',
+      );
       return;
     }
     // Non-serviceable (courier) order → confirm before placing.
@@ -268,6 +310,19 @@ export const PlaceOrderAction: React.FC<{
           <ValidationError message={t('text-place-order-helper-text')} />
         </div>
       )}
+
+      <CityMismatchDialog
+        open={cityMismatch !== null}
+        shoppingCity={cityMismatch?.shopping_city ?? getStoredCity() ?? ''}
+        addressCity={cityMismatch?.address_city ?? ''}
+        onClose={() => setCityMismatch(null)}
+        onChooseAnother={() => {
+          // Send the shopper back to the Address step's grid.
+          document
+            .querySelector('.pa-checkout-step')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }}
+      />
 
       {confirmCourier && (
         <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 p-4">

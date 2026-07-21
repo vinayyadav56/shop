@@ -3,6 +3,7 @@ import { useAtom } from 'jotai';
 import { billingAddressAtom, shippingAddressAtom } from '@/store/checkout';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { useVerifyOrder } from '@/framework/order';
+import { getStoredCity } from '@/lib/customer-location';
 import omit from 'lodash/omit';
 
 export const CheckAvailabilityAction: React.FC<{
@@ -27,6 +28,9 @@ export const CheckAvailabilityAction: React.FC<{
         ...(shipping_address?.address &&
           omit(shipping_address.address, ['__typename'])),
       },
+      // Shopping-City redesign: arms the server-side mismatch check — the
+      // verify response then carries `city_mismatch` for the blocking dialog.
+      ...(getStoredCity() ? { shopping_city: getStoredCity() } : {}),
     });
   }
 

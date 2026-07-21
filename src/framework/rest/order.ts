@@ -309,6 +309,22 @@ export function useCreateOrder() {
       const {
         response: { data },
       }: any = error ?? {};
+      // Shopping-City hard gate (422): the API encodes a structured payload in
+      // message — surface the dedicated mismatch dialog instead of a raw toast.
+      try {
+        const parsed =
+          typeof data?.message === 'string' && data.message.trim().startsWith('{')
+            ? JSON.parse(data.message)
+            : null;
+        if (parsed?.code === 'SHOPPING_CITY_MISMATCH') {
+          window.dispatchEvent(
+            new CustomEvent('pah-city-mismatch', { detail: parsed }),
+          );
+          return;
+        }
+      } catch {
+        /* not the gate — fall through to the generic toast */
+      }
       toast.error(data?.message);
     },
   });

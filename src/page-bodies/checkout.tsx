@@ -53,6 +53,9 @@ const PincodeServiceability = dynamic(
   () => import('@/components/checkout/pincode-serviceability'),
   { ssr: false }
 );
+const DeliverTo = dynamic(() => import('@/components/checkout/deliver-to'), {
+  ssr: false,
+});
 
 export default function CheckoutPage() {
   const { t } = useTranslation();
@@ -88,11 +91,12 @@ export default function CheckoutPage() {
       key: 'address',
       node: (
         <div className="space-y-6">
+          <DeliverTo count={2} label="Delivery type" />
           <AddressGrid
             userId={id!}
             className="pa-checkout-step"
             label={t('text-billing-address')}
-            count={2}
+            count={3}
             //@ts-ignore
             addresses={address?.filter(
               (item) => item?.type === AddressType.Billing
@@ -116,7 +120,7 @@ export default function CheckoutPage() {
               userId={me?.id!}
               className="pa-checkout-step"
               label={t('text-shipping-address')}
-              count={3}
+              count={4}
               //@ts-ignore
               addresses={address?.filter(
                 (item) => item?.type === AddressType.Shipping
@@ -137,10 +141,10 @@ export default function CheckoutPage() {
           <ScheduleGrid
             className="pa-checkout-step"
             label={t('text-delivery-schedule')}
-            count={4}
+            count={5}
           />
           <DeliveryLocationVerification
-            count={5}
+            count={6}
             label={t('Verify delivery location')}
           />
         </div>
@@ -148,7 +152,7 @@ export default function CheckoutPage() {
     },
     {
       key: 'review',
-      node: <OrderNote count={6} label={t('Order Note')} />,
+      node: <OrderNote count={7} label={t('Order Note')} />,
     },
   ];
 

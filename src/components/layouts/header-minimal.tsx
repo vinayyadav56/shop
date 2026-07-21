@@ -31,6 +31,7 @@ import dynamic from 'next/dynamic';
 import React, { useCallback } from 'react';
 import { useWindowSize } from 'react-use';
 import GroupsDropdownMenu from './menu/groups-menu';
+import CitySwitcher from '@/components/location/city-switcher';
 import StaticMenu from './menu/static-menu';
 import { useRouter } from '@/compat/next-router';
 const CartCounterIconButton = dynamic(
@@ -155,6 +156,9 @@ const HeaderMinimal = ({ layout }: { layout: string }) => {
                 !isMultiLangEnable ? 'mx-auto lg:mx-0' : 'ltr:ml-0 rtl:mr-0'
               }`}
             />
+
+            {/* Shopping-City chip — always visible, minimal header included. */}
+            <CitySwitcher className="ml-4 hidden shrink-0 sm:inline-flex" />
 
             {/* {isMultiLangEnable ? (
             <div className="ltr:ml-auto rtl:mr-auto lg:hidden">
