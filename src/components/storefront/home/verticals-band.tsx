@@ -38,7 +38,7 @@ export function VerticalsBand() {
 
   return (
     <section className="border-t border-kraft-200/60 bg-white">
-      <div className="mx-auto max-w-7xl px-5 pb-[44px] pt-[40px] sm:px-8 lg:px-16 lg:pb-[56px] lg:pt-[48px]">
+      <div className="mx-auto max-w-none px-5 pb-[44px] pt-[40px] sm:px-8 lg:px-16 lg:pb-[56px] lg:pt-[48px]">
         {/* header */}
         <motion.div
           initial={{ y: 24 }}

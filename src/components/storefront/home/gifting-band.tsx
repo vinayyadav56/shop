@@ -59,7 +59,7 @@ export function GiftingBand() {
   return (
     <section className="bg-[#F8F7F2]">
       {/* top — copy + photo (constrained width so it doesn't run edge-to-edge) */}
-      <div className="mx-auto flex max-w-7xl flex-col lg:min-h-[460px] lg:flex-row lg:items-stretch">
+      <div className="mx-auto flex max-w-none flex-col lg:min-h-[460px] lg:flex-row lg:items-stretch">
 
         {/* left copy */}
         <motion.div

@@ -82,7 +82,7 @@ export function BestSellers({
         paddingBottom: 52,
       }}
     >
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
+      <div className="mx-auto max-w-none px-5 sm:px-8 lg:px-16">
       <div className="mb-[22px] flex items-end justify-between gap-4">
         <div>
           <div

@@ -56,7 +56,7 @@ export function SpringSaleBand() {
       transition={{ duration: 0.65, ease: EXPO }}
       className="py-6 lg:py-8"
     >
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
+      <div className="mx-auto max-w-none px-5 sm:px-8 lg:px-16">
       <div className="relative overflow-hidden rounded-[18px] bg-[linear-gradient(135deg,#1c4d28_0%,#0f2d1a_48%,#081a0f_100%)]">
 
         {/* grain texture */}

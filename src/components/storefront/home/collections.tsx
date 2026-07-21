@@ -90,7 +90,7 @@ export function Collections() {
 
   return (
     <section className="g-light-a">
-      <div className="mx-auto max-w-7xl px-5 pb-[40px] pt-[40px] sm:px-8 lg:px-16 lg:pb-[52px] lg:pt-[48px]">
+      <div className="mx-auto max-w-none px-5 pb-[40px] pt-[40px] sm:px-8 lg:px-16 lg:pb-[52px] lg:pt-[48px]">
       <div className="mb-[26px] flex items-end justify-between gap-4">
         <div>
           <div className="mb-[9px] font-jost text-[11px] font-medium uppercase tracking-[0.2em] text-forest-600">

@@ -86,7 +86,7 @@ export function WhyPlants() {
 
   return (
     <section className="border-t border-kraft-200/60 bg-white">
-      <div className="mx-auto max-w-7xl px-5 py-11 sm:px-8 lg:px-16 lg:pb-[48px] lg:pt-[52px]">
+      <div className="mx-auto max-w-none px-5 py-11 sm:px-8 lg:px-16 lg:pb-[48px] lg:pt-[52px]">
 
         {/* header */}
         <motion.div

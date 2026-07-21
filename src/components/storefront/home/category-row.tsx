@@ -49,7 +49,7 @@ export function CategoryRow() {
 
   return (
     <section className="relative z-[5]">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
+      <div className="mx-auto max-w-none px-5 sm:px-8 lg:px-16">
         <div className="pah-rail [--rail-w:46%] md:[--rail-w:calc((100%_-_40px)/5)] lg:[--rail-w:calc((100%_-_48px)/5)] grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">
 
           {isLoading && categories.length === 0
