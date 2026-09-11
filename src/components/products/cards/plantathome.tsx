@@ -282,13 +282,13 @@ const PlantAtHomeCard: React.FC<Props> = ({
               // way to see the rest. `title` is the one tooltip that works on both a desktop hover
               // and a mobile long-press without shipping a popover — same approach as cart-item.
               title={product.name}
-              className="line-clamp-2 block w-full text-left text-[0.82rem] font-medium leading-snug text-[#184A31] transition hover:text-forest-700 sm:text-[0.9rem]"
+              className="block w-full truncate text-left text-[12.5px] font-medium leading-tight text-[#184A31] transition hover:text-forest-700 sm:text-[0.9rem]"
             >
               {product.name}
             </Link>
             {/* Botanical name — Inter 400, up to 16px, #8A8A8A */}
             {sciName ? (
-              <p title={sciName} className="mt-[5px] truncate text-[clamp(10.5px,3.4cqw,12px)] leading-[1.4] text-[#8A8A8A]">{sciName}</p>
+              <p title={sciName} className="mt-[5px] truncate text-[clamp(10px,3.4cqw,12px)] leading-[1.4] text-[#8A8A8A]">{sciName}</p>
             ) : null}
           </div>
           {/* Rating only. The "New" chip that used to be the else-branch here
@@ -301,11 +301,11 @@ const PlantAtHomeCard: React.FC<Props> = ({
             <div className="shrink-0 text-right leading-none">
               <span className="flex items-center justify-end gap-1.5">
                 <GoldStar />
-                <strong className="text-[clamp(11.5px,3.6cqw,13px)] font-semibold leading-none text-gray-900">
+                <strong className="text-[clamp(11px,3.6cqw,13px)] font-semibold leading-none text-gray-900">
                   {ratingVal.toFixed(1)}
                 </strong>
               </span>
-              <span className="mt-[6px] block text-[clamp(10px,3.2cqw,11px)] leading-none text-[#888888]">
+              <span className="mt-[6px] block text-[clamp(9.5px,3.2cqw,11px)] leading-none text-[#888888]">
                 ({reviewCount.toLocaleString('en-IN')})
               </span>
             </div>
@@ -316,7 +316,7 @@ const PlantAtHomeCard: React.FC<Props> = ({
             clamp with fixed min-height so grid rows stay aligned. Vertical
             margins are tighter than the reference's standalone card — inside a
             grid the full 18/22px rhythm made cards run too long. */}
-        <p className="mb-[0.275rem] mt-[0.1rem] min-h-[2.6em] text-[clamp(11px,3.4cqw,12.5px)] leading-[1.3] text-[#5B5B5B] line-clamp-2">
+        <p className="mb-[0.275rem] mt-[0.1rem] min-h-[2.6em] text-[clamp(10.5px,3.4cqw,12.5px)] leading-[1.3] text-[#5B5B5B] line-clamp-2">
           {desc}
         </p>
 
@@ -341,7 +341,7 @@ const PlantAtHomeCard: React.FC<Props> = ({
                     // shrink-0: flex was allowed to compress these to fit three across a
                     // ~165px two-up mobile card, which rendered them as "P…", "F…", "Mo…" —
                     // present but unreadable. A chip now keeps its natural width…
-                    'shrink-0 max-w-[46%] truncate whitespace-nowrap rounded-full bg-[#F3F8EC] px-[clamp(6px,2.4cqw,9px)] py-[4px] text-[clamp(9px,2.9cqw,11px)] font-medium leading-none text-[#24693E]',
+                    'shrink-0 max-w-[46%] truncate whitespace-nowrap rounded-full bg-[#F3F8EC] px-[clamp(6px,2.4cqw,9px)] py-[4px] text-[clamp(8.5px,2.9cqw,11px)] font-medium leading-none text-[#24693E]',
                     // …and instead we show only as many as genuinely fit: two on a phone
                     // grid, all three once the card is wide enough. The list layout is
                     // full-width even on mobile, so it keeps all three.
@@ -374,8 +374,8 @@ const PlantAtHomeCard: React.FC<Props> = ({
               <span
                 className={`whitespace-nowrap leading-none text-[#14532D] ${
                   isVariable && hasRange
-                    ? 'text-[clamp(13px,4.4cqw,16px)] font-semibold'
-                    : 'text-[clamp(15px,5.4cqw,19px)] font-bold'
+                    ? 'text-[clamp(12px,4.4cqw,16px)] font-semibold'
+                    : 'text-[clamp(13.5px,5.4cqw,19px)] font-bold'
                 }`}
               >
                 {isVariable
@@ -385,13 +385,13 @@ const PlantAtHomeCard: React.FC<Props> = ({
                   : compactPrice(price)}
               </span>
               {!isVariable && basePrice && (
-                <del className="whitespace-nowrap text-[clamp(12px,4.4cqw,18px)] leading-none text-[#A0A0A0]">
+                <del className="whitespace-nowrap text-[clamp(11px,4.4cqw,18px)] leading-none text-[#A0A0A0]">
                   {compactPrice(basePrice)}
                 </del>
               )}
             </span>
             {!isVariable && discount && (
-              <span className="shrink-0 whitespace-nowrap rounded-[8px] bg-[#FFEAEA] px-[clamp(6px,2.6cqw,12px)] py-1.5 text-[clamp(10px,3.4cqw,14px)] font-bold leading-none text-[#D73C3C]">
+              <span className="shrink-0 whitespace-nowrap rounded-[8px] bg-[#FFEAEA] px-[clamp(6px,2.6cqw,12px)] py-1.5 text-[clamp(9.5px,3.4cqw,14px)] font-bold leading-none text-[#D73C3C]">
                 {discount} OFF
               </span>
             )}
@@ -408,7 +408,7 @@ const PlantAtHomeCard: React.FC<Props> = ({
                  as heavy slabs on wide cards. Kept in lockstep with the qty stepper
                  below and add-to-cart-btn/add-to-cart, which share this baseline —
                  changing one alone breaks the action row's alignment. */
-              className="flex h-[clamp(34px,9.5cqw,40px)] w-full items-center justify-center gap-2 whitespace-nowrap rounded-[12px] bg-ds-btn px-2 text-[clamp(12px,3.6cqw,14px)] font-medium text-white transition duration-300 hover:bg-ds-btn-hover focus:outline-0"
+              className="flex h-[clamp(34px,9.5cqw,40px)] w-full items-center justify-center gap-2 whitespace-nowrap rounded-[12px] bg-ds-btn px-2 text-[clamp(11px,3.6cqw,14px)] font-medium text-white transition duration-300 hover:bg-ds-btn-hover focus:outline-0"
             >
               {/* Cart glyph dropped: on a ~150px two-up card it ate the width the label
                   needed, crowding "Select Options". The wording alone is unambiguous —
@@ -423,16 +423,16 @@ const PlantAtHomeCard: React.FC<Props> = ({
                     type="button"
                     aria-label="Decrease quantity"
                     onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="px-1.5 text-[clamp(20px,7.2cqw,28px)] leading-none text-[#333333] transition hover:text-[#14532D]"
+                    className="px-1.5 text-[clamp(18px,7.2cqw,28px)] leading-none text-[#333333] transition hover:text-[#14532D]"
                   >
                     −
                   </button>
-                  <span className="text-[clamp(15px,5.2cqw,20px)] font-semibold leading-none text-gray-900">{qty}</span>
+                  <span className="text-[clamp(13.5px,5.2cqw,20px)] font-semibold leading-none text-gray-900">{qty}</span>
                   <button
                     type="button"
                     aria-label="Increase quantity"
                     onClick={() => setQty((q) => q + 1)}
-                    className="px-1.5 text-[clamp(20px,7.2cqw,28px)] leading-none text-[#333333] transition hover:text-[#14532D]"
+                    className="px-1.5 text-[clamp(18px,7.2cqw,28px)] leading-none text-[#333333] transition hover:text-[#14532D]"
                   >
                     +
                   </button>

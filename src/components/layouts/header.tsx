@@ -95,19 +95,13 @@ const Header = ({ layout }: { layout?: string }) => {
   const [searchOpen, setSearchOpen] = useAtom(displayMobileHeaderSearchAtom);
   const [menuOpen, setMenuOpen] = React.useState(false);
 
-  // Collapse-on-scroll (annotation: the glass pill "should be collapsable"):
-  // hide when scrolling DOWN past the hero band, reappear on ANY upward
-  // scroll or near the top. An 8px delta filter ignores rubber-band jitter.
+  // Collapse-on-scroll v2 (annotation follow-up): past the top band the full
+  // pill "should not show" — a slim light bar (hamburger + delivering city +
+  // Track Order) takes its place. The full pill returns near the top.
   const [collapsed, setCollapsed] = React.useState(false);
-  const lastY = React.useRef(0);
   React.useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      const dy = y - lastY.current;
-      if (Math.abs(dy) < 8) return;
-      setCollapsed(y > 150 && dy > 0);
-      lastY.current = y;
-    };
+    const onScroll = () => setCollapsed(window.scrollY > 150);
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -202,13 +196,13 @@ const Header = ({ layout }: { layout?: string }) => {
           under the announcement bar. */}
       <header
         id="site-header"
-        className={`pointer-events-none sticky top-2 z-50 -mt-1.5 w-full px-5 transition-transform duration-300 ease-out ${
-          collapsed && !searchOpen && !menuOpen ? '-translate-y-[130%]' : 'translate-y-0'
-        }`}
+        className="pointer-events-none sticky top-2 z-50 -mt-1.5 w-full px-5"
       >
         {/* floating warm-glass pill. NOT overflow-hidden — the dropdown menus
             render inside it and would be clipped; the shine lives in its own
-            clipped child span instead. */}
+            clipped child span instead. Swapped for the compact bar once
+            scrolled (search/menu keep the full pill up). */}
+        {(!collapsed || searchOpen || menuOpen) ? (
         <div className="pointer-events-auto relative mx-auto flex h-[58px] max-w-[1580px] items-center gap-6 rounded-[18px] border border-white/[0.72] bg-[linear-gradient(110deg,rgba(255,255,255,0.88)_0%,rgba(248,247,241,0.78)_48%,rgba(255,255,255,0.84)_100%)] px-6 shadow-[0_18px_45px_rgba(5,24,10,0.12),0_2px_8px_rgba(5,24,10,0.05),inset_0_1px_0_rgba(255,255,255,0.85)] backdrop-blur-[22px] backdrop-saturate-[1.35] transition-shadow duration-300 lg:h-[78px] lg:px-[42px]">
           {/* glass shine — top-half highlight, clipped to the pill radius */}
           <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-[18px]">
@@ -310,6 +304,32 @@ const Header = ({ layout }: { layout?: string }) => {
             </button>
           </div>
         </div>
+        ) : (
+          /* compact scrolled bar — light glass (explicitly "not in green"):
+             hamburger, delivering city, Track Order. */
+          <div className="pointer-events-auto mx-auto flex h-11 max-w-[1580px] items-center gap-3 rounded-[14px] border border-white/[0.72] bg-white/[0.88] px-3.5 shadow-[0_10px_28px_rgba(5,24,10,0.12)] backdrop-blur-[18px] backdrop-saturate-[1.3] sm:px-5">
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-black/[0.06] text-[#1a2e1f]"
+              aria-label="Menu"
+            >
+              <Icon.menu className="h-[18px] w-[18px]" />
+            </button>
+            <span className="flex min-w-0 items-center gap-1.5 overflow-hidden whitespace-nowrap text-[13px]">
+              <span className="hidden text-neutral-500 sm:inline">Delivering to</span>
+              <CitySwitcher tone="dark" />
+            </span>
+            <span className="flex-1" />
+            <Link
+              href="/track-order"
+              className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap text-[13px] font-medium text-[#1a2e1f] transition-colors hover:text-forest-700"
+            >
+              <Truck size={15} aria-hidden />
+              Track Order
+            </Link>
+          </div>
+        )}
 
         {/* search overlay — its own floating glass panel below the pill (the
             fixed-height pill can't grow to contain it) */}
@@ -347,11 +367,11 @@ const Header = ({ layout }: { layout?: string }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] flex flex-col overflow-y-auto overscroll-contain bg-forest p-7 text-white"
+            className="fixed inset-0 z-[70] flex flex-col overflow-y-auto overscroll-contain bg-cream-50 p-6 text-forest-900"
           >
             <div className="mb-10 flex items-center justify-between">
-              <BrandLogo light />
-              <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu">
+              <BrandLogo />
+              <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu" className="text-forest-900">
                 <Icon.x className="h-6 w-6" />
               </button>
             </div>
@@ -375,7 +395,7 @@ const Header = ({ layout }: { layout?: string }) => {
                   else if (l.href === '#account') onProfile();
                   else router.push(l.href);
                 }}
-                className="block border-b border-white/10 py-5 text-left font-poppins text-2xl font-bold"
+                className="block border-b border-black/10 py-3.5 text-left font-poppins text-lg font-semibold"
               >
                 {l.label}
               </motion.button>
