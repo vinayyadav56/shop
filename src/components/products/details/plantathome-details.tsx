@@ -327,21 +327,41 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
 
   return (
     <article className="bg-cream-100">
-      <div className="mx-auto w-full max-w-7xl px-4 pb-36 pt-5 sm:px-6 lg:px-10 lg:pb-12">
+      <div className="mx-auto w-full max-w-7xl px-4 pb-36 pt-3 sm:px-6 lg:px-10 lg:pb-12">
         {/* breadcrumb */}
         {!isModal && (
           <>
             <Breadcrumb items={crumbs} />
-            <div className="mt-5 h-px w-full bg-kraft-300/70" />
+            <div className="mt-3 h-px w-full bg-kraft-300/70" />
           </>
         )}
 
         {/* main grid — media slightly dominant; gallery pins while the info
             column scrolls (modern PDP convention). Sticky only outside the
             quick-view modal (the modal has its own scroll context). */}
-        <div className="mt-7 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 xl:gap-16">
+        <div className="mt-4 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 xl:gap-16">
           <div className={classNames('relative', !isModal && 'lg:sticky lg:top-24 lg:self-start')}>
-            <PlantAtHomeGallery gallery={previewImages} productId={id} productName={name} badge={badge} />
+            <PlantAtHomeGallery
+              gallery={previewImages}
+              productId={id}
+              productName={name}
+              badge={badge}
+              // Ask AI rides INSIDE the image box, bottom-left — the wrapper's
+              // own bottom edge is the thumbnail strip since the gallery
+              // restructure, which is exactly where the old absolute button
+              // ended up (the annotation). Compact pill per the annotation.
+              overlay={
+                askAiEnabled ? (
+                  <button
+                    type="button"
+                    onClick={onAskAi}
+                    className="absolute bottom-2.5 left-2.5 z-[2] inline-flex items-center gap-1 rounded-full border border-black/5 bg-white/90 px-2.5 py-1.5 text-[11px] font-bold text-clay-700 shadow-sm backdrop-blur transition hover:scale-105 hover:bg-white sm:bottom-3 sm:left-3"
+                  >
+                    <Sparkles size={13} fill="currentColor" className="text-clay-600" aria-hidden /> Ask AI
+                  </button>
+                ) : null
+              }
+            />
             {/* Over the image, matching where the wishlist heart sits on every
                 product card. It used to share the title row, where it also ate
                 width from the product name. */}
@@ -359,25 +379,6 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
               />
             </button>
 
-            {/*
-              Ask AI lives ON the image, bottom-left — the one corner the gallery
-              leaves free (thumbnails run down the top-left, the prev/next arrows
-              sit bottom-right, the wishlist heart is top-right).
-
-              It was the last pill in the attribute chip row, which is a single
-              horizontal scroller: on a 1440px screen it sat half-clipped past the
-              right edge, so the feature was effectively hidden again. On the
-              image it is unmissable and costs the info column no width.
-            */}
-            {askAiEnabled && (
-              <button
-                type="button"
-                onClick={onAskAi}
-                className="absolute bottom-3 left-3 z-[2] inline-flex items-center gap-1.5 rounded-full border border-black/5 bg-white/90 px-3 py-2 text-[12px] font-bold text-clay-700 shadow-sm backdrop-blur transition hover:scale-105 hover:bg-white sm:bottom-4 sm:left-4 sm:gap-2 sm:px-3.5 sm:text-[13px]"
-              >
-                <Sparkles size={16} fill="currentColor" className="text-clay-600" aria-hidden /> Ask AI
-              </button>
-            )}
           </div>
 
           {/* info panel — min-w-0 is load-bearing: as a grid item its default

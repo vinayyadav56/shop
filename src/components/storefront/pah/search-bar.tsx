@@ -7,14 +7,14 @@ export function SearchBar() {
   const router = useRouter();
   const [q, setQ] = React.useState('');
   return (
-    <div className="relative z-[5] -mt-[28px] mb-[22px] px-5">
+    <div className="relative z-[5] -mt-[26px] mb-[22px] px-5">
       <form
         onSubmit={(e) => {
           e.preventDefault();
           const t = q.trim();
           router.push(t ? `/search?text=${encodeURIComponent(t)}` : '/plants/search');
         }}
-        className="flex items-center gap-2 rounded-2xl border border-kraft-200 bg-white py-1.5 pl-4 pr-1.5 shadow-[0_9px_22px_rgba(15,30,18,0.22)]"
+        className="flex h-[52px] items-center gap-2 rounded-2xl border border-kraft-200 bg-white py-1.5 pl-4 pr-1.5 shadow-[0_9px_22px_rgba(15,30,18,0.22)]"
       >
         <Search size={16} className="shrink-0 text-stone-500" aria-hidden />
         <input

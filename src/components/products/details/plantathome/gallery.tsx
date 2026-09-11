@@ -11,9 +11,13 @@ type Props = {
   /* passed by plantathome-details; unused here (V1 shipped the same) */
   productId?: any;
   badge?: string | null;
+  /* rendered INSIDE the image box (bottom-left is free: arrows are
+     edge-centred, wishlist is top-right) — the parent's own absolute overlay
+     would land on the thumbnail strip below the image instead. */
+  overlay?: React.ReactNode;
 };
 
-const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName }) => {
+const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName, overlay }) => {
   const images = (gallery?.length ? gallery : [{ original: '', thumbnail: '' }]) as GalleryImage[];
   const [active, setActive] = useState(0);
   const [err, setErr] = useState<Record<number, boolean>>({});
@@ -100,6 +104,7 @@ const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName }) => {
           ))}
         </>
       )}
+      {overlay}
       </div>
 
       {/* Horizontal thumbnail strip UNDER the image (annotation: thumbs must

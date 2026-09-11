@@ -56,7 +56,7 @@ function CategoryCard({ c }: { c: CardData }) {
           </span>
         )}
       </span>
-      <span className="mt-3 font-pahserif text-[15px] font-medium leading-tight text-forest-900 transition-colors group-hover:text-forest-700">
+      <span className="mt-3 font-pahserif text-[13px] font-medium leading-tight text-forest-900 transition-colors group-hover:text-forest-700">
         {c.name}
       </span>
     </Link>

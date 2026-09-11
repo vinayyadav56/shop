@@ -95,6 +95,23 @@ const Header = ({ layout }: { layout?: string }) => {
   const [searchOpen, setSearchOpen] = useAtom(displayMobileHeaderSearchAtom);
   const [menuOpen, setMenuOpen] = React.useState(false);
 
+  // Collapse-on-scroll (annotation: the glass pill "should be collapsable"):
+  // hide when scrolling DOWN past the hero band, reappear on ANY upward
+  // scroll or near the top. An 8px delta filter ignores rubber-band jitter.
+  const [collapsed, setCollapsed] = React.useState(false);
+  const lastY = React.useRef(0);
+  React.useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      const dy = y - lastY.current;
+      if (Math.abs(dy) < 8) return;
+      setCollapsed(y > 150 && dy > 0);
+      lastY.current = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const openCart = () => setDrawer({ display: true, view: 'cart' });
 
   // Premium add-to-cart feedback: the fly-to-cart animation (lib/cart-animation)
@@ -185,7 +202,9 @@ const Header = ({ layout }: { layout?: string }) => {
           under the announcement bar. */}
       <header
         id="site-header"
-        className="pointer-events-none sticky top-2 z-50 -mt-1.5 w-full px-5"
+        className={`pointer-events-none sticky top-2 z-50 -mt-1.5 w-full px-5 transition-transform duration-300 ease-out ${
+          collapsed && !searchOpen && !menuOpen ? '-translate-y-[130%]' : 'translate-y-0'
+        }`}
       >
         {/* floating warm-glass pill. NOT overflow-hidden — the dropdown menus
             render inside it and would be clipped; the shine lives in its own

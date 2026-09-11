@@ -291,10 +291,11 @@ export default function PahHome(_props: { variables?: any }) {
               <BestSellers />
             </>
           )}
-          <TrustRow />
           <WhyPlants />
           <CorporateGifting />
           <Gifting />
+          {/* Trust badges close the page, right above the footer (matches desktop order). */}
+          <TrustRow />
           <Footer />
         </div>
       </div>

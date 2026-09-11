@@ -282,7 +282,7 @@ const PlantAtHomeCard: React.FC<Props> = ({
               // way to see the rest. `title` is the one tooltip that works on both a desktop hover
               // and a mobile long-press without shipping a popover — same approach as cart-item.
               title={product.name}
-              className="block w-full truncate text-left text-[0.9rem] font-medium leading-none text-[#184A31] transition hover:text-forest-700"
+              className="line-clamp-2 block w-full text-left text-[0.82rem] font-medium leading-snug text-[#184A31] transition hover:text-forest-700 sm:text-[0.9rem]"
             >
               {product.name}
             </Link>
