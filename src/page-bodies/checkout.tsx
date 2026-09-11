@@ -8,7 +8,12 @@ import {
   billingAddressAtom,
   shippingAddressAtom,
   checkoutStepAtom,
+  verifiedResponseAtom,
 } from '@/store/checkout';
+import { useCart } from '@/store/quick-cart/cart.context';
+import { cartFingerprint } from '@/lib/checkout-totals';
+import { formatOrderedProduct } from '@/lib/format-ordered-product';
+import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
 import { getLayout } from '@/components/layouts/layout';
 import { AddressType } from '@/framework/utils/constants';
@@ -85,6 +90,24 @@ export default function CheckoutPage() {
     setWizardBridge({ step, last: 3, setStep });
     return () => setWizardBridge(null);
   }, [step, setWizardBridge]);
+
+  // Advance to Review when a verify lands. This lives HERE (derived from the
+  // same freshness check right-side-view.tsx renders by) and not in a mutate
+  // callback inside CheckAvailabilityAction: storing the verified response
+  // unmounts that button mid-flight, and its dead-closure setStep call was
+  // crashing authenticated /checkout into the route error boundary. Effect
+  // fires on the false→true edge only, so stepping back to edit afterwards
+  // is not fought.
+  const [verifiedResponse] = useAtom(verifiedResponseAtom);
+  const { items: cartItems } = useCart();
+  const verifiedFresh =
+    !isEmpty(verifiedResponse) &&
+    (verifiedResponse as any)?.__fingerprint ===
+      cartFingerprint((cartItems ?? []).map((item: any) => formatOrderedProduct(item)));
+  useEffect(() => {
+    if (verifiedFresh) setStep(3);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [verifiedFresh]);
 
   // One panel per wizard step (reuses the existing grid components + flow).
   const panels: WizardPanel[] = [

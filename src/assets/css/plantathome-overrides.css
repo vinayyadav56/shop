@@ -2487,6 +2487,11 @@ textarea:focus {
   transition: opacity 0.15s;
 }
 .pa-address-card:hover .pa-address-actions { opacity: 1; }
+/* Touch devices have no hover — the edit/delete actions must simply be
+   visible, or the reserved bottom gutter serves buttons nobody can reach. */
+@media (hover: none) {
+  .pa-address-actions { opacity: 1; }
+}
 .pa-address-btn {
   width: 22px;
   height: 22px;

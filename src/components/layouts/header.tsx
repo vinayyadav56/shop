@@ -166,7 +166,7 @@ const Header = ({ layout }: { layout?: string }) => {
             <span aria-hidden className="hidden h-[18px] w-px bg-[linear-gradient(to_bottom,transparent,rgba(255,255,255,0.35),transparent)] min-[1440px]:block" />
             <span className="hidden min-[1440px]:inline">Extra 5% OFF on prepaid orders</span>
           </span>
-          <span className="col-start-3 flex shrink-0 items-center justify-end gap-3 whitespace-nowrap sm:gap-[22px]">
+          <span className="col-start-3 flex min-w-0 items-center justify-end gap-3 overflow-hidden whitespace-nowrap sm:gap-[22px]">
             <Link href="/track-order" className="inline-flex items-center gap-1.5 transition-colors hover:text-white">
               <Truck size={15} aria-hidden />
               Track Order
@@ -207,15 +207,17 @@ const Header = ({ layout }: { layout?: string }) => {
               actions block at narrower desktop widths. ── */}
           {/* xl+ only: with 8 verticals the pill row measures ~730px and collides
               with logo/actions through the whole lg range (1024–1210), so
-              768–1279 uses the hamburger's full-screen menu instead. */}
+              768–1279 uses the hamburger's full-screen menu instead.
+              1280–1439 runs SMALLER text + tighter gaps: at 15px/gap-5 the row
+              measured 684px against a 679px nav at exactly 1280 and spilled. */}
           <nav className="relative z-[2] hidden min-w-0 flex-1 justify-center xl:flex">
-            <div className="flex items-center gap-5 min-[1440px]:gap-[34px]">
+            <div className="flex items-center gap-3.5 min-[1440px]:gap-[34px]">
               {NAV.map((n) =>
                 n.menu ? (
                   <div key={n.label} className="group relative">
                     <Link
                       href={n.href}
-                      className={`relative inline-flex items-center gap-[7px] whitespace-nowrap py-2 text-[15px] font-medium transition-colors duration-200 hover:text-[#397b2a] ${NAV_UNDERLINE} text-[#1d2b20]`}
+                      className={`relative inline-flex items-center gap-[7px] whitespace-nowrap py-2 text-[13.5px] font-medium transition-colors duration-200 hover:text-[#397b2a] min-[1440px]:text-[15px] ${NAV_UNDERLINE} text-[#1d2b20]`}
                     >
                       {n.label}
                       <ChevronDown size={12} className="opacity-60 transition-transform duration-200 group-hover:rotate-180" aria-hidden />
@@ -239,7 +241,7 @@ const Header = ({ layout }: { layout?: string }) => {
                   <Link
                     key={n.label}
                     href={n.href}
-                    className={`relative whitespace-nowrap py-2 text-[15px] font-medium transition-colors duration-200 hover:text-[#397b2a] ${NAV_UNDERLINE} ${
+                    className={`relative whitespace-nowrap py-2 text-[13.5px] font-medium transition-colors duration-200 hover:text-[#397b2a] min-[1440px]:text-[15px] ${NAV_UNDERLINE} ${
                       n.href === '/offers' ? 'text-[#397b2a]' : 'text-[#1d2b20]'
                     }`}
                   >

@@ -282,7 +282,9 @@ export const PlaceOrderAction: React.FC<{
     }
     submitOrder();
   };
-  const isDigitalCheckout = available_items.find((item) =>
+  // items comes from cart context and can be momentarily undefined during
+  // hydration — the ?.filter above concedes that, so guard the read too.
+  const isDigitalCheckout = (available_items ?? []).find((item) =>
     Boolean(item.is_digital),
   );
 

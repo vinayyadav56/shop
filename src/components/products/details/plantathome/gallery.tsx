@@ -27,11 +27,13 @@ const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName }) => {
   // Every image gets a thumb — the strip scrolls (max-h + overflow-y below).
   const thumbs = images;
 
-  // FIXED height at lg (not h-auto): the media column must not stretch to
-  // match the right column — opening the pot rail made the object-cover
-  // image blow up/distort (worst in the quick-view modal).
+  // FIXED height at lg (not h-auto) on the IMAGE BOX: the media column must
+  // not stretch to match the right column — opening the pot rail made the
+  // object-cover image blow up/distort (worst in the quick-view modal).
+  // self-start on the root keeps that true with the thumb strip below.
   return (
-    <div className="relative h-[300px] w-full self-start sm:h-[380px] lg:h-[620px]">
+    <div className="w-full self-start">
+      <div className="relative h-[300px] w-full sm:h-[380px] lg:h-[620px]">
       {/* Full rectangular image — no decorative curve/border, fills the right side.
           All gallery images are stacked + preloaded, so switching thumbnails is an
           instant opacity swap (no reload flash / fluctuation). */}
@@ -76,55 +78,57 @@ const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName }) => {
         )}
       </div>
 
-      {/* vertical thumbnail strip — outer (left) side.
-          The 68px thumb upsize happens at lg, NOT sm: the container is only
-          380px tall from sm to lg, and several thumbs at 68px + gaps + top
-          offset spilled past the gallery onto the content below. At lg the
-          container is ≥620px and 68px fits. max-h + overflow-y keeps
-          many-image products scrolling inside the strip. */}
-      <div className="absolute left-3 top-5 z-10 flex max-h-[calc(100%-2.5rem)] flex-col gap-2 overflow-y-auto sm:left-6 sm:top-10 lg:gap-3">
-        {thumbs.map((img, i) => {
-          const src = img.thumbnail || img.original || '';
-          return (
-            <button
-              key={img.id ?? i}
-              type="button"
-              onClick={() => setActive(i)}
-              aria-label={`View image ${i + 1}`}
-              className={`relative h-11 w-11 shrink-0 overflow-hidden rounded-2xl bg-white shadow-[0_8px_20px_-8px_rgba(34,48,26,0.4)] transition lg:h-[68px] lg:w-[68px] ${
-                active === i
-                  ? 'ring-2 ring-forest-600 ring-offset-2 ring-offset-[#F4F1E6]'
-                  : 'opacity-90 hover:opacity-100'
-              }`}
-            >
-              {src ? (
-                <Image src={src} alt={`${productName} — photo ${i + 1}`} fill sizes="68px" className="object-cover" />
-              ) : (
-                <span className="grid h-full w-full place-items-center text-forest-700/30"><Sprout size={16} aria-hidden /></span>
-              )}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Prev / next — paired in the bottom-right rather than the usual
-          centred-on-each-edge placement, because the thumbnail rail owns the
-          left edge at every breakpoint and a centred left arrow would sit on
-          top of it. Shown on touch and pointer alike: swiping is invisible
-          affordance, and on desktop there is nothing to swipe with. */}
+      {/* Prev / next — centred on each edge of the image, the placement the
+          annotations asked for (possible now that the thumb strip lives BELOW
+          the image instead of overlaying its left edge). Shown on touch and
+          pointer alike: swiping is invisible affordance, and on desktop there
+          is nothing to swipe with. */}
       {images.length > 1 && (
-        <div className="absolute bottom-4 right-3 z-10 flex gap-2 sm:bottom-6 sm:right-6">
+        <>
           {(['prev', 'next'] as const).map((dir) => (
             <button
               key={dir}
               type="button"
               onClick={() => go(dir === 'prev' ? -1 : 1)}
               aria-label={dir === 'prev' ? 'Previous image' : 'Next image'}
-              className="grid h-9 w-9 place-items-center rounded-full border border-white/40 bg-white/85 text-forest-900 shadow-[0_6px_16px_-6px_rgba(34,48,26,0.5)] backdrop-blur-md transition hover:bg-white sm:h-10 sm:w-10"
+              className={`absolute top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-white/40 bg-white/85 text-forest-900 shadow-[0_6px_16px_-6px_rgba(34,48,26,0.5)] backdrop-blur-md transition hover:bg-white sm:h-10 sm:w-10 ${
+                dir === 'prev' ? 'left-2 sm:left-4' : 'right-2 sm:right-4'
+              }`}
             >
               {dir === 'prev' ? <ChevronLeft size={18} aria-hidden /> : <ChevronRight size={18} aria-hidden />}
             </button>
           ))}
+        </>
+      )}
+      </div>
+
+      {/* Horizontal thumbnail strip UNDER the image (annotation: thumbs must
+          not overlay the photo). Scrolls sideways for many-image products;
+          shrink-0 keeps thumbs square inside the scroll row. */}
+      {images.length > 1 && (
+        <div className="mt-3 flex gap-2 overflow-x-auto pb-1 lg:gap-3">
+          {thumbs.map((img, i) => {
+            const src = img.thumbnail || img.original || '';
+            return (
+              <button
+                key={img.id ?? i}
+                type="button"
+                onClick={() => setActive(i)}
+                aria-label={`View image ${i + 1}`}
+                className={`relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-white shadow-[0_8px_20px_-8px_rgba(34,48,26,0.4)] transition lg:h-[68px] lg:w-[68px] ${
+                  active === i
+                    ? 'ring-2 ring-forest-600 ring-offset-2 ring-offset-[#F4F1E6]'
+                    : 'opacity-90 hover:opacity-100'
+                }`}
+              >
+                {src ? (
+                  <Image src={src} alt={`${productName} — photo ${i + 1}`} fill sizes="68px" className="object-cover" />
+                ) : (
+                  <span className="grid h-full w-full place-items-center text-forest-700/30"><Sprout size={16} aria-hidden /></span>
+                )}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

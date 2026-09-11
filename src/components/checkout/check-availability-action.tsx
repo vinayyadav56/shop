@@ -60,16 +60,12 @@ export const CheckAvailabilityAction: React.FC<{
         // verify response then carries `city_mismatch` for the blocking dialog.
         ...(getStoredCity() ? { shopping_city: getStoredCity() } : {}),
       },
-      {
-        // Success on the stepped page → jump to Review so the main column and
-        // the payment sidebar agree (business errors are toasted by the hook).
-        onSuccess: (data: unknown) => {
-          const failed = Boolean((data as { errors?: unknown } | null)?.errors);
-          if (wizard && data && !failed) {
-            wizard.setStep(wizard.last);
-          }
-        },
-      },
+      // No mutate-level onSuccess: the hook's own onSuccess stores the verified
+      // response, which unmounts THIS component (UnverifiedItemList swaps to
+      // VerifiedItemList) — a callback here then runs from a dead closure and
+      // was crashing the authenticated /checkout into the route error boundary.
+      // The wizard page itself advances to Review when the verify lands (see
+      // the verifiedFresh effect in page-bodies/checkout.tsx).
     );
   }
 

@@ -139,7 +139,7 @@ export const AddressGrid: React.FC<AddressesProps> = ({
           {matching.length ? (
             <RadioGroup value={selectedAddress} onChange={pick}>
               <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {/* h-full on the Option: it is the grid item, so the card can only stretch to
                     the row height if its wrapper does too. */}
                 {matching.map((address) => (
@@ -173,7 +173,7 @@ export const AddressGrid: React.FC<AddressesProps> = ({
               <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-stone-400">
                 Other cities (not deliverable while shopping in {shoppingCity})
               </p>
-              <div className="grid grid-cols-1 gap-4 opacity-70 sm:grid-cols-2 md:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 opacity-70 sm:grid-cols-2">
                 {others.map((address) => (
                   <button
                     type="button"
