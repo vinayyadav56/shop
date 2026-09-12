@@ -6,6 +6,7 @@ import Seo from '@/components/seo/seo';
 import { useEffect, useRef } from 'react';
 import { PaymentStatus } from '@/types';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
+import OrderLoadError from '@/components/orders/order-load-error';
 import { useOrder } from '@/framework/order';
 import { useRouter } from '@/compat/next-router';
 import { useModalAction } from '@/components/ui/modal/modal.context';
@@ -16,7 +17,7 @@ export default function OrderPage() {
   const { settings } = useSettings();
   const { openModal } = useModalAction();
   const { query } = useRouter();
-  const { order, isLoading, isFetching } = useOrder({
+  const { order, isLoading, isFetching, error, refetch } = useOrder({
     tracking_number: query.tracking_number!.toString(),
   });
 
@@ -44,8 +45,19 @@ export default function OrderPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPaymentModalEnabled, payment_intent?.payment_intent_info?.payment_id]);
 
-  if (isLoading) {
+  if (isLoading || (!order && isFetching)) {
     return <Spinner showText={false} />;
+  }
+
+  // A settled fetch with no order used to fall through and render a fully
+  // BLANK order shell ("Order #", ₹0.00, dead Pay Now). Say what happened.
+  if (!order) {
+    return (
+      <>
+        <Seo noindex={true} nofollow={true} />
+        <OrderLoadError error={error} onRetry={() => refetch()} />
+      </>
+    );
   }
 
   return (

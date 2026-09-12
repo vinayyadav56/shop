@@ -100,10 +100,16 @@ const Header = ({ layout }: { layout?: string }) => {
   // Track Order) takes its place. The full pill returns near the top.
   const [collapsed, setCollapsed] = React.useState(false);
   React.useEffect(() => {
-    const onScroll = () => setCollapsed(window.scrollY > 150);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    // Mobile-only (annotation follow-up): on md+ the full pill stays put —
+    // the compact scrolled bar is a phone affordance.
+    const update = () => setCollapsed(window.scrollY > 150 && window.innerWidth < 768);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
   }, []);
 
   const openCart = () => setDrawer({ display: true, view: 'cart' });

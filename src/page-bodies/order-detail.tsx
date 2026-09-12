@@ -6,6 +6,7 @@ import Seo from '@/components/seo/seo';
 import { useRouter } from '@/compat/next-router';
 import { useOrder } from '@/framework/order';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
+import OrderLoadError from '@/components/orders/order-load-error';
 import { useSettings } from '@/framework/settings';
 import PrivateRoute from '@/lib/private-route';
 import { useHasMounted } from '@/lib/use-has-mounted';
@@ -15,12 +16,22 @@ export default function OrderPage() {
   const { query } = useRouter();
   const { settings } = useSettings();
 
-  const { order, isLoading, isFetching } = useOrder({
+  const { order, isLoading, isFetching, error, refetch } = useOrder({
     tracking_number: query.tracking_number!.toString(),
   });
 
-  if (isLoading) {
+  if (isLoading || (!order && isFetching)) {
     return <Spinner showText={false} />;
+  }
+
+  // Settled with no order → say so instead of the blank order shell.
+  if (!order) {
+    return (
+      <>
+        <Seo noindex={true} nofollow={true} />
+        <OrderLoadError error={error} onRetry={() => refetch()} />
+      </>
+    );
   }
 
   return (

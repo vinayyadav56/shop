@@ -40,17 +40,20 @@ export default function RouteError({
     // eslint-disable-next-line no-console
     console.error('[route-error]', error?.message, error?.digest ?? '');
 
-    // Stale-deploy self-heal: hard-reload ONCE onto the fresh build. The sessionStorage
-    // guard prevents a reload loop if the failure is real rather than stale chunks.
+    // Stale-deploy self-heal: hard-reload onto the fresh build. Guarded by a
+    // 2-minute window (not once-per-session): on a multi-deploy day a long-
+    // lived tab can go stale more than once, and the old once-only guard left
+    // the SECOND occurrence stuck on this error page. A real chunk failure
+    // still can't loop — one reload per 2 minutes, then the manual UI.
     if (isStaleChunkError(error)) {
       try {
-        const KEY = 'pah-chunk-reload';
-        if (sessionStorage.getItem(KEY) !== '1') {
-          sessionStorage.setItem(KEY, '1');
+        const KEY = 'pah-chunk-reload-at';
+        const last = Number(sessionStorage.getItem(KEY) ?? 0);
+        if (!last || Date.now() - last > 2 * 60 * 1000) {
+          sessionStorage.setItem(KEY, String(Date.now()));
           window.location.reload();
           return;
         }
-        sessionStorage.removeItem(KEY);
       } catch {
         /* storage unavailable — fall through to the manual UI */
       }

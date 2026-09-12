@@ -280,13 +280,18 @@ const PaymentGrid: React.FC<{ className?: string; theme?: 'bw' }> = ({
           {settings?.useEnableGateway &&
             availableGateway &&
             availableGateway?.map((gateway: any, index: any) => {
+              // Admin-authored gateway rows can miss `name`; an unguarded
+              // .toUpperCase() here crashed the whole checkout to the route
+              // error page the moment VerifiedItemList mounted.
+              const name = typeof gateway?.name === 'string' ? gateway.name : '';
+              if (!name) return null;
               return (
                 <Fragment key={index}>
                   <PaymentGroupOption
                     theme={theme}
                     payment={
                       AVAILABLE_PAYMENT_METHODS_MAP[
-                        gateway?.name.toUpperCase() as PaymentGateway
+                        name.toUpperCase() as PaymentGateway
                       ]
                     }
                   />

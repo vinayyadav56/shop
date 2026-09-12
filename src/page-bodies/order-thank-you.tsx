@@ -5,6 +5,7 @@ import Order from '@/components/orders/order-view';
 import Seo from '@/components/seo/seo';
 import { useEffect, useState } from 'react';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
+import OrderLoadError from '@/components/orders/order-load-error';
 import { useOrder, useOrderPayment } from '@/framework/order';
 import { useRouter } from '@/compat/next-router';
 import { toast } from 'react-toastify';
@@ -16,7 +17,7 @@ export default function OrderPage() {
   const { settings } = useSettings();
   const { query } = useRouter();
   const { t } = useTranslation();
-  const { order, isLoading, isFetching } = useOrder({
+  const { order, isLoading, isFetching, error, refetch } = useOrder({
     tracking_number: query.tracking_number!.toString(),
   });
   const { createOrderPayment } = useOrderPayment();
@@ -50,16 +51,27 @@ export default function OrderPage() {
   }, [order?.payment_status]);
 
   useEffect(() => {
-    if (!isLoading && order?.payment_gateway.toLowerCase()) {
+    const gateway = order?.payment_gateway;
+    if (!isLoading && typeof gateway === 'string' && gateway) {
       createOrderPayment({
         tracking_number: query?.tracking_number as string,
-        payment_gateway: order?.payment_gateway.toLowerCase() as string,
+        payment_gateway: gateway.toLowerCase(),
       });
     }
   }, [order?.payment_status]);
 
-  if (isLoading) {
+  if (isLoading || (!order && isFetching)) {
     return <Spinner showText={false} />;
+  }
+
+  // Settled with no order → say so instead of the blank order shell.
+  if (!order) {
+    return (
+      <>
+        <Seo noindex={true} nofollow={true} />
+        <OrderLoadError error={error} onRetry={() => refetch()} />
+      </>
+    );
   }
 
   return (

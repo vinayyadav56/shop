@@ -83,10 +83,17 @@ export function useOrder({ tracking_number }: { tracking_number: string }) {
   const { query } = useRouter();
   // Guest orders are gated by a per-order token; pull it from the URL (emailed /
   // post-checkout link) or from what we stored at checkout. Owned orders ignore it.
-  const token = useMemo(
-    () => resolveOrderToken(tracking_number, query?.token as string | undefined),
-    [tracking_number, query?.token]
-  );
+  // The router's server search-snapshot is empty during hydration, so ALSO read
+  // window.location directly — otherwise the very first fetch of an emailed link
+  // goes out token-less, 404s, and caches an error entry.
+  const token = useMemo(() => {
+    const fromRouter = query?.token as string | undefined;
+    const fromLocation =
+      typeof window !== 'undefined'
+        ? new URLSearchParams(window.location.search).get('token') ?? undefined
+        : undefined;
+    return resolveOrderToken(tracking_number, fromRouter ?? fromLocation);
+  }, [tracking_number, query?.token]);
   const { data, isLoading, error, isFetching, refetch } = useQuery<
     Order,
     Error
@@ -489,15 +496,16 @@ export function useGetPaymentIntentOriginal({
   const router = useRouter();
   const { openModal } = useModalAction();
 
-  const { data, isLoading, error, refetch } = useQuery(
+  const { data, error, refetch, isFetching } = useQuery(
     [API_ENDPOINTS.PAYMENT_INTENT, { tracking_number }],
     () => client.orders.getPaymentIntent({ tracking_number }),
     // Make it dynamic for both gql and rest
     {
       enabled: false,
       onSuccess: (data) => {
-        if (data?.payment_intent_info?.is_redirect) {
-          return router.push(data?.payment_intent_info?.redirect_url as string);
+        const url = data?.payment_intent_info?.redirect_url;
+        if (data?.payment_intent_info?.is_redirect && typeof url === 'string' && url) {
+          return router.push(url);
         } else {
           openModal('PAYMENT_MODAL', {
             paymentGateway: data?.payment_gateway,
@@ -512,7 +520,11 @@ export function useGetPaymentIntentOriginal({
   return {
     data,
     getPaymentIntentQueryOriginal: refetch,
-    isLoading,
+    // A lazily-enabled (enabled:false) query is status 'pending' forever in
+    // TanStack v5, and the compat shim maps isLoading→isPending — which left
+    // every consumer's button disabled with a spinner before the first fetch.
+    // "Loading" here means "actually fetching".
+    isLoading: isFetching,
     error,
   };
 }
@@ -532,7 +544,7 @@ export function useGetPaymentIntent({
   const { t } = useTranslation('common');
   const { openModal, closeModal } = useModalAction();
 
-  const { data, isLoading, error, refetch, isFetching } = useQuery(
+  const { data, error, refetch, isFetching } = useQuery(
     [
       API_ENDPOINTS.PAYMENT_INTENT,
       { tracking_number, payment_gateway, recall_gateway },
@@ -559,8 +571,14 @@ export function useGetPaymentIntent({
         } else if (isObject(item)) {
           data = item;
         }
-        if (data?.payment_intent_info?.is_redirect) {
-          return router.push(data?.payment_intent_info?.redirect_url as string);
+        // A malformed intent (is_redirect with no URL) must never crash the
+        // page — router.push(undefined) threw all the way to the route error
+        // boundary ("This page didn't load") when a gateway was selected.
+        const url = data?.payment_intent_info?.redirect_url;
+        if (data?.payment_intent_info?.is_redirect && typeof url === 'string' && url) {
+          return router.push(url);
+        } else if (data?.payment_intent_info?.is_redirect) {
+          toast.error(t('text-payment-unavailable'));
         } else {
           if (recall_gateway) window.location.reload();
           openModal('PAYMENT_MODAL', {
@@ -576,7 +594,9 @@ export function useGetPaymentIntent({
   return {
     data,
     getPaymentIntentQuery: refetch,
-    isLoading,
+    // See useGetPaymentIntentOriginal: enabled:false ⇒ isPending forever in
+    // v5; "loading" for consumers means an actual in-flight fetch.
+    isLoading: isFetching,
     fetchAgain: isFetching,
     error,
   };

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   useModalAction,
   useModalState,
@@ -31,6 +32,18 @@ const PaymentModal = () => {
   const PaymentMethod = PAYMENTS_FORM_COMPONENTS[paymentGateway?.toUpperCase()];
   const PaymentComponent = PaymentMethod?.component;
   const paymentModalType = PaymentMethod?.type;
+
+  // A gateway with no form (COD, wallet, an empty intent) has nothing to
+  // render here — returning <undefined /> crashed the whole shell to the
+  // global error page. Close quietly; the page state already reflects the
+  // gateway change after its reload.
+  const missingComponent = !PaymentComponent;
+  useEffect(() => {
+    if (missingComponent && isOpen) closeModal();
+  }, [missingComponent, isOpen, closeModal]);
+  if (missingComponent) {
+    return null;
+  }
 
   return paymentModalType === 'custom' ? (
     <Modal open={isOpen} onClose={closeModal}>
