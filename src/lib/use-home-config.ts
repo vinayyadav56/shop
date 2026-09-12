@@ -45,7 +45,7 @@ export type HomeSection = {
   maxCategories?: number;
   maxProducts?: number;
   order?: number;
-  /** LineIcon glyph name for the section heading; blank/unknown → Sprout. */
+  /** LineIcon glyph name for the section heading; blank/unknown → Flower2. */
   icon?: string;
 };
 

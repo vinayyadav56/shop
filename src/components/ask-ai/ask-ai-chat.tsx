@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { PlantMark } from '@/components/storefront/logo-mark';
 import Image from 'next/image';
 import { useModalState, useModalAction } from '@/components/ui/modal/modal.context';
-import { Sprout } from '@/components/ui/icon';
+import {  } from '@/components/ui/icon';
 import { useAskAi, useAskAiEnabled } from '@/framework/ask-ai';
 import type { Product } from '@/types';
 
@@ -58,7 +59,7 @@ export default function AskAiChat() {
           {image ? (
             <Image src={image} alt={product.name} fill className="object-cover" sizes="44px" />
           ) : (
-            <span className="grid h-full w-full place-items-center text-forest-700"><Sprout size={20} aria-hidden /></span>
+            <span className="grid h-full w-full place-items-center text-forest-700"><PlantMark className="h-5 w-5" /></span>
           )}
         </div>
         <div className="min-w-0 flex-1">

@@ -7,7 +7,7 @@ import { useAtom } from 'jotai';
 import { authorizationAtom } from '@/store/authorization-atom';
 import { drawerAtom } from '@/store/drawer-atom';
 import { useModalAction } from '@/components/ui/modal/modal.context';
-import { Heart, Home, LayoutGrid, Sprout, User, type LucideIcon } from '@/components/ui/icon';
+import { Flower2, Heart, Home, LayoutGrid, type LucideIcon, User } from '@/components/ui/icon';
 
 const ACCENT = '#2E5E2A';
 const MUTED = '#8A8A82';
@@ -20,7 +20,7 @@ const MUTED = '#8A8A82';
 const ICONS: Record<string, LucideIcon> = {
   Home: Home,
   Categories: LayoutGrid,
-  Plants: Sprout,
+  Plants: Flower2,
   Wishlist: Heart,
   Profile: User,
 };

@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { PLACEHOLDER } from './_img';
-import { ArrowRight, Droplet, Earth, Heart, Sprout, TrendingUp, VolumeX, Wind } from '@/components/ui/icon';
+import { ArrowRight, Droplet, Earth, Flower2, Heart, TrendingUp, VolumeX, Wind } from '@/components/ui/icon';
 
 /** Mobile "Why We Need Plants" — horizontal benefit-card carousel + closing CTA
  *  strip, matched to the Mobile Home reference (152px cards, 96px image, 46px icon
@@ -30,7 +30,6 @@ export function WhyPlants() {
       {/* header */}
       <div className="mx-auto mb-5 max-w-[308px] text-center">
         <span className="inline-flex items-center gap-[7px] font-jost text-[10px] font-medium uppercase tracking-[0.22em] text-forest-600">
-          <Sprout size={12} className="text-forest-500" aria-hidden />
           {t('m-why-eyebrow')}
         </span>
         <div className="mx-auto mt-2.5 h-0.5 w-[42px] rounded-full bg-forest-500" />
@@ -54,7 +53,7 @@ export function WhyPlants() {
       </div>
       {/* closing CTA strip */}
       <div className="mt-4 flex items-center gap-[11px] rounded-[13px] border border-kraft-200 bg-white py-2 pl-3 pr-2 shadow-[0_2px_8px_rgba(20,40,24,0.05)]">
-        <span className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-forest-800 text-white"><Sprout size={16} aria-hidden /></span>
+        <span className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-forest-800 text-white"><Flower2 size={16} aria-hidden /></span>
         <p className="min-w-0 flex-1 text-[11.5px] leading-[1.32] text-forest-900">{t('m-why-cta-text')} <strong className="font-bold">{t('m-why-cta-text-strong-1')}</strong> &amp; <strong className="font-bold">{t('m-why-cta-text-strong-2')}</strong></p>
         <Link href="/plants/search" className="inline-flex shrink-0 items-center gap-[5px] rounded-[9px] bg-forest-600 px-[14px] py-[9px] font-hanken text-[11.5px] font-bold text-white">{t('m-why-cta-button')}<ArrowRight size={12} aria-hidden /></Link>
       </div>

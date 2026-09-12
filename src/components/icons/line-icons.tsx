@@ -14,8 +14,8 @@ import {
   Heart,
   Home,
   Leaf,
+  Menu,
   Package,
-  Sprout, Menu,
   Play,
   Plus,
   ShieldCheck,
@@ -24,8 +24,8 @@ import {
   Star,
   Sun,
   Truck,
-  Wrench,
   type LucideIcon,
+  Wrench,
 } from '@/components/ui/icon';
 
 /**
@@ -34,7 +34,7 @@ import {
  * should import from '@/components/ui/icon' directly.
  */
 const GLYPHS: Record<string, LucideIcon> = {
-  leaf: Sprout,
+  leaf: Flower2,
   lotus: Flower2,
   menu: Menu,
   cart: ShoppingBag,
@@ -53,9 +53,9 @@ const GLYPHS: Record<string, LucideIcon> = {
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   // admin-pickable section-heading glyphs (homeSections[].icon); unknown or
-  // blank names fall back to Sprout below, so any string is safe to store.
+  // blank names fall back to Flower2 below, so any string is safe to store.
   flower: Flower2,
-  sprout: Sprout,
+  sprout: Flower2,
   realLeaf: Leaf,
   sun: Sun,
   heart: Heart,
@@ -80,7 +80,7 @@ export function LineIcon({
   if (!Glyph && process.env.NODE_ENV !== 'production') {
     console.warn('[icons] LineIcon unmapped name:', name);
   }
-  const Resolved = Glyph ?? Sprout;
+  const Resolved = Glyph ?? Flower2;
   return <Resolved className={className} strokeWidth={strokeWidth} aria-hidden />;
 }
 

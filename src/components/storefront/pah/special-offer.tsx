@@ -3,11 +3,11 @@ import React from 'react';
 import { useRouter } from '@/compat/next-router';
 import { useTranslation } from 'next-i18next';
 import { useBannerEnabled } from '@/lib/use-home-config';
-import { ArrowRight, Package, RotateCcw, Sprout, Truck, type LucideIcon } from '@/components/ui/icon';
+import { ArrowRight, Package, RotateCcw, ShieldCheck, Truck, type LucideIcon } from '@/components/ui/icon';
 
 const PERKS: { label: string; icon: LucideIcon }[] = [
   { label: 'Secure Packaging', icon: Package },
-  { label: 'Live Plant Guarantee', icon: Sprout },
+  { label: 'Live Plant Guarantee', icon: ShieldCheck },
   { label: 'Easy Returns', icon: RotateCcw },
   { label: 'Fast & Safe Delivery', icon: Truck },
 ];

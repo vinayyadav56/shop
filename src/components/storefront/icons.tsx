@@ -2,6 +2,7 @@ import {
   ArrowRight,
   ChevronRight,
   Droplet,
+  Flower2,
   Heart,
   Home,
   Lock,
@@ -14,15 +15,14 @@ import {
   ShieldCheck,
   ShoppingBag,
   Sparkles,
-  Sprout,
   Star,
   Sun,
   Truck,
+  type LucideProps,
   User,
   Wind,
   X,
   Zap,
-  type LucideProps,
 } from '@/components/ui/icon';
 
 // Storefront `Icon.*` set, now backed by Lucide (docs/design/icon-system.md).
@@ -31,8 +31,8 @@ import {
 type P = LucideProps;
 
 export const Icon = {
-  // Key frozen for call-site compat; renders Sprout (decorative leaves retired).
-  leaf: (p: P) => <Sprout strokeWidth={2} {...p} />,
+  // Key frozen for call-site compat; renders Flower2 (leaf/sprout glyphs retired).
+  leaf: (p: P) => <Flower2 strokeWidth={2} {...p} />,
   truck: (p: P) => <Truck strokeWidth={2} {...p} />,
   shield: (p: P) => <ShieldCheck strokeWidth={2} {...p} />,
   star: (p: P) => <Star fill="currentColor" strokeWidth={0} {...p} />,
@@ -56,5 +56,5 @@ export const Icon = {
   moon: (p: P) => <Moon strokeWidth={2} {...p} />,
   home: (p: P) => <Home strokeWidth={2} {...p} />,
   zap: (p: P) => <Zap strokeWidth={2} {...p} />,
-  sprout: (p: P) => <Sprout strokeWidth={2} {...p} />,
+  sprout: (p: P) => <Flower2 strokeWidth={2} {...p} />,
 };

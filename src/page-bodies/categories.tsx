@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { PlantMark } from '@/components/storefront/logo-mark';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { getLayout as getSiteLayout } from '@/components/layouts/layout';
@@ -11,7 +12,7 @@ import { useCategories } from '@/framework/category';
 import { TYPES_PER_PAGE } from '@/framework/client/variables';
 import { getVerticalMeta } from '@/components/storefront/verticals';
 import type { Type } from '@/types';
-import { Sprout, ArrowRight } from '@/components/ui/icon';
+import { ArrowRight } from '@/components/ui/icon';
 
 
 /** Compact brand category card — image + serif name, links to /c/[slug].
@@ -37,7 +38,7 @@ function CategoryCard({ category }: { category: any }) {
           />
         ) : (
           <div className="grid h-full w-full place-items-center text-forest-300">
-            <Sprout size={32} aria-hidden />
+            <PlantMark className="h-8 w-8" />
           </div>
         )}
       </div>

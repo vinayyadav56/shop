@@ -8,7 +8,7 @@ import {
   Ruler,
   ShieldCheck,
   Sparkles,
-  Sprout,
+  Flower2,
   Star,
   UserRound,
   Wrench,
@@ -21,7 +21,7 @@ import {
  * code should import from '@/components/ui/icon' directly.
  */
 const GLYPHS: Record<string, LucideIcon> = {
-  sprout: Sprout,
+  sprout: Flower2,
   soil: Layers,
   tools: Wrench,
   gardener: UserRound,
@@ -48,7 +48,7 @@ export function GsIcon({
   if (!Glyph && process.env.NODE_ENV !== 'production') {
     console.warn('[icons] GsIcon unmapped name:', name);
   }
-  const Resolved = Glyph ?? Sprout;
+  const Resolved = Glyph ?? Flower2;
   return <Resolved className={className} strokeWidth={strokeWidth} aria-hidden />;
 }
 

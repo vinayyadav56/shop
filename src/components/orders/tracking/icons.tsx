@@ -5,6 +5,7 @@ import {
   Clock,
   Copy,
   Flag,
+  Flower2,
   Headset,
   Mail,
   MapPin,
@@ -13,7 +14,6 @@ import {
   RefreshCw,
   ShieldCheck,
   ShoppingBag,
-  Sprout,
   Truck,
 } from '@/components/ui/icon';
 
@@ -67,11 +67,11 @@ export const ChevronRightIcon = ({ className }: IconProps) => (
   <ChevronRight className={className} strokeWidth={2} aria-hidden />
 );
 export const PottedPlantIcon = ({ className }: IconProps) => (
-  <Sprout className={className} strokeWidth={2} aria-hidden />
+  <Flower2 className={className} strokeWidth={2} aria-hidden />
 );
 export const ShieldCheckIcon = ({ className }: IconProps) => (
   <ShieldCheck className={className} strokeWidth={2} aria-hidden />
 );
 export const LeafIcon = ({ className }: IconProps) => (
-  <Sprout className={className} strokeWidth={2} aria-hidden />
+  <Flower2 className={className} strokeWidth={2} aria-hidden />
 );

@@ -10,10 +10,9 @@ import {
   Gift,
   Heart,
   ShieldCheck,
-  Sprout,
   Truck,
-  WandSparkles,
   type LucideIcon,
+  WandSparkles,
 } from '@/components/ui/icon';
 
 /** Mobile "Corporate Gifting" section (sage card + hero photo + 4 reasons + dark
@@ -48,13 +47,11 @@ export function CorporateGifting() {
       {/* copy */}
       <div className="text-center">
         <span className="font-jost inline-flex items-center gap-2 rounded-[999px] border-[1.5px] border-sage-400 bg-white px-[14px] py-[7px] text-[9.5px] font-medium uppercase tracking-[0.2em] text-forest-700">
-          <Sprout size={12} aria-hidden style={{ color: '#3A6B33' }} />
           {t('m-gift-eyebrow')}
         </span>
         <h2 className="font-pahserif mt-[14px] text-[30px] font-medium leading-[1.06] tracking-[-0.01em] text-forest-900">{t('m-gift-title-1')} <span className="text-forest-600">{t('m-gift-title-2')}</span></h2>
         <div className="mt-[13px] flex items-center justify-center gap-[10px]">
           <div className="h-px w-[58px] bg-kraft-300" />
-          <Sprout size={12} aria-hidden style={{ color: '#4E8244' }} />
           <div className="h-px w-[58px] bg-kraft-300" />
         </div>
         {/* single line at every width — font scales with the viewport */}

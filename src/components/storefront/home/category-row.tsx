@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useCategories } from '@/framework/category';
 import { useHomeConfig, applyCuration } from '@/lib/use-home-config';
-import { ArrowRight, ChevronRight, Droplet, Flower2, ShoppingBag, Sprout, Wrench } from '@/components/ui/icon';
+import { ArrowRight, ChevronRight, Droplet, Flower2, ShoppingBag, Wrench } from '@/components/ui/icon';
 
 // Same query as collections.tsx (shared react-query cache). limit=1000 makes the
 // categories API truncate its JSON mid-stream — see collections.tsx.
@@ -13,7 +13,7 @@ const HOME_CATEGORIES_LIMIT = 100;
 const FALLBACK_ICONS: JSX.Element[] = [
   <Flower2 key="0" size={24} aria-hidden />,
   <ShoppingBag key="1" size={24} aria-hidden />,
-  <Sprout key="2" size={24} aria-hidden />,
+  <Flower2 key="2" size={24} aria-hidden />,
   <Droplet key="3" size={24} aria-hidden />,
   <Wrench key="4" size={24} aria-hidden />,
 ];

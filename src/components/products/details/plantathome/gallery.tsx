@@ -1,7 +1,8 @@
 'use client';
 import React, { useRef, useState } from 'react';
+import { PlantMark } from '@/components/storefront/logo-mark';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, Sprout } from '@/components/ui/icon';
+import { ChevronLeft, ChevronRight } from '@/components/ui/icon';
 
 type GalleryImage = { original?: string; thumbnail?: string; id?: string | number };
 
@@ -129,7 +130,7 @@ const PlantAtHomeGallery: React.FC<Props> = ({ gallery, productName, overlay }) 
                 {src ? (
                   <Image src={src} alt={`${productName} — photo ${i + 1}`} fill sizes="68px" className="object-cover" />
                 ) : (
-                  <span className="grid h-full w-full place-items-center text-forest-700/30"><Sprout size={16} aria-hidden /></span>
+                  <span className="grid h-full w-full place-items-center text-forest-700/30"><PlantMark className="h-4 w-4" /></span>
                 )}
               </button>
             );
