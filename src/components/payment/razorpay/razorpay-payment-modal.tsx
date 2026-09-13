@@ -5,7 +5,11 @@ import { PaymentGateway, PaymentIntentInfo } from '@/types';
 import { useTranslation } from 'next-i18next';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { useSettings } from '@/framework/settings';
-import { useOrder, useOrderPayment } from '@/framework/order';
+import { useOrder } from '@/framework/order';
+import client from '@/framework/client';
+import { API_ENDPOINTS } from '@/framework/client/api-endpoints';
+import { useQueryClient } from '@/compat/react-query';
+import { toast } from 'react-toastify';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
 
 interface Props {
@@ -26,7 +30,36 @@ const RazorpayPaymentModal: React.FC<Props> = ({
   const { order, isLoading, refetch } = useOrder({
     tracking_number: trackingNumber,
   });
-  const { createOrderPayment } = useOrderPayment();
+  const queryClient = useQueryClient();
+
+  // Confirm the captured payment with our backend. Razorpay has ALREADY taken
+  // the money by the time this fires, so losing this call means a paid order
+  // stuck "payment-pending" (the Razorpay webhook is the server-side backstop).
+  // It runs via the raw client — NOT a component-owned mutation — so closing
+  // the modal can never tear the request down mid-flight; and it retries once
+  // on a transport failure before surfacing anything to the customer.
+  const confirmPayment = useCallback(async () => {
+    const body = { tracking_number: trackingNumber!, payment_gateway: 'razorpay' };
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        await client.orders.payment(body as any);
+        queryClient.refetchQueries(API_ENDPOINTS.ORDERS);
+        queryClient.refetchQueries(API_ENDPOINTS.ORDERS_DOWNLOADS);
+        return true;
+      } catch (e) {
+        if (attempt === 0) {
+          await new Promise((r) => setTimeout(r, 1500));
+          continue;
+        }
+        // Both tries failed. The webhook will still reconcile it server-side;
+        // tell the customer their money is safe and where to look.
+        toast.error(
+          'Payment received — we are confirming your order. It will appear in "My Orders" shortly.',
+        );
+      }
+    }
+    return false;
+  }, [trackingNumber, queryClient]);
   // Script-load failure (ad-blocker, CSP, offline) used to be an UNHANDLED rejection that
   // rendered null: no modal, no error, no way forward, order left unpaid (D10).
   const [loadError, setLoadError] = useState(false);
@@ -51,11 +84,13 @@ const RazorpayPaymentModal: React.FC<Props> = ({
       image: settings?.logo?.original!,
       order_id: paymentIntentInfo?.payment_id!,
       handler: async () => {
+        // Confirm FIRST (awaited, retrying), THEN close. The old order —
+        // closeModal() before the confirm — unmounted this modal and the
+        // mutation it owned, dropping the POST entirely, so a paid order was
+        // never confirmed (order 248: captured on Razorpay, stuck pending).
+        await confirmPayment();
         closeModal();
-        createOrderPayment({
-          tracking_number: trackingNumber!,
-          payment_gateway: 'razorpay' as string,
-        });
+        await refetch();
       },
       prefill: {
         ...(customer_name && { name: customer_name }),
