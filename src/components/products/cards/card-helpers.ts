@@ -53,6 +53,12 @@ export function plantQuickFacts(product: Product): { icon: string; label: string
   if (pa.sunlight) facts.push({ icon: 'lotus', label: head(pa.sunlight) });
   if (pa.water_requirement) facts.push({ icon: 'droplet', label: `${head(pa.water_requirement)} water` });
   if (pa.indoor_outdoor) facts.push({ icon: 'box', label: pa.indoor_outdoor });
+  // Secondary facts — fill in when the primary five are sparse so a plant
+  // with any attribute data at all still gets chips on its card.
+  if (pa.difficulty_level) facts.push({ icon: 'sprout', label: `${head(pa.difficulty_level)} care` });
+  if (pa.growth_rate) facts.push({ icon: 'plant', label: `${head(pa.growth_rate)} growth` });
+  if (pa.humidity) facts.push({ icon: 'humidity', label: `${head(pa.humidity)} humidity` });
+  if (pa.height_range) facts.push({ icon: 'prune', label: head(pa.height_range) });
   return facts;
 }
 

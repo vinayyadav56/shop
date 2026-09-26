@@ -10,6 +10,7 @@ import { Routes } from '@/config/routes';
 // straight to the product page), but this card opens the ASK_AI modal too.
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { Heart as HeartGlyph, Star } from '@/components/ui/icon';
+import { LineIcon } from '@/components/icons/line-icons';
 import { useToggleWishlist, useInWishlist } from '@/framework/wishlist';
 import { useUser } from '@/framework/user';
 import { useAskAiEnabled } from '@/framework/ask-ai';
@@ -341,14 +342,16 @@ const PlantAtHomeCard: React.FC<Props> = ({
                     // shrink-0: flex was allowed to compress these to fit three across a
                     // ~165px two-up mobile card, which rendered them as "P…", "F…", "Mo…" —
                     // present but unreadable. A chip now keeps its natural width…
-                    'shrink-0 max-w-[46%] truncate whitespace-nowrap rounded-full bg-[#F3F8EC] px-[clamp(6px,2.4cqw,9px)] py-[4px] text-[clamp(8.5px,2.9cqw,11px)] font-medium leading-none text-[#24693E]',
+                    'shrink-0 inline-flex items-center gap-1 max-w-[46%] whitespace-nowrap rounded-full bg-[#F3F8EC] px-[clamp(6px,2.4cqw,9px)] py-[4px] text-[clamp(8.5px,2.9cqw,11px)] font-medium leading-none text-[#24693E]',
                     // …and instead we show only as many as genuinely fit: two on a phone
                     // grid, all three once the card is wide enough. The list layout is
                     // full-width even on mobile, so it keeps all three.
-                    !isList && i === 2 ? 'hidden sm:inline-block' : '',
+                    !isList && i === 2 ? 'hidden sm:inline-flex' : '',
                   ].join(' ')}
                 >
-                  {f.label}
+                  {/* icon shrink-0 so truncation only ever eats the label */}
+                  <LineIcon name={f.icon} className="h-3 w-3 shrink-0" aria-hidden />
+                  <span className="min-w-0 truncate">{f.label}</span>
                 </span>
               ))}
             </div>

@@ -355,6 +355,21 @@ export interface PlantAttribute {
   growth_rate?: string | null;
   flowering_season?: string | null;
   native_region?: string | null;
+  // botanical fields (2026_07_13 migration) — the API sends all of these
+  difficulty_level?: string | null;
+  humidity?: string | null;
+  soil_type?: string | null;
+  fertilizer_requirement?: string | null;
+  is_flowering?: boolean | null;
+  fruit_bearing?: boolean | null;
+  season?: string | null;
+  life_cycle?: string | null;
+  width_range?: string | null;
+  regional_names?: Record<string, string> | null;
+  care_guide?: string | null;
+  planting_guide?: string | null;
+  faqs?: { question: string; answer: string }[] | null;
+  common_names?: string | null;
 }
 
 export interface RatingCount {
