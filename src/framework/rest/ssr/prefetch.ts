@@ -19,6 +19,9 @@ import {
   TYPES_PER_PAGE,
 } from '@/framework/client/variables';
 import { formatProductsArgs } from '@/framework/utils/format-products-args';
+// Plain module: the /farmbox hooks' own option objects, so the SSR keys can't drift from them.
+import { categoriesQuery, combosQuery } from '@/components/farmbox/farmbox-content';
+import type { Product } from '@/types';
 
 const LOCALE = 'en';
 
@@ -332,6 +335,41 @@ export async function loadToolsData(typeSlug: string) {
     dehydratedState: { ...general, queries: [...(general?.queries ?? []), ...(own.queries ?? [])] },
     products,
     kit: tagged[0] ?? topSet[0] ?? null,
+  };
+}
+
+/**
+ * /farmbox loader: settings + types + the two lists the page renders — the combos (best-sellers)
+ * and every root category — under the EXACT keys components/farmbox builds (the same
+ * combosQuery / categoriesQuery objects), so the server HTML carries the circles and any listed
+ * product cards. City-less like every SSR prefetch, and fail-soft: a failed query is never
+ * dehydrated, and the client fetches on mount. Categories go through prefetchInfiniteQuery for
+ * the reason given on loadPlpData.
+ */
+export async function loadFarmboxData(typeSlug: string) {
+  const { dehydratedState: general } = await loadGeneralData();
+  const queryClient = new QueryClient();
+  const [products] = await Promise.all([
+    queryClient
+      .fetchInfiniteQuery({
+        queryKey: [API_ENDPOINTS.PRODUCTS, { ...formatProductsArgs(combosQuery(typeSlug)), language: LOCALE }],
+        queryFn: ({ queryKey }: any) => client.products.all(queryKey[1]),
+        initialPageParam: undefined,
+      } as any)
+      .then((list: any): Product[] => list?.pages?.[0]?.data ?? [])
+      .catch((): Product[] => []),
+    queryClient
+      .prefetchInfiniteQuery({
+        queryKey: [API_ENDPOINTS.CATEGORIES, { ...categoriesQuery(typeSlug), language: LOCALE }],
+        queryFn: ({ queryKey }: any) => client.categories.all(queryKey[1]),
+        initialPageParam: undefined,
+      } as any)
+      .catch(() => {}),
+  ]);
+  const own = JSON.parse(JSON.stringify(dehydrate(queryClient)));
+  return {
+    dehydratedState: { ...general, queries: [...(general?.queries ?? []), ...(own.queries ?? [])] },
+    products,
   };
 }
 

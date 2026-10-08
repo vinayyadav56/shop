@@ -1,10 +1,19 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { Caveat } from 'next/font/google';
 import { Hydrate } from '@/compat/react-query-hydration';
-import { loadHomeData, loadPlpData, loadToolsData, loadTypeName, loadTypeSlugs } from '@/framework/ssr/prefetch';
+import {
+  loadFarmboxData,
+  loadHomeData,
+  loadPlpData,
+  loadToolsData,
+  loadTypeName,
+  loadTypeSlugs,
+} from '@/framework/ssr/prefetch';
 import HomeScreen from '@/app-shell/home-screen';
 import { PageBody as PlpPageBody } from '@/page-bodies/plp';
 import { PageBody as ToolsPageBody } from '@/page-bodies/tools';
+import { PageBody as FarmboxPageBody } from '@/page-bodies/farmbox';
 import { getVerticalMeta } from '@/components/storefront/verticals';
 // Plain module (no 'use client'), so the FAQ copy is real data here, not a client reference.
 import { TOOLS_FAQS } from '@/components/tools/tools-content';
@@ -19,6 +28,22 @@ const PLP_VERTICALS = new Set(['plants']);
 
 /** Verticals with their own designed landing (the owner's /tools mock). */
 const TOOLS_VERTICALS = new Set(['tools']);
+
+/** The owner's /farmbox mock. Staging's slug is `farmbox`, production's `farm-box`. */
+const FARMBOX_VERTICALS = new Set(['farmbox', 'farm-box']);
+
+/**
+ * The /farmbox mock's two handwritten notes, and nothing else, use Caveat (headings stay the
+ * site font). `preload: false` because this route file also serves /plants and /tools: the
+ * woff2 is fetched only where the notes render, i.e. on /farmbox.
+ */
+const farmboxScript = Caveat({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  preload: false,
+  variable: '--font-farmbox-script',
+});
 
 export const revalidate = 30;
 export const dynamicParams = true;
@@ -161,6 +186,46 @@ export default async function VerticalPage({ params }: { params: Promise<{ searc
           />
         ))}
         <ToolsPageBody type={vertical} />
+      </Hydrate>
+    );
+  }
+
+  if (FARMBOX_VERTICALS.has(vertical)) {
+    // Each environment knows only one of the two spellings; the other must 404.
+    const slugs = await loadTypeSlugs();
+    if (slugs.length && !slugs.includes(vertical)) return notFound();
+    const { dehydratedState, products } = await loadFarmboxData(vertical);
+    const collection = {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name,
+      url: `${SITE_URL}/${vertical}`,
+      description: getVerticalMeta(vertical).seo?.description,
+      // The server-rendered combos, when the API lists any — never invented.
+      ...(products.length > 0 && {
+        mainEntity: {
+          '@type': 'ItemList',
+          itemListElement: products.map((p, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: p.name,
+            url: `${SITE_URL}/products/${p.slug}`,
+          })),
+        },
+      }),
+    };
+    return (
+      <Hydrate state={dehydratedState}>
+        {[breadcrumb, collection].map((ld) => (
+          <script
+            key={ld['@type']}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, '\\u003c') }}
+          />
+        ))}
+        <div className={farmboxScript.variable}>
+          <FarmboxPageBody type={vertical} />
+        </div>
       </Hydrate>
     );
   }

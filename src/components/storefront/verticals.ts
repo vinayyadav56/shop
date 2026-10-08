@@ -79,6 +79,12 @@ const FARMBOX_META = {
     'Organic fruits, vegetables and salad greens — harvested at dawn, delivered to your door the same day.',
   scenes: FARM_SCENES,
   promise: FARM_PROMISE,
+  // The /farmbox landing's own <title> and description (owner's spec, 2026-10-09).
+  seo: {
+    title: 'Fresh FarmBox Fruits & Vegetables Delivered',
+    description:
+      'Shop fresh fruits, vegetables, greens and curated FarmBox combos sourced from trusted farms and delivered fresh to your doorstep.',
+  },
 };
 
 /** Bespoke per-slug presentation. Covers staging + production vertical slugs. */

@@ -127,6 +127,11 @@ import {
   IconUpload,
   IconDots,
   IconDotsVertical,
+  // produce (FarmBox)
+  IconCarrot,
+  IconTractor,
+  IconBasket,
+  IconFlaskOff,
 } from '@tabler/icons-react';
 
 /**
@@ -316,3 +321,9 @@ export const Hand = g(IconHandStop);
 export const Upload = g(IconUpload);
 export const Ellipsis = g(IconDots);
 export const EllipsisVertical = g(IconDotsVertical);
+
+// produce (FarmBox): food and farming glyphs, because a leaf means a plant
+export const Carrot = g(IconCarrot);
+export const Tractor = g(IconTractor);
+export const Basket = g(IconBasket);
+export const FlaskOff = g(IconFlaskOff);
