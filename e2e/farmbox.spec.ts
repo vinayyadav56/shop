@@ -171,7 +171,7 @@ test.describe('/farmbox landing', () => {
     expect(await page.locator('#main-content').innerText()).not.toMatch(FORBIDDEN);
   });
 
-  test('CTAs point at real anchors, and "View All Categories" lands on the FarmBox block', async ({ page }) => {
+  test('CTAs point at real anchors, and "View All Categories" lands on a FarmBox-only categories page', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(`/${SLUG}`, { waitUntil: 'domcontentloaded' });
     await hydrated(page);
@@ -181,10 +181,12 @@ test.describe('/farmbox landing', () => {
     for (const id of ['categories', 'combos', 'how-it-works']) await expect(page.locator(`#${id}`)).toBeAttached();
 
     const all = page.getByRole('link', { name: 'View All Categories' });
-    await expect(all).toHaveAttribute('href', `/categories#${SLUG}`);
+    await expect(all).toHaveAttribute('href', `/categories/${SLUG}`);
     await all.click();
-    await expect(page).toHaveURL(new RegExp(`/categories#${SLUG}$`));
+    await expect(page).toHaveURL(new RegExp(`/categories/${SLUG}$`));
+    // Only FarmBox's block — not every vertical's (owner annotation 2026-10-09).
     await expect(page.locator(`section#${SLUG}`)).toBeAttached();
+    await expect(page.locator('section#plants, section#tools')).toHaveCount(0);
   });
 
   test('combos: real cards, or the empty state with a way on — never placeholders', async ({ page }) => {
@@ -199,7 +201,7 @@ test.describe('/farmbox landing', () => {
       await expect(combos.getByText(EMPTY)).toBeVisible();
       await expect(combos.getByRole('link', { name: 'Explore FarmBox Categories' })).toHaveAttribute(
         'href',
-        `/categories#${SLUG}`,
+        `/categories/${SLUG}`,
       );
       await expect(combos.getByRole('link', { name: 'View All Combos' })).toHaveCount(0);
     } else {
@@ -275,7 +277,7 @@ test.describe('/farmbox combos states (intercepted list)', () => {
     await page.setViewportSize({ width: 1440, height: 900 });
   });
 
-  test('cards: the /tools card, Add to Cart fills the cart, an out-of-stock product says so', async ({ page }) => {
+  test("cards: the site's one card, Add To Shopping Cart fills the cart, an out-of-stock product says so", async ({ page }) => {
     const body: Body = structuredClone(tools);
     test.skip(!body?.data || body.data.length < 2, 'no tools list to stand in');
     // Stand-ins, so the test doesn't depend on today's stock: one nationwide product in stock,
@@ -294,7 +296,7 @@ test.describe('/farmbox combos states (intercepted list)', () => {
     await expect(combos.getByRole('link', { name: 'View All Combos' })).toHaveAttribute('href', `/${SLUG}/search`);
     await expect(cards.nth(soldOut)).toContainText(/Out of stock/i);
 
-    await cards.nth(simple).getByRole('button', { name: 'Add to Cart', exact: true }).click();
+    await cards.nth(simple).getByRole('button', { name: 'Add To Shopping Cart', exact: true }).click();
     await expect
       .poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('plantathome-cart') ?? '{}')?.items?.length ?? 0))
       .toBe(1);

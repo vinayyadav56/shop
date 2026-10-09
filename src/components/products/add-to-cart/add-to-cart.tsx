@@ -9,9 +9,6 @@ import classNames from 'classnames';
 import { useCitySupply } from '@/lib/use-city-supply';
 import { isCityBased, isNationwideOutOfStock } from '@/lib/is-city-based';
 import dynamic from 'next/dynamic';
-import {
-  CartOff,
-} from '@/components/ui/icon';
 const AddToCartBtn = dynamic(
   () => import('@/components/products/add-to-cart/add-to-cart-btn'),
   {
@@ -34,7 +31,6 @@ interface Props {
     | 'text'
     | 'plantathome'
     | 'icon'
-    | 'homeMini'
     | 'florine';
   counterVariant?:
     | 'helium'
@@ -129,24 +125,6 @@ export const AddToCart = ({
       return (
         <span className="flex h-[clamp(34px,9.5cqw,40px)] w-full min-w-0 cursor-not-allowed items-center justify-center rounded bg-gray-100 px-[clamp(6px,2.2cqw,12px)] text-[clamp(10px,3.2cqw,12px)] font-medium uppercase leading-none tracking-wide text-stone-500">
           <span className="truncate">Out of Stock</span>
-        </span>
-      );
-    }
-    // Mini rail card: the footer is ~105px wide and shared with the price, so
-    // its sibling CTA for variable products is a 36x36 icon button. The text
-    // pill got 67px there and wrapped "Out of Stock" onto THREE lines, making
-    // a 60px-tall lump in a 131px card. Same 36x36 footprint instead — a
-    // struck-through cart, which cannot wrap, with the wording kept on the
-    // tooltip and the accessible name.
-    if (variant === 'homeMini') {
-      return (
-        <span
-          role="img"
-          aria-label="Out of Stock"
-          title="Out of Stock"
-          className="grid h-9 w-9 shrink-0 cursor-not-allowed place-items-center rounded bg-gray-100 text-stone-400"
-        >
-          <CartOff className="h-4 w-4" aria-hidden />
         </span>
       );
     }

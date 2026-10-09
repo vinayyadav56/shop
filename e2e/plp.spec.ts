@@ -7,10 +7,11 @@ import { test, expect, Locator, Page } from '@playwright/test';
  * control (the header chip — no in-page city selector), the bottom nav on
  * phones, product links in the server HTML, a real "N+ plants" trust
  * count, category tiles linking /c/, need tiles and sort that round-trip
- * through the URL, "Popular" as the default sort, "Add to cart" on every card
- * opening the size sheet (adding a size bumps the header cart badge — local
- * state only, no order), "Clear all" that keeps products on screen, six grid
- * columns at 1536, the search route rendering the same body, and the usual
+ * through the URL, "Popular" as the default sort, the site's one product card
+ * (the /c card) with "Select Options" opening the size sheet (adding a size
+ * bumps the header cart badge — local state only, no order), "Clear all" that
+ * keeps products on screen, /c's five grid columns at 1536, the search route
+ * rendering the same body, and the usual
  * hygiene gates: no console errors, no 4xx/5xx images, no horizontal overflow.
  *
  * Read-only against any environment except the cart test, which only touches
@@ -119,7 +120,7 @@ test.describe('/plants PLP', () => {
     });
   }
 
-  test('results row, Popular by default, six columns at 1536', async ({ page }) => {
+  test('results row, Popular by default, the /c column ladder (five at 1536)', async ({ page }) => {
     await page.setViewportSize({ width: 1536, height: 900 });
     await page.goto('/plants', { waitUntil: 'domcontentloaded' });
     await expect(page.getByText(/\d[\d,]* Plants available/).first()).toBeVisible({ timeout: 20_000 });
@@ -131,7 +132,7 @@ test.describe('/plants PLP', () => {
       .locator('[data-product-card]')
       .first()
       .evaluate((el) => getComputedStyle(el.parentElement as HTMLElement).gridTemplateColumns.split(' ').length);
-    expect(tracks, 'grid columns at 1536px').toBe(6);
+    expect(tracks, 'grid columns at 1536px').toBe(5);
   });
 
   test('a need tile filters through the URL and marks itself pressed', async ({ page }) => {
@@ -167,7 +168,7 @@ test.describe('/plants PLP', () => {
     await expect(firstProductLink(page)).toBeAttached({ timeout: 20_000 });
   });
 
-  test('every card has Add to cart; the size sheet adds a sized plant to the local cart', async ({ page }) => {
+  test('every card has a CTA; "Select Options" opens the size sheet, which adds a sized plant to the local cart', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/plants', { waitUntil: 'domcontentloaded' });
     const cards = page.locator('[data-product-card]');
@@ -179,17 +180,19 @@ test.describe('/plants PLP', () => {
 
     const n = await cards.count();
     for (let i = 0; i < Math.min(n, 12); i++) {
-      await expect(cards.nth(i).getByRole('button', { name: /add to cart|out of stock/i })).toBeVisible();
+      await expect(
+        cards.nth(i).getByRole('button', { name: /select options|add to shopping cart|out of stock/i }),
+      ).toBeVisible();
     }
 
     const badge = page.locator('[data-cart-target] span span');
     const before = Number((await badge.first().textContent())?.trim() || '0');
 
-    const addable = cards.filter({ has: page.getByRole('button', { name: /^add to cart$/i }) });
+    const addable = cards.filter({ has: page.getByRole('button', { name: /^select options$/i }) });
     if ((await addable.count()) === 0) {
       test.skip(true, 'nothing addable in the seeded city in this environment');
     }
-    await addable.first().getByRole('button', { name: /^add to cart$/i }).click();
+    await addable.first().getByRole('button', { name: /^select options$/i }).click();
 
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible({ timeout: 10_000 });
@@ -198,7 +201,7 @@ test.describe('/plants PLP', () => {
     // Escape closes the sheet; reopen it for the add.
     await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
-    await addable.first().getByRole('button', { name: /^add to cart$/i }).click();
+    await addable.first().getByRole('button', { name: /^select options$/i }).click();
     await expect(dialog).toBeVisible({ timeout: 10_000 });
     await chips.first().click();
     const add = dialog.getByRole('button', { name: /^add to cart$/i });

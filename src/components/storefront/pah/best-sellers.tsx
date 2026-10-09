@@ -6,7 +6,8 @@ import { useProducts } from '@/framework/product';
 import { useTypes } from '@/framework/type';
 import { TYPES_PER_PAGE } from '@/framework/client/variables';
 import { ArrowRight, TrendingUp } from '@/components/ui/icon';
-import { ProductCard } from './product-card';
+// The site's one product card (owner, 2026-10-09), in this rail's 165px slot.
+import PlantAtHomeCard from '@/components/products/cards/plantathome';
 import { cn } from '@/lib/cn';
 
 export function BestSellers() {
@@ -66,7 +67,11 @@ export function BestSellers() {
               </div>
             ))
           : list.length > 0
-          ? list.map((p) => <ProductCard key={p.id} product={p} />)
+          ? list.map((p) => (
+              <div key={p.id} className="w-[165px] shrink-0">
+                <PlantAtHomeCard product={p} />
+              </div>
+            ))
           : <p className="py-6 text-[13px] text-stone-500">{t('m-bestsellers-empty')}</p>}
       </div>
     </div>

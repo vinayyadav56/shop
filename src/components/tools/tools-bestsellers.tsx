@@ -6,8 +6,8 @@ import { SectionHead } from './section-head';
 import { SECTION } from './tools-content';
 
 /**
- * /tools "Tools gardeners love": the vertical's six best-sellers in the PLP
- * product card, six across from `lg`, three on tablets and two on phones.
+ * /tools "Tools gardeners love": the vertical's six best-sellers in the site's one
+ * product card, on the same column ladder as every listing.
  *
  * Uses the same useProducts options as loadToolsData's bestsellers list, so the
  * cards arrive as server HTML. Shows skeleton cards while loading. The whole
@@ -31,12 +31,12 @@ export function ToolsBestsellers({ type }: { type: string }) {
       <Grid
         products={products}
         isLoading={isLoading}
-        cardVariant="plp"
         // Below the hero's LCP image: no card image is preloaded.
         priorityCount={0}
         hasMore={false}
         limit={6}
-        gridClassName="mt-5 !grid-cols-2 !gap-x-[15px] !gap-y-5 md:!grid-cols-3 lg:!grid-cols-6"
+        // The one card and the shared column ladder, as on /c (owner, 2026-10-09).
+        className="mt-5"
       />
     </section>
   );

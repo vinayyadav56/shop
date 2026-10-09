@@ -141,11 +141,16 @@ function VerticalSection({ type }: { type: Type }) {
   );
 }
 
-export default function CategoriesPage() {
+/**
+ * /categories (every vertical) and /categories/{type} (one vertical's categories only: where each
+ * vertical's "View All Categories" lands — owner annotation 2026-10-09).
+ */
+export default function CategoriesPage({ type }: { type?: string }) {
   const { t } = useTranslation('common');
   // Same options as the SSR prefetch (general.ssr) so the dehydrated cache hits.
   const { types, isLoading } = useTypes({ limit: TYPES_PER_PAGE } as any);
-  const list = types ?? [];
+  const list = (types ?? []).filter((ty: Type) => !type || ty.slug === type);
+  const only = type ? list[0] : undefined;
 
   return (
     <>
@@ -155,7 +160,7 @@ export default function CategoriesPage() {
         url="categories"
       />
       <PageBanner
-        title={t('categories-page-title')}
+        title={only ? `${getVerticalMeta(only.slug, only.name).label} Categories` : t('categories-page-title')}
         breadcrumbTitle={t('text-home')}
       />
       <div className="g-light-a">

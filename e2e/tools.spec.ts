@@ -323,7 +323,7 @@ test.describe('Tools are nationwide: never city-gated', () => {
       await expect(cards.first(), 'tools listed').toBeVisible();
       await expect(cards.filter({ hasText: /Out of stock in|Not available in/i })).toHaveCount(0);
       for (let i = 0, n = await cards.count(); i < n; i++) {
-        await expect(cards.nth(i)).toContainText(/Add to cart|Out of stock/i);
+        await expect(cards.nth(i)).toContainText(/Add To Shopping Cart|Select Options|Out of stock/i);
       }
 
       const href = await cards.first().locator('a[href^="/products/"]').first().getAttribute('href');
@@ -341,7 +341,7 @@ test.describe('Tools are nationwide: never city-gated', () => {
 
     await page.goto('/tools', { waitUntil: 'domcontentloaded' });
     await settled(page, 'Delhi');
-    const add = toolCards(page).getByRole('button', { name: 'Add to Cart', exact: true }).first();
+    const add = toolCards(page).getByRole('button', { name: 'Add To Shopping Cart', exact: true }).first();
     test.skip(!(await add.isVisible()), 'no tool with a seller rate to add in this environment');
     await add.click();
     const cartLines = () =>

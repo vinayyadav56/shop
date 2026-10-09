@@ -374,8 +374,9 @@ export async function loadFarmboxData(typeSlug: string) {
 }
 
 /** /categories index: every vertical's root categories (first page) under the
- *  key categories.tsx builds — the index of all category links is server HTML. */
-export async function loadCategoriesIndexData() {
+ *  key categories.tsx builds — the index of all category links is server HTML.
+ *  `only` = /categories/{type}: prefetch just that vertical's categories. */
+export async function loadCategoriesIndexData(only?: string) {
   const queryClient = new QueryClient();
   try {
     await queryClient.prefetchQuery({
@@ -387,7 +388,7 @@ export async function loadCategoriesIndexData() {
       queryFn: ({ queryKey }: any) => client.types.all(queryKey[1]),
     });
     await Promise.all(
-      (types ?? []).map((t: any) =>
+      (types ?? []).filter((t) => !only || t.slug === only).map((t: any) =>
         queryClient.prefetchInfiniteQuery({
           queryKey: [API_ENDPOINTS.CATEGORIES, { type: t.slug, parent: 'null', limit: 100, language: LOCALE }],
           queryFn: ({ queryKey }: any) => client.categories.all(queryKey[1]),

@@ -15,8 +15,7 @@ type Props = {
     | 'big'
     | 'text'
     | 'plantathome'
-    | 'icon'
-    | 'homeMini';
+    | 'icon';
   onClick(event: React.MouseEvent<HTMLButtonElement | MouseEvent>): void;
   disabled?: boolean;
   /** The 'plantathome' button's text; defaults to "Add To Shopping Cart". */
@@ -109,21 +108,6 @@ const AddToCartBtn: React.FC<Props> = ({ variant, onClick, disabled, label }) =>
         >
           <CartIcon className="h-[clamp(13px,4.4cqw,18px)] w-[clamp(13px,4.4cqw,18px)] shrink-0" />
           <span className="truncate">{label ?? t('text-add-cart')}</span>
-        </button>
-      );
-    case 'homeMini':
-      return (
-        <button
-          onClick={onClick}
-          disabled={disabled}
-          aria-label={t('text-add-cart')}
-          title={t('text-add-cart')}
-          className={cn(
-            'grid h-9 w-9 shrink-0 place-items-center rounded-full bg-ds-btn text-white transition duration-200 hover:bg-ds-btn-hover focus:outline-0',
-            { 'cursor-not-allowed !bg-stone-300': disabled }
-          )}
-        >
-          <CartIcon className="h-4 w-4" />
         </button>
       );
     case 'icon':

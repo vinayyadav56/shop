@@ -21,8 +21,6 @@ import { useState, type ReactNode } from 'react';
  * next.config.ts, or Next 16 answers the request with a 400.
  */
 const VARIANTS = {
-  /** phone product card — w-[165px] (storefront/pah/product-card.tsx) */
-  'product-card': { sizes: '165px', quality: 65 },
   /** phone verticals rail tile — h-[96px] w-[150px] (pah/verticals-rail.tsx) */
   'vertical-tile': { sizes: '150px', quality: 65 },
   /** phone "why plants" card — w-[168px], image box h-[124px] (pah/why-plants.tsx) */

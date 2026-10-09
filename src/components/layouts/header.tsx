@@ -40,7 +40,7 @@ const CATEGORY_MENUS: Record<string, { label: string; href: string }[]> = {
     { label: 'Pet-friendly', href: '/c/pet-friendly' },
     { label: 'Herbs', href: '/c/herbs' },
     { label: 'Climbers & Vines', href: '/c/climbers-vines' },
-    { label: 'All Categories', href: '/categories' },
+    { label: 'All Categories', href: '/categories/plants' },
   ],
   tools: [
     { label: 'Pruning & Cutting', href: '/c/pruning-cutting' },
@@ -48,7 +48,7 @@ const CATEGORY_MENUS: Record<string, { label: string; href: string }[]> = {
     { label: 'Soil & Care', href: '/c/soil-care' },
     { label: 'Tool Sets', href: '/c/tool-sets' },
     { label: 'Accessories', href: '/c/tool-accessories' },
-    { label: 'All Categories', href: '/categories' },
+    { label: 'All Categories', href: '/categories/tools' },
   ],
   farmbox: [
     { label: 'Seasonal Veg Box', href: '/c/veg-box' },
@@ -57,6 +57,7 @@ const CATEGORY_MENUS: Record<string, { label: string; href: string }[]> = {
     { label: 'Herbs', href: '/c/fresh-herbs' },
     { label: 'Exotic Picks', href: '/c/exotic-picks' },
     { label: 'Juices & Cold-press', href: '/c/juices-cold-press' },
+    { label: 'All Categories', href: '/categories/farmbox' },
   ],
   // Production's FarmBox type slug + its live root categories.
   'farm-box': [
@@ -64,7 +65,7 @@ const CATEGORY_MENUS: Record<string, { label: string; href: string }[]> = {
     { label: 'Citrus', href: '/c/citrus' },
     { label: 'Berries', href: '/c/berries' },
     { label: 'Stone Fruits', href: '/c/stone-fruits' },
-    { label: 'All Categories', href: '/categories' },
+    { label: 'All Categories', href: '/categories/farm-box' },
   ],
 };
 

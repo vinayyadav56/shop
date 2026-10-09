@@ -194,10 +194,11 @@ export function FarmboxHero() {
       <div className={cn(HERO_WRAP, 'relative z-10 bg-cream-100 pb-7 lg:-mt-16 lg:bg-transparent lg:pb-0')}>
         <ul
           aria-label="Why FarmBox"
-          className="grid grid-cols-2 gap-x-3 gap-y-5 rounded-lg border border-white/70 bg-white/80 p-4 shadow-box backdrop-blur-md md:grid-cols-4 md:gap-x-4 md:px-5 lg:w-[88%] lg:py-5 xl:w-[76%] 2xl:w-[68%]"
+          // Centred under the hero, each promise centred in its column (owner annotation 2026-10-09).
+          className="grid grid-cols-2 gap-x-3 gap-y-5 rounded-lg border border-white/70 bg-white/80 p-4 shadow-box backdrop-blur-md md:grid-cols-4 md:gap-x-4 md:px-5 lg:mx-auto lg:w-[88%] lg:py-5 xl:w-[76%] 2xl:w-[68%]"
         >
           {HERO_BENEFITS.map((item) => (
-            <IconLine key={item.t} item={item} />
+            <IconLine key={item.t} item={item} className="md:justify-center" />
           ))}
         </ul>
       </div>
@@ -227,7 +228,7 @@ export function FarmboxCategories({ type }: { type: string }) {
         id="farmbox-categories"
         title={SECTION.categories.title}
         sub={SECTION.categories.sub}
-        link={{ label: SECTION.categories.viewAll, href: `/categories#${type}` }}
+        link={{ label: SECTION.categories.viewAll, href: `/categories/${type}` }}
       />
 
       {/* The gap sits on a wrapper: .pah-rail sets its own negative margins for the shadow room. */}
@@ -310,7 +311,7 @@ export function SeasonalBanner() {
 
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-10 top-1/2 hidden h-[122%] w-[24%] -translate-y-1/2 rounded-[46%_54%_42%_58%/55%_45%_55%_45%] bg-sage-100 lg:block"
+          className="pointer-events-none absolute -right-10 top-1/2 hidden h-[122%] w-[24%] -translate-y-1/2 rounded-[46%_54%_42%_58%/55%_45%_55%_45%] bg-sage-100/60 lg:block"
         />
         <p
           aria-hidden
@@ -348,8 +349,8 @@ export function SeasonalBanner() {
 }
 
 /**
- * "Our FarmBox Combos": the vertical's listable products in the SAME card /tools uses (owner,
- * 2026-10-09), six across from lg, three on tablets, two on phones. Real products only.
+ * "Our FarmBox Combos": the vertical's listable products in the site's one product card, on the
+ * same column ladder as /c (owner, 2026-10-09). Real products only.
  *
  * Grid only renders when there is something to draw (cards or first-load skeletons), so its own
  * empty state — hard-coded to /plants — never shows here. Ours: the empty line + a way on to the
@@ -385,12 +386,11 @@ export function FarmboxCombos({ type }: { type: string }) {
         <Grid
           products={products}
           isLoading={isLoading}
-          cardVariant="plp"
           // Below the hero's LCP image: no card image is preloaded.
           priorityCount={0}
           hasMore={false}
           limit={6}
-          gridClassName="mt-6 !grid-cols-2 !gap-x-[15px] !gap-y-5 md:!grid-cols-3 lg:!grid-cols-6"
+          className="mt-6"
         />
       ) : (
         <div
@@ -415,7 +415,7 @@ export function FarmboxCombos({ type }: { type: string }) {
               {SECTION.combos.retry}
             </button>
           ) : (
-            <Link href={`/categories#${type}`} className={BTN_OUTLINE}>
+            <Link href={`/categories/${type}`} className={BTN_OUTLINE}>
               {SECTION.combos.emptyCta}
               <ArrowRight size={16} className="shrink-0" aria-hidden />
             </Link>

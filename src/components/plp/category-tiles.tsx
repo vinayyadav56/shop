@@ -53,7 +53,7 @@ export default function CategoryTiles({ type }: { type: string }) {
           Shop by Category
         </h2>
         <Link
-          href="/categories"
+          href={`/categories/${type}`}
           className="inline-flex shrink-0 items-center gap-1 text-[13px] font-semibold text-forest-700 hover:text-forest-900"
         >
           <span>

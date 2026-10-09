@@ -32,8 +32,6 @@ import { getVerticalMeta } from '@/components/storefront/verticals';
 import { useFilterFacets, useProducts } from '@/framework/product';
 import { PRODUCTS_PER_PAGE } from '@/framework/client/variables';
 import { useCustomerCity } from '@/lib/use-customer-city';
-import { getStoredPincode } from '@/lib/customer-location';
-import { usePincodeServiceability } from '@/lib/use-pincode-serviceability';
 import { track } from '@/lib/analytics/track';
 import { drawerAtom } from '@/store/drawer-atom';
 import type { Product } from '@/types';
@@ -96,20 +94,6 @@ function Plp({ type, mode = 'browse', catalogueTotal = null }: Props) {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, text, isLoading]);
-
-  // The stored pincode's ETA feeds the cards' "Delivery in {n} days" line for
-  // plants no local vendor stocks. localStorage is read AFTER mount: the server
-  // and the first client render must agree (no pincode), or React throws the
-  // tree away (#418).
-  const [pincode, setPincode] = useState<string | null>(null);
-  useEffect(() => {
-    setPincode(getStoredPincode());
-    const sync = () => setPincode(getStoredPincode());
-    window.addEventListener('pah-location-changed', sync);
-    return () => window.removeEventListener('pah-location-changed', sync);
-  }, []);
-  const { result: serviceability } = usePincodeServiceability(pincode);
-  const deliveryEtaDays = serviceability?.serviceable ? serviceability.eta_days ?? null : null;
 
   // Until the city-keyed list has landed, the hydrated all-India list is on
   // screen (keepPreviousData). Say so, dimmed, rather than let it pass as the
@@ -211,10 +195,8 @@ function Plp({ type, mode = 'browse', catalogueTotal = null }: Props) {
                   error={error}
                   column={view === 'list' ? 'list' : 'auto'}
                   categoryName={meta.label}
-                  cardVariant="plp"
-                  deliveryEtaDays={deliveryEtaDays}
-                  // Tailwind `!` beats the shared ladder (PRODUCT_GRID_CLASS); classnames appends.
-                  gridClassName="!gap-x-[15px] !gap-y-5 xl:!grid-cols-4 min-[1440px]:!grid-cols-5 min-[1536px]:!grid-cols-6"
+                  // The one card and the shared column ladder, exactly as /c renders them
+                  // (owner, 2026-10-09: same card on every vertical).
                 />
               </div>
             </div>

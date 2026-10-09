@@ -65,8 +65,8 @@ export interface ToolsFaq {
   a: string;
 }
 
-/** Where every "View All …" link lands: the Tools block of /categories. */
-export const VIEW_ALL_HREF = '/categories#tools';
+/** Where every "View All …" link lands: the tools-only categories page. */
+export const VIEW_ALL_HREF = '/categories/tools';
 
 /** The owner's potting-table photo (1600×569): the hero, the kit band's stand-in and the
  *  need band's leafy crop all use it. */

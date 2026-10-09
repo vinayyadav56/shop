@@ -156,6 +156,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Coming-soon verticals (seeds, fertilizers) are empty shells — not yet.
   for (const slug of typeSlugs.filter((t) => !getVerticalMeta(t).comingSoon)) {
     entries.push({ url: `${BASE}/${slug}`, changeFrequency: 'daily', priority: 0.9 });
+    entries.push({ url: `${BASE}/categories/${slug}`, changeFrequency: 'weekly', priority: 0.6 });
   }
   for (const slug of policySlugs) {
     entries.push({ url: `${BASE}/policies/${slug}`, changeFrequency: 'monthly', priority: 0.3 });
