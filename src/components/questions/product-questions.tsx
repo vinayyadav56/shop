@@ -68,10 +68,7 @@ const ProductQuestions: React.FC<ProductQuestionsProps> = ({
   // active we keep the card (and the input's focus) mounted.
   if (isLoading && isEmpty(questions) && !debouncedSearch) {
     return (
-      <section
-        id="questions"
-        className="mx-auto w-full max-w-7xl scroll-mt-24 px-4 py-10 sm:px-6 lg:px-10"
-      >
+      <section id="questions" className="scroll-mt-24 py-10">
         <div
           className={`flex items-center justify-center rounded-2xl border border-kraft-200 bg-white py-20 ${CARD_SHADOW}`}
         >
@@ -86,15 +83,15 @@ const ProductQuestions: React.FC<ProductQuestionsProps> = ({
     paginatorInfo?.total ?? 0;
 
   return (
-    <section
-      id="questions"
-      className="mx-auto w-full max-w-7xl scroll-mt-24 px-4 py-10 sm:px-6 lg:px-10"
-    >
+    // The product page supplies the container (full width, or the left column beside
+    // "You May Also Like" from xl), so the header reads the CARD's width: title, search and
+    // the Ask button need ~930px side by side, and stack below that.
+    <section id="questions" className="scroll-mt-24 py-10 [container-type:inline-size]">
       <div
         className={`overflow-hidden rounded-2xl border border-kraft-200 bg-white ${CARD_SHADOW}`}
       >
         {/* header — title + local search + ask-question CTA */}
-        <div className="flex flex-col gap-6 border-b border-kraft-200 p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+        <div className="flex flex-col gap-6 border-b border-kraft-200 p-6 sm:p-8 [@container(min-width:58rem)]:flex-row [@container(min-width:58rem)]:items-center [@container(min-width:58rem)]:justify-between [@container(min-width:58rem)]:gap-10">
           <div className="shrink-0">
             <p className="text-[12px] font-bold uppercase leading-none tracking-[0.14em] text-[#B58E39]">
               Plant Q&amp;A
@@ -106,7 +103,7 @@ const ProductQuestions: React.FC<ProductQuestionsProps> = ({
               </span>
             </h2>
           </div>
-          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto lg:justify-end">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center [@container(min-width:58rem)]:w-auto [@container(min-width:58rem)]:justify-end">
             <div className="relative w-full sm:max-w-[360px]">
               <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#8A8A8A]">
                 <Search size={18} aria-hidden />

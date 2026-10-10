@@ -73,6 +73,9 @@ function SignInPage() {
   // than asking them to type what they just typed.
   const [otpPrefill, setOtpPrefill] = useState<string>();
   const [otpChannel, setOtpChannel] = useState<OtpChannel>('sms');
+  // Phone/WhatsApp opened from the Sign Up tab: Back returns there, and a number that
+  // already has an account says so as it signs in.
+  const [otpFromSignup, setOtpFromSignup] = useState(false);
   const reduceMotion = useReducedMotion();
   // login/register are the two tabbed forms; phone/forgot are full replacements
   // for the card, reached from inside those forms.
@@ -301,6 +304,7 @@ function SignInPage() {
                           onPhoneOtp={(phone, channel = 'sms') => {
                             setOtpPrefill(phone);
                             setOtpChannel(channel);
+                            setOtpFromSignup(false);
                             setMode('phone');
                           }}
                         />
@@ -310,11 +314,18 @@ function SignInPage() {
                           onPhoneOtp={(channel = 'sms') => {
                             setOtpPrefill(undefined);
                             setOtpChannel(channel);
+                            setOtpFromSignup(true);
                             setMode('phone');
                           }}
                         />
                       ) : mode === 'phone' ? (
-                        <OtpLoginView inline channel={otpChannel} prefillPhone={otpPrefill} onBack={() => setMode('login')} />
+                        <OtpLoginView
+                          inline
+                          channel={otpChannel}
+                          prefillPhone={otpPrefill}
+                          signup={otpFromSignup}
+                          onBack={() => setMode(otpFromSignup ? 'register' : 'login')}
+                        />
                       ) : (
                         <ForgotUserPassword inline onBack={() => setMode('login')} />
                       )}

@@ -8,8 +8,10 @@ import { test, expect, Locator, Page } from '@playwright/test';
  * phones, product links in the server HTML, a real "N+ plants" trust
  * count, category tiles linking /c/, need tiles and sort that round-trip
  * through the URL, "Popular" as the default sort, the site's one product card
- * (the /c card) with "Select Options" opening the size sheet (adding a size
- * bumps the header cart badge — local state only, no order), "Clear all" that
+ * (the /c card) — a click anywhere on it opens the product, in a new tab on
+ * desktop and the same tab on a phone, while a simple product's Add To Shopping
+ * Cart still adds in place (bumps the header badge — local state only, no
+ * order) — "Clear all" that
  * keeps products on screen, /c's five grid columns at 1536, the search route
  * rendering the same body, and the usual
  * hygiene gates: no console errors, no 4xx/5xx images, no horizontal overflow.
@@ -168,47 +170,87 @@ test.describe('/plants PLP', () => {
     await expect(firstProductLink(page)).toBeAttached({ timeout: 20_000 });
   });
 
-  test('every card has a CTA; "Select Options" opens the size sheet, which adds a sized plant to the local cart', async ({ page }) => {
+  /** Click the middle of a card's description — a spot with no control of its own, so
+   *  whatever happens there is the card's stretched link. A real mouse click (not
+   *  locator.click) because the link's overlay is meant to sit over the text. */
+  const clickCardBody = async (page: Page, card: Locator) => {
+    const desc = card.locator('p').last();
+    await desc.scrollIntoViewIfNeeded();
+    const box = await desc.boundingBox();
+    if (!box) throw new Error('card description not laid out');
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  };
+
+  test('every card has a CTA; on desktop a click anywhere on a card opens the product in a new tab', async ({ page, context }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/plants', { waitUntil: 'domcontentloaded' });
     const cards = page.locator('[data-product-card]');
     await expect(cards.first()).toBeVisible({ timeout: 20_000 });
-    // The server HTML already has the buttons; a click before React hydrates
-    // does nothing. Wait for hydration, then let the city-scoped list settle.
+    // The new-tab target is set after mount; wait for hydration and the city-scoped list.
     await hydrated(page);
     await expect(page.locator('[aria-busy="true"]')).toHaveCount(0, { timeout: 20_000 });
 
     const n = await cards.count();
     for (let i = 0; i < Math.min(n, 12); i++) {
+      // Sized products go to the product page to choose ("Select Options" is a link —
+      // the in-card size picker is gone); simple ones add in place.
       await expect(
-        cards.nth(i).getByRole('button', { name: /select options|add to shopping cart|out of stock/i }),
+        cards
+          .nth(i)
+          .getByRole('link', { name: /^select options$/i })
+          .or(cards.nth(i).getByRole('button', { name: /add to shopping cart|out of stock/i })),
       ).toBeVisible();
     }
 
+    const card = cards.first();
+    const link = card.locator('a[href^="/products/"]').first();
+    await expect(link).toHaveAttribute('target', '_blank');
+    const href = await link.getAttribute('href');
+    const [tab] = await Promise.all([context.waitForEvent('page'), clickCardBody(page, card)]);
+    await tab.waitForLoadState('domcontentloaded');
+    expect(new URL(tab.url()).pathname).toBe(href);
+    await tab.close();
+    // The listing stays where it was, with no size sheet opened over it.
+    expect(new URL(page.url()).pathname).toBe('/plants');
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+  });
+
+  test('on a phone a click anywhere on a card opens the product in the same tab', async ({ page, context }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/plants', { waitUntil: 'domcontentloaded' });
+    const card = page.locator('[data-product-card]').first();
+    await expect(card).toBeVisible({ timeout: 20_000 });
+    await hydrated(page);
+    // The city-scoped list replaces the server one; measure the card only once it has.
+    await expect(page.locator('[aria-busy="true"]')).toHaveCount(0, { timeout: 20_000 });
+    const link = card.locator('a[href^="/products/"]').first();
+    await expect(link).not.toHaveAttribute('target', /.+/);
+    const href = await link.getAttribute('href');
+    const pagesBefore = context.pages().length;
+    await clickCardBody(page, card);
+    await expect.poll(() => new URL(page.url()).pathname, { timeout: 20_000 }).toBe(href);
+    expect(context.pages().length).toBe(pagesBefore);
+  });
+
+  test("a simple product's Add To Shopping Cart adds in place — the card's link doesn't take the click", async ({ page, context }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/plants', { waitUntil: 'domcontentloaded' });
+    const cards = page.locator('[data-product-card]');
+    await expect(cards.first()).toBeVisible({ timeout: 20_000 });
+    await hydrated(page);
+    await expect(page.locator('[aria-busy="true"]')).toHaveCount(0, { timeout: 20_000 });
+
+    const addable = cards.filter({ has: page.getByRole('button', { name: /add to shopping cart/i }) });
+    if ((await addable.count()) === 0) {
+      test.skip(true, 'no simple product addable in the seeded city in this environment');
+    }
     const badge = page.locator('[data-cart-target] span span');
     const before = Number((await badge.first().textContent())?.trim() || '0');
-
-    const addable = cards.filter({ has: page.getByRole('button', { name: /^select options$/i }) });
-    if ((await addable.count()) === 0) {
-      test.skip(true, 'nothing addable in the seeded city in this environment');
-    }
-    await addable.first().getByRole('button', { name: /^select options$/i }).click();
-
-    const dialog = page.getByRole('dialog');
-    await expect(dialog).toBeVisible({ timeout: 10_000 });
-    const chips = dialog.locator('button[aria-pressed]');
-    await expect(chips.first()).toBeVisible({ timeout: 20_000 });
-    // Escape closes the sheet; reopen it for the add.
-    await page.keyboard.press('Escape');
-    await expect(dialog).toBeHidden();
-    await addable.first().getByRole('button', { name: /^select options$/i }).click();
-    await expect(dialog).toBeVisible({ timeout: 10_000 });
-    await chips.first().click();
-    const add = dialog.getByRole('button', { name: /^add to cart$/i });
-    await expect(add).toBeEnabled({ timeout: 10_000 });
-    await add.click();
-    await expect(dialog).toBeHidden({ timeout: 10_000 });
+    const pagesBefore = context.pages().length;
+    await addable.first().getByRole('button', { name: /add to shopping cart/i }).click();
     await expect.poll(async () => Number((await badge.first().textContent())?.trim() || '0'), { timeout: 10_000 }).toBe(before + 1);
+    expect(new URL(page.url()).pathname).toBe('/plants');
+    expect(context.pages().length).toBe(pagesBefore);
   });
 
   test('/plants/search renders the same body with the term', async ({ page }) => {

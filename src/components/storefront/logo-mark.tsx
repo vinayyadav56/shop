@@ -24,12 +24,17 @@ export function PlantMark({
       <path d="M13 32 32 15l19 17" />
       <path d="M19 29v18h7" />
       <path d="M45 29v18h-7" />
-      {/* plant — stem + two leaf pairs */}
-      <path d="M32 47V27" />
-      <path d="M32 30c-7 0-11-4-11-10 7 0 11 4 11 10Z" />
-      <path d="M32 30c7 0 11-4 11-10-7 0-11 4-11 10Z" />
-      <path d="M32 40c-5.5 0-9-3-9-7.5 5.5 0 9 3 9 7.5Z" />
-      <path d="M32 40c5.5 0 9-3 9-7.5-5.5 0-9 3-9 7.5Z" />
+      {/* plant — stem + two leaf pairs, shrunk 30% about the stem's base (32,47) so it
+          grows INSIDE the house: at full size the top leaves (x 21/43, y 20) crossed the
+          roofline (annotation). Leaves now span x 24–40, y 28–47; the roof is at y≈22
+          above them. Stroke divided by the scale so the line weight still matches. */}
+      <g transform="translate(9.6 14.1) scale(0.7)" strokeWidth={2.6 / 0.7}>
+        <path d="M32 47V27" />
+        <path d="M32 30c-7 0-11-4-11-10 7 0 11 4 11 10Z" />
+        <path d="M32 30c7 0 11-4 11-10-7 0-11 4-11 10Z" />
+        <path d="M32 40c-5.5 0-9-3-9-7.5 5.5 0 9 3 9 7.5Z" />
+        <path d="M32 40c5.5 0 9-3 9-7.5-5.5 0-9 3-9 7.5Z" />
+      </g>
     </svg>
   );
 }

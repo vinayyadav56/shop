@@ -206,13 +206,13 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   const needsSelection = hasVariations && !isSelected;
 
   /**
-   * The price, rendered in one of two places: inline with the first variation
-   * picker's label when the product has variations, or in its own row when it
-   * does not. Defined once so the two positions can never drift.
+   * The price — ONE row, directly above the qty + CTA row, for every product (owner
+   * annotation 2026-10-10: "price should come just above the select options button").
+   * It used to share the first size label's row, or sit under the title when the
+   * product had no sizes.
    *
    * Slightly smaller in the range state (20px vs 22px) because "₹359.00 –
-   * ₹929.00" is roughly twice the width of a single price and would otherwise
-   * crowd the label it now shares a row with.
+   * ₹929.00" is roughly twice the width of a single price.
    */
   const priceBlock = needsSelection ? (
     <span className="whitespace-nowrap text-[15px] font-bold leading-none text-ds-btn sm:text-[17px] lg:text-[20px]">
@@ -294,6 +294,8 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
   // ONE source of truth for both CTAs (inline + sticky bar) so copy/state
   // can never drift between them.
   const ctaDisabled = !inStock || needsSelection || verticalBlocked || displayOnly || cityUnavailable;
+  // Something to pick (sizes, or a pot for a plant) for the delivery card to sit beside on xl.
+  const hasOptions = hasVariations || type?.slug === 'plants';
   const ctaLabel = displayOnly
     ? `Out of Stock in ${shoppingCity}`
     : cityUnavailable
@@ -342,7 +344,9 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
 
   return (
     <article className="bg-cream-100">
-      <div className="mx-auto w-full max-w-7xl px-4 pb-36 pt-3 sm:px-6 lg:px-10 lg:pb-12">
+      {/* The listing pages' width (owner annotation 2026-10-10: "not utilizing the full
+          space of the page"): up to 1920px, the same gutters as /plants from sm up. */}
+      <div className="mx-auto w-full max-w-[1920px] px-4 pb-36 pt-3 sm:px-6 lg:pb-12 xl:px-8">
         {/* breadcrumb */}
         {!isModal && (
           <>
@@ -353,8 +357,11 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
 
         {/* main grid — media slightly dominant; gallery pins while the info
             column scrolls (modern PDP convention). Sticky only outside the
-            quick-view modal (the modal has its own scroll context). */}
-        <div className="mt-4 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 xl:gap-16">
+            quick-view modal (the modal has its own scroll context).
+            From xl the extra width of the full-width page goes to the INFO column,
+            which seats the delivery card beside the size options; the gallery stays
+            about as wide as before (~590px at 1440), so it still fits the viewport. */}
+        <div className="mt-4 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] xl:gap-16">
           <div className={classNames('relative', !isModal && 'lg:sticky lg:top-24 lg:self-start')}>
             <PlantAtHomeGallery
               gallery={previewImages}
@@ -466,25 +473,6 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
               </div>
             )}
 
-            {/*
-              Price sits on the SAME ROW as the first variation picker's label
-              (label left, price right) rather than in a row of its own further
-              up. Selecting a size is what changes the price, so putting them on
-              one line makes that cause and effect visible instead of leaving the
-              reader to connect two separate blocks.
-
-              Products with no variations keep the standalone row — there is no
-              picker to pair it with.
-            */}
-            {!hasVariations && (
-              <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1">
-                {priceBlock}
-                <span className="w-full text-[11px] font-medium text-stone-400">
-                  incl. of all taxes
-                </span>
-              </div>
-            )}
-
             <div className="mt-4 h-px w-full bg-kraft-300/70" />
 
             {/* short description (the ONLY teaser — full text lives in the
@@ -503,167 +491,182 @@ const PlantAtHomeProductDetails: React.FC<Props> = ({ product, isModal = false }
               <BundleContents product={product} compact={isModal} />
             </div>
 
-            {/* variation pickers */}
-            {hasVariations &&
-              Object.keys(variations).map((groupName, groupIndex) => {
-                const allOptions = variations[groupName] as any[];
-                const isSizeGroup = groupName.toLowerCase() === 'size';
-                // Only vendor-supplied sizes for the customer's city; fail-open
-                // to the full list when the filter would empty it.
-                const cityFiltered =
-                  isSizeGroup && unavailableSizes.size > 0
-                    ? allOptions.filter((o) => !unavailableSizes.has(String(o.value)))
-                    : allOptions;
-                const options = cityFiltered.length > 0 ? cityFiltered : allOptions;
-                const color = isColorGroup(groupName, options);
-                const selected = attributes[groupName];
-                return (
-                  <div key={groupName} className="mt-5">
-                    <div className="mb-2 flex items-center justify-between gap-x-3">
-                      <span className="flex min-w-0 items-center gap-x-2.5">
-                        <p className="shrink-0 whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.08em] text-forest-900 sm:text-[12px]">
-                          {`Select ${groupName.replace(/-/g, ' ')}`}
-                        </p>
-                        {/* Popup size guide, right where the sizes are chosen —
-                            works on the full PDP AND in the quick-view modal. */}
-                        {isSizeGroup && (size_guide?.original || allOptions.length > 0) && (
-                          <button
-                            type="button"
-                            onClick={() =>
-                              openModal('SIZE_GUIDE', {
-                                sizeGuide: size_guide,
-                                sizes: (variations as any)?.size ?? [],
-                                name,
-                              })
-                            }
-                            className="flex shrink-0 items-center gap-1 text-[11px] font-semibold text-forest-700 underline underline-offset-2 hover:text-forest-900"
-                          >
-                            <Ruler size={12} aria-hidden />
-                            Size guide
-                          </button>
-                        )}
-                      </span>
-                      {/* first picker only — repeating the price above every
-                          group would read as a different price per group. */}
-                      {groupIndex === 0 && (
-                        <span className="flex min-w-0 items-center justify-end gap-x-2 whitespace-nowrap">
-                          {priceBlock}
-                        </span>
-                      )}
-                    </div>
-                    {color ? (
-                      <div className="flex flex-wrap items-center gap-3">
-                        {options.map((o) => {
-                          const active = selected === o.value;
-                          return (
-                            <button
-                              key={o.id}
-                              type="button"
-                              aria-label={o.value}
-                              onClick={() => setAttributes((p: any) => ({ ...p, [groupName]: o.value }))}
-                              className={classNames(
-                                'grid h-10 w-10 place-items-center rounded-full border-2 transition',
-                                active ? 'border-forest-600' : 'border-transparent hover:border-kraft-300',
+            {/* Buy area. DOM order is the phone order (owner, 2026-10-10): options → price →
+                qty + CTA → delivery card. From xl the info column is wide enough to seat the
+                delivery card BESIDE the options, top right, where the price used to sit
+                (annotation: "keep this side by side at the place where price is currently
+                showing"); price + CTA then run full width under both. A product with
+                nothing to choose keeps the card under the CTA, so no cell sits empty. */}
+            <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_18rem] xl:items-start xl:gap-x-6">
+              {hasOptions && (
+                <div className="min-w-0">
+                  {/* variation pickers */}
+                  {hasVariations &&
+                    Object.keys(variations).map((groupName) => {
+                      const allOptions = variations[groupName] as any[];
+                      const isSizeGroup = groupName.toLowerCase() === 'size';
+                      // Only vendor-supplied sizes for the customer's city; fail-open
+                      // to the full list when the filter would empty it.
+                      const cityFiltered =
+                        isSizeGroup && unavailableSizes.size > 0
+                          ? allOptions.filter((o) => !unavailableSizes.has(String(o.value)))
+                          : allOptions;
+                      const options = cityFiltered.length > 0 ? cityFiltered : allOptions;
+                      const color = isColorGroup(groupName, options);
+                      const selected = attributes[groupName];
+                      return (
+                        <div key={groupName} className="mt-5">
+                          <div className="mb-2 flex items-center justify-between gap-x-3">
+                            <span className="flex min-w-0 items-center gap-x-2.5">
+                              <p className="shrink-0 whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.08em] text-forest-900 sm:text-[12px]">
+                                {`Select ${groupName.replace(/-/g, ' ')}`}
+                              </p>
+                              {/* Popup size guide, right where the sizes are chosen —
+                                  works on the full PDP AND in the quick-view modal. */}
+                              {isSizeGroup && (size_guide?.original || allOptions.length > 0) && (
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    openModal('SIZE_GUIDE', {
+                                      sizeGuide: size_guide,
+                                      sizes: (variations as any)?.size ?? [],
+                                      name,
+                                    })
+                                  }
+                                  className="flex shrink-0 items-center gap-1 text-[11px] font-semibold text-forest-700 underline underline-offset-2 hover:text-forest-900"
+                                >
+                                  <Ruler size={12} aria-hidden />
+                                  Size guide
+                                </button>
                               )}
-                            >
-                              <span className="h-7 w-7 rounded-full border border-black/10" style={{ backgroundColor: o.meta || o.value }} />
-                            </button>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <div className="flex flex-wrap gap-3">
-                        {options.map((o) => {
-                          const active = selected === o.value;
-                          return (
-                            <button
-                              key={o.id}
-                              type="button"
-                              onClick={() => setAttributes((p: any) => ({ ...p, [groupName]: o.value }))}
-                              className={classNames(
-                                'min-w-[3.25rem] rounded-full border px-4 py-1.5 text-[13px] font-medium transition',
-                                active
-                                  ? 'border-forest-700 bg-forest-700 text-white'
-                                  : 'border-kraft-300 bg-transparent text-forest-900 hover:border-forest-500',
-                              )}
-                            >
-                              {o.value}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
+                            </span>
+                          </div>
+                          {color ? (
+                            <div className="flex flex-wrap items-center gap-3">
+                              {options.map((o) => {
+                                const active = selected === o.value;
+                                return (
+                                  <button
+                                    key={o.id}
+                                    type="button"
+                                    aria-label={o.value}
+                                    onClick={() => setAttributes((p: any) => ({ ...p, [groupName]: o.value }))}
+                                    className={classNames(
+                                      'grid h-10 w-10 place-items-center rounded-full border-2 transition',
+                                      active ? 'border-forest-600' : 'border-transparent hover:border-kraft-300',
+                                    )}
+                                  >
+                                    <span className="h-7 w-7 rounded-full border border-black/10" style={{ backgroundColor: o.meta || o.value }} />
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <div className="flex flex-wrap gap-3">
+                              {options.map((o) => {
+                                const active = selected === o.value;
+                                return (
+                                  <button
+                                    key={o.id}
+                                    type="button"
+                                    onClick={() => setAttributes((p: any) => ({ ...p, [groupName]: o.value }))}
+                                    className={classNames(
+                                      'min-w-[3.25rem] rounded-full border px-4 py-1.5 text-[13px] font-medium transition',
+                                      active
+                                        ? 'border-forest-700 bg-forest-700 text-white'
+                                        : 'border-kraft-300 bg-transparent text-forest-900 hover:border-forest-500',
+                                    )}
+                                  >
+                                    {o.value}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+
+                  {/* pot picker — plants only; pots are real products added as their
+                      own cart line, size-matched to the selected plant size */}
+                  {type?.slug === 'plants' && (
+                    <PotPicker
+                      plantSize={(attributes as any)?.size ?? null}
+                      fallbackSize={((variations as any)?.size?.[0]?.value as string) ?? null}
+                      selected={selectedPot}
+                      onSelect={setSelectedPot}
+                    />
+                  )}
+                </div>
+              )}
+
+              <div className="xl:col-span-2">
+                {/* the price, just above the CTA (annotation 2026-10-10) */}
+                <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1">
+                  {priceBlock}
+                  <span className="w-full text-[11px] font-medium text-stone-400">
+                    incl. of all taxes
+                  </span>
+                </div>
+
+                {/* quantity + add to cart (the div is also the sticky-bar sentinel:
+                    the condensed bar appears once this row scrolls above the fold) */}
+                <div ref={atcSentinelRef} className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-stretch">
+                  <div className="flex items-center justify-between gap-2 rounded-full border border-kraft-300 px-2 py-1.5 sm:w-[140px]">
+                    <button
+                      type="button"
+                      aria-label="Decrease quantity"
+                      onClick={() => setQty((q) => Math.max(1, q - 1))}
+                      className="grid h-10 w-10 place-items-center rounded-full text-forest-900 transition hover:bg-cream-100 disabled:opacity-40"
+                      disabled={qty <= 1}
+                    >
+                      <Minus size={16} aria-hidden />
+                    </button>
+                    <span className="min-w-[1.5rem] text-center text-[14px] font-semibold text-forest-900">
+                      {String(qty).padStart(2, '0')}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label="Increase quantity"
+                      onClick={() => setQty((q) => (availableQty ? Math.min(availableQty, q + 1) : q + 1))}
+                      className="grid h-10 w-10 place-items-center rounded-full text-forest-900 transition hover:bg-cream-100"
+                    >
+                      <Plus size={16} aria-hidden />
+                    </button>
                   </div>
-                );
-              })}
 
-            {/* pot picker — plants only; pots are real products added as their
-                own cart line, size-matched to the selected plant size */}
-            {type?.slug === 'plants' && (
-              <PotPicker
-                plantSize={(attributes as any)?.size ?? null}
-                fallbackSize={((variations as any)?.size?.[0]?.value as string) ?? null}
-                selected={selectedPot}
-                onSelect={setSelectedPot}
-              />
-            )}
-
-            {/* ONE coherent "Delivery & availability" card — merges the ETA
-                line, the vendor-availability note, the vertical-blocked and
-                browse-only notices that used to be four scattered rows. */}
-            <div className="mt-5">
-              <DeliveryCard
-                city={customerCity}
-                etaDays={fulfillment?.eta_days ?? null}
-                fulfillmentMode={fulfillment?.fulfillment_mode ?? null}
-                product={product}
-                variationOptionId={isSelected ? selectedVariation?.id ?? null : null}
-                verticalBlocked={verticalBlocked}
-                verticalMessage={verticalMessage}
-                displayOnly={displayOnly}
-              />
-            </div>
-
-            {/* quantity + add to cart (the div is also the sticky-bar sentinel:
-                the condensed bar appears once this row scrolls above the fold) */}
-            <div ref={atcSentinelRef} className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-stretch">
-              <div className="flex items-center justify-between gap-2 rounded-full border border-kraft-300 px-2 py-1.5 sm:w-[140px]">
-                <button
-                  type="button"
-                  aria-label="Decrease quantity"
-                  onClick={() => setQty((q) => Math.max(1, q - 1))}
-                  className="grid h-10 w-10 place-items-center rounded-full text-forest-900 transition hover:bg-cream-100 disabled:opacity-40"
-                  disabled={qty <= 1}
-                >
-                  <Minus size={16} aria-hidden />
-                </button>
-                <span className="min-w-[1.5rem] text-center text-[14px] font-semibold text-forest-900">
-                  {String(qty).padStart(2, '0')}
-                </span>
-                <button
-                  type="button"
-                  aria-label="Increase quantity"
-                  onClick={() => setQty((q) => (availableQty ? Math.min(availableQty, q + 1) : q + 1))}
-                  className="grid h-10 w-10 place-items-center rounded-full text-forest-900 transition hover:bg-cream-100"
-                >
-                  <Plus size={16} aria-hidden />
-                </button>
+                  <button
+                    type="button"
+                    onClick={handleAdd}
+                    disabled={ctaDisabled}
+                    className={classNames(
+                      'flex flex-1 items-center justify-center gap-2.5 rounded-control px-7 py-3.5 text-[14px] font-bold uppercase tracking-[0.04em] text-white transition',
+                      ctaDisabled
+                        ? 'cursor-not-allowed bg-stone-300'
+                        : 'bg-ds-btn shadow-[0_14px_30px_-12px_rgba(20,83,45,0.6)] hover:bg-ds-btn-hover',
+                    )}
+                  >
+                    <ShoppingBag size={20} aria-hidden />
+                    {ctaLabel}
+                  </button>
+                </div>
               </div>
 
-              <button
-                type="button"
-                onClick={handleAdd}
-                disabled={ctaDisabled}
-                className={classNames(
-                  'flex flex-1 items-center justify-center gap-2.5 rounded-control px-7 py-3.5 text-[14px] font-bold uppercase tracking-[0.04em] text-white transition',
-                  ctaDisabled
-                    ? 'cursor-not-allowed bg-stone-300'
-                    : 'bg-ds-btn shadow-[0_14px_30px_-12px_rgba(20,83,45,0.6)] hover:bg-ds-btn-hover',
-                )}
-              >
-                <ShoppingBag size={20} aria-hidden />
-                {ctaLabel}
-              </button>
+              {/* ONE coherent "Delivery & availability" card — merges the ETA
+                  line, the vendor-availability note, the vertical-blocked and
+                  browse-only notices that used to be four scattered rows. */}
+              <div className={classNames('mt-5', hasOptions ? 'xl:col-start-2 xl:row-start-1' : 'xl:col-span-2')}>
+                <DeliveryCard
+                  city={customerCity}
+                  etaDays={fulfillment?.eta_days ?? null}
+                  fulfillmentMode={fulfillment?.fulfillment_mode ?? null}
+                  product={product}
+                  variationOptionId={isSelected ? selectedVariation?.id ?? null : null}
+                  verticalBlocked={verticalBlocked}
+                  verticalMessage={verticalMessage}
+                  displayOnly={displayOnly}
+                />
+              </div>
             </div>
 
             {/* trust strip — modern convention: guarantees directly under the

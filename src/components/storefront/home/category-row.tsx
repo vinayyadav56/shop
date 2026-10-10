@@ -92,8 +92,11 @@ export function CategoryRow() {
     <section className="relative">
       {/* warm-glass panel the cards float on (design spec §8). Total height is
           pinned to the navbar pill: 56 card + 8 rail py + 12 panel p + 2
-          border = 78px (annotation: strip = navbar height). */}
-      <div className="relative rounded-2xl border border-white/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.93),rgba(248,248,243,0.86))] p-1.5 shadow-box backdrop-blur-[24px] backdrop-saturate-[1.3]">
+          border = 78px (annotation: strip = navbar height).
+          Cream, not white glass (annotation 2026-10-10: "a little cream … more focused"):
+          cream-100 → kraft-200, nearly opaque, so the strip reads as one solid surface
+          over the photo and the white tiles on it stand out. */}
+      <div className="relative rounded-2xl border border-kraft-200 bg-[linear-gradient(135deg,rgba(244,241,234,0.97),rgba(233,227,214,0.93))] p-1.5 shadow-box backdrop-blur-[24px] backdrop-saturate-[1.3]">
         <div
           ref={railRef}
           // py-1 gives the 3px hover lift headroom INSIDE the scroll box —
@@ -119,7 +122,7 @@ export function CategoryRow() {
                   >
                     <Link
                       href={`/c/${c.slug}`}
-                      className="group flex h-[56px] items-center rounded-xl border border-[rgba(30,65,36,0.06)] bg-[linear-gradient(135deg,rgba(255,255,255,0.7),rgba(245,247,241,0.45))] p-2 transition-all duration-200 hover:-translate-y-[3px] hover:bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(243,248,238,0.85))] hover:shadow-[0_10px_25px_rgba(15,55,24,0.1)]"
+                      className="group flex h-[56px] items-center rounded-xl border border-[rgba(30,65,36,0.06)] bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(255,255,255,0.88))] p-2 transition-all duration-200 hover:-translate-y-[3px] hover:bg-white hover:bg-none hover:shadow-[0_10px_25px_rgba(15,55,24,0.1)]"
                     >
                       {/* product photo — left, 44x44 on a soft radial tile. object-cover, not
                           contain: at 40px with 5px padding a 4:3 shot rendered ~30x22 and

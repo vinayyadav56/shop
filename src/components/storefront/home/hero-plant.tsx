@@ -442,7 +442,9 @@ export function HeroPlant() {
           transition={{ delay: 0.65, duration: 0.8, ease: EXPO }}
           className="absolute right-5 top-1/2 z-[45] hidden -translate-y-1/2 lg:block sm:right-8 lg:right-[110px]"
         >
-          <div className="flex items-center gap-4 rounded-2xl border border-white/[0.14] bg-white/[0.08] px-5 py-4 backdrop-blur-2xl">
+          {/* Twice the site radius (owner annotation 2026-10-10: "a bit more rounded") — the
+              only card over the hero photo, so it can take a softer corner than the 8px canon. */}
+          <div className="flex items-center gap-4 rounded-[calc(var(--radius-box)*2)] border border-white/[0.14] bg-white/[0.08] px-5 py-4 backdrop-blur-2xl">
             {/* icon */}
             <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#4ADE80]/20 ring-1 ring-[#4ADE80]/25">
               <Percent className="h-[18px] w-[18px] text-[#4ADE80]" />

@@ -15,7 +15,17 @@ import OtpRegisterForm from '@/components/otp/otp-register-form';
 import { WhatsAppIcon } from '@/components/icons/whatsapp';
 import type { OtpChannel } from '@/types';
 
-function OtpLogin({ channel, prefillPhone }: { channel: OtpChannel; prefillPhone?: string }) {
+function OtpLogin({
+  channel,
+  prefillPhone,
+  signup,
+  onCancel,
+}: {
+  channel: OtpChannel;
+  prefillPhone?: string;
+  signup?: boolean;
+  onCancel?: () => void;
+}) {
   const { t } = useTranslation('common');
   const [otpState, setOtpState] = useAtom(optAtom);
   const reduceMotion = useReducedMotion();
@@ -31,7 +41,7 @@ function OtpLogin({ channel, prefillPhone }: { channel: OtpChannel; prefillPhone
     mutate: otpLogin,
     isLoading: otpLoginLoading,
     serverError: optLoginError,
-  } = useOtpLogin();
+  } = useOtpLogin({ signup });
 
   // A fresh open must never inherit a half-finished attempt from last time.
   // `prefillPhone` is the one thing that MAY survive the reset: when someone
@@ -148,6 +158,7 @@ function OtpLogin({ channel, prefillPhone }: { channel: OtpChannel; prefillPhone
           <OtpRegisterForm
             loading={otpLoginLoading}
             onSubmit={onOtpLoginSubmission}
+            onCancel={onCancel}
           />
         </>
       )}
@@ -171,14 +182,19 @@ type OtpLoginViewProps = {
   inline?: boolean;
   /** Digits only (e.g. "919876543210"), pre-filled into the number field. */
   prefillPhone?: string;
+  /** Opened from Sign Up: a number that already has an account says so as it signs in.
+   *  Inline callers pass it; modal callers send `signup: true` in the payload. */
+  signup?: boolean;
 };
 
-export default function OtpLoginView({ channel: channelProp, onBack, inline = false, prefillPhone }: OtpLoginViewProps = {}) {
+export default function OtpLoginView({ channel: channelProp, onBack, inline = false, prefillPhone, signup: signupProp }: OtpLoginViewProps = {}) {
   const { t } = useTranslation('common');
   const { openModal, closeModal } = useModalAction();
-  const { data } = useModalState() as { data?: { channel?: OtpChannel } };
+  const { data } = useModalState() as { data?: { channel?: OtpChannel; signup?: boolean } };
   const channel: OtpChannel =
     channelProp ?? (data?.channel === 'whatsapp' ? 'whatsapp' : 'sms');
+  const signup = signupProp ?? Boolean(data?.signup);
+  const back = onBack ?? (() => openModal(signup ? 'REGISTER' : 'LOGIN_VIEW'));
 
   const body = (
     <>
@@ -196,15 +212,17 @@ export default function OtpLoginView({ channel: channelProp, onBack, inline = fa
           </p>
         </div>
       ) : null}
-      <OtpLogin channel={channel} prefillPhone={prefillPhone} />
+      {/* Inline, the details step's Cancel goes the same way as Back — it called
+          closeModal, which does nothing on the /signin page. The dialog keeps closing. */}
+      <OtpLogin channel={channel} prefillPhone={prefillPhone} signup={signup} onCancel={onBack} />
       <div className="mt-9 flex items-center gap-4 sm:mt-10">
         <hr className="min-w-0 flex-1 border-stone-200" />
         <button
-          onClick={onBack ?? (() => openModal('LOGIN_VIEW'))}
+          onClick={back}
           className="inline-flex items-center gap-2 rounded-sm font-semibold text-forest-700 transition-colors hover:text-forest-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest-600 focus-visible:ring-offset-2"
         >
           <ArrowLeft size={16} aria-hidden />
-          Back to login
+          {signup ? 'Back to sign up' : 'Back to login'}
         </button>
         <hr className="min-w-0 flex-1 border-stone-200" />
       </div>

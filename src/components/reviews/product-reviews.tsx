@@ -77,10 +77,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
 
   if (isLoading && isEmpty(reviews)) {
     return (
-      <section
-        id="reviews"
-        className="mx-auto w-full max-w-7xl scroll-mt-24 px-4 py-10 sm:px-6 lg:px-10"
-      >
+      <section id="reviews" className="scroll-mt-24 py-10">
         <div
           className={`flex items-center justify-center rounded-2xl border border-kraft-200 bg-white py-20 ${CARD_SHADOW}`}
         >
@@ -96,15 +93,15 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
   const showOrdersLink = mounted && isAuthorized;
 
   return (
-    <section
-      id="reviews"
-      className="mx-auto w-full max-w-7xl scroll-mt-24 px-4 py-10 sm:px-6 lg:px-10"
-    >
+    // The product page supplies the container (this sits full width, or in the left column
+    // beside "You May Also Like" from xl), so the header reads the CARD's width, not the
+    // viewport's: side by side once there are ~800px for it, stacked otherwise.
+    <section id="reviews" className="scroll-mt-24 py-10 [container-type:inline-size]">
       <div
         className={`overflow-hidden rounded-2xl border border-kraft-200 bg-white ${CARD_SHADOW}`}
       >
         {/* header — title + write-review affordance, ratings summary beside */}
-        <div className="flex flex-col gap-8 border-b border-kraft-200 p-6 sm:p-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
+        <div className="flex flex-col gap-8 border-b border-kraft-200 p-6 sm:p-8 [@container(min-width:50rem)]:flex-row [@container(min-width:50rem)]:items-start [@container(min-width:50rem)]:justify-between [@container(min-width:50rem)]:gap-12">
           <div className="shrink-0">
             <p className="text-[12px] font-bold uppercase leading-none tracking-[0.14em] text-[#B58E39]">
               Customer voices

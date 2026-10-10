@@ -11,7 +11,8 @@
  * Modern PDP order (2026-07 reorg): details (sticky gallery + info column)
  * → Frequently Bought Together (real data) → Plant care & details (merged
  * description/specs/video) → Styled Spaces (admin-config) → Reviews →
- * Q&A → You May Also Like last.
+ * Q&A → You May Also Like last. From xl, Reviews + Q&A and You May Also Like
+ * share one row (2026-10-10).
  */
 
 import Link from 'next/link';
@@ -38,8 +39,11 @@ import { track } from '@/lib/analytics/track';
 
 const BookDetails = dynamic(() => import('@/components/products/details/book-details'));
 
-/** One container class everywhere — the old page mixed three padding systems. */
-const CONTAINER = 'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10';
+/** One container class everywhere — the old page mixed three padding systems. The
+ *  listing pages' width (owner annotation 2026-10-10: "not utilizing the full space"):
+ *  up to 1920px, the same gutters as /plants from sm up. Keep in step with the details
+ *  panel and Styled Spaces, which carry the same classes. */
+const CONTAINER = 'mx-auto w-full max-w-[1920px] px-4 sm:px-6 xl:px-8';
 
 const ProductPage = ({ product }: any) => {
   const { width } = useWindowSize();
@@ -121,38 +125,50 @@ const ProductPage = ({ product }: any) => {
               {/* Styled in Real Spaces — admin-configurable (Product Page Sections) */}
               <StyledSpaces />
 
-              {/* social proof before related — modern PDP order */}
-              <ProductReviews
-                productId={product?.id}
-                productType={product?.type?.slug}
-                ratings={Number(product?.ratings) || 0}
-                totalReviews={Number(product?.total_reviews) || 0}
-                ratingCount={product?.rating_count}
-              />
-              <ProductQuestions productId={product?.id} shopId={product?.shop?.id} productType={product?.type?.slug} />
+              {/* Social proof, then related. From xl they sit side by side (owner annotation
+                  2026-10-10): reviews + Q&A on the left, "You May Also Like" on the right as
+                  two cards per row. Below xl, and for a product with no related items, the
+                  page stacks exactly as before — reviews → Q&A → related. */}
+              <div
+                className={`${CONTAINER} ${
+                  related.length > 0
+                    ? 'xl:grid xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] xl:items-start xl:gap-x-10'
+                    : ''
+                }`}
+              >
+                <div className="min-w-0">
+                  <ProductReviews
+                    productId={product?.id}
+                    productType={product?.type?.slug}
+                    ratings={Number(product?.ratings) || 0}
+                    totalReviews={Number(product?.total_reviews) || 0}
+                    ratingCount={product?.rating_count}
+                  />
+                  <ProductQuestions productId={product?.id} shopId={product?.shop?.id} productType={product?.type?.slug} />
+                </div>
 
-              {/* You May Also Like — last */}
-              {related.length > 0 && (
-                <section className="bg-[#FAF8F2]">
-                  <div className={`${CONTAINER} py-9`}>
-                    <div className="mb-6 flex items-center justify-between">
+                {related.length > 0 && (
+                  <section className="min-w-0 py-9 xl:py-10">
+                    <div className="mb-6 flex items-center justify-between gap-3">
                       <h2 className="flex items-center gap-2 text-[1.4rem] font-medium text-forest-700">
                         You May Also Like
                         <Sparkles size={20} className="text-forest-500" aria-hidden />
                       </h2>
-                      <Link href="/plants" className="inline-flex items-center gap-1 text-[13px] font-semibold text-forest-600 hover:text-forest-700">
+                      <Link href="/plants" className="inline-flex shrink-0 items-center gap-1 text-[13px] font-semibold text-forest-600 hover:text-forest-700">
                         View All Plants
                         <ArrowRight size={14} aria-hidden />
                       </Link>
                     </div>
-                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-                      {related.slice(0, 6).map((r: any) => (
+                    {/* Four cards: 2×2 on a phone, one row of four on a tablet, and two
+                        side by side in the desktop column. */}
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-2 xl:gap-4">
+                      {related.slice(0, 4).map((r: any) => (
                         <ProductCard key={r.id} product={r} cardType={r?.type?.slug} />
                       ))}
                     </div>
-                  </div>
-                </section>
-              )}
+                  </section>
+                )}
+              </div>
             </>
           )}
         </div>

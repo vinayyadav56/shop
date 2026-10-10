@@ -402,7 +402,12 @@ export function useVerifyOtpCode({
   return { mutate, isLoading, serverError, setServerError };
 }
 
-export function useOtpLogin() {
+/**
+ * `signup`: the flow was opened from Sign Up. A number that already has an account
+ * still signs straight in — verifying the code proves the phone is theirs — but now
+ * says so, since they set out to create an account (owner annotation 2026-10-10).
+ */
+export function useOtpLogin({ signup = false }: { signup?: boolean } = {}) {
   const [otpState, setOtpState] = useAtom(optAtom);
   const { t } = useTranslation('common');
   const [_, setAuthorized] = useAtom(authorizationAtom);
@@ -420,6 +425,10 @@ export function useOtpLogin() {
       }
       setToken(data.token!);
       setAuthorized(true);
+      // In without the name/email step = the number already had an account.
+      if (signup && otpState.step !== 'RegisterForm') {
+        toast.success('This number already has an account. You’re signed in.');
+      }
       setOtpState({
         ...initialOtpState,
       });
@@ -472,7 +481,8 @@ export function useRegister() {
   const queryClient = useQueryClient();
   const [_, setAuthorized] = useAtom(authorizationAtom);
   const { closeModal } = useModalAction();
-  let [formError, setFormError] = useState<Partial<RegisterUserInput> | null>(
+  // Field errors from a 422, or `message` for an answer that belongs to no field.
+  let [formError, setFormError] = useState<(Partial<RegisterUserInput> & { message?: string }) | null>(
     null,
   );
 
@@ -499,11 +509,23 @@ export function useRegister() {
       }
     },
     onError: (error) => {
-      const {
-        response: { data },
-      }: any = error ?? {};
-
-      setFormError(data);
+      const res = (error as { response?: { status?: number; data?: Partial<RegisterUserInput> } } | null)
+        ?.response;
+      // 422 = field errors ({ email: [...], contact: [...] }) the form shows under each
+      // field. Anything else belongs to no field, so it travels as `message`. This used to
+      // destructure error.response.data, which threw on a network error (no response)
+      // and left the customer looking at a button that did nothing.
+      setFormError(
+        res?.status === 422 && res.data
+          ? res.data
+          : {
+              message: !res
+                ? 'Couldn’t reach the server. Check your connection and try again.'
+                : res.status === 429
+                  ? 'Too many attempts. Wait a minute, then try again.'
+                  : 'Something went wrong on our side. Please try again.',
+            },
+      );
     },
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.NOTIFY_LOGS);

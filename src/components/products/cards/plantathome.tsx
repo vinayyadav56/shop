@@ -5,9 +5,10 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import useMedia from 'react-use/lib/useMedia';
 import { Routes } from '@/config/routes';
-// Still needed for Ask AI — the product quick-view popup is gone (cards link
-// straight to the product page), but this card opens the ASK_AI modal too.
+// Still needed for Ask AI — the product quick-view popup and the size picker are
+// gone (the whole card links to the product page), but Ask AI is a modal.
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { Heart as HeartGlyph, Star, type IconSize } from '@/components/ui/icon';
 import { LineIcon } from '@/components/icons/line-icons';
@@ -93,6 +94,10 @@ const PlantAtHomeCard: React.FC<Props> = ({
   layout = 'grid',
 }) => {
   const isList = layout === 'list';
+  // Owner (2026-10-10): iPad and desktop open the product in a new tab, phones in the same
+  // tab. 744px is iPad mini portrait; landscape phones are under 500px tall. `false` until
+  // mounted, so the server HTML matches and an early phone tap never spawns a tab.
+  const linkProps = useMedia('(min-width: 744px) and (min-height: 500px)', false) ? PRODUCT_LINK_PROPS : {};
   const [imgError, setImgError] = useState(false);
   const [qty, setQty] = useState(1);
   const [mounted, setMounted] = useState(false);
@@ -178,13 +183,18 @@ const PlantAtHomeCard: React.FC<Props> = ({
             what made it read as oversized in the grid. A list row has the room for a
             slightly larger name on up to two lines. */}
         <Link
-          {...PRODUCT_LINK_PROPS}
+          {...linkProps}
           href={Routes.product(product.slug)}
           // The name is truncated, so a long or awkward one is unreadable with no
           // way to see the rest. `title` is the one tooltip that works on both a desktop hover
           // and a mobile long-press without shipping a popover — same approach as cart-item.
           title={product.name}
-          className={`block w-full text-left font-medium text-[#184A31] transition hover:text-forest-700 ${
+          // The WHOLE card is this link (annotation 2026-10-10: "anywhere click on card should
+          // take to the product page"): its ::after stretches over the article, which is the
+          // nearest positioned ancestor. Controls that must not navigate sit above it on z-10
+          // (wishlist, Ask AI, the qty stepper + Add to Cart). The focus ring is drawn on the
+          // overlay, so a keyboard user sees the whole card outlined.
+          className={`block w-full text-left font-medium text-[#184A31] transition after:absolute after:inset-0 after:rounded-2xl hover:text-forest-700 focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-forest-700 ${
             isList
               ? 'text-[14px] leading-snug line-clamp-2 sm:text-[16px]'
               : 'truncate text-[12.5px] leading-tight sm:text-[0.9rem]'
@@ -305,22 +315,22 @@ const PlantAtHomeCard: React.FC<Props> = ({
       {cityBased && city ? `Out of stock in ${city}` : 'Out of stock'}
     </button>
   ) : isVariable ? (
-    /* The size picker on the page (owner, 2026-10-09: one card everywhere, with the /plants
-       sheet) — it picks a size available in the city and adds it to the cart. */
-    <button
-      type="button"
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        openModal('SELECT_PRODUCT_VARIATION', product.slug);
-      }}
-      className={`${ctaBox} bg-ds-btn text-white transition duration-300 hover:bg-ds-btn-hover focus:outline-0 focus-visible:ring-2 focus-visible:ring-forest-700 focus-visible:ring-offset-2`}
+    /* Sizes are chosen on the product page (owner, 2026-10-10: the in-card size picker is
+       removed, the whole card opens the product). A real link for keyboard and screen-reader
+       users; a pointer lands on the card's stretched link above it — same page either way —
+       so the hover colour follows the card (group-hover). */
+    <Link
+      {...linkProps}
+      href={Routes.product(product.slug)}
+      className={`${ctaBox} bg-ds-btn text-white transition duration-300 group-hover:bg-ds-btn-hover focus:outline-0 focus-visible:ring-2 focus-visible:ring-forest-700 focus-visible:ring-offset-2`}
     >
       {/* No cart glyph: on a ~150px two-up card it ate the width the label needed. */}
       Select Options
-    </button>
+    </Link>
   ) : (
-    <div className="pah-card-actions flex gap-[clamp(8px,3.9cqw,15px)]">
+    /* relative z-10: above the card's stretched link, so the stepper and Add to Cart act
+       here instead of opening the product. */
+    <div className="pah-card-actions relative z-10 flex gap-[clamp(8px,3.9cqw,15px)]">
       {!inCart && !displayOnly && (
         <div className="flex h-[clamp(34px,9.5cqw,40px)] w-[clamp(80px,27cqw,104px)] shrink-0 items-center justify-around rounded border border-[#DDDDDD]">
           <button
@@ -362,14 +372,14 @@ const PlantAtHomeCard: React.FC<Props> = ({
       // (cqw units): full reference sizes at its native 390px, fluidly smaller
       // in dense grids (search page cells are ~230px) — nothing truncates or
       // wraps at any grid density.
-      className={`group flex h-full overflow-hidden rounded-2xl border border-kraft-200 bg-white shadow-box transition-shadow duration-300 [container-type:inline-size] hover:shadow-[0_10px_18px_rgba(0,0,0,0.08),0_30px_60px_rgba(0,0,0,0.12)] ${
+      className={`group relative flex h-full overflow-hidden rounded-2xl border border-kraft-200 bg-white shadow-box transition-shadow duration-300 [container-type:inline-size] hover:shadow-[0_10px_18px_rgba(0,0,0,0.08),0_30px_60px_rgba(0,0,0,0.12)] ${
         isList ? 'flex-row items-stretch' : 'flex-col'
       } ${className}`}
     >
       {/* image zone (reference .image: #F7F5EF, zoom on hover) */}
       <div className={isList ? 'relative w-[40%] max-w-[250px] shrink-0' : 'relative'}>
       <Link
-        {...PRODUCT_LINK_PROPS}
+        {...linkProps}
         href={Routes.product(product.slug)}
         aria-label={`View ${product.name}`}
         className={`relative block w-full overflow-hidden bg-[#F7F5EF] text-left ${

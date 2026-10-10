@@ -13,6 +13,8 @@ import * as yup from 'yup';
 interface OtpRegisterFormProps {
   onSubmit: (formData: any) => void;
   loading: boolean;
+  /** Where Cancel goes. Absent, it closes the dialog (the modal flow). */
+  onCancel?: () => void;
 }
 
 type OtpRegisterFormValues = {
@@ -38,6 +40,7 @@ const otpLoginFormSchemaForNewUser = yup.object().shape({
 export default function OtpRegisterForm({
   onSubmit,
   loading,
+  onCancel,
 }: OtpRegisterFormProps) {
   const { t } = useTranslation('common');
   const { closeModal } = useModalAction();
@@ -120,7 +123,7 @@ export default function OtpRegisterForm({
               <Button
                 type="button"
                 variant="formSecondary"
-                onClick={closeModal}
+                onClick={onCancel ?? closeModal}
               >
                 {t('text-cancel')}
               </Button>

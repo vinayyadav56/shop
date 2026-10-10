@@ -124,7 +124,7 @@ const StoreBadge = ({
   );
 
 /**
- * "Get the app" — ONE mount, in the brand column, badges side by side.
+ * "Get the app" — ONE mount, in the socials row under the contact details, badges side by side.
  *
  * History, because this has now swung both ways. The footer grid's row height is
  * set by its tallest column (the brand column), so anything added there adds to
@@ -141,6 +141,11 @@ const StoreBadge = ({
  * side. Placed in the FOOTER GRID rather than inside a link column, so it bottom-aligns
  * with the socials via self-end and still sits in the empty space below the links —
  * which means it costs no desktop height, satisfying the original complaint too.
+ *
+ * 2026-10-10, fourth placement (owner: "under contact, in the same row as the social
+ * icons"): the socials left the brand column and share ONE row with these badges, right
+ * under the contact details — see the socials row in the grid. The row replaces the old
+ * socials block and the old second grid row, so the footer is no taller than before.
  * ⚠️ If this is asked to move again, read this whole block first: every previous move
  * was undone by the next annotation.
  */
@@ -159,13 +164,17 @@ const AppBadges = ({ className = '' }: { className?: string }) => (
         width={334}
         heightClass="h-9"
       />
-      <StoreBadge
-        href={siteSettings.cta.app_store_link}
-        src={AppStoreImg}
-        alt="Download on the App Store"
-        width={338}
-        heightClass="h-9"
-      />
+      {/* While there is no iOS app the inert "Soon" badge shows from tablet width up only:
+          on a phone it would push the socials row onto two lines (owner, 2026-10-10). */}
+      <div className={siteSettings.cta.app_store_link ? 'shrink-0' : 'hidden shrink-0 md:block'}>
+        <StoreBadge
+          href={siteSettings.cta.app_store_link}
+          src={AppStoreImg}
+          alt="Download on the App Store"
+          width={338}
+          heightClass="h-9"
+        />
+      </div>
     </div>
   </div>
 );
@@ -276,9 +285,16 @@ const Footer = () => {
               {email}
             </a>
           </div>
+        </div>
 
-          {/* socials */}
-          <div className="mt-6 flex items-center gap-2">
+        {/* Socials + "Get the app" in ONE row, directly under the contact details, at every
+            width (owner annotation 2026-10-10 — the history is on AppBadges). Its own grid
+            item rather than part of the brand column, whose 300px cap can't seat icons and
+            badges side by side: at lg it is the whole second grid row, starting under the
+            contact block. The negative top margin takes the grid's row gap (28/40px) back
+            to the 24px the socials always had below contact. */}
+        <div className="col-span-2 -mt-1 flex flex-wrap items-end gap-x-6 gap-y-4 sm:-mt-4 md:col-span-4 lg:col-span-5 lg:row-start-2">
+          <div className="flex items-center gap-2">
             {SOCIALS.map((s) => (
               <a
                 key={s.name}
@@ -292,7 +308,7 @@ const Footer = () => {
               </a>
             ))}
           </div>
-
+          <AppBadges />
         </div>
 
         {/* link columns */}
@@ -316,14 +332,6 @@ const Footer = () => {
             </ul>
           </div>
         ))}
-
-        {/* "Get the app", right side, under the links and level with the socials row.
-            col-start-2 + self-end at lg is what puts it there: it spans the four link
-            columns and drops to the bottom of the grid row, which is where the brand
-            column's socials already sit. It also lands in space the link columns were
-            leaving empty, so it costs no extra footer height — the complaint that moved
-            it out of the brand column in the first place. */}
-        <AppBadges className="col-span-2 mt-2 md:col-span-4 lg:col-span-4 lg:col-start-2 lg:mt-0 lg:self-end" />
       </div>
 
       {/* ── Plant Delivery Across India — active city landing pages. Renders

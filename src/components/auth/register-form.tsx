@@ -59,26 +59,33 @@ const Req = () => (
 );
 
 type RegisterFormProps = {
-  /** Accepted for callers' sake; the in-form "Login" link that used it was
-   *  removed (the tab bar above the card is the same control). */
+  /** Switches the card to the login form in place (/signin). Absent (the modal),
+   *  the "Log in" links open LOGIN_VIEW instead. */
   onSwitchToLogin?: () => void;
   /** Renders the phone-OTP step in the page column instead of a dialog. Absent
    *  (header, checkout) it falls back to the modal, unchanged. */
   onPhoneOtp?: (channel?: OtpChannel) => void;
 };
 
-export function RegisterForm({ onPhoneOtp }: RegisterFormProps = {}) {
+export function RegisterForm({ onSwitchToLogin, onPhoneOtp }: RegisterFormProps = {}) {
   const { t } = useTranslation('common');
   const { openModal } = useModalAction();
   const { mutate, isLoading, formError } = useRegister();
+  const toLogin = onSwitchToLogin ?? (() => openModal('LOGIN_VIEW'));
+  const err = formError as Record<string, unknown> | null;
+  // The server refused the email, or the number, as already belonging to an account
+  // (its message sits under that field). Checked on submit only: a live lookup would
+  // let anyone test whether an email or a phone has an account (owner, 2026-10-10).
+  const alreadyRegistered = Boolean(err?.email || err?.contact);
 
   const { login: googleLogin, isLoading: googleBusy } = useGoogleLogin();
   function onSubmit({ first_name, last_name, email, contact, password }: RegisterFormValues) {
     const trimmedFirst = first_name.trim();
     const trimmedLast = (last_name ?? '').trim();
     // Keep sending the joined `name` too — old-API belt and braces. `/register`
-    // itself ignores `contact`; useRegister saves it with PUT /me/contacts once
-    // the token is set, so the backend contract stays untouched.
+    // validates `contact` (a number already on another account is refused before
+    // the account exists) but stores only name/email/password; useRegister saves
+    // the number with PUT /me/contacts once the token is set.
     mutate({
       name: [trimmedFirst, trimmedLast].filter(Boolean).join(' '),
       first_name: trimmedFirst,
@@ -120,7 +127,7 @@ export function RegisterForm({ onPhoneOtp }: RegisterFormProps = {}) {
           size="small"
           className="w-full"
           disabled={isLoading}
-          onClick={() => (onPhoneOtp ? onPhoneOtp('sms') : openModal('OTP_LOGIN', { channel: 'sms' }))}
+          onClick={() => (onPhoneOtp ? onPhoneOtp('sms') : openModal('OTP_LOGIN', { channel: 'sms', signup: true }))}
           aria-label="Continue with phone OTP"
           title="Continue with phone OTP"
         >
@@ -133,7 +140,7 @@ export function RegisterForm({ onPhoneOtp }: RegisterFormProps = {}) {
           size="small"
           className="w-full"
           disabled={isLoading}
-          onClick={() => (onPhoneOtp ? onPhoneOtp('whatsapp') : openModal('OTP_LOGIN', { channel: 'whatsapp' }))}
+          onClick={() => (onPhoneOtp ? onPhoneOtp('whatsapp') : openModal('OTP_LOGIN', { channel: 'whatsapp', signup: true }))}
           aria-label="Continue with WhatsApp"
           title="Continue with WhatsApp"
         >
@@ -231,6 +238,26 @@ export function RegisterForm({ onPhoneOtp }: RegisterFormProps = {}) {
             {/* The terms checkbox that used to sit here duplicated the subtitle,
                 which already states "By signing up, you agree to our Terms &
                 Policy" next to the button. One consent statement, not two. */}
+            {/* An answer that belongs to no field — offline, too many attempts, a 5xx.
+                The Form maps field keys only, so these used to show nothing at all. */}
+            {typeof err?.message === 'string' && (
+              <p role="alert" className="mb-3 text-[13px] leading-snug text-red-600">
+                {err.message}
+              </p>
+            )}
+            {/* Already has an account: one tap to log in instead of a dead end. */}
+            {alreadyRegistered && (
+              <p className="mb-3 text-[13px] leading-snug text-stone-600">
+                Already registered?{' '}
+                <button
+                  type="button"
+                  onClick={toLogin}
+                  className="font-semibold text-[#175840] underline hover:no-underline focus:outline-0 focus-visible:ring-2 focus-visible:ring-forest-600"
+                >
+                  Log in instead
+                </button>
+              </p>
+            )}
             <Button
               variant="formPrimary"
               className="w-full"
@@ -243,8 +270,18 @@ export function RegisterForm({ onPhoneOtp }: RegisterFormProps = {}) {
           </>
         )}
       </Form>
-      {/* "Already have an account? Login" used to follow. The tab bar above the
-          card does the same switch, so it was a second copy of the same control. */}
+      {/* Back by request (owner annotation 2026-10-10: "under signup provide if already
+          have account Login") — the mirror of the login form's "Sign up" link. */}
+      <div className="mt-5 text-center text-sm text-body">
+        {t('text-already-account')}{' '}
+        <button
+          type="button"
+          onClick={toLogin}
+          className="font-semibold underline transition-colors duration-200 text-[#175840] hover:text-[#1B6B50] hover:no-underline focus:text-[#1B6B50] focus:no-underline focus:outline-0 ltr:ml-1 rtl:mr-1"
+        >
+          {t('text-login')}
+        </button>
+      </div>
     </>
   );
 }
