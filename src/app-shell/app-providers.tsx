@@ -63,7 +63,10 @@ export default function AppProviders({
         queries: {
           staleTime: 60 * 1000,
           refetchOnWindowFocus: false,
-          refetchOnReconnect: false,
+          // On: when a dropped connection comes back, sections whose load failed reload by
+          // themselves instead of staying empty until a manual refresh (owner's iPad
+          // annotations, 2026-10-08: "network error", "dynamic sections coming empty").
+          refetchOnReconnect: true,
 
           // TanStack v5 defaults to THREE retries with exponential backoff. Neither was declared
           // here, so every query that does not override it answered a dead endpoint with 4
@@ -71,7 +74,14 @@ export default function AppProviders({
           // against a Mumbai origin, so each of those round trips costs ~2.5x. 15 files already
           // set `retry` by hand, which is the symptom of a missing default rather than 15
           // independent decisions.
-          retry: 1,
+          //
+          // One retry for an ANSWER (the server responded with an error: a second identical try
+          // rarely helps). But NO answer at all — axios "Network Error" or a timeout: a flaky
+          // phone/tablet connection, here a long route to the API — gets up to three, with the
+          // default exponential backoff (1s, 2s, 4s), so a short drop never surfaces as an empty
+          // section with "network error" (owner's iPad annotations, 2026-10-08).
+          retry: (failureCount: number, error: unknown) =>
+            (error as { response?: unknown } | null)?.response ? failureCount < 1 : failureCount < 3,
 
           // v5's gcTime default is 5 minutes, but several hooks set staleTime to 10-30 minutes.
           // Reference data (types, cities, states, location pages) was therefore evicted while

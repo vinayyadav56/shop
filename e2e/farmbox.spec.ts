@@ -317,6 +317,36 @@ test.describe('/farmbox combos states (intercepted list)', () => {
     await expect(combos.getByRole('link', { name: 'View All Combos' })).toHaveCount(0);
   });
 
+  /**
+   * The owner's iPad "network error" (2026-10-08): a connection that drops for a moment must not
+   * leave a section empty. No answer at all is retried (up to three times, with backoff), so two
+   * dropped attempts in a row still end in real cards and no error line.
+   */
+  test('a dropped connection recovers by itself: no error line, the cards arrive', async ({ page }) => {
+    test.skip(!tools?.data?.length, 'no tools list to recover with');
+    let attempts = 0;
+    await page.route(
+      (url) => /\/products$/.test(url.pathname) && (url.searchParams.get('search') ?? '').includes(`type.slug:${SLUG}`),
+      async (route) => {
+        if (route.request().method() === 'OPTIONS') return route.continue();
+        attempts += 1;
+        if (attempts <= 2) return route.abort('internetdisconnected');
+        const origin = route.request().headers()['origin'] ?? '*';
+        await route.fulfill({
+          status: 200,
+          headers: { 'access-control-allow-origin': origin, 'access-control-allow-credentials': 'true', 'content-type': 'application/json' },
+          body: JSON.stringify(tools),
+        });
+      },
+    );
+    await page.goto(`/${SLUG}`, { waitUntil: 'domcontentloaded' });
+    await hydrated(page);
+    const combos = page.locator('section#combos');
+    await expect(combos.locator('[data-product-card]').first()).toBeVisible({ timeout: 30_000 });
+    await expect(combos.getByText(ERROR)).toHaveCount(0);
+    expect(attempts, 'two dropped attempts, then the answer').toBeGreaterThanOrEqual(3);
+  });
+
   test('failed list: the error line, never raw errors; Try Again stays disabled while it retries', async ({ page }) => {
     test.skip(!tools?.data?.length, 'no tools list to recover with');
     let failing = true;
